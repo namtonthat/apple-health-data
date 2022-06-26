@@ -1,0 +1,4 @@
+# ignore extracts and workouts
+workout-routes
+electrocardiograms
+*.xml
