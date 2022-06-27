@@ -96,7 +96,6 @@ def send_files_to_s3(filename, date):
     return
 
 
-
 if __name__ == "__main__":
     date = '2022-06-26'
     # e = create_event("2022-06-27", "sleep", "8 hrs")

@@ -1,0 +1,82 @@
+,date,type,description
+0,2022-06-01,food,2081 calories (279C/104P/61F)
+1,2022-06-02,food,2293 calories (308C/146P/53F)
+2,2022-06-03,food,2108 calories (282C/128P/52F)
+3,2022-06-04,food,2658 calories (289C/182P/86F)
+4,2022-06-05,food,2334 calories (260C/148P/78F)
+5,2022-06-06,food,2468 calories (288C/185P/64F)
+6,2022-06-07,food,2337 calories (249C/162P/77F)
+7,2022-06-08,food,2336 calories (284C/147P/68F)
+8,2022-06-09,food,2301 calories (326C/148P/45F)
+9,2022-06-10,food,2475 calories (305C/154P/71F)
+10,2022-06-11,food,2287 calories (256C/138P/79F)
+11,2022-06-12,food,2434 calories (319C/168P/54F)
+12,2022-06-13,food,2776 calories (362C/125P/92F)
+13,2022-06-14,food,2149 calories (191C/164P/81F)
+14,2022-06-15,food,2414 calories (282C/137P/82F)
+15,2022-06-16,food,2427 calories (290C/139P/79F)
+16,2022-06-17,food,2183 calories (269C/144P/59F)
+17,2022-06-18,food,2283 calories (238C/200P/59F)
+18,2022-06-19,food,2292 calories (291C/147P/60F)
+19,2022-06-20,food,2346 calories (297C/177P/50F)
+20,2022-06-21,food,2405 calories (295C/133P/77F)
+21,2022-06-22,food,2209 calories (232C/192P/57F)
+22,2022-06-23,food,2400 calories (267C/198P/60F)
+23,2022-06-24,food,2349 calories (266C/166P/69F)
+24,2022-06-25,food,2644 calories (327C/163P/76F)
+25,2022-06-26,food,2801 calories (242C/249P/93F)
+26,2022-06-27,food,2160 calories (320C/121P/44F)
+27,2022-06-01,activity,10957 steps
+28,2022-06-02,activity,10639 steps
+29,2022-06-03,activity,13124 steps
+30,2022-06-04,activity,9345 steps
+31,2022-06-05,activity,8875 steps
+32,2022-06-06,activity,11716 steps
+33,2022-06-07,activity,14449 steps
+34,2022-06-08,activity,14780 steps
+35,2022-06-09,activity,13597 steps
+36,2022-06-10,activity,8614 steps
+37,2022-06-11,activity,10618 steps
+38,2022-06-12,activity,11828 steps
+39,2022-06-13,activity,15534 steps
+40,2022-06-14,activity,11485 steps
+41,2022-06-15,activity,15360 steps
+42,2022-06-16,activity,8390 steps
+43,2022-06-17,activity,5461 steps
+44,2022-06-18,activity,11050 steps
+45,2022-06-19,activity,4661 steps
+46,2022-06-20,activity,11951 steps
+47,2022-06-21,activity,12134 steps
+48,2022-06-22,activity,9324 steps
+49,2022-06-23,activity,13519 steps
+50,2022-06-24,activity,13092 steps
+51,2022-06-25,activity,11068 steps
+52,2022-06-26,activity,13934 steps
+53,2022-06-27,activity,8120 steps
+54,2022-06-01,sleep,9.0 h (96% eff.)
+55,2022-06-02,sleep,No sleep data.
+56,2022-06-03,sleep,7.6 h (100% eff.)
+57,2022-06-04,sleep,8.7 h (100% eff.)
+58,2022-06-05,sleep,No sleep data.
+59,2022-06-06,sleep,9.6 h (95% eff.)
+60,2022-06-07,sleep,No sleep data.
+61,2022-06-08,sleep,8.2 h (89% eff.)
+62,2022-06-09,sleep,6.3 h (90% eff.)
+63,2022-06-10,sleep,8.2 h (87% eff.)
+64,2022-06-11,sleep,7.8 h (80% eff.)
+65,2022-06-12,sleep,6.3 h (91% eff.)
+66,2022-06-13,sleep,7.3 h (100% eff.)
+67,2022-06-14,sleep,No sleep data.
+68,2022-06-15,sleep,7.9 h (100% eff.)
+69,2022-06-16,sleep,No sleep data.
+70,2022-06-17,sleep,7.1 h (75% eff.)
+71,2022-06-18,sleep,8.0 h (74% eff.)
+72,2022-06-19,sleep,9.4 h (97% eff.)
+73,2022-06-20,sleep,9.1 h (86% eff.)
+74,2022-06-21,sleep,No sleep data.
+75,2022-06-22,sleep,7.8 h (96% eff.)
+76,2022-06-23,sleep,9.3 h (100% eff.)
+77,2022-06-24,sleep,9.1 h (100% eff.)
+78,2022-06-25,sleep,7.5 h (86% eff.)
+79,2022-06-26,sleep,7.5 h (93% eff.)
+80,2022-06-27,sleep,8.3 h (83% eff.)

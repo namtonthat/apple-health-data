@@ -1,130 +1,262 @@
 # %%
 import pandas as pd
-from lxml import etree
-import datetime as dt
+import numpy as np
+import datetime
+from ics import Calendar, Event
+import boto3
+import sys, getopt
+import os
 
 # %%
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Simple Apple Health XML to CSV
-==============================
-:File: convert.py
-:Description: Convert Apple Health "export.xml" file into a csv
-:Version: 0.0.1
-:Created: 2019-10-04
-:Authors: Jason Meno (jam)
-:Dependencies: An export.xml file from Apple Health
-:License: BSD-2-Clause
-"""
+def ts_to_dt(ts):
+    return datetime.datetime.fromtimestamp(ts)
 
+# %%
+def process_raw_data(file):
+    """
+    Create [date, source] from file.
+    :param file: as exported by Auto Health Export
+    """
+    df = pd.read_csv(file, sep = ',')
+    df['creation_date'] = ts_to_dt(file.stat().st_atime)
+    df['filename'] = file.name
 
-# %% Function Definitions
-def pre_process():
-    """Pre-processes the XML file by replacing specific bits that would
-    normally result in a ParseError
+    return df
+
+# %%
+def read_raw_files(str_path):
+    """
+    Read all files in a directory and return a dataframe.
+    :param str_path: directory path as type string
+    """
+    df = pd.DataFrame()
+    print('Reading files..')
+    for i in os.scandir(str_path):
+        if i.name.startswith('HealthAutoExport') and i.name.endswith('Data.csv'):
+            print(f'Reading: {i.name}')
+            df_tmp = process_raw_data(i)
+            df = pd.concat([df, df_tmp])
+
+    # concat results in weird indices
+    df = df.reset_index(drop=True)
+    return df
+
+# %% [markdown]
+# ### Transformations
+
+# %% [markdown]
+# Functions to cleanse the data
+# - Dedupe values
+# - Cleanse trim all values to closest integer except for sleep and weight
+# - Create the following columns
+#   - `Calories`
+
+# %%
+def create_numeric_cols(df):
+    """
+    Calculates the total calories from the macros
+    Calculates the sleep efficiency
+    """
+    df['calories'] = df['carbs'] * 4 + df['fat'] * 9 + df['protein'] * 4
+    df['sleep_eff'] = df['sleep_asleep'] / df['sleep_in_bed'] * 100
+    df['sleep_eff'] = df['sleep_eff'].fillna(0)
+    df['sleep_eff'] = df['sleep_eff'].astype(int)
+
+    return df
+
+# %%
+def round_df(df):
+    """
+    Round all numerical columns to closest integer except for one d.p. cols
+    Replaces all NaN with null
+    """
+    one_dp_cols = ['sleep_asleep', 'sleep_in_bed', 'weight']
+    for i in df.columns:
+        if df[i].dtypes == 'float64':
+            if i in one_dp_cols:
+                df[i] = df[i].round(1)
+            else:
+                df[i] = df[i].astype(int)
+
+    df = df.replace({np.nan: None})
+    return df
+
+# %%
+def convert_column_types(df):
+    """
+    Convert certain columns to be a certain type
+    """
+    df['date'] = pd.to_datetime(df['date']).dt.date
+
+    # force apply float64 type for weight
+    df['weight'] = df['weight'].astype(float)
+
+    return df
+
+# %%
+def rename_columns(df):
+    """
+    Rename columns for easier reference
+    Styling follows lowercase and no units with spaces being replaced by _
+    """
+    d_col_rename = {
+        'Date': 'date',
+        'Carbohydrates (g)': 'carbs',
+        'Protein (g)': 'protein',
+        'Total Fat (g)': 'fat',
+        'Sleep Analysis [In Bed] (hr)': 'sleep_in_bed',
+        'Sleep Analysis [Asleep] (hr)': 'sleep_asleep',
+        'Step Count (count)': 'steps',
+        'Weight & Body Mass (kg) ': 'weight'
+    }
+
+    df.rename(columns=d_col_rename, inplace=True)
+
+    # fill in values
+    df = df.replace(r'^\s+$', np.nan, regex=True)
+
+    # convert column types
+    df = convert_column_types(df)
+    return df
+
+# %%
+def dedup_df(df):
+    """
+    Remove duplicates ordering by 'date' and 'creation_date' and then keep only the latest
+    """
+    df_sort = df.sort_values(['date', 'creation_date'], ascending= True)
+    df_dedup = df_sort.drop_duplicates(subset = 'date', keep = 'last')
+
+    return df_dedup
+
+# %%
+def create_description_cols(df):
+    """
+    Create description columns for the generating events
+    """
+    # convert all columns to strings for easy manipulation
+    print("Creating description columns")
+    df_1 = df.astype(str)
+
+    food_macros = "(" + df_1['carbs'] + "C/" + df_1['protein'] + "P/" + df_1['fat'] + "F" + ")"
+    df['food'] = df_1['calories'] + " calories " + food_macros
+    df['activity'] = df_1['steps'] + " steps"
+
+    df['sleep'] = df_1['sleep_asleep'] + " h" + " (" + df_1['sleep_eff'] + "% eff.)"
+    df['sleep'] = df['sleep'].replace('None h (0% eff.)', 'No sleep data.')
+
+    return df
+
+# %%
+def generate_calendar(df, output_path):
+    """
+    Generates a CSV and ICS from the dataframe
+    :param df: cleansed dataframe from `create_description_cols`
+    """
+    print("Generating calendar")
+
+    df_event = df[['date', 'food', 'activity', 'sleep']].melt(
+        id_vars = ['date'],
+        value_vars = ['food', 'activity', 'sleep'],
+        var_name = 'type',
+        value_name = 'description'
+    )
+
+    file_name = 'apple-health-calendar'
+    output_file = output_path + f'/{file_name}.csv'
+    df_event.to_csv(output_file)
+
+    c = Calendar()
+    for _, row in df_event.iterrows():
+        e = create_event(row['date'], row['type'], row['description'])
+        c.events.add(e)
+
+    with open(file_name + '.ics', 'w') as f:
+        f.write(str(c))
+        f.close()
+
+    return df
+
+# %%
+def transform(df):
+    """
+    Round all numerical columns to closest integer except for sleep times and weight
+    :param df: dataframe from the read_raw_files function
+    """
+    if len(df) > 0:
+        df = rename_columns(df)
+        df = round_df(df)
+        df = dedup_df(df)
+        df = create_numeric_cols(df)
+        df = create_description_cols(df)
+
+        return df
+
+# %%
+def etl_raw_data(input_path, output_path):
+    """
+    Perform ETL on Apple Health data
+    :param input_path: directory path as type string
+    :param output_path:
     """
 
-    print("Pre-processing...", end="")
-    with open("export.xml") as f:
-        newTextSpace = f.read().replace("\x0b", "")
-        newText = newTextSpace.read().replace("\x0b", "")
-
-    # with open("apple_health_export_2/new_export.xml", "w") as f:
-    with open("processed_export.xml", "w") as f:
-        f.write(newText)
-
-    print("done!")
+    df = read_raw_files(input_path)
+    df = transform(df)
+    df = generate_calendar(df, output_path)
 
     return
 
-
-def convert_xml():
+# %%
+def create_event(date, type, description):
     """
-    Loops through the element tree, retrieving all objects, and then
-    combining them together into a dataframe
+    Create an all day event for the given date and type
+    :param date: date as type datetime.date
+    :param type: type of event as type string
+    :param description: description of event as type string
     """
-    parser = etree.XMLParser(recover=True)
-    print("Converting XML File...", end="")
-    elementTree = etree.parse("processed_export.xml", parser)
+    if type == 'sleep':
+        emoticon = "💤"
+    if type == 'activity':
+        emoticon = "🔥"
+    if type == 'food':
+        emoticon = "🥞"
 
-    attribute_list = []
+    all_day_date = str(date) + " 00:00:00"
+    e = Event()
+    e.name = emoticon + " " + description
+    e.begin = all_day_date
+    e.end = all_day_date
+    e.make_all_day()
 
-    for child in elementTree.getroot():
-        child_attrib = child.attrib
-        for metadata_entry in list(child):
-            # print(metadata_entry)
-            metadata_values = list(metadata_entry.attrib.values())
-            # print(metadata_values)
-            if len(metadata_values) == 2:
-                metadata_dict = {metadata_values[0].replace(' ', ''): metadata_values[1]}
-                print(metadata_dict)
-                child_attrib.update(metadata_dict)
-
-        attribute_list.append(child_attrib)
-
-    health_df = pd.DataFrame(attribute_list)
-
-
-    # Every health data type and some columns have a long identifer
-    # Removing these for readability
-    # health_df.type = health_df.type.str.replace('HKQuantityTypeIdentifier', "")
-    # health_df.type = health_df.type.str.replace('HKCategoryTypeIdentifier', "")
-    # health_df.columns = \
-        # health_df.columns.str.replace("HKCharacteristicTypeIdentifier", "")
-
-    # Reorder some of the columns for easier visual data review
-    # original_cols = list(health_df)
-    # shifted_cols = ['type',
-    #                 'sourceName',
-    #                 'value',
-    #                 'unit',
-    #                 'startDate',
-    #                 'endDate',
-    #                 'creationDate']
-
-    # # Add loop specific column ordering if metadata entries exist
-    # if 'com.loopkit.InsulinKit.MetadataKeyProgrammedTempBasalRate' in original_cols:
-    #     shifted_cols.append('com.loopkit.InsulinKit.MetadataKeyProgrammedTempBasalRate')
-
-    # if 'com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate' in original_cols:
-    #     shifted_cols.append('com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate')
-
-    # if 'com.loudnate.CarbKit.HKMetadataKey.AbsorptionTimeMinutes' in original_cols:
-    #     shifted_cols.append('com.loudnate.CarbKit.HKMetadataKey.AbsorptionTimeMinutes')
-
-    # remaining_cols = list(set(original_cols) - set(shifted_cols))
-    # reordered_cols = shifted_cols + remaining_cols
-    # health_df = health_df.reindex(labels=reordered_cols, axis='columns')
-
-    # # Sort by newest data first
-    # health_df.sort_values(by='startDate', ascending=False, inplace=True)
-
-    # print("done!")
-
-    return health_df
-
-
-def save_to_csv(health_df):
-    print("Saving CSV file...", end="")
-    today = dt.datetime.now().strftime('%Y-%m-%d')
-    health_df.to_csv("apple_health_export_" + today + ".csv", index=False)
-    print("done!")
-
-    return
+    return e
 
 
 # %%
-def main():
-    # pre_process()
-    health_df = convert_xml()
-    save_to_csv(health_df)
-    return
+if __name__ == "__main__":
+    input_path = None
+    output_path = None
 
-# %%
-if __name__ == '__main__':
-    main()
+    argv = sys.argv[1:]
+
+    try:
+        opts, args = getopt.getopt(argv, "i:o:f:")
+    except:
+        print("Error")
 
 
+    for opt, arg in opts:
+        if opt == '-h':
+            print('Usage: apple-health.py -i <input_path> -o <output_path> -f <file_name>')
+            sys.exit()
+        if opt in ['-i']:
+            input_path = arg
+        elif opt in ['-o']:
+            output_path = arg
 
+    # read all files in directory
+    if input_path == None:
+        input_path = os.getcwd()
+    if output_path == None:
+        output_path = os.getcwd()
 
+    etl_raw_data(input_path, output_path)
