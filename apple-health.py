@@ -170,10 +170,12 @@ def generate_calendar(df, output_path):
     for _, row in df_event.iterrows():
         e = create_event(row['date'], row['type'], row['description'])
         c.events.add(e)
-
-    with open(file_name + '.ics', 'w') as f:
+    calendar_file_name = file_name + '.ics'
+    with open(calendar_file_name, 'w') as f:
         f.write(str(c))
         f.close()
+
+    upload_to_s3(calendar_file_name)
 
     return df
 
@@ -231,18 +233,54 @@ def create_event(date, type, description):
     return e
 
 
+def create_s3_bucket(s3_resource, bucket_name, aws_region):
+    """
+    Create a bucket if it does not exist
+    :param bucket_name: name of bucket
+    """
+    bucket = s3_resource.Bucket(bucket_name)
+    if bucket.creation_date:
+        print('Bucket already exists!')
+    else:
+        location = {'LocationConstraint': aws_region}
+        bucket =  s3_resource.create_bucket(
+            Bucket=bucket_name,
+            CreateBucketConfiguration=location
+        )
+
+        print('Creating bucket')
+    return bucket
+
+def upload_to_s3(file_name):
+    """
+    Send a file to S3
+    :param calendar_file_name: name of .ics file
+    """
+    # upload to S3 bucket
+    # TODO: parameterise bucket name
+    bucket_name = 'ntonthat-ahc'
+    aws_region = 'ap-southeast-2'
+    data = open(file_name, 'rb')
+    print(f"Reading {file_name}")
+
+    s3 = boto3.resource('s3', region_name=aws_region)
+    bucket = create_s3_bucket(s3, bucket_name, aws_region)
+    bucket.put_object(Key= file_name, Body = data, ACL='public-read')
+
+    print(f'Uploaded {file_name} into bucket for public access')
+    # print bucket name to subscribe to
+    return
 # %%
 if __name__ == "__main__":
+    # user input
     input_path = None
     output_path = None
 
     argv = sys.argv[1:]
-
     try:
         opts, args = getopt.getopt(argv, "i:o:f:")
     except:
         print("Error")
-
 
     for opt, arg in opts:
         if opt == '-h':
@@ -253,7 +291,6 @@ if __name__ == "__main__":
         elif opt in ['-o']:
             output_path = arg
 
-    # read all files in directory
     if input_path == None:
         input_path = os.getcwd()
     if output_path == None:
