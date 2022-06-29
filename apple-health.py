@@ -1,11 +1,16 @@
-# %%
+"""
+Simple Python script to render Apple Health data from Auto Exports
+"""
 import pandas as pd
 import numpy as np
 import datetime
-from ics import Calendar, Event
 import boto3
 import sys, getopt
 import os
+import yaml
+
+from ics import Calendar, Event
+
 
 # %%
 def ts_to_dt(ts):
@@ -78,7 +83,7 @@ def round_df(df):
             else:
                 df[i] = df[i].astype(int)
 
-    df = df.replace({np.nan: None})
+    # df = df.replace({np.nan: None})
     return df
 
 # %%
@@ -134,7 +139,14 @@ def create_description_cols(df):
     """
     Create description columns for the generating events
     """
-    # convert all columns to strings for easy manipulation
+    print("Adding commas as separator")
+    for i in df.columns:
+        print(f"{i} : {df[i].dtypes}")
+        if df[i].dtypes == 'float64':
+            df[i] = df[i].apply(lambda x: f"{x:,.1f}")
+        elif df[i].dtypes == 'int64':
+            df[i] = df[i].apply(lambda x: f"{x:,.0f}")
+
     print("Creating description columns")
     df_1 = df.astype(str)
 
@@ -143,7 +155,7 @@ def create_description_cols(df):
     df['activity'] = df_1['steps'] + " steps"
 
     df['sleep'] = df_1['sleep_asleep'] + " h" + " (" + df_1['sleep_eff'] + "% eff.)"
-    df['sleep'] = df['sleep'].replace('None h (0% eff.)', 'No sleep data.')
+    df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
 
     return df
 
@@ -163,8 +175,9 @@ def generate_calendar(df, output_path):
     )
 
     file_name = 'apple-health-calendar'
-    output_file = output_path + f'/{file_name}.csv'
-    df_event.to_csv(output_file)
+    output_csv_path = output_path + f'/{file_name}.csv'
+    print(output_csv_path)
+    df_event.to_csv(output_csv_path)
 
     c = Calendar()
     for _, row in df_event.iterrows():
@@ -268,32 +281,33 @@ def upload_to_s3(file_name):
     bucket.put_object(Key= file_name, Body = data, ACL='public-read')
 
     print(f'Uploaded {file_name} into bucket for public access')
-    # print bucket name to subscribe to
+    # TODO: print bucket name to subscribe to
     return
 # %%
+
+def get_config(config_file):
+    """
+    Geneerate configs are read from config.yml
+    """
+    config = yaml.load(open(config_file, "r"),  Loader=yaml.FullLoader)
+
+    input_path = config['input'].get('raw_path')
+    output_csv = config['output'].get('output_csv')
+    output_cal =  config['output'].get('output_cal')
+
+    paths = {
+        'input_path': input_path,
+        'output_csv': output_csv,
+        'output_cal': output_cal
+    }
+
+    for path in paths.keys():
+        if paths[path] == "":
+            paths[path] = os.getcwd()
+
+    return paths.values()
+
 if __name__ == "__main__":
-    # user input
-    input_path = None
-    output_path = None
-
-    argv = sys.argv[1:]
-    try:
-        opts, args = getopt.getopt(argv, "i:o:f:")
-    except:
-        print("Error")
-
-    for opt, arg in opts:
-        if opt == '-h':
-            print('Usage: apple-health.py -i <input_path> -o <output_path> -f <file_name>')
-            sys.exit()
-        if opt in ['-i']:
-            input_path = arg
-        elif opt in ['-o']:
-            output_path = arg
-
-    if input_path == None:
-        input_path = os.getcwd()
-    if output_path == None:
-        output_path = os.getcwd()
-
-    etl_raw_data(input_path, output_path)
+    input_path, output_csv, output_cal = get_config('config.yml')
+    print(input_path, output_csv, output_cal)
+    etl_raw_data(input_path = input_path, output_path = output_csv)

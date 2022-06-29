@@ -1,0 +1,10 @@
+{
+  type: "aws",
+  input: {
+    raw_path: '/Users/ntonthat/Library/Mobile Documents/iCloud~com~ifunography~HealthExport/Documents/raw/'
+  },
+  output: {
+    output_csv: "",
+    output_cal: "s3://ntonthat-ahc"
+  }
+}
