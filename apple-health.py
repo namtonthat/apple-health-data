@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import datetime
 import boto3
-import sys, getopt
 import os
 import yaml
 
@@ -164,9 +163,16 @@ def generate_calendar(df, output_path):
     """
     Generates a CSV and ICS from the dataframe
     :param df: cleansed dataframe from `create_description_cols`
+    :param output_path: as type string - a combination of both the local and public storage
     """
-    print("Generating calendar")
+    output_csv = output_path[0]
+    output_cal = output_path[1]
+    file_name = 'apple-health-calendar'
 
+    output_csv_path = output_csv + f'/{file_name}.csv'
+    calendar_file_name = file_name + '.ics'
+
+    print("Generating calendar (as CSV)")
     df_event = df[['date', 'food', 'activity', 'sleep']].melt(
         id_vars = ['date'],
         value_vars = ['food', 'activity', 'sleep'],
@@ -174,21 +180,21 @@ def generate_calendar(df, output_path):
         value_name = 'description'
     )
 
-    file_name = 'apple-health-calendar'
-    output_csv_path = output_path + f'/{file_name}.csv'
-    print(output_csv_path)
-    df_event.to_csv(output_csv_path)
-
+    print("Generating calendar (as .ICS)")
     c = Calendar()
     for _, row in df_event.iterrows():
         e = create_event(row['date'], row['type'], row['description'])
         c.events.add(e)
-    calendar_file_name = file_name + '.ics'
+
+    print(f"Outputing csv to: {output_csv_path}")
+    df_event.to_csv(output_csv_path)
+
     with open(calendar_file_name, 'w') as f:
         f.write(str(c))
         f.close()
+    print(f"Outputing calendar to: {output_path}")
 
-    upload_to_s3(calendar_file_name)
+    upload_to_s3(calendar_file_name, output_cal)
 
     return df
 
@@ -264,14 +270,15 @@ def create_s3_bucket(s3_resource, bucket_name, aws_region):
         print('Creating bucket')
     return bucket
 
-def upload_to_s3(file_name):
+def upload_to_s3(file_name, output_cal):
     """
     Send a file to S3
     :param calendar_file_name: name of .ics file
+    :param output_cal: location of public storage for calendar to resdie in
     """
     # upload to S3 bucket
-    # TODO: parameterise bucket name
-    bucket_name = 'ntonthat-ahc'
+    bucket_name = output_cal.split('s3://')[1]
+    # TODO: parameterise aws_region
     aws_region = 'ap-southeast-2'
     data = open(file_name, 'rb')
     print(f"Reading {file_name}")
@@ -288,16 +295,17 @@ def upload_to_s3(file_name):
 def get_config(config_file):
     """
     Geneerate configs are read from config.yml
+    If no values defined, return as current working directory
     """
     config = yaml.load(open(config_file, "r"),  Loader=yaml.FullLoader)
-
+    # TODO: iterate over variables quicker
     input_path = config['input'].get('raw_path')
-    output_csv = config['output'].get('output_csv')
+    output_local = config['output'].get('output_local')
     output_cal =  config['output'].get('output_cal')
 
     paths = {
         'input_path': input_path,
-        'output_csv': output_csv,
+        'output_local': output_local,
         'output_cal': output_cal
     }
 
@@ -308,6 +316,9 @@ def get_config(config_file):
     return paths.values()
 
 if __name__ == "__main__":
-    input_path, output_csv, output_cal = get_config('config.yml')
-    print(input_path, output_csv, output_cal)
-    etl_raw_data(input_path = input_path, output_path = output_csv)
+    # TODO: simplify input and output paths
+    input_path, output_local, output_cal = get_config('config.yml')
+    print(input_path, output_local, output_cal)
+
+    # TODO: create weight list
+    etl_raw_data(input_path = input_path, output_path = [output_local, output_cal])

@@ -4,7 +4,9 @@
     raw_path: '/Users/ntonthat/Library/Mobile Documents/iCloud~com~ifunography~HealthExport/Documents/raw/'
   },
   output: {
-    output_csv: "",
+  # output_local defines the local storage to output to
+    output_local: "",
+  # output_cal defines the public storage to output to after it has been output locally
     output_cal: "s3://ntonthat-ahc"
   }
 }
