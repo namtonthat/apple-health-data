@@ -7,6 +7,7 @@ from datetime import datetime
 import boto3
 import os
 import yaml
+import flatdict
 
 from ics import Calendar, Event
 
@@ -162,23 +163,6 @@ def create_description_cols(df):
     return df
 
 
-# %%
-def transform(df):
-    """
-    Round all numerical columns to closest integer except for sleep times and weight
-    :param df: dataframe from the read_raw_files function
-    """
-    # Fix up df_health
-    if len(df) > 0:
-        df = rename_columns(df)
-        df = round_df(df)
-        df = dedup_df(df)
-        df = create_numeric_cols(df)
-        df = create_description_cols(df)
-
-        return df
-
-
 def convert_autosleep_time(time, is_24h=False):
     """
     Converts time as from a string, stripping the date and adding the AM / PM
@@ -219,7 +203,7 @@ def etl_autosleep_data(df_sleep):
     df['sleep'] = df.agg(lambda x: f"{x['asleep']} [{x['deep']} / {int(x['efficiency'])}%]\r\n(🌒 {x['bedtime']} /🌞 {x['waketime']})", axis = 1)
 
     # Remove duplicates
-    df = df.drop_duplicates(subset = ['date'], keep = 'last').sort_values(by = ['date']).reset_index(drop = True)
+    df = dedup_df(df)
 
     return df
 
@@ -309,11 +293,11 @@ def upload_to_s3(file_name, output_cal):
     """
     Send a file to S3
     :param calendar_file_name: name of .ics file
-    :param output_cal: location of public storage for calendar to resdie in
+    :param output_cal: location of public storage for calendar to reside in
     """
     print(f'Attempting to upload into public location: {output_cal}')
-    # upload to S3 bucket
     bucket_name = output_cal.split('s3://')[1]
+
     # TODO: parameterise aws_region
     aws_region = 'ap-southeast-2'
     data = open(file_name, 'rb')
@@ -331,41 +315,39 @@ def upload_to_s3(file_name, output_cal):
 
 def get_config(config_file):
     """
-    Geneerate configs are read from config.yml
+    Generate configs are read from config.yml
     If no values defined, return as current working directory
     """
     config = yaml.load(open(config_file, "r"),  Loader=yaml.FullLoader)
-    # TODO: iterate over variables quicker
-    input_path = config['input'].get('raw_path')
-    output_local = config['output'].get('output_local')
-    output_cal =  config['output'].get('output_cal')
+    config = flatdict.FlatDict(config, delimiter = '.')
+    for k, v in config.items():
+        if k != 'type':
+            if v == "": config[k] = os.getcwd()
 
-    paths = {
-        'input_path': input_path,
-        'output_local': output_local,
-        'output_cal': output_cal
-    }
-
-    for path in paths.keys():
-        if paths[path] == "":
-            paths[path] = os.getcwd()
-
-    return paths.values()
+    return config.values()
 
 if __name__ == "__main__":
-    # TODO: simplify input and output paths
-    input_path, output_local, output_cal = get_config('config.yml')
+    # TODO: add in dropbox functionality
+    # TODO: refactor code so easier to read
+    type, input_path, output_local, output_cal = get_config('config.yml')
     print(input_path, output_local, output_cal)
 
-    # TODO: create weight list
-    df_health, df_sleep = read_raw_files(input_path)
-    df = transform(df_health)
+    df, df_sleep = read_raw_files(input_path)
 
-    # Fix up df_sleep
+    # Fix up df_health - round all numerical columns to closest integer except for sleep times and weight
+    if len(df) > 0:
+        df = rename_columns(df)
+        df = round_df(df)
+        df = dedup_df(df)
+        df = create_numeric_cols(df)
+        df = create_description_cols(df)
+
+    # If Autosleep data is available, use that instead of Apple Health sleep data
     if len(df_sleep) > 0:
         df_health_sleep = etl_autosleep_data(df_sleep)
         df_merge = pd.merge(df, df_health_sleep,  on = 'date', how= 'left')[['date', 'food', 'activity', 'sleep_x', 'sleep_y']]
         df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
         df = df_merge[['date', 'food', 'activity', 'sleep']]
 
+    # Upload into S3 / public access bucket
     df = generate_calendar(df, output_path = [output_local, output_cal])
