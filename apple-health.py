@@ -3,7 +3,7 @@ Simple Python script to render Apple Health data from Auto Exports
 """
 import pandas as pd
 import numpy as np
-import datetime
+from datetime import datetime
 import boto3
 import os
 import yaml
@@ -13,37 +13,41 @@ from ics import Calendar, Event
 
 # %%
 def ts_to_dt(ts):
-    return datetime.datetime.fromtimestamp(ts)
+    return datetime.fromtimestamp(ts)
 
-# %%
-def process_raw_data(file):
+def process_health_data(file):
     """
     Create [date, source] from file.
     :param file: as exported by Auto Health Export
     """
     df = pd.read_csv(file, sep = ',')
+    print(f'Processing: {file}')
     df['creation_date'] = ts_to_dt(file.stat().st_atime)
     df['filename'] = file.name
 
     return df
 
-# %%
 def read_raw_files(str_path):
     """
     Read all files in a directory and return a dataframe.
     :param str_path: directory path as type string
     """
-    df = pd.DataFrame()
+    df_health = pd.DataFrame()
+    df_sleep = pd.DataFrame()
+    # valid_files = ['HealthAutoExport', 'AutoSleep']
     print('Reading files..')
     for i in os.scandir(str_path):
-        if i.name.startswith('HealthAutoExport') and i.name.endswith('Data.csv'):
-            print(f'Reading: {i.name}')
-            df_tmp = process_raw_data(i)
-            df = pd.concat([df, df_tmp])
+        if i.name.endswith('.csv'):
+            df_tmp = process_health_data(i)
+            if i.name.startswith('HealthAutoExport'):
+                df_health = pd.concat([df_health, df_tmp])
+            elif i.name.startswith('AutoSleep'):
+                df_sleep = pd.concat([df_sleep, df_tmp])
 
     # concat results in weird indices
-    df = df.reset_index(drop=True)
-    return df
+    df_health = df_health.reset_index(drop=True)
+    return df_health, df_sleep
+
 
 # %% [markdown]
 # ### Transformations
@@ -158,7 +162,92 @@ def create_description_cols(df):
 
     return df
 
+
 # %%
+def transform(df):
+    """
+    Round all numerical columns to closest integer except for sleep times and weight
+    :param df: dataframe from the read_raw_files function
+    """
+    # Fix up df_health
+    if len(df) > 0:
+        df = rename_columns(df)
+        df = round_df(df)
+        df = dedup_df(df)
+        df = create_numeric_cols(df)
+        df = create_description_cols(df)
+
+        return df
+
+
+def convert_autosleep_time(time, is_24h=False):
+    """
+    Converts time as from a string, stripping the date and adding the AM / PM
+    """
+    time_dt = time.split(" ")[-1][:5]
+
+    if is_24h:
+        time_dt = datetime.strptime(time_dt, "%H:%M")
+        time_dt = time_dt.strftime("%-I:%M %p")
+    else:
+        hours = int(time_dt.split(":")[0])
+        min = int(time_dt.split(":")[1])
+        time_dt = str(hours) + " h " + str(min) + " m"
+
+    return time_dt
+
+def etl_autosleep_data(df_sleep):
+    """
+    Cleans autosleep data into correct formatting
+    """
+    # Create a copy for non destructive debugging
+    df = df_sleep.copy()
+
+    #  Clean up the time columns with either 12 h format (AM / PM) or with hours and minutes
+    time_dict = {
+        '24h': ['bedtime', 'waketime'],
+        'hrs': ['asleep', 'deep']
+    }
+    for time_type, time_cols in time_dict.items():
+        is_24h = 0
+        for time_col in time_cols:
+            if time_type == '24h': is_24h = 1
+            df[time_col] = df[time_col].apply(lambda x: convert_autosleep_time(x, is_24h))
+
+    # Collect the date
+    df['date'] = df['ISO8601'].apply(lambda x: datetime.strptime(x.split("T")[0], '%Y-%m-%d').date())
+
+    df['sleep'] = df.agg(lambda x: f"{x['asleep']} [{x['deep']} / {int(x['efficiency'])}%]\r\n(🌒 {x['bedtime']} /🌞 {x['waketime']})", axis = 1)
+
+    # Remove duplicates
+    df = df.drop_duplicates(subset = ['date'], keep = 'last').sort_values(by = ['date']).reset_index(drop = True)
+
+    return df
+
+# %%
+def create_event(date, type, description):
+    """
+    Create an all day event for the given date and type
+    :param date: date as type datetime.date
+    :param type: type of event as type string
+    :param description: description of event as type string
+    """
+    if type == 'sleep':
+        emoticon = "💤"
+    if type == 'activity':
+        emoticon = "🔥"
+    if type == 'food':
+        emoticon = "🥞"
+
+    all_day_date = str(date) + " 00:00:00"
+    e = Event()
+    e.name = emoticon + " " + description
+    e.begin = all_day_date
+    e.end = all_day_date
+    e.make_all_day()
+
+    return e
+
 def generate_calendar(df, output_path):
     """
     Generates a CSV and ICS from the dataframe
@@ -197,60 +286,6 @@ def generate_calendar(df, output_path):
     upload_to_s3(calendar_file_name, output_cal)
 
     return df
-
-# %%
-def transform(df):
-    """
-    Round all numerical columns to closest integer except for sleep times and weight
-    :param df: dataframe from the read_raw_files function
-    """
-    if len(df) > 0:
-        df = rename_columns(df)
-        df = round_df(df)
-        df = dedup_df(df)
-        df = create_numeric_cols(df)
-        df = create_description_cols(df)
-
-        return df
-
-# %%
-def etl_raw_data(input_path, output_path):
-    """
-    Perform ETL on Apple Health data
-    :param input_path: directory path as type string
-    :param output_path:
-    """
-
-    df = read_raw_files(input_path)
-    df = transform(df)
-    df = generate_calendar(df, output_path)
-
-    return
-
-# %%
-def create_event(date, type, description):
-    """
-    Create an all day event for the given date and type
-    :param date: date as type datetime.date
-    :param type: type of event as type string
-    :param description: description of event as type string
-    """
-    if type == 'sleep':
-        emoticon = "💤"
-    if type == 'activity':
-        emoticon = "🔥"
-    if type == 'food':
-        emoticon = "🥞"
-
-    all_day_date = str(date) + " 00:00:00"
-    e = Event()
-    e.name = emoticon + " " + description
-    e.begin = all_day_date
-    e.end = all_day_date
-    e.make_all_day()
-
-    return e
-
 
 def create_s3_bucket(s3_resource, bucket_name, aws_region):
     """
@@ -321,4 +356,14 @@ if __name__ == "__main__":
     print(input_path, output_local, output_cal)
 
     # TODO: create weight list
-    etl_raw_data(input_path = input_path, output_path = [output_local, output_cal])
+    df_health, df_sleep = read_raw_files(input_path)
+    df = transform(df_health)
+
+    # Fix up df_sleep
+    if len(df_sleep) > 0:
+        df_health_sleep = etl_autosleep_data(df_sleep)
+        df_merge = pd.merge(df, df_health_sleep,  on = 'date', how= 'left')[['date', 'food', 'activity', 'sleep_x', 'sleep_y']]
+        df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
+        df = df_merge[['date', 'food', 'activity', 'sleep']]
+
+    df = generate_calendar(df, output_path = [output_local, output_cal])
