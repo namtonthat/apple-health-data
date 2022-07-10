@@ -21,7 +21,7 @@ def process_health_data(file):
     :param file: as exported by Auto Health Export
     """
     df = pd.read_csv(file, sep = ',')
-    print(f'Processing: {file}')
+    print(f'Processing: {file.name}')
     df['creation_date'] = ts_to_dt(file.stat().st_atime)
     df['filename'] = file.name
 
@@ -142,9 +142,8 @@ def create_description_cols(df):
     """
     Create description columns for the generating events
     """
-    print("Adding commas as separator")
+    print("Creating description columns for calendar events")
     for i in df.columns:
-        print(f"{i} : {df[i].dtypes}")
         if df[i].dtypes == 'float64':
             df[i] = df[i].apply(lambda x: f"{x:,.1f}")
         elif df[i].dtypes == 'int64':
@@ -275,17 +274,18 @@ def generate_calendar(df, output_path):
         e = create_event(row['date'], row['type'], row['description'])
         c.events.add(e)
 
-    print(f"Outputing csv to: {output_csv_path}")
     df_event.to_csv(output_csv_path)
 
     with open(calendar_file_name, 'w') as f:
         f.write(str(c))
         f.close()
-    print(f"Outputing calendar to: {output_path}")
 
-    upload_to_s3(calendar_file_name, output_cal)
+    print(f"Outputing csv and cal to: {output_csv_path}")
 
-    return df
+    if output_cal.startswith("s3://"):
+        upload_to_s3(calendar_file_name, output_cal)
+
+    return
 
 def create_s3_bucket(s3_resource, bucket_name, aws_region):
     """
@@ -311,6 +311,7 @@ def upload_to_s3(file_name, output_cal):
     :param calendar_file_name: name of .ics file
     :param output_cal: location of public storage for calendar to resdie in
     """
+    print(f'Attempting to upload into public location: {output_cal}')
     # upload to S3 bucket
     bucket_name = output_cal.split('s3://')[1]
     # TODO: parameterise aws_region
@@ -322,8 +323,9 @@ def upload_to_s3(file_name, output_cal):
     bucket = create_s3_bucket(s3, bucket_name, aws_region)
     bucket.put_object(Key= file_name, Body = data, ACL='public-read')
 
-    print(f'Uploaded {file_name} into bucket for public access')
-    # TODO: print bucket name to subscribe to
+    print(f'Uploaded {file_name} for public read access')
+    print(f'Subscribe to {output_cal}/{file_name} for calendar events')
+
     return
 # %%
 
