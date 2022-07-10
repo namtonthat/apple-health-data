@@ -1,11 +1,15 @@
 {
-  type: "aws",
+  type:  {
+    provider: "aws",
+    region: "ap-southeast-2"
+  },
   input: {
+  # raw_path - absolute path that defines the csv file location that were exported from the iPhone
     raw_path: '/Users/ntonthat/Library/Mobile Documents/iCloud~com~ifunography~HealthExport/Documents/raw/'
   },
   output: {
-  # output_local defines the local storage to output to
-    output_local: "",
+  # output_local - absolute path that defines the local storage to output to
+    output_local: "/Users/ntonthat/Documents/scratch/apple-health-calendar/outputs",
   # output_cal defines the public storage to output to after it has been output locally
     output_cal: "s3://ntonthat-ahc"
   }

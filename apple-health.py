@@ -18,8 +18,8 @@ def ts_to_dt(ts):
 
 def process_health_data(file):
     """
-    Create [date, source] from file.
-    :param file: as exported by Auto Health Export
+    Create [date, source] columns from files read in.
+    :param file: as exported by Auto Health Export / Autosleep
     """
     df = pd.read_csv(file, sep = ',')
     print(f'Processing: {file.name}')
@@ -45,8 +45,6 @@ def read_raw_files(str_path):
             elif i.name.startswith('AutoSleep'):
                 df_sleep = pd.concat([df_sleep, df_tmp])
 
-    # concat results in weird indices
-    df_health = df_health.reset_index(drop=True)
     return df_health, df_sleep
 
 
@@ -165,7 +163,7 @@ def create_description_cols(df):
 
 def convert_autosleep_time(time, is_24h=False):
     """
-    Converts time as from a string, stripping the date and adding the AM / PM
+    Converts time from a string; stripping the date and adding the AM / PM / hours and minutes
     """
     time_dt = time.split(" ")[-1][:5]
 
@@ -244,7 +242,7 @@ def generate_calendar(df, output_path):
     output_csv_path = output_csv + f'/{file_name}.csv'
     calendar_file_name = file_name + '.ics'
 
-    print("Generating calendar (as CSV)")
+    print("Generating calendar (as .CSV)")
     df_event = df[['date', 'food', 'activity', 'sleep']].melt(
         id_vars = ['date'],
         value_vars = ['food', 'activity', 'sleep'],
@@ -264,7 +262,7 @@ def generate_calendar(df, output_path):
         f.write(str(c))
         f.close()
 
-    print(f"Outputing csv and cal to: {output_csv_path}")
+    print(f"Outputing CSV and ICS to: {output_csv_path}")
 
     if output_cal.startswith("s3://"):
         upload_to_s3(calendar_file_name, output_cal)
@@ -292,7 +290,7 @@ def create_s3_bucket(s3_resource, bucket_name, aws_region):
 def upload_to_s3(file_name, output_cal):
     """
     Send a file to S3
-    :param calendar_file_name: name of .ics file
+    :param calendar_file_name: name of .ICS file
     :param output_cal: location of public storage for calendar to reside in
     """
     print(f'Attempting to upload into public location: {output_cal}')
@@ -321,26 +319,33 @@ def get_config(config_file):
     config = yaml.load(open(config_file, "r"),  Loader=yaml.FullLoader)
     config = flatdict.FlatDict(config, delimiter = '.')
     for k, v in config.items():
-        if k != 'type':
+        if not k.startswith('type'):
             if v == "": config[k] = os.getcwd()
 
-    return config.values()
+    return config
 
 if __name__ == "__main__":
     # TODO: add in dropbox functionality
     # TODO: refactor code so easier to read
-    type, input_path, output_local, output_cal = get_config('config.yml')
-    print(input_path, output_local, output_cal)
+    # TODO: clean up df_health function
+    config = get_config('config.yml')
+    input_path = config.get('input.raw_path')
+    output_local = config.get('output.output_local')
+    output_cal = config.get('output.output_cal')
+    region = config.get('type.region')
+
 
     df, df_sleep = read_raw_files(input_path)
 
-    # Fix up df_health - round all numerical columns to closest integer except for sleep times and weight
+    # Round all numerical columns to closest integer except for sleep times and weight
+    # Create description columns and deduplicate data
     if len(df) > 0:
         df = rename_columns(df)
         df = round_df(df)
         df = dedup_df(df)
         df = create_numeric_cols(df)
         df = create_description_cols(df)
+        df = df.reset_index(drop=True)
 
     # If Autosleep data is available, use that instead of Apple Health sleep data
     if len(df_sleep) > 0:
