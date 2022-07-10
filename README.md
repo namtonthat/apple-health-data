@@ -6,5 +6,5 @@ graph TD
     A[fa:fa-mobile iPhone / Apple Watch] -->|Auto Health Export|B
     A[fa:fa-mobile iPhone / Apple Watch] -->|Autosleep|B
     B[apple-health.py] --> C[fa:fa-aws AWS Lambda]
-    C --> D[AWS S3 Bucket as CSV]
+    C --> D[AWS S3 Bucket as .ics]
 ```
