@@ -271,7 +271,6 @@ def generate_calendar(df, output_path, aws_region: None):
     df_event_activity.fillna('', inplace=True)
     df_event_activity['description'] = df_event_activity.groupby('date')['description'].transform(lambda x: ' '.join(x))
     df_event_activity['description'] = [x.strip() for x in df_event_activity['description']]
-    df_event_activity['description'] = [x.replace(" ", "") for x in df_event_activity['description']]
     df_event_activity.drop_duplicates(subset = ['date', 'description'], keep = 'last', inplace = True)
 
     df_event = pd.concat([df_events.query('event_type in ("food", "sleep")'), df_event_activity])
