@@ -1,6 +1,7 @@
 """
 Simple Python script to render Apple Health data from Auto Exports
 """
+from operator import truediv
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -67,7 +68,7 @@ def create_numeric_cols(df):
     df['calories'] = df['carbs'] * 4 + df['fat'] * 9 + df['protein'] * 4
     df['sleep_eff'] = df['sleep_asleep'] / df['sleep_in_bed'] * 100
     df['sleep_eff'] = df['sleep_eff'].fillna(0)
-    df['sleep_eff'] = df['sleep_eff'].astype(int)
+    df['sleep_eff'] = df['sleep_eff'].astype('int64')
 
     return df
 
@@ -83,7 +84,7 @@ def round_df(df):
             if i in one_dp_cols:
                 df[i] = df[i].round(1)
             else:
-                df[i] = df[i].astype(int)
+                df[i] = np.floor(pd.to_numeric(df[i], errors= 'coerce')).astype('Int64')
 
     # df = df.replace({np.nan: None})
     return df
@@ -101,23 +102,13 @@ def convert_column_types(df):
     return df
 
 # %%
-def rename_columns(df):
+def rename_columns(df, col_map):
     """
     Rename columns for easier reference
     Styling follows lowercase and no units with spaces being replaced by _
     """
-    d_col_rename = {
-        'Date': 'date',
-        'Carbohydrates (g)': 'carbs',
-        'Protein (g)': 'protein',
-        'Total Fat (g)': 'fat',
-        'Sleep Analysis [In Bed] (hr)': 'sleep_in_bed',
-        'Sleep Analysis [Asleep] (hr)': 'sleep_asleep',
-        'Step Count (count)': 'steps',
-        'Weight & Body Mass (kg) ': 'weight'
-    }
 
-    df.rename(columns=d_col_rename, inplace=True)
+    df.rename(columns=col_map, inplace=True)
 
     # fill in values
     df = df.replace(r'^\s+$', np.nan, regex=True)
@@ -142,6 +133,7 @@ def create_description_cols(df):
     Create description columns for the generating events
     """
     print("Creating description columns for calendar events")
+    print(df.columns)
     for i in df.columns:
         if df[i].dtypes == 'float64':
             df[i] = df[i].apply(lambda x: f"{x:,.1f}")
@@ -157,6 +149,9 @@ def create_description_cols(df):
 
     df['sleep'] = df_1['sleep_asleep'] + " h" + " (" + df_1['sleep_eff'] + "% eff.)"
     df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
+
+    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins'].fillna(0)]
+    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins'].fillna(0)]
 
     return df
 
@@ -205,35 +200,51 @@ def etl_autosleep_data(df_sleep):
 
     return df
 
+def make_event_description(event, event_type, description):
+    """
+    Creates an event name
+    """
+    if description:
+        emoticon_dict = {
+            'sleep'     : "💤",
+            'activity'  : "🔥",
+            'food'      : "🥞",
+            'mindful'   : "🧘",
+            'exercise'  : "🏃"
+        }
+
+        emoticon = emoticon_dict.get(event_type)
+
+        # case statement to catch events that were not completed
+        if description == 1:
+            description = ""
+
+        event_description = emoticon + " " + description
+        return event_description
+
 # %%
-def create_event(date, type, description):
+def create_event(date, event_type, description):
     """
     Create an all day event for the given date and type
     :param date: date as type datetime.date
-    :param type: type of event as type string
-    :param description: description of event as type string
+    :param event_type: type of event as string
+    :param description: description of event as string
     """
-    if type == 'sleep':
-        emoticon = "💤"
-    if type == 'activity':
-        emoticon = "🔥"
-    if type == 'food':
-        emoticon = "🥞"
-
     all_day_date = str(date) + " 00:00:00"
     e = Event()
-    e.name = emoticon + " " + description
+    e.name = description
     e.begin = all_day_date
     e.end = all_day_date
     e.make_all_day()
 
     return e
 
-def generate_calendar(df, output_path):
+def generate_calendar(df, output_path, aws_region: None):
     """
     Generates a CSV and ICS from the dataframe
     :param df: cleansed dataframe from `create_description_cols`
     :param output_path: as type string - a combination of both the local and public storage
+    :param aws_region: as type string - the AWS S3 bucket region for uploading the ICS
     """
     output_csv = output_path[0]
     output_cal = output_path[1]
@@ -243,17 +254,32 @@ def generate_calendar(df, output_path):
     calendar_file_name = file_name + '.ics'
 
     print("Generating calendar (as .CSV)")
-    df_event = df[['date', 'food', 'activity', 'sleep']].melt(
+
+    df_events = df[['date', 'food', 'activity', 'sleep', 'exercise', 'mindful']].melt(
         id_vars = ['date'],
-        value_vars = ['food', 'activity', 'sleep'],
-        var_name = 'type',
+        value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
+        var_name = 'event_type',
         value_name = 'description'
     )
+
+    # TODO: remove the duplicate iterrows
+    # Combine exercise, mindfulness and activity into one
+    for _, row in df_events.iterrows():
+        row['description'] = make_event_description(row['date'], row['event_type'], row['description'])
+
+    df_event_activity = df_events.query('event_type in ("mindful", "exercise", "activity")').copy().sort_values(by= ['event_type'], ascending= False)
+    df_event_activity.fillna('', inplace=True)
+    df_event_activity['description'] = df_event_activity.groupby('date')['description'].transform(lambda x: ' '.join(x))
+    df_event_activity['description'] = [x.strip() for x in df_event_activity['description']]
+    df_event_activity['description'] = [x.replace(" ", "") for x in df_event_activity['description']]
+    df_event_activity.drop_duplicates(subset = ['date', 'description'], keep = 'last')
+
+    df_event = pd.concat([df_events.query('event_type in ("food", "sleep")'), df_event_activity])
 
     print("Generating calendar (as .ICS)")
     c = Calendar()
     for _, row in df_event.iterrows():
-        e = create_event(row['date'], row['type'], row['description'])
+        e = create_event(row['date'], row['event_type'], row['description'])
         c.events.add(e)
 
     df_event.to_csv(output_csv_path)
@@ -264,8 +290,8 @@ def generate_calendar(df, output_path):
 
     print(f"Outputing CSV and ICS to: {output_csv_path}")
 
-    if output_cal.startswith("s3://"):
-        upload_to_s3(calendar_file_name, output_cal)
+    if output_cal.startswith("s3://") and region is not None:
+        upload_to_s3(calendar_file_name, output_cal, region)
 
     return
 
@@ -287,7 +313,7 @@ def create_s3_bucket(s3_resource, bucket_name, aws_region):
         print('Creating bucket')
     return bucket
 
-def upload_to_s3(file_name, output_cal):
+def upload_to_s3(file_name, output_cal, aws_region):
     """
     Send a file to S3
     :param calendar_file_name: name of .ICS file
@@ -296,8 +322,6 @@ def upload_to_s3(file_name, output_cal):
     print(f'Attempting to upload into public location: {output_cal}')
     bucket_name = output_cal.split('s3://')[1]
 
-    # TODO: parameterise aws_region
-    aws_region = 'ap-southeast-2'
     data = open(file_name, 'rb')
     print(f"Reading {file_name}")
 
@@ -326,21 +350,22 @@ def get_config(config_file):
 
 if __name__ == "__main__":
     # TODO: add in dropbox functionality
-    # TODO: refactor code so easier to read
+    # TODO: refactor code so that the columns are parameterise
     # TODO: clean up df_health function
+    #
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
     output_local = config.get('output.output_local')
     output_cal = config.get('output.output_cal')
     region = config.get('type.region')
-
+    col_map = config.get('col_map')
 
     df, df_sleep = read_raw_files(input_path)
 
     # Round all numerical columns to closest integer except for sleep times and weight
     # Create description columns and deduplicate data
     if len(df) > 0:
-        df = rename_columns(df)
+        df = rename_columns(df, col_map)
         df = round_df(df)
         df = dedup_df(df)
         df = create_numeric_cols(df)
@@ -350,9 +375,9 @@ if __name__ == "__main__":
     # If Autosleep data is available, use that instead of Apple Health sleep data
     if len(df_sleep) > 0:
         df_health_sleep = etl_autosleep_data(df_sleep)
-        df_merge = pd.merge(df, df_health_sleep,  on = 'date', how= 'left')[['date', 'food', 'activity', 'sleep_x', 'sleep_y']]
+        df_merge = pd.merge(df, df_health_sleep,  on = 'date', how= 'left')
         df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
-        df = df_merge[['date', 'food', 'activity', 'sleep']]
+        df = df_merge.copy()
 
     # Upload into S3 / public access bucket
-    df = generate_calendar(df, output_path = [output_local, output_cal])
+    df = generate_calendar(df, output_path = [output_local, output_cal], aws_region = region)
