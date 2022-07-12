@@ -168,7 +168,7 @@ def convert_autosleep_time(time, is_24h=False):
     else:
         hours = int(time_dt.split(":")[0])
         min = int(time_dt.split(":")[1])
-        time_dt = str(hours) + " h " + str(min) + " m"
+        time_dt = f"{hours} h {min} m"
 
     return time_dt
 
@@ -219,7 +219,7 @@ def make_event_description(event, event_type, description):
         if description == 1:
             description = ""
 
-        event_description = emoticon + " " + description
+        event_description = f"{emoticon} {description}"
         return event_description
 
 # %%
@@ -230,7 +230,7 @@ def create_event(date, event_type, description):
     :param event_type: type of event as string
     :param description: description of event as string
     """
-    all_day_date = str(date) + " 00:00:00"
+    all_day_date = f"{date} 00:00:00"
     e = Event()
     e.name = description
     e.begin = all_day_date
@@ -250,8 +250,8 @@ def generate_calendar(df, output_path, aws_region: None):
     output_cal = output_path[1]
     file_name = 'apple-health-calendar'
 
-    output_csv_path = output_csv + f'/{file_name}.csv'
-    calendar_file_name = file_name + '.ics'
+    output_csv_path = f"{output_csv}/{file_name}.csv"
+    calendar_file_name = f'{file_name}.ics'
 
     print("Generating calendar (as .CSV)")
 
