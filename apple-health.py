@@ -133,25 +133,25 @@ def create_description_cols(df):
     Create description columns for the generating events
     """
     print("Creating description columns for calendar events")
-    print(df.columns)
+    # Create boolean for beating threshold
+    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins'].fillna(0)]
+    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins'].fillna(0)]
+
+    # pretty print
     for i in df.columns:
         if df[i].dtypes == 'float64':
             df[i] = df[i].apply(lambda x: f"{x:,.1f}")
-        elif df[i].dtypes == 'int64':
-            df[i] = df[i].apply(lambda x: f"{x:,.0f}")
+        elif df[i].dtypes in ('int64', 'Int64'):
+            df[i] = df[i].map('{:,.0f}'.format)
 
     print("Creating description columns")
-    df_1 = df.astype(str)
 
-    food_macros = "(" + df_1['carbs'] + "C/" + df_1['protein'] + "P/" + df_1['fat'] + "F" + ")"
-    df['food'] = df_1['calories'] + " calories " + food_macros
-    df['activity'] = df_1['steps'] + " steps"
+    food_macros = f"({df['carbs']} C/ {df['protein']} P/ {df['fat']} F)"
+    df['food'] =f"{df['calories']} calories {food_macros}"
+    df['activity'] = f"{df['steps']} steps"
 
-    df['sleep'] = df_1['sleep_asleep'] + " h" + " (" + df_1['sleep_eff'] + "% eff.)"
+    df['sleep'] = f"{df['sleep_asleep']} h ({df['sleep_eff']} % eff.)"
     df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
-
-    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins'].fillna(0)]
-    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins'].fillna(0)]
 
     return df
 
@@ -349,9 +349,9 @@ def get_config(config_file):
 
 if __name__ == "__main__":
     # TODO: add in dropbox functionality
-    # TODO: refactor code so that the columns are parameterise
+    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: clean up df_health function
-    #
+    # TODO: add serverless framework
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
     output_local = config.get('output.output_local')

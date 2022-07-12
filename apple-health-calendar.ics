@@ -2,603 +2,618 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:ics.py - http://git.io/lLljaA
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220629
-SUMMARY:🥞 2644 calories (226C/183P/112F)
-UID:d6ca74c5-e5f5-4c9e-93c2-4971a9befbda@d6ca.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220603
-SUMMARY:🥞 2108 calories (282C/128P/52F)
-UID:291dd54d-436a-4141-8e89-b55f0d65ad70@291d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220619
-SUMMARY:🥞 2292 calories (291C/147P/60F)
-UID:5d2e162e-1b46-497c-a691-62de9313d106@5d2e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220703
-SUMMARY:🥞 2723 calories (309C/167P/91F)
-UID:afeb6dfc-8d81-4119-b845-0417a24a686f@afeb.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220612
-SUMMARY:🥞 2434 calories (319C/168P/54F)
-UID:5e6af811-0883-45d9-8f04-47319f872cee@5e6a.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220618
-SUMMARY:💤 8 h 42 m [2 h 0 m / 74%]\r\n(🌒 8:15 PM /🌞 7:00 AM)
-UID:0c922d78-2988-4bbc-b97c-e0a8ec67fa86@0c92.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220612
-SUMMARY:🔥11\,828steps
-UID:627e6ce7-7441-4fcf-a410-2b12e16fc9fd@627e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220617
-SUMMARY:🥞 2183 calories (269C/144P/59F)
-UID:d3d8d14d-cb5f-4156-a696-dc47748bee4b@d3d8.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220604
-SUMMARY:🔥9\,345steps
-UID:2a879a8a-43cb-48d5-aa1f-ccfb44f25a08@2a87.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220605
-SUMMARY:🥞 2334 calories (260C/148P/78F)
-UID:e1b42fcf-0e13-4e59-aab9-06e28b59fdfb@e1b4.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220608
-SUMMARY:💤 8 h 9 m [2 h 53 m / 88%]\r\n(🌒 10:11 PM /🌞 7:22 AM)
-UID:d1709868-d78d-4ff2-b52e-9a68f2c305e7@d170.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220608
-SUMMARY:🔥14\,780steps
-UID:fbf092a7-928d-4557-b23f-bf814b4aa60d@fbf0.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220621
-SUMMARY:🔥12\,134steps
-UID:d28c6746-baa9-42e0-bbff-ec7b6ebf19fd@d28c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220710
-SUMMARY:🏃🔥17\,783steps
-UID:5b91d11c-b053-4afc-81cb-a281804d53b5@5b91.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220702
-SUMMARY:💤 8 h 25 m [0 h 59 m / 100%]\r\n(🌒 10:21 PM /🌞 6:46 AM)
-UID:0f28ce19-559d-4b26-9212-9c00365f0497@0f28.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220706
-SUMMARY:💤 7 h 25 m [0 h 30 m / 96%]\r\n(🌒 10:45 PM /🌞 6:25 AM)
-UID:7263e968-e8b9-4782-b739-d0da8aa9f72a@7263.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220626
-SUMMARY:🔥13\,934steps
-UID:25f2e984-a9cd-492d-a162-b7bfcdfa1edc@25f2.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220708
-SUMMARY:💤 7 h 48 m [2 h 15 m / 100%]\r\n(🌒 10:29 PM /🌞 6:17 AM)
-UID:dad9e77c-b2c3-43da-9fef-ad9c0b1ab62d@dad9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220626
-SUMMARY:🥞 2801 calories (242C/249P/93F)
-UID:e86a235c-a96a-44ec-8b8c-33a092b73c84@e86a.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220622
-SUMMARY:🔥9\,324steps
-UID:09fcfe62-750d-45a2-9766-48c84a8b6002@09fc.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220614
-SUMMARY:🥞 2149 calories (191C/164P/81F)
-UID:94193fb6-4142-4bcb-b83d-f0325b42e5c0@9419.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220609
-SUMMARY:💤 6 h 17 m [2 h 0 m / 90%]\r\n(🌒 11:05 PM /🌞 6:02 AM)
-UID:e3d36164-d70b-43c8-ad4d-4abdae1415bb@e3d3.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220609
-SUMMARY:🥞 2301 calories (326C/148P/45F)
-UID:d5589fd2-ffb3-471f-9752-f884052a34fa@d558.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220628
-SUMMARY:💤 6 h 16 m [1 h 45 m / 100%]\r\n(🌒 11:31 PM /🌞 5:47 AM)
-UID:0d13fa72-cc19-4aae-bb6f-3f7ce2fbce70@0d13.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220703
-SUMMARY:💤 6 h 59 m [0 h 44 m / 100%]\r\n(🌒 11:16 PM /🌞 6:15 AM)
-UID:f4dbfa03-c8f8-408a-8451-9d4a6dc1f80e@f4db.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220607
-SUMMARY:🥞 2337 calories (249C/162P/77F)
-UID:da71319a-51c5-4784-a605-0ce4567c1ec3@da71.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220620
-SUMMARY:💤 9 h 6 m [4 h 48 m / 94%]\r\n(🌒 10:30 PM /🌞 6:59 AM)
-UID:62b981de-a900-4310-ab1d-2bcca726c27d@62b9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220705
-SUMMARY:🏃🔥10\,931steps
-UID:c3580fb2-30bb-4428-89a3-2b378b6e0521@c358.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220624
-SUMMARY:🔥13\,092steps
-UID:2aee4154-cf1e-41a4-b1d0-fc0f96231430@2aee.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220617
-SUMMARY:💤 7 h 6 m [1 h 5 m / 75%]\r\n(🌒 10:15 PM /🌞 7:40 AM)
-UID:405403d2-4b2e-46d1-8b44-4c40099c64b8@4054.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220704
-SUMMARY:🥞 2811 calories (382C/206P/51F)
-UID:085c1fde-da6c-4d26-a7e0-4e6fd7c136a2@085c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220705
-SUMMARY:💤 7 h 39 m [2 h 2 m / 100%]\r\n(🌒 11:17 PM /🌞 6:56 AM)
-UID:0e241ba9-ca19-4f83-93ea-3436e055f9da@0e24.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220607
-SUMMARY:💤 8 h 18 m [3 h 16 m / 100%]\r\n(🌒 9:54 PM /🌞 6:12 AM)
-UID:72ab95ca-b905-4fee-90fd-c158df16e2bf@72ab.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220606
-SUMMARY:💤 9 h 34 m [3 h 52 m / 94%]\r\n(🌒 9:31 PM /🌞 7:36 AM)
-UID:45370f73-fd52-442f-99e9-bd60a4ef1507@4537.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220604
-SUMMARY:🥞 2658 calories (289C/182P/86F)
-UID:4eb9cf17-b474-4c12-8ee2-752b3fc782d3@4eb9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220626
-SUMMARY:💤 7 h 47 m [0 h 30 m / 93%]\r\n(🌒 11:30 PM /🌞 7:32 AM)
-UID:10000e7f-8e9b-405d-ba6f-fda544db5d28@1000.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220605
-SUMMARY:💤 8 h 44 m [3 h 14 m / 100%]\r\n(🌒 10:45 PM /🌞 7:29 AM)
-UID:626b67dd-9c4e-49f9-b8eb-32b8c254e859@626b.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220613
-SUMMARY:🔥15\,534steps
-UID:7394ec87-e3db-4fe2-b1b0-16d9ddfb5f89@7394.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220618
-SUMMARY:🔥11\,050steps
-UID:cc0faf81-ac2d-4e75-a9d4-d53f86960440@cc0f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220706
-SUMMARY:🧘🏃🔥15\,244steps
-UID:052fbf64-0516-47f5-8246-7c78102eac78@052f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220622
-SUMMARY:🥞 2209 calories (232C/192P/57F)
-UID:d189dc0e-cb5e-42e5-bd8e-592b78c878ff@d189.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220619
-SUMMARY:💤 9 h 21 m [2 h 4 m / 97%]\r\n(🌒 10:20 PM /🌞 7:56 AM)
-UID:a63db4ba-ec9f-4b09-a0fb-3903cd5f9bd5@a63d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220624
-SUMMARY:💤 9 h 6 m [2 h 29 m / 100%]\r\n(🌒 9:49 PM /🌞 5:48 AM)
-UID:1885540a-8d81-4b0a-a1d8-08ea2de1e9a6@1885.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220709
-SUMMARY:🥞 2573 calories (292C/169P/81F)
-UID:d994b7d0-bb5e-4a0b-8254-62cc5cdc6f5a@d994.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220625
-SUMMARY:💤 7 h 28 m [3 h 36 m / 96%]\r\n(🌒 10:46 PM /🌞 6:29 AM)
-UID:444f9caf-4c30-4dd3-b7da-5e90d3b0b7c4@444f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220705
-SUMMARY:🥞 2098 calories (244C/141P/62F)
-UID:2835ccb3-1006-4456-afc5-8dda84afad5c@2835.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220627
-SUMMARY:🥞 2566 calories (341C/179P/54F)
-UID:22c6976e-4280-4218-b49e-0db644ea30a4@22c6.org
-END:VEVENT
-BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220707
 SUMMARY:💤 8 h 14 m [1 h 29 m / 100%]\r\n(🌒 11:17 PM /🌞 7:31 AM)
-UID:89f5b01c-fb91-4a74-83f3-b9eadb4b8b61@89f5.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220622
-SUMMARY:💤 7 h 48 m [1 h 0 m / 96%]\r\n(🌒 10:00 PM /🌞 6:04 AM)
-UID:b1f24f44-9e1f-4a13-897a-ee394858f497@b1f2.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220708
-SUMMARY:🏃🔥12\,787steps
-UID:22426b5b-ae9b-48a6-98e9-c0c3a770f709@2242.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220620
-SUMMARY:🥞 2346 calories (297C/177P/50F)
-UID:9b7d42cd-61c0-4868-96b8-5dcc832c1271@9b7d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220617
-SUMMARY:🔥5\,461steps
-UID:db6ea7db-5e3e-4954-848e-17b2973c1c6c@db6e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220628
-SUMMARY:🥞 2838 calories (346C/179P/82F)
-UID:7eb5c4e9-f449-4817-8388-0c69329dd302@7eb5.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220701
-SUMMARY:🔥12\,934steps
-UID:ad19e5ae-1917-4fc0-83ee-6a5efc160c32@ad19.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220627
-SUMMARY:🔥11\,200steps
-UID:aa785e91-c335-4a5b-b6b0-c3d65790db5c@aa78.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220601
-SUMMARY:🥞 2081 calories (279C/104P/61F)
-UID:f49aba5b-9887-49da-9b0c-d8d4006a4c9c@f49a.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220708
-SUMMARY:🥞 2589 calories (289C/176P/81F)
-UID:08b270f8-b1d0-42d9-a1c1-f6ec57bdbf64@08b2.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220602
-SUMMARY:🥞 2293 calories (308C/146P/53F)
-UID:c416a840-518c-40d7-9e3c-427b30e30e61@c416.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220604
-SUMMARY:💤 7 h 31 m [1 h 33 m / 78%]\r\n(🌒 9:01 PM /🌞 6:35 AM)
-UID:812e77e0-7397-44f7-8a24-e372b4a93b24@812e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220603
-SUMMARY:🔥13\,124steps
-UID:261fc2a1-4394-4dec-91e3-e2fa06c8afc7@261f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220629
-SUMMARY:💤 7 h 34 m [1 h 0 m / 100%]\r\n(🌒 10:00 PM /🌞 5:34 AM)
-UID:02ded0c9-81b6-4e54-ae4e-2c32c2752bce@02de.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220608
-SUMMARY:🥞 2336 calories (284C/147P/68F)
-UID:1af9d0ad-3f69-4d37-9545-fe7f3eccd05a@1af9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220623
-SUMMARY:🔥13\,519steps
-UID:64dfcb7a-3833-4295-89ec-92624bb5aad6@64df.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220614
-SUMMARY:🔥11\,485steps
-UID:b15d5816-b21a-4e1a-8545-ba1397fe1c1c@b15d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220619
-SUMMARY:🔥4\,661steps
-UID:381cc380-8536-4d62-83f0-aaec841fddca@381c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220607
-SUMMARY:🔥14\,449steps
-UID:af19c483-cd0b-47c5-acb9-36f57eeab717@af19.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220702
-SUMMARY:🔥15\,445steps
-UID:1ae7e5df-d0a2-459e-8eea-58b4168fc84b@1ae7.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220610
-SUMMARY:🔥8\,614steps
-UID:b146541e-f3ad-4c2d-b897-cbcb631d7011@b146.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220703
-SUMMARY:🔥16\,770steps
-UID:9b7577d9-e872-4960-8947-d1a3c9bc4f99@9b75.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220611
-SUMMARY:🥞 2287 calories (256C/138P/79F)
-UID:875e803e-2e42-43dd-ab41-60641270b5b1@875e.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220614
-SUMMARY:💤 6 h 43 m [1 h 33 m / 94%]\r\n(🌒 10:15 PM /🌞 5:22 AM)
-UID:c4995b40-25e3-4e04-9892-4b1cfe5d2c17@c499.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220628
-SUMMARY:🔥16\,008steps
-UID:6202a305-03d1-4b0a-b9ef-543220f3a2d1@6202.org
+UID:a50b2d36-3e44-4920-8c89-a844346de60a@a50b.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220710
-SUMMARY:🥞 2850 calories (328C/191P/86F)
-UID:ea855186-fe6d-448b-8c70-4814b6684ece@ea85.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220701
-SUMMARY:💤 7 h 54 m [1 h 31 m / 99%]\r\n(🌒 10:18 PM /🌞 6:15 AM)
-UID:3052e534-3be9-4fad-afb2-6c271021cad8@3052.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220707
-SUMMARY:🏃🔥15\,733steps
-UID:a45bc4bd-295c-4847-840b-a50c0909e8a5@a45b.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220621
-SUMMARY:💤 7 h 32 m [1 h 30 m / 97%]\r\n(🌒 10:49 PM /🌞 6:33 AM)
-UID:149b5fa1-9b95-476a-88ad-1fed292aae6f@149b.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220601
-SUMMARY:🔥10\,957steps
-UID:01105e8c-97dd-43aa-8011-dc3b172c6868@0110.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220701
-SUMMARY:🥞 2915 calories (268C/220P/107F)
-UID:989f7c22-483e-43b0-a262-ae024afeb31a@989f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220709
-SUMMARY:💤 7 h 44 m [2 h 29 m / 100%]\r\n(🌒 11:16 PM /🌞 7:00 AM)
-UID:cc40412d-f6ec-4201-beb4-cacccca290c9@cc40.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220611
-SUMMARY:💤 7 h 51 m [1 h 46 m / 97%]\r\n(🌒 10:26 PM /🌞 6:28 AM)
-UID:6ef9eb99-00f5-4dee-93fd-49aa9a12c99b@6ef9.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220618
-SUMMARY:🥞 2283 calories (238C/200P/59F)
-UID:9e1f8a09-44d6-4a58-aaed-eecbe7568e57@9e1f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220630
-SUMMARY:🥞 2814 calories (395C/133P/78F)
-UID:a735abd1-ad68-4ae0-8cec-7de95acb20e8@a735.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220625
-SUMMARY:🔥11\,068steps
-UID:7f5c1efd-a336-4592-b954-5281a3fef7ac@7f5c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220707
-SUMMARY:🥞 2955 calories (368C/184P/83F)
-UID:8361a564-48ff-4f6e-8746-f5221e87f214@8361.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220612
-SUMMARY:💤 7 h 51 m [1 h 46 m / 97%]\r\n(🌒 10:26 PM /🌞 6:28 AM)
-UID:623ca7a3-3a14-454e-905c-49910465795a@623c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220611
-SUMMARY:🔥10\,618steps
-UID:544d873d-0234-478b-abdc-344564b049f9@544d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220606
-SUMMARY:🥞 2468 calories (288C/185P/64F)
-UID:444f6322-ffa7-44c9-91ee-f44ee6ce292a@444f.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220621
-SUMMARY:🥞 2405 calories (295C/133P/77F)
-UID:01bfbf0b-ac2a-40a5-aaf1-f0481183e255@01bf.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220603
-SUMMARY:💤 7 h 33 m [1 h 30 m / 100%]\r\n(🌒 10:03 PM /🌞 5:36 AM)
-UID:47763f81-bb63-4366-a92c-f31f817e8fff@4776.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220623
-SUMMARY:💤 9 h 16 m [1 h 48 m / 99%]\r\n(🌒 10:33 PM /🌞 7:51 AM)
-UID:0e086371-fe8e-4ecb-bc48-592f7fbbe8c4@0e08.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220605
-SUMMARY:🔥8\,875steps
-UID:2d4a5c8d-21e1-4c91-bf55-5b215987a06e@2d4a.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220615
-SUMMARY:🔥15\,360steps
-UID:440bd6b1-7cc0-4796-b212-c48da6c53b77@440b.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220706
-SUMMARY:🥞 2114 calories (238C/151P/62F)
-UID:88cfa133-d071-4e89-8574-b5383d8d414e@88cf.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220630
-SUMMARY:🔥14\,346steps
-UID:6f11c2e8-ffe6-4693-80a0-6baebabb8f77@6f11.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220601
-SUMMARY:💤 9 h 1 m [0 h 15 m / 96%]\r\n(🌒 8:47 PM /🌞 6:06 AM)
-UID:71883f87-6aee-4dea-bce0-87f6bb0efd72@7188.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220704
-SUMMARY:🔥10\,125steps
-UID:61bd76ec-09a4-440e-a09e-052db6c2a9d9@61bd.org
+SUMMARY:🧘 0 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:2a94fdb3-0424-415b-8845-7629612ec295@2a94.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220613
 SUMMARY:💤 7 h 12 m [1 h 48 m / 99%]\r\n(🌒 11:45 PM /🌞 7:01 AM)
-UID:e947773c-c927-4e11-85bc-fb34a7b3d4d9@e947.org
+UID:0c55feec-cf9c-45dc-915b-48f89c55ee3d@0c55.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220602
-SUMMARY:💤 7 h 7 m [2 h 17 m / 100%]\r\n(🌒 10:04 PM /🌞 5:11 AM)
-UID:0d62c0ae-d043-4135-92c4-3cc9bc4f5be2@0d62.org
+DTSTART;VALUE=DATE:20220703
+SUMMARY:💤 6 h 59 m [0 h 44 m / 100%]\r\n(🌒 11:16 PM /🌞 6:15 AM)
+UID:307b7d5a-a9a3-41e4-9083-d115e1dda578@307b.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220615
-SUMMARY:🥞 2414 calories (282C/137P/82F)
-UID:d6bc8f2e-9835-4681-ab9e-bd74f0b14079@d6bc.org
+DTSTART;VALUE=DATE:20220711
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:5e7fa585-9c10-48c2-9d07-377990b279ce@5e7f.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220625
-SUMMARY:🥞 2644 calories (327C/163P/76F)
-UID:142a95f7-77a2-49fe-9512-942428ec1dd0@142a.org
+DTSTART;VALUE=DATE:20220706
+SUMMARY:🧘 1 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:92bcacf1-e5bd-4556-98a0-ed5798160272@92bc.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220610
-SUMMARY:💤 8 h 10 m [1 h 32 m / 100%]\r\n(🌒 10:14 PM /🌞 5:54 AM)
-UID:68165e4e-27c5-44d3-b06f-7bbe9fb9fa1e@6816.org
+DTSTART;VALUE=DATE:20220618
+SUMMARY:💤 8 h 42 m [2 h 0 m / 74%]\r\n(🌒 8:15 PM /🌞 7:00 AM)
+UID:5e3a949c-7d1c-4630-b7c3-4a306dc30fee@5e3a.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220704
-SUMMARY:💤 7 h 26 m [2 h 49 m / 100%]\r\n(🌒 11:41 PM /🌞 7:07 AM)
-UID:2c0309ca-bb97-4dbb-bda5-9de22378a325@2c03.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220616
-SUMMARY:🔥8\,390steps
-UID:14291a87-0df1-4073-96d0-1447d87a47d6@1429.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220710
-SUMMARY:💤 7 h 53 m [2 h 32 m / 100%]\r\n(🌒 10:46 PM /🌞 6:39 AM)
-UID:1b69c26c-7393-4da6-8736-c6bb1dddce80@1b69.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220620
-SUMMARY:🔥11\,951steps
-UID:3f549ff3-1095-49bb-8a73-42859bdb0767@3f54.org
+DTSTART;VALUE=DATE:20220623
+SUMMARY:💤 9 h 16 m [1 h 48 m / 99%]\r\n(🌒 10:33 PM /🌞 7:51 AM)
+UID:b8beeab1-dea9-40e6-a371-870170e50291@b8be.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220630
 SUMMARY:💤 7 h 54 m [1 h 31 m / 99%]\r\n(🌒 10:18 PM /🌞 6:15 AM)
-UID:0e5d6046-0d3c-4fe9-bbc4-34692a5cf0a1@0e5d.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220627
-SUMMARY:💤 7 h 51 m [2 h 31 m / 95%]\r\n(🌒 11:15 PM /🌞 7:27 AM)
-UID:eb3cba39-9ea2-4c1b-9d38-4ba5c4dbcf97@eb3c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220609
-SUMMARY:🔥13\,597steps
-UID:c535d959-dd92-4427-8da3-85be115eef48@c535.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220606
-SUMMARY:🔥11\,716steps
-UID:421bacbd-5378-4fa5-a3ca-0512eef322e1@421b.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220602
-SUMMARY:🔥10\,639steps
-UID:2e58691f-2a35-424e-be5a-cd99cc327078@2e58.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220624
-SUMMARY:🥞 2349 calories (266C/166P/69F)
-UID:5beb6543-b266-4e68-a610-6e30452195a1@5beb.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220702
-SUMMARY:🥞 2741 calories (328C/175P/81F)
-UID:931038af-8a99-458c-a7f4-570b60c85ce1@9310.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220623
-SUMMARY:🥞 2400 calories (267C/198P/60F)
-UID:8cf102df-59ba-4081-a385-ca4015012c9e@8cf1.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220613
-SUMMARY:🥞 2776 calories (362C/125P/92F)
-UID:2cd82584-f290-4011-8b2d-9848a5df94d8@2cd8.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220610
-SUMMARY:🥞 2475 calories (305C/154P/71F)
-UID:eab54b4e-ba47-4497-91b1-c1d80bf7e0df@eab5.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220615
-SUMMARY:💤 7 h 47 m [1 h 15 m / 100%]\r\n(🌒 12:00 AM /🌞 7:47 AM)
-UID:e6b4485e-359c-40c0-b37f-e0e48807c13a@e6b4.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220616
-SUMMARY:🥞 2427 calories (290C/139P/79F)
-UID:9fe71848-c6fe-4a1f-a1c0-36bac19820a3@9fe7.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20220629
-SUMMARY:🔥14\,554steps
-UID:55eadca0-9cb9-4d51-b987-d65caa133715@55ea.org
+UID:ccdafa67-0fba-42e0-8e24-8258fb8cb0a7@ccda.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220616
 SUMMARY:💤 6 h 45 m [0 h 31 m / 91%]\r\n(🌒 10:03 PM /🌞 5:25 AM)
-UID:6cbece61-bd3f-4b69-bdac-374b275c07bb@6cbe.org
+UID:0b3ffa77-8f7e-499d-a00d-c7be03116ae6@0b3f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220621
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:d6899365-65ed-4eb7-8afa-0cf629cb05b1@d689.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220604
+SUMMARY:💤 7 h 31 m [1 h 33 m / 78%]\r\n(🌒 9:01 PM /🌞 6:35 AM)
+UID:f35596df-1041-4532-b68f-66c42cd084b0@f355.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220607
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:a1f7dee5-794b-41e3-a457-2ce6963d62d7@a1f7.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220624
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:5f57d623-6e2b-40f0-9319-542f9edf7338@5f57.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220614
+SUMMARY:💤 6 h 43 m [1 h 33 m / 94%]\r\n(🌒 10:15 PM /🌞 5:22 AM)
+UID:e5d63a11-cafa-439c-a8f4-174fa38614bc@e5d6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220621
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:237f93ba-f669-4955-a40d-6ebfa1a112fc@237f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220614
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:f5569825-6005-409b-8c95-4ed642593b18@f556.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220629
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:684ba163-a84d-4bce-9874-a6a2be376107@684b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220623
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:d41bca3f-54e6-400d-85dd-e6fe0a9b8ff3@d41b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220708
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:7dc6a2c0-3e39-4dfd-826e-2b5ba8c1161f@7dc6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220708
+SUMMARY:🧘 0 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:06aafd51-6d24-445d-91c8-fdb261ddcbbc@06aa.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220630
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:6cf87025-147e-4406-893f-73b155bb1052@6cf8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220614
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:b76f23d4-785c-4ee7-8081-712f3cbab1b3@b76f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220701
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:c9033195-6252-4ed3-98da-1f9e5663e6ce@c903.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220601
+SUMMARY:💤 9 h 1 m [0 h 15 m / 96%]\r\n(🌒 8:47 PM /🌞 6:06 AM)
+UID:58d4dcbb-db19-497f-8f0f-592ff38a1837@58d4.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220620
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:e8fce3b3-f785-4e13-bbe7-c557d119c252@e8fc.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220622
+SUMMARY:💤 7 h 48 m [1 h 0 m / 96%]\r\n(🌒 10:00 PM /🌞 6:04 AM)
+UID:23785747-c32c-4626-b928-e21bd943b535@2378.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220606
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:10e0db4b-1cb4-472d-9dba-72e53de30eed@10e0.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220618
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:b71aa9ba-c1b0-4ab1-984d-62af972abe24@b71a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220622
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:0f8d118c-b105-4da5-807b-0d3589a43bb0@0f8d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220703
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:fbfe5bfa-bc5d-4b33-9ddf-e382630239b9@fbfe.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220616
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:7a600a85-e842-4f65-b231-226220ab0067@7a60.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220601
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:d5122b34-c432-4750-a6fa-c1c7fe42c255@d512.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220604
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:0db9c285-b5a8-42bb-a49b-82432df7ff01@0db9.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220605
+SUMMARY:💤 8 h 44 m [3 h 14 m / 100%]\r\n(🌒 10:45 PM /🌞 7:29 AM)
+UID:db84b02b-8efa-4f88-9a6b-9c510a426848@db84.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20220709
-SUMMARY:🏃🔥20\,532steps
-UID:cad9186f-4ebc-40bb-9d85-8e26619f4e93@cad9.org
+SUMMARY:🧘 0 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:678a449d-e625-404d-b01f-c291881b6831@678a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220601
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:37e1d51a-78f9-4480-bc20-4157478c66ab@37e1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220605
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:0435bb12-e59a-431f-8fd2-8b08fdf11eac@0435.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220704
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:14de5e59-cce7-44e3-bd9a-b3478501da54@14de.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220625
+SUMMARY:💤 7 h 28 m [3 h 36 m / 96%]\r\n(🌒 10:46 PM /🌞 6:29 AM)
+UID:55b14fd5-033b-4e5f-b669-2b35e0f3520f@55b1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220613
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:8b48a727-fec5-4f53-9752-7d725149d31d@8b48.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220612
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:91478533-87fe-4f85-8e1c-d4defcac5296@9147.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220607
+SUMMARY:💤 8 h 18 m [3 h 16 m / 100%]\r\n(🌒 9:54 PM /🌞 6:12 AM)
+UID:30ed2471-dfad-4de4-9524-878603c16cfa@30ed.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220623
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:d2f63d93-2fa5-4833-9d9f-2f2fb6b85e67@d2f6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220702
+SUMMARY:💤 8 h 25 m [0 h 59 m / 100%]\r\n(🌒 10:21 PM /🌞 6:46 AM)
+UID:194908d6-675f-4c87-b9ce-922a41ff9095@1949.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220617
+SUMMARY:💤 7 h 6 m [1 h 5 m / 75%]\r\n(🌒 10:15 PM /🌞 7:40 AM)
+UID:80a65d40-05e6-4b62-a37d-f8c257c6e99b@80a6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220610
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:a57c86d9-4216-4a21-b464-17845adb74b3@a57c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220608
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:56507603-8759-4f83-8615-d5d707f3efc7@5650.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220626
+SUMMARY:💤 7 h 47 m [0 h 30 m / 93%]\r\n(🌒 11:30 PM /🌞 7:32 AM)
+UID:1ff872b9-b874-420d-bf77-23c1c7264a39@1ff8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220625
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:91ac006d-29e6-42f8-9b28-0a7724ef25fe@91ac.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220705
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:eb886ba0-d5de-4838-9507-663ee80e62d4@eb88.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220701
+SUMMARY:💤 7 h 54 m [1 h 31 m / 99%]\r\n(🌒 10:18 PM /🌞 6:15 AM)
+UID:635a43a0-01cb-40eb-9d6f-507d8902440c@635a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220626
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:f1dcc084-8788-4f73-91f9-42461a204e47@f1dc.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220705
+SUMMARY:🧘 0 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:cb6d5ae8-6bf3-4ca6-9a57-45fd2c78fa24@cb6d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220707
+SUMMARY:🧘 0 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:1510a341-c05b-43af-809c-ab4f4270dfed@1510.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220606
+SUMMARY:💤 9 h 34 m [3 h 52 m / 94%]\r\n(🌒 9:31 PM /🌞 7:36 AM)
+UID:5f3a0bb8-600e-45e2-a507-fbaf1fe08b80@5f3a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220628
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:56ae6326-4acd-4ea8-b7d0-05c3dd9b6e22@56ae.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220611
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:a238a9b6-df82-4e16-9156-958bf1462757@a238.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220615
+SUMMARY:💤 7 h 47 m [1 h 15 m / 100%]\r\n(🌒 12:00 AM /🌞 7:47 AM)
+UID:764cd4f6-b924-44a8-9b1a-ff0fd4c6a5c3@764c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220704
+SUMMARY:💤 7 h 26 m [2 h 49 m / 100%]\r\n(🌒 11:41 PM /🌞 7:07 AM)
+UID:4dbea1c3-56bd-4f43-8c1d-64f8e1f82241@4dbe.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220619
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:9f415bbc-55b5-4754-88d6-77e9518888b6@9f41.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220612
+SUMMARY:💤 7 h 51 m [1 h 46 m / 97%]\r\n(🌒 10:26 PM /🌞 6:28 AM)
+UID:114210eb-1e1b-4fab-936f-b9467ad05b85@1142.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220710
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:8491b863-f429-4d03-9c40-9c3d8587b5d5@8491.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220630
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:c9f58c58-96d1-4670-8aba-cafbb59b56e5@c9f5.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220702
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:7a4cd0f1-b96d-434d-bdb9-6d1641f97264@7a4c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220627
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:f4670c1b-e3e6-429c-b498-7d2774ce9a72@f467.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220620
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:c20dc302-d0ac-4c3c-96da-f3dc5021a4a9@c20d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220628
+SUMMARY:💤 6 h 16 m [1 h 45 m / 100%]\r\n(🌒 11:31 PM /🌞 5:47 AM)
+UID:cb575074-6210-4f67-8e20-bae6fefc7583@cb57.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220617
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:b2569983-1949-439a-8d46-7b4e67440177@b256.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220622
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:399e20ca-17ac-4a63-a0c6-294f7a4c8426@399e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220708
+SUMMARY:💤 7 h 48 m [2 h 15 m / 100%]\r\n(🌒 10:29 PM /🌞 6:17 AM)
+UID:14e30e7a-87bc-4ed1-9d6d-ddd2e25f9ee7@14e3.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220610
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:37b92007-a28a-46bd-b408-b3e81a3f63ee@37b9.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220615
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:f3ef5713-842b-4b4d-9487-2113bcccc539@f3ef.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220616
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:b184b5fa-6a70-4e8c-8a51-d959a014e0c1@b184.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220605
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:a5f1ae76-50a6-41a6-a9f2-2a5cb8b21f6f@a5f1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220608
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:7eb098b8-538f-481b-a4b4-a877a34f2f84@7eb0.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220701
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:8f495092-aa1c-49fb-844e-9b0dbe179c7b@8f49.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220602
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:6dc153ea-fa0a-48b5-8cb3-687242f0f6dc@6dc1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220629
+SUMMARY:💤 7 h 34 m [1 h 0 m / 100%]\r\n(🌒 10:00 PM /🌞 5:34 AM)
+UID:200d8222-7957-481a-a5b5-7eae9ec77a73@200d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220706
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:d1605691-5848-4e31-91f1-c45b2f36db82@d160.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220602
+SUMMARY:💤 7 h 7 m [2 h 17 m / 100%]\r\n(🌒 10:04 PM /🌞 5:11 AM)
+UID:a2c3d638-06b7-4262-934d-e11ff6a71f9f@a2c3.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220627
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:56711b8c-efdf-4d0d-8d56-b39e20e802ee@5671.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220625
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:b3df601c-7c2f-4a1c-9cb7-1f40a621ad6a@b3df.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220626
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:755d03f4-77b9-496e-923d-0ae467dcb6bb@755d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220628
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:a524c06e-2a72-4685-9393-fa5f41509dc2@a524.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220711
+SUMMARY:🧘 1 🏃 1 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:f34cf604-04f7-402a-9553-7ec38ae1dd06@f34c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220611
+SUMMARY:💤 7 h 51 m [1 h 46 m / 97%]\r\n(🌒 10:26 PM /🌞 6:28 AM)
+UID:c3e9b6d1-f8bb-46d8-88df-ed899373dda5@c3e9.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220709
+SUMMARY:💤 7 h 44 m [2 h 29 m / 100%]\r\n(🌒 11:16 PM /🌞 7:00 AM)
+UID:e89d048a-b3a3-4958-ba00-1612e11f04cc@e89d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220709
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:9e38deef-8f3a-4982-85ce-c9888d76a65c@9e38.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220606
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:9a2cae3b-ebef-4c82-b6c7-e732f9122b17@9a2c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220609
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:f90655f5-4cc0-44f7-b6d9-63e90d318daf@f906.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220629
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:f0a83ad5-dba1-4c7b-8c05-594db10012fa@f0a8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220704
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:f863a12a-e416-4d77-82c9-bdc6a89d076e@f863.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220627
+SUMMARY:💤 7 h 51 m [2 h 31 m / 95%]\r\n(🌒 11:15 PM /🌞 7:27 AM)
+UID:f2da0425-7fb2-4911-9f4b-43907931b4c0@f2da.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220609
+SUMMARY:💤 6 h 17 m [2 h 0 m / 90%]\r\n(🌒 11:05 PM /🌞 6:02 AM)
+UID:ae5d5156-c004-4b5e-8acd-18bd249b746b@ae5d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220710
+SUMMARY:💤 7 h 53 m [2 h 32 m / 100%]\r\n(🌒 10:46 PM /🌞 6:39 AM)
+UID:d6494a26-c6e1-4631-bd9a-c56fb6d75f7b@d649.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220613
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:e0043c1a-22d1-43d7-9e47-8458bb77cf61@e004.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220603
+SUMMARY:💤 7 h 33 m [1 h 30 m / 100%]\r\n(🌒 10:03 PM /🌞 5:36 AM)
+UID:abc2dc62-07f2-469e-aa85-8a65a7507d2e@abc2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220608
+SUMMARY:💤 8 h 9 m [2 h 53 m / 88%]\r\n(🌒 10:11 PM /🌞 7:22 AM)
+UID:530d92b2-33bb-4c0c-bdbb-9929dd91b1a6@530d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220615
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:ae0d1716-2d6d-4f64-ac72-12f1bf57343c@ae0d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220603
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:13d6c5e1-af10-4bf4-b27f-340cfe589441@13d6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220610
+SUMMARY:💤 8 h 10 m [1 h 32 m / 100%]\r\n(🌒 10:14 PM /🌞 5:54 AM)
+UID:3809a287-f47e-426b-8c02-7624d4ccfdc0@3809.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220621
+SUMMARY:💤 7 h 32 m [1 h 30 m / 97%]\r\n(🌒 10:49 PM /🌞 6:33 AM)
+UID:4f045c51-eb87-47c8-85cc-245327acb106@4f04.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220624
+SUMMARY:💤 9 h 6 m [2 h 29 m / 100%]\r\n(🌒 9:49 PM /🌞 5:48 AM)
+UID:d07d0ea0-cb96-4527-9426-7a3aab6ce12a@d07d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220706
+SUMMARY:💤 7 h 25 m [0 h 30 m / 96%]\r\n(🌒 10:45 PM /🌞 6:25 AM)
+UID:bb6963b3-f9d3-4761-83d9-579f786dba44@bb69.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220611
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:5eb2c97c-a462-4ada-b303-30a47a908709@5eb2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220705
+SUMMARY:💤 7 h 39 m [2 h 2 m / 100%]\r\n(🌒 11:17 PM /🌞 6:56 AM)
+UID:daa0e685-83e2-4177-b8e5-3d530265de2d@daa0.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220624
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:2a12add8-fe44-42c4-8216-35e2244fef84@2a12.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220619
+SUMMARY:💤 9 h 21 m [2 h 4 m / 97%]\r\n(🌒 10:20 PM /🌞 7:56 AM)
+UID:09393c9e-4a77-4698-8121-cd55bd5e81d8@0939.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220619
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:af87e572-3aa4-4104-b916-9abccdab8245@af87.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220703
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:d4a6e795-8d42-4dd3-b059-c5def95745b0@d4a6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220604
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:02a30766-ffd8-497b-bc76-5e9e669e7f09@02a3.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220711
+SUMMARY:💤 0     9.0\n1     nan\n2     7.6\n3     8.7\n4     nan\n5     9.6\n6     nan\n7     8.2\n8     6.3\n9     8.2\n10    7.8\n11    6.3\n12    7.3\n13    nan\n14    7.9\n15    nan\n16    7.1\n17    8.0\n18    9.4\n19    9.1\n20    nan\n21    7.8\n22    9.3\n23    9.1\n24    7.5\n25    7.5\n0     8.3\n5     nan\n6     7.6\n0     7.9\n0     8.4\n0     nan\n0     7.6\n0     7.4\n0     8.2\n1     nan\n2     7.8\n3     7.9\n4     nan\n5     6.2\n6     8.0\nName: sleep_asleep\, dtype: object h (0      96\n1       0\n2     100\n3     100\n4       0\n5      95\n6       0\n7      89\n8      90\n9      87\n10     80\n11     91\n12    100\n13      0\n14    100\n15      0\n16     75\n17     74\n18     97\n19     86\n20      0\n21     96\n22    100\n23    100\n24     86\n25     93\n0      83\n5       0\n6      91\n0      95\n0     100\n0       0\n0      86\n0      96\n0      92\n1       0\n2      92\n3     100\n4       0\n5      83\n6     100\nName: sleep_eff\, dtype: object % eff.)
+UID:a02bbedd-0633-4e25-bae1-af011553b3a0@a02b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220612
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:ca731854-64b0-411f-adca-03a9355e3826@ca73.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220617
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:86a4a094-295f-414f-bfd3-13ded127edc5@86a4.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220607
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:328423dc-d94e-465d-909c-534a3722bfa8@3284.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220702
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:e64646e4-a059-4d2a-980b-9d6c7ab9791c@e646.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220603
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:568fc529-82bb-4cbc-80fd-00e843c1507e@568f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220609
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:9092d002-538b-40d1-877f-e225eda6fe1d@9092.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220602
+SUMMARY:🧘 0 🏃 0 🔥 0     10\,957\n1     10\,639\n2     13\,124\n3      9\,345\n4      8\,875\n5     11\,716\n6     14\,449\n7     14\,780\n8     13\,597\n9      8\,614\n10    10\,618\n11    11\,828\n12    15\,534\n13    11\,485\n14    15\,360\n15     8\,390\n16     5\,461\n17    11\,050\n18     4\,661\n19    11\,951\n20    12\,134\n21     9\,324\n22    13\,519\n23    13\,092\n24    11\,068\n25    13\,934\n0     11\,200\n5     16\,008\n6     14\,554\n0     14\,346\n0     12\,934\n0     15\,445\n0     16\,770\n0     10\,125\n0     10\,931\n1     15\,244\n2     15\,733\n3     12\,787\n4     20\,532\n5     17\,783\n6     13\,756\nName: steps\, dtype: object steps
+UID:70fa0c42-cfed-4f6a-9d31-959cbdd083b8@70fa.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220618
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:4df9946a-5608-4529-aaea-41c04505ab9a@4df9.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220707
+SUMMARY:🥞 0     2\,081\n1     2\,293\n2     2\,108\n3     2\,658\n4     2\,334\n5     2\,468\n6     2\,337\n7     2\,336\n8     2\,301\n9     2\,475\n10    2\,287\n11    2\,434\n12    2\,776\n13    2\,149\n14    2\,414\n15    2\,427\n16    2\,183\n17    2\,283\n18    2\,292\n19    2\,346\n20    2\,405\n21    2\,209\n22    2\,400\n23    2\,349\n24    2\,644\n25    2\,801\n0     2\,566\n5     2\,838\n6     2\,644\n0     2\,814\n0     2\,915\n0     2\,741\n0     2\,723\n0     2\,811\n0     2\,098\n1     2\,114\n2     2\,955\n3     2\,589\n4     2\,573\n5     2\,850\n6     2\,415\nName: calories\, dtype: object calories (0     279\n1     308\n2     282\n3     289\n4     260\n5     288\n6     249\n7     284\n8     326\n9     305\n10    256\n11    319\n12    362\n13    191\n14    282\n15    290\n16    269\n17    238\n18    291\n19    297\n20    295\n21    232\n22    267\n23    266\n24    327\n25    242\n0     341\n5     346\n6     226\n0     395\n0     268\n0     328\n0     309\n0     382\n0     244\n1     238\n2     368\n3     289\n4     292\n5     328\n6     275\nName: carbs\, dtype: object C/ 0     104\n1     146\n2     128\n3     182\n4     148\n5     185\n6     162\n7     147\n8     148\n9     154\n10    138\n11    168\n12    125\n13    164\n14    137\n15    139\n16    144\n17    200\n18    147\n19    177\n20    133\n21    192\n22    198\n23    166\n24    163\n25    249\n0     179\n5     179\n6     183\n0     133\n0     220\n0     175\n0     167\n0     206\n0     141\n1     151\n2     184\n3     176\n4     169\n5     191\n6     160\nName: protein\, dtype: object P/ 0      61\n1      53\n2      52\n3      86\n4      78\n5      64\n6      77\n7      68\n8      45\n9      71\n10     79\n11     54\n12     92\n13     81\n14     82\n15     79\n16     59\n17     59\n18     60\n19     50\n20     77\n21     57\n22     60\n23     69\n24     76\n25     93\n0      54\n5      82\n6     112\n0      78\n0     107\n0      81\n0      91\n0      51\n0      62\n1      62\n2      83\n3      81\n4      81\n5      86\n6      75\nName: fat\, dtype: object F)
+UID:b970bce6-0df9-4a6b-b2f5-991533727fd6@b970.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20220620
+SUMMARY:💤 9 h 6 m [4 h 48 m / 94%]\r\n(🌒 10:30 PM /🌞 6:59 AM)
+UID:eea2bd2a-fd8b-4063-ab55-f57ffa1a6db2@eea2.org
 END:VEVENT
 END:VCALENDAR
