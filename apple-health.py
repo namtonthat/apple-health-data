@@ -131,6 +131,7 @@ def dedup_df(df):
 def create_description_cols(df):
     """
     Create description columns for the generating events
+    Converts events into boolean
     """
     print("Creating description columns for calendar events")
     # Create boolean for beating threshold
@@ -146,13 +147,14 @@ def create_description_cols(df):
 
     print("Creating description columns")
 
-    food_macros = f"({df['carbs']} C/ {df['protein']} P/ {df['fat']} F)"
-    df['food'] =f"{df['calories']} calories {food_macros}"
-    df['activity'] = f"{df['steps']} steps"
+    df['food_macros'] = [f"({a}C/{b}P/{c}F)" for a,b,c in zip(df['carbs'], df['protein'], df['fat'])]
+    df['food'] = [f"{a} calories {b}" for a,b in zip(df['calories'], df['food_macros']) ]
+    df['activity'] = [f"{a} steps" for a in df['steps']]
+    df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
 
-    df['sleep'] = f"{df['sleep_asleep']} h ({df['sleep_eff']} % eff.)"
+    # Cleanse data
     df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
-
+    print(df.head())
     return df
 
 
@@ -254,7 +256,7 @@ def generate_calendar(df, output_path, aws_region: None):
     calendar_file_name = f'{file_name}.ics'
 
     print("Generating calendar (as .CSV)")
-
+    print(df.columns)
     df_events = df[['date', 'food', 'activity', 'sleep', 'exercise', 'mindful']].melt(
         id_vars = ['date'],
         value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
@@ -329,7 +331,7 @@ def upload_to_s3(file_name, output_cal, aws_region):
     bucket.put_object(Key= file_name, Body = data, ACL='public-read')
 
     print(f'Uploaded {file_name} for public read access')
-    print(f'Subscribe to {output_cal}/{file_name} for calendar events')
+    print(f'Subscribe to https://{bucket_name}.s3.{aws_region}.amazonaws.com/{file_name} for calendar events')
 
     return
 # %%
@@ -351,7 +353,9 @@ if __name__ == "__main__":
     # TODO: add in dropbox functionality
     # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: clean up df_health function
+    # TODO: clean up descriptions so it would just sit in the event description
     # TODO: add serverless framework
+    # TODO: add ability to ignore bad files
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
     output_local = config.get('output.output_local')
@@ -374,7 +378,10 @@ if __name__ == "__main__":
     # If Autosleep data is available, use that instead of Apple Health sleep data
     if len(df_sleep) > 0:
         df_health_sleep = etl_autosleep_data(df_sleep)
-        df_merge = pd.merge(df, df_health_sleep,  on = 'date', how= 'left')
+
+        df_merge = pd.merge(df, df_health_sleep[['date', 'sleep']],  on = 'date', how= 'left')
+        print(df_merge.columns)
+        # print(df_merge[['asleep', 'sleep']].head())
         df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
         df = df_merge.copy()
 
