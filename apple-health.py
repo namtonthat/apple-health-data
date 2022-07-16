@@ -57,17 +57,32 @@ def read_raw_files(str_path):
 
 # %% [markdown]
 # Functions to cleanse the data
+# - Rename columns
 # - Dedupe values
 # - Cleanse trim all values to closest integer except for sleep and weight
 # - Create the following columns
 #   - `Calories`
 
+
 # %%
-def create_numeric_cols(df):
+def update_columns(df, col_map):
     """
-    Calculates the total calories from the macros
-    Calculates the sleep efficiency
+    Rename columns for easier reference
+    Styling follows lowercase and no units with spaces being replaced by _
     """
+
+    df.rename(columns=col_map, inplace=True)
+
+    # fill in values
+    df = df.replace(r'^\s+$', np.nan, regex=True)
+
+    # convert column types
+    df['date'] = pd.to_datetime(df['date']).dt.date
+
+    # force apply float64 type for weight
+    df['weight'] = df['weight'].astype(float)
+
+    # Update column types
     df['calories'] = df['carbs'] * 4 + df['fat'] * 9 + df['protein'] * 4
     df['sleep_eff'] = df['sleep_asleep'] / df['sleep_in_bed'] * 100
     df['sleep_eff'] = df['sleep_eff'].fillna(0)
@@ -75,7 +90,6 @@ def create_numeric_cols(df):
 
     return df
 
-# %%
 def round_df(df):
     """
     Round all numerical columns to closest integer except for one d.p. cols
@@ -89,38 +103,8 @@ def round_df(df):
             else:
                 df[i] = np.floor(pd.to_numeric(df[i], errors= 'coerce')).astype('Int64')
 
-    # df = df.replace({np.nan: None})
     return df
 
-# %%
-def convert_column_types(df):
-    """
-    Convert certain columns to be a certain type
-    """
-    df['date'] = pd.to_datetime(df['date']).dt.date
-
-    # force apply float64 type for weight
-    df['weight'] = df['weight'].astype(float)
-
-    return df
-
-# %%
-def rename_columns(df, col_map):
-    """
-    Rename columns for easier reference
-    Styling follows lowercase and no units with spaces being replaced by _
-    """
-
-    df.rename(columns=col_map, inplace=True)
-
-    # fill in values
-    df = df.replace(r'^\s+$', np.nan, regex=True)
-
-    # convert column types
-    df = convert_column_types(df)
-    return df
-
-# %%
 def dedup_df(df):
     """
     Remove duplicates ordering by 'date' and 'creation_date' and then keep only the latest
@@ -205,7 +189,7 @@ def etl_autosleep_data(df_sleep):
 
     return df
 
-def make_event_description(event, event_type, description):
+def make_event_description(event_type, description):
     """
     Creates an event name
     """
@@ -228,11 +212,10 @@ def make_event_description(event, event_type, description):
         return event_description
 
 # %%
-def create_event(date, event_type, description):
+def create_event(date, description):
     """
     Create an all day event for the given date and type
     :param date: date as type datetime.date
-    :param event_type: type of event as string
     :param description: description of event as string
     """
     all_day_date = f"{date} 00:00:00"
@@ -259,7 +242,6 @@ def generate_calendar(df, output_path, aws_region: None):
     calendar_file_name = f'{file_name}.ics'
 
     print("Generating calendar (as .CSV)")
-    print(df.columns)
     df_events = df[['date', 'food', 'activity', 'sleep', 'exercise', 'mindful']].melt(
         id_vars = ['date'],
         value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
@@ -353,12 +335,12 @@ def get_config(config_file):
     return config
 
 if __name__ == "__main__":
-    # TODO: add in dropbox functionality
-    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
-    # TODO: clean up df_health function
+    # TODO: create function to calculate percentage of how close you are to your goal
     # TODO: clean up descriptions so it would just sit in the event description
+    # TODO: clean up df_health function
+    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
+    # TODO: add in dropbox functionality
     # TODO: add serverless framework
-    # TODO: add ability to ignore bad files
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
     output_local = config.get('output.output_local')
@@ -371,10 +353,9 @@ if __name__ == "__main__":
     # Round all numerical columns to closest integer except for sleep times and weight
     # Create description columns and deduplicate data
     if len(df) > 0:
-        df = rename_columns(df, col_map)
+        df = update_columns(df, col_map)
         df = round_df(df)
         df = dedup_df(df)
-        df = create_numeric_cols(df)
         df = create_description_cols(df)
         df = df.reset_index(drop=True)
 
@@ -384,7 +365,6 @@ if __name__ == "__main__":
 
         df_merge = pd.merge(df, df_health_sleep[['date', 'sleep']],  on = 'date', how= 'left')
         print(df_merge.columns)
-        # print(df_merge[['asleep', 'sleep']].head())
         df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
         df = df_merge.copy()
 
