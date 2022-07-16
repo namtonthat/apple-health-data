@@ -49,8 +49,14 @@ def read_raw_files(str_path):
         elif i.name.startswith('AutoSleep'):
             df_sleep = pd.concat([df_sleep, df_tmp])
 
-    return df_health, df_sleep
-
+    # ensure there is valid data
+    if (len(df_health) > 0):
+        if len(df_sleep) == 0:
+            print('No Autosleep data found')
+        return df_health, df_sleep
+    else:
+        print('No health data found.')
+        exit
 
 # %% [markdown]
 # ### Transformations
@@ -141,21 +147,21 @@ def create_description_cols(df, is_autosleep=False):
             elif df[i].dtypes in ('int64', 'Int64'):
                 df[i] = df[i].map('{:,.0f}'.format)
 
-        print("Creating description columns")
-
         df['description_food'] = [f"({a}C/{b}P/{c}F)" for a,b,c in zip(df['carbs'], df['protein'], df['fat'])]
 
-        df['food'] = [f"{a} calories {b}" for a,b in zip(df['calories'], df['description_food']) ]
+        df['description_exercise'] = df.agg(lambda x: f"{x['exercise']} mins of exercise and {x['mindful_mins']} mindful mins", axis=1)
+
+        df['description_sleep'] = df.agg(lambda x: f"{x['sleep_asleep']} mins asleep and {x['sleep_in_bed']} mins in bed", axis=1)
+
+        df['food'] = [f"{a} calories" for a in df['calories']]
         df['activity'] = [f"{a} steps" for a in df['steps']]
         df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
 
         # Cleanse data
         df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
 
+
         return df
-
-
-
 
 def convert_autosleep_time(time, is_24h=False):
     """
@@ -177,7 +183,6 @@ def etl_autosleep_data(df):
     """
     Cleans autosleep data into correct formatting
     """
-
     #  Clean up the time columns with either 12 h format (AM / PM) or with hours and minutes
     time_dict = {
         '24h': ['bedtime', 'waketime'],
@@ -199,27 +204,27 @@ def etl_autosleep_data(df):
 
     return df
 
+
 def make_event_name(event_type, description):
     """
-    Creates an event name
+    Creates an event name with an emoticon
     """
-    if description:
-        emoticon_dict = {
-            'sleep'     : "💤",
-            'activity'  : "🔥",
-            'food'      : "🥞",
-            'mindful'   : "🧘",
-            'exercise'  : "🏃"
-        }
+    emoticons = {
+        'sleep'     : "💤",
+        'activity'  : "🔥",
+        'food'      : "🥞",
+        'mindful'   : "🧘",
+        'exercise'  : "🏃"
+    }
 
-        emoticon = emoticon_dict.get(event_type)
+    emoticon = emoticons.get(event_type)
 
-        # case statement to catch events that were not completed
-        if description == 1:
-            description = ""
+    # case statement to catch events that were not completed
+    if description == 1:
+        description = ""
 
-        event_name = f"{emoticon} {description}"
-        return event_name
+    event_name = f"{emoticon} {description}"
+    return event_name
 
 # %%
 def create_event(date, description):
@@ -237,6 +242,50 @@ def create_event(date, description):
 
     return e
 
+def create_events_df(df):
+    """
+    Unpivot dataframe and updates descriptions with emoticons
+    """
+    print("Generating calendar (as .CSV)")
+    df_events = df[['date', 'food', 'activity', 'sleep', 'exercise', 'mindful']].melt(
+        id_vars = ['date'],
+        value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
+        var_name = 'event_type',
+        value_name = 'event_name'
+    )
+
+    df_events['event_name'] = [make_event_name(a,b) for a,b in zip(df_events['event_type'], df_events['event_name'])]
+
+    df_events = join_events(df_events, list_events=['activity', 'mindful', 'exercise'])
+
+    return df_events
+
+
+def join_events(df, list_events):
+    """
+    Joins multiple events into a single entry
+    """
+    print(f"Joining {list_events} into a single event to dataframe")
+
+    # Filter out events to join
+    df_list_events = df.query(f'event_type in @list_events').sort_values(by= ['date', 'event_type'], ascending=True)
+    df_list_events.fillna('', inplace=True)
+
+    # join events together
+    df_list_events['event_name'] = df_list_events.groupby('date')['event_name'].transform(lambda x: ' '.join(x))
+
+    # cleanse trailing
+    df_list_events['event_name'] = [x.strip() for x in df_list_events['event_name']]
+
+    # Keep only the last events - as descriptions are duplicated
+    df_list_events.drop_duplicates(subset = ['date', 'event_name'], keep = 'first', inplace = True)
+    df_list_events.reset_index(drop=True, inplace=True)
+
+    # merge back with original data
+    df_events = pd.concat([df.query('event_type not in @list_events'), df_list_events])
+
+    return df_events
+
 def generate_calendar(df, outputs, aws_region: None):
     """
     Generates a CSV and ICS from the dataframe
@@ -249,27 +298,7 @@ def generate_calendar(df, outputs, aws_region: None):
     output_csv_path = f"{output_path}/{file_name}.csv"
     calendar_file_name = f'{file_name}.ics'
 
-    print("Generating calendar (as .CSV)")
-    df_events = df[['date', 'food', 'activity', 'sleep', 'exercise', 'mindful']].melt(
-        id_vars = ['date'],
-        value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
-        var_name = 'event_type',
-        value_name = 'event_name'
-    )
-
-    # TODO: remove the duplicate iterrows
-    # Combine exercise, mindfulness and activity into one
-    for _, row in df_events.iterrows():
-        row['event_name'] = make_event_name(row['event_type'], row['event_name'])
-
-    print(df_events.head())
-    df_event_activity = df_events.query('event_type in ("mindful", "exercise", "activity")').copy().sort_values(by= ['event_type'], ascending= False)
-    df_event_activity.fillna('', inplace=True)
-    df_event_activity['event_name'] = df_event_activity.groupby('date')['event_name'].transform(lambda x: ' '.join(x))
-    df_event_activity['event_name'] = [x.strip() for x in df_event_activity['event_name']]
-    df_event_activity.drop_duplicates(subset = ['date', 'event_name'], keep = 'last', inplace = True)
-
-    df_event = pd.concat([df_events.query('event_type in ("food", "sleep")'), df_event_activity])
+    df_event = create_events_df(df)
 
     print("Generating calendar (as .ICS)")
     c = Calendar()
@@ -360,14 +389,11 @@ if __name__ == "__main__":
 
     df, df_sleep = read_raw_files(input_path)
 
-    # Round all numerical columns to closest integer except for sleep times and weight
-    # Create description columns and deduplicate data
-    if len(df) > 0:
-        df = update_columns(df, col_map)
-        df = round_df(df)
-        df = dedup_df(df)
-        df = create_description_cols(df)
-        df = df.reset_index(drop=True)
+    df = update_columns(df, col_map)
+    df = round_df(df)
+    df = dedup_df(df)
+    df = create_description_cols(df)
+    df = df.reset_index(drop=True)
 
     # If Autosleep data is available, use that instead of Apple Health sleep data
     if len(df_sleep) > 0:
