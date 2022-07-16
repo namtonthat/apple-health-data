@@ -173,12 +173,10 @@ def convert_autosleep_time(time, is_24h=False):
 
     return time_dt
 
-def etl_autosleep_data(df_sleep):
+def etl_autosleep_data(df):
     """
     Cleans autosleep data into correct formatting
     """
-    # Create a copy for non destructive debugging
-    df = df_sleep.copy()
 
     #  Clean up the time columns with either 12 h format (AM / PM) or with hours and minutes
     time_dict = {
@@ -201,7 +199,7 @@ def etl_autosleep_data(df_sleep):
 
     return df
 
-def make_event_description(event_type, description):
+def make_event_name(event_type, description):
     """
     Creates an event name
     """
@@ -220,8 +218,8 @@ def make_event_description(event_type, description):
         if description == 1:
             description = ""
 
-        event_description = f"{emoticon} {description}"
-        return event_description
+        event_name = f"{emoticon} {description}"
+        return event_name
 
 # %%
 def create_event(date, description):
@@ -256,26 +254,27 @@ def generate_calendar(df, outputs, aws_region: None):
         id_vars = ['date'],
         value_vars = ['food', 'activity', 'sleep', 'exercise', 'mindful'],
         var_name = 'event_type',
-        value_name = 'description'
+        value_name = 'event_name'
     )
 
     # TODO: remove the duplicate iterrows
     # Combine exercise, mindfulness and activity into one
     for _, row in df_events.iterrows():
-        row['description'] = make_event_description(row['date'], row['event_type'], row['description'])
+        row['event_name'] = make_event_name(row['event_type'], row['event_name'])
 
+    print(df_events.head())
     df_event_activity = df_events.query('event_type in ("mindful", "exercise", "activity")').copy().sort_values(by= ['event_type'], ascending= False)
     df_event_activity.fillna('', inplace=True)
-    df_event_activity['description'] = df_event_activity.groupby('date')['description'].transform(lambda x: ' '.join(x))
-    df_event_activity['description'] = [x.strip() for x in df_event_activity['description']]
-    df_event_activity.drop_duplicates(subset = ['date', 'description'], keep = 'last', inplace = True)
+    df_event_activity['event_name'] = df_event_activity.groupby('date')['event_name'].transform(lambda x: ' '.join(x))
+    df_event_activity['event_name'] = [x.strip() for x in df_event_activity['event_name']]
+    df_event_activity.drop_duplicates(subset = ['date', 'event_name'], keep = 'last', inplace = True)
 
     df_event = pd.concat([df_events.query('event_type in ("food", "sleep")'), df_event_activity])
 
     print("Generating calendar (as .ICS)")
     c = Calendar()
     for _, row in df_event.iterrows():
-        e = create_event(row['date'], row['event_type'], row['description'])
+        e = create_event(row['date'], row['event_name'])
         c.events.add(e)
 
     df_event.to_csv(output_csv_path)
