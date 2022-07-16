@@ -88,6 +88,10 @@ def update_columns(df, col_map):
     df['sleep_eff'] = df['sleep_eff'].fillna(0)
     df['sleep_eff'] = df['sleep_eff'].astype('int64')
 
+    # Create boolean for beating threshold
+    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins'].fillna(0)]
+    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins'].fillna(0)]
+
     return df
 
 def round_df(df):
@@ -115,34 +119,42 @@ def dedup_df(df):
     return df_dedup
 
 # %%
-def create_description_cols(df):
+def create_description_cols(df, is_autosleep=False):
     """
     Create description columns for the generating events
     Converts events into boolean
     """
     print("Creating description columns for calendar events")
-    # Create boolean for beating threshold
-    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins'].fillna(0)]
-    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins'].fillna(0)]
+    # cleansing Autosleep data
+    if is_autosleep:
+        print("Updating sleep statistics")
+        df['description_sleep'] =  df.agg(lambda x: f"{x['deep']} / {int(x['efficiency'])}%]\r\n(🌒 {x['bedtime']} /🌞 {x['waketime']})", axis=1)
 
-    # pretty print
-    for i in df.columns:
-        if df[i].dtypes == 'float64':
-            df[i] = df[i].apply(lambda x: f"{x:,.1f}")
-        elif df[i].dtypes in ('int64', 'Int64'):
-            df[i] = df[i].map('{:,.0f}'.format)
+        df['sleep'] = df.agg(lambda x: f"{x['asleep']}", axis = 1)
 
-    print("Creating description columns")
+        return df
+    # cleansing Apple Health Data
+    else:
+        for i in df.columns:
+            if df[i].dtypes == 'float64':
+                df[i] = df[i].apply(lambda x: f"{x:,.1f}")
+            elif df[i].dtypes in ('int64', 'Int64'):
+                df[i] = df[i].map('{:,.0f}'.format)
 
-    df['food_macros'] = [f"({a}C/{b}P/{c}F)" for a,b,c in zip(df['carbs'], df['protein'], df['fat'])]
-    df['food'] = [f"{a} calories {b}" for a,b in zip(df['calories'], df['food_macros']) ]
-    df['activity'] = [f"{a} steps" for a in df['steps']]
-    df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
+        print("Creating description columns")
 
-    # Cleanse data
-    df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
-    print(df.head())
-    return df
+        df['description_food'] = [f"({a}C/{b}P/{c}F)" for a,b,c in zip(df['carbs'], df['protein'], df['fat'])]
+
+        df['food'] = [f"{a} calories {b}" for a,b in zip(df['calories'], df['description_food']) ]
+        df['activity'] = [f"{a} steps" for a in df['steps']]
+        df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
+
+        # Cleanse data
+        df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
+
+        return df
+
+
 
 
 def convert_autosleep_time(time, is_24h=False):
@@ -182,7 +194,7 @@ def etl_autosleep_data(df_sleep):
     # Collect the date
     df['date'] = df['ISO8601'].apply(lambda x: datetime.strptime(x.split("T")[0], '%Y-%m-%d').date())
 
-    df['sleep'] = df.agg(lambda x: f"{x['asleep']} [{x['deep']} / {int(x['efficiency'])}%]\r\n(🌒 {x['bedtime']} /🌞 {x['waketime']})", axis = 1)
+    df = create_description_cols(df, is_autosleep=True)
 
     # Remove duplicates
     df = dedup_df(df)
@@ -227,18 +239,16 @@ def create_event(date, description):
 
     return e
 
-def generate_calendar(df, output_path, aws_region: None):
+def generate_calendar(df, outputs, aws_region: None):
     """
     Generates a CSV and ICS from the dataframe
     :param df: cleansed dataframe from `create_description_cols`
-    :param output_path: as type string - a combination of both the local and public storage
+    :param outputs: as type string - a combination of both the local and public storage
     :param aws_region: as type string - the AWS S3 bucket region for uploading the ICS
     """
-    output_csv = output_path[0]
-    output_cal = output_path[1]
-    file_name = 'apple-health-calendar'
+    output_path, output_cal, file_name = outputs
 
-    output_csv_path = f"{output_csv}/{file_name}.csv"
+    output_csv_path = f"{output_path}/{file_name}.csv"
     calendar_file_name = f'{file_name}.ics'
 
     print("Generating calendar (as .CSV)")
@@ -343,8 +353,9 @@ if __name__ == "__main__":
     # TODO: add serverless framework
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
-    output_local = config.get('output.output_local')
-    output_cal = config.get('output.output_cal')
+    output_path = config.get('output.raw_path')
+    output_cal = config.get('output.calendar_path')
+    output_file_name = config.get('output.file_name')
     region = config.get('type.region')
     col_map = config.get('col_map')
 
@@ -369,4 +380,4 @@ if __name__ == "__main__":
         df = df_merge.copy()
 
     # Upload into S3 / public access bucket
-    df = generate_calendar(df, output_path = [output_local, output_cal], aws_region = region)
+    df = generate_calendar(df, outputs = [output_path, output_cal, output_file_name], aws_region = region)
