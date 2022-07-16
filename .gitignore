@@ -3,3 +3,5 @@ workout-routes
 electrocardiograms
 *.xml
 .DS_Store
+*.csv
+*.ics
