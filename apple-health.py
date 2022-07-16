@@ -23,11 +23,12 @@ def process_health_data(file):
     :param file: as exported by Auto Health Export / Autosleep
     """
     df = pd.read_csv(file, sep = ',')
-    print(f'Processing: {file.name}')
-    df['creation_date'] = ts_to_dt(file.stat().st_atime)
-    df['filename'] = file.name
+    if len(df.columns) > 1:
+        print(f'Processing: {file.name}')
+        df['creation_date'] = ts_to_dt(file.stat().st_atime)
+        df['filename'] = file.name
 
-    return df
+        return df
 
 def read_raw_files(str_path):
     """
@@ -38,13 +39,15 @@ def read_raw_files(str_path):
     df_sleep = pd.DataFrame()
     # valid_files = ['HealthAutoExport', 'AutoSleep']
     print('Reading files..')
-    for i in os.scandir(str_path):
-        if i.name.endswith('.csv'):
-            df_tmp = process_health_data(i)
-            if i.name.startswith('HealthAutoExport'):
-                df_health = pd.concat([df_health, df_tmp])
-            elif i.name.startswith('AutoSleep'):
-                df_sleep = pd.concat([df_sleep, df_tmp])
+    file_list = os.scandir(str_path)
+    csv_files = [f for f in file_list if f.name.endswith('.csv')]
+
+    for i in csv_files:
+        df_tmp = process_health_data(i)
+        if i.name.startswith('HealthAutoExport'):
+            df_health = pd.concat([df_health, df_tmp])
+        elif i.name.startswith('AutoSleep'):
+            df_sleep = pd.concat([df_sleep, df_tmp])
 
     return df_health, df_sleep
 
