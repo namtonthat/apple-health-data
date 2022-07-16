@@ -1,136 +1,271 @@
-,date,event_type,event_name
-0,2022-06-01,food,"🥞 2,085 calories"
-1,2022-06-02,food,"🥞 2,300 calories"
-2,2022-06-03,food,"🥞 2,119 calories"
-3,2022-06-04,food,"🥞 2,671 calories"
-4,2022-06-05,food,"🥞 2,341 calories"
-5,2022-06-06,food,"🥞 2,474 calories"
-6,2022-06-07,food,"🥞 2,346 calories"
-7,2022-06-08,food,"🥞 2,347 calories"
-8,2022-06-09,food,"🥞 2,311 calories"
-9,2022-06-10,food,"🥞 2,482 calories"
-10,2022-06-11,food,"🥞 2,298 calories"
-11,2022-06-12,food,"🥞 2,438 calories"
-12,2022-06-13,food,"🥞 2,780 calories"
-13,2022-06-14,food,"🥞 2,155 calories"
-14,2022-06-15,food,"🥞 2,425 calories"
-15,2022-06-16,food,"🥞 2,434 calories"
-16,2022-06-17,food,"🥞 2,190 calories"
-17,2022-06-18,food,"🥞 2,287 calories"
-18,2022-06-19,food,"🥞 2,300 calories"
-19,2022-06-20,food,"🥞 2,352 calories"
-20,2022-06-21,food,"🥞 2,414 calories"
-21,2022-06-22,food,"🥞 2,218 calories"
-22,2022-06-23,food,"🥞 2,411 calories"
-23,2022-06-24,food,"🥞 2,357 calories"
-24,2022-06-25,food,"🥞 2,652 calories"
-25,2022-06-26,food,"🥞 2,814 calories"
-26,2022-06-27,food,"🥞 2,572 calories"
-27,2022-06-28,food,"🥞 2,842 calories"
-28,2022-06-29,food,"🥞 2,650 calories"
-29,2022-06-30,food,"🥞 2,819 calories"
-30,2022-07-01,food,"🥞 2,919 calories"
-31,2022-07-02,food,"🥞 2,751 calories"
-32,2022-07-03,food,"🥞 2,736 calories"
-33,2022-07-04,food,"🥞 2,817 calories"
-34,2022-07-05,food,"🥞 2,103 calories"
-35,2022-07-06,food,"🥞 2,123 calories"
-36,2022-07-07,food,"🥞 2,961 calories"
-37,2022-07-08,food,"🥞 2,594 calories"
-38,2022-07-09,food,"🥞 2,587 calories"
-39,2022-07-10,food,"🥞 2,857 calories"
-40,2022-07-11,food,"🥞 2,426 calories"
-41,2022-07-12,food,"🥞 2,042 calories"
-42,2022-07-13,food,"🥞 2,014 calories"
-43,2022-07-14,food,"🥞 2,124 calories"
-44,2022-07-15,food,"🥞 2,113 calories"
-90,2022-06-01,sleep,💤 7 h 16 m
-91,2022-06-02,sleep,💤 9 h 1 m
-92,2022-06-03,sleep,💤 7 h 7 m
-93,2022-06-04,sleep,💤 7 h 33 m
-94,2022-06-05,sleep,💤 7 h 31 m
-95,2022-06-06,sleep,💤 8 h 44 m
-96,2022-06-07,sleep,💤 9 h 34 m
-97,2022-06-08,sleep,💤 8 h 18 m
-98,2022-06-09,sleep,💤 8 h 9 m
-99,2022-06-10,sleep,💤 6 h 17 m
-100,2022-06-11,sleep,💤 8 h 10 m
-101,2022-06-12,sleep,💤 7 h 51 m
-102,2022-06-13,sleep,💤 7 h 12 m
-103,2022-06-14,sleep,💤 7 h 12 m
-104,2022-06-15,sleep,💤 6 h 43 m
-105,2022-06-16,sleep,💤 7 h 47 m
-106,2022-06-17,sleep,💤 6 h 45 m
-107,2022-06-18,sleep,💤 7 h 6 m
-108,2022-06-19,sleep,💤 8 h 42 m
-109,2022-06-20,sleep,💤 9 h 21 m
-110,2022-06-21,sleep,💤 9 h 6 m
-111,2022-06-22,sleep,💤 7 h 32 m
-112,2022-06-23,sleep,💤 7 h 48 m
-113,2022-06-24,sleep,💤 9 h 16 m
-114,2022-06-25,sleep,💤 9 h 6 m
-115,2022-06-26,sleep,💤 7 h 28 m
-116,2022-06-27,sleep,💤 7 h 47 m
-117,2022-06-28,sleep,💤 7 h 51 m
-118,2022-06-29,sleep,💤 6 h 16 m
-119,2022-06-30,sleep,💤 7 h 34 m
-120,2022-07-01,sleep,💤 7 h 54 m
-121,2022-07-02,sleep,💤 8 h 25 m
-122,2022-07-03,sleep,💤 6 h 59 m
-123,2022-07-04,sleep,💤 7 h 26 m
-124,2022-07-05,sleep,💤 7 h 39 m
-125,2022-07-06,sleep,💤 7 h 25 m
-126,2022-07-07,sleep,💤 8 h 14 m
-127,2022-07-08,sleep,💤 7 h 48 m
-128,2022-07-09,sleep,💤 7 h 44 m
-129,2022-07-10,sleep,💤 7 h 53 m
-130,2022-07-11,sleep,💤 6 h 14 m
-131,2022-07-12,sleep,💤 7 h 58 m
-132,2022-07-13,sleep,💤 7 h 21 m
-133,2022-07-14,sleep,💤 8 h 15 m
-134,2022-07-15,sleep,💤 7 h 14 m
-0,2022-06-01,activity,"🔥 10,957 steps 🏃 0 🧘 0"
-1,2022-06-02,activity,"🔥 10,639 steps 🏃 0 🧘 0"
-2,2022-06-03,activity,"🔥 13,124 steps 🏃 0 🧘 0"
-3,2022-06-04,activity,"🔥 9,345 steps 🏃 0 🧘 0"
-4,2022-06-05,activity,"🔥 8,875 steps 🏃 0 🧘 0"
-5,2022-06-06,activity,"🔥 11,716 steps 🏃 0 🧘 0"
-6,2022-06-07,activity,"🔥 14,449 steps 🏃 0 🧘 0"
-7,2022-06-08,activity,"🔥 14,780 steps 🏃 0 🧘 0"
-8,2022-06-09,activity,"🔥 13,597 steps 🏃 0 🧘 0"
-9,2022-06-10,activity,"🔥 8,614 steps 🏃 0 🧘 0"
-10,2022-06-11,activity,"🔥 10,618 steps 🏃 0 🧘 0"
-11,2022-06-12,activity,"🔥 11,828 steps 🏃 0 🧘 0"
-12,2022-06-13,activity,"🔥 15,534 steps 🏃 0 🧘 0"
-13,2022-06-14,activity,"🔥 11,485 steps 🏃 0 🧘 0"
-14,2022-06-15,activity,"🔥 15,360 steps 🏃 0 🧘 0"
-15,2022-06-16,activity,"🔥 8,390 steps 🏃 0 🧘 0"
-16,2022-06-17,activity,"🔥 5,461 steps 🏃 0 🧘 0"
-17,2022-06-18,activity,"🔥 11,050 steps 🏃 0 🧘 0"
-18,2022-06-19,activity,"🔥 4,661 steps 🏃 0 🧘 0"
-19,2022-06-20,activity,"🔥 11,951 steps 🏃 0 🧘 0"
-20,2022-06-21,activity,"🔥 12,134 steps 🏃 0 🧘 0"
-21,2022-06-22,activity,"🔥 9,324 steps 🏃 0 🧘 0"
-22,2022-06-23,activity,"🔥 13,519 steps 🏃 0 🧘 0"
-23,2022-06-24,activity,"🔥 13,092 steps 🏃 0 🧘 0"
-24,2022-06-25,activity,"🔥 11,068 steps 🏃 0 🧘 0"
-25,2022-06-26,activity,"🔥 13,934 steps 🏃 0 🧘 0"
-26,2022-06-27,activity,"🔥 11,200 steps 🏃 0 🧘 0"
-27,2022-06-28,activity,"🔥 16,008 steps 🏃 0 🧘 0"
-28,2022-06-29,activity,"🔥 14,554 steps 🏃 0 🧘 0"
-29,2022-06-30,activity,"🔥 14,346 steps 🏃 0 🧘 0"
-30,2022-07-01,activity,"🔥 12,934 steps 🏃 0 🧘 0"
-31,2022-07-02,activity,"🔥 15,445 steps 🏃 0 🧘 0"
-32,2022-07-03,activity,"🔥 16,770 steps 🏃 0 🧘 0"
-33,2022-07-04,activity,"🔥 10,125 steps 🏃 0 🧘 0"
-34,2022-07-05,activity,"🔥 10,931 steps 🏃 1 🧘 0"
-35,2022-07-06,activity,"🔥 15,244 steps 🏃 0 🧘 0"
-36,2022-07-07,activity,"🔥 15,733 steps 🏃 1 🧘 0"
-37,2022-07-08,activity,"🔥 12,787 steps 🏃 1 🧘 0"
-38,2022-07-09,activity,"🔥 20,532 steps 🏃 1 🧘 0"
-39,2022-07-10,activity,"🔥 17,783 steps 🏃 1 🧘 0"
-40,2022-07-11,activity,"🔥 13,756 steps 🏃 1 🧘 1"
-41,2022-07-12,activity,"🔥 11,925 steps 🏃 1 🧘 0"
-42,2022-07-13,activity,"🔥 15,649 steps 🏃 1 🧘 1"
-43,2022-07-14,activity,"🔥 16,446 steps 🏃 1 🧘 0"
-44,2022-07-15,activity,"🔥 12,831 steps 🏃 1 🧘 0"
+,date,event_type,event_name,dsc
+0,2022-06-01,food,"🥞 2,085 calories",279C / 104P / 61F
+1,2022-06-02,food,"🥞 2,300 calories",308C / 146P / 53F
+2,2022-06-03,food,"🥞 2,119 calories",282C / 128P / 52F
+3,2022-06-04,food,"🥞 2,671 calories",289C / 182P / 86F
+4,2022-06-05,food,"🥞 2,341 calories",260C / 148P / 78F
+5,2022-06-06,food,"🥞 2,474 calories",288C / 185P / 64F
+6,2022-06-07,food,"🥞 2,346 calories",249C / 162P / 77F
+7,2022-06-08,food,"🥞 2,347 calories",284C / 147P / 68F
+8,2022-06-09,food,"🥞 2,311 calories",326C / 148P / 45F
+9,2022-06-10,food,"🥞 2,482 calories",305C / 154P / 71F
+10,2022-06-11,food,"🥞 2,298 calories",256C / 138P / 79F
+11,2022-06-12,food,"🥞 2,438 calories",319C / 168P / 54F
+12,2022-06-13,food,"🥞 2,780 calories",362C / 125P / 92F
+13,2022-06-14,food,"🥞 2,155 calories",191C / 164P / 81F
+14,2022-06-15,food,"🥞 2,425 calories",282C / 137P / 82F
+15,2022-06-16,food,"🥞 2,434 calories",290C / 139P / 79F
+16,2022-06-17,food,"🥞 2,190 calories",269C / 144P / 59F
+17,2022-06-18,food,"🥞 2,287 calories",238C / 200P / 59F
+18,2022-06-19,food,"🥞 2,300 calories",291C / 147P / 60F
+19,2022-06-20,food,"🥞 2,352 calories",297C / 177P / 50F
+20,2022-06-21,food,"🥞 2,414 calories",295C / 133P / 77F
+21,2022-06-22,food,"🥞 2,218 calories",232C / 192P / 57F
+22,2022-06-23,food,"🥞 2,411 calories",267C / 198P / 60F
+23,2022-06-24,food,"🥞 2,357 calories",266C / 166P / 69F
+24,2022-06-25,food,"🥞 2,652 calories",327C / 163P / 76F
+25,2022-06-26,food,"🥞 2,814 calories",242C / 249P / 93F
+26,2022-06-27,food,"🥞 2,572 calories",341C / 179P / 54F
+27,2022-06-28,food,"🥞 2,842 calories",346C / 179P / 82F
+28,2022-06-29,food,"🥞 2,650 calories",226C / 183P / 112F
+29,2022-06-30,food,"🥞 2,819 calories",395C / 133P / 78F
+30,2022-07-01,food,"🥞 2,919 calories",268C / 220P / 107F
+31,2022-07-02,food,"🥞 2,751 calories",328C / 175P / 81F
+32,2022-07-03,food,"🥞 2,736 calories",309C / 167P / 91F
+33,2022-07-04,food,"🥞 2,817 calories",382C / 206P / 51F
+34,2022-07-05,food,"🥞 2,103 calories",244C / 141P / 62F
+35,2022-07-06,food,"🥞 2,123 calories",238C / 151P / 62F
+36,2022-07-07,food,"🥞 2,961 calories",368C / 184P / 83F
+37,2022-07-08,food,"🥞 2,594 calories",289C / 176P / 81F
+38,2022-07-09,food,"🥞 2,587 calories",292C / 169P / 81F
+39,2022-07-10,food,"🥞 2,857 calories",328C / 191P / 86F
+40,2022-07-11,food,"🥞 2,426 calories",275C / 160P / 75F
+41,2022-07-12,food,"🥞 2,042 calories",244C / 174P / 40F
+42,2022-07-13,food,"🥞 2,014 calories",218C / 151P / 59F
+43,2022-07-14,food,"🥞 2,124 calories",285C / 153P / 41F
+44,2022-07-15,food,"🥞 2,113 calories",198C / 125P / 90F
+45,2022-06-01,sleep,💤 9 h 1 m,"Deep sleep: 0 h 15 m 
+Sleep efficiency: 96% 
+Bedtime: 🌒 8:47 PM 
+Wakeup time: 🌞 6:06 AM)"
+46,2022-06-02,sleep,💤 7 h 7 m,"Deep sleep: 2 h 17 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:04 PM 
+Wakeup time: 🌞 5:11 AM)"
+47,2022-06-03,sleep,💤 7 h 33 m,"Deep sleep: 1 h 30 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:03 PM 
+Wakeup time: 🌞 5:36 AM)"
+48,2022-06-04,sleep,💤 7 h 31 m,"Deep sleep: 1 h 33 m 
+Sleep efficiency: 78% 
+Bedtime: 🌒 9:01 PM 
+Wakeup time: 🌞 6:35 AM)"
+49,2022-06-05,sleep,💤 8 h 44 m,"Deep sleep: 3 h 14 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:45 PM 
+Wakeup time: 🌞 7:29 AM)"
+50,2022-06-06,sleep,💤 9 h 34 m,"Deep sleep: 3 h 52 m 
+Sleep efficiency: 94% 
+Bedtime: 🌒 9:31 PM 
+Wakeup time: 🌞 7:36 AM)"
+51,2022-06-07,sleep,💤 8 h 18 m,"Deep sleep: 3 h 16 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 9:54 PM 
+Wakeup time: 🌞 6:12 AM)"
+52,2022-06-08,sleep,💤 8 h 9 m,"Deep sleep: 2 h 53 m 
+Sleep efficiency: 88% 
+Bedtime: 🌒 10:11 PM 
+Wakeup time: 🌞 7:22 AM)"
+53,2022-06-09,sleep,💤 6 h 17 m,"Deep sleep: 2 h 0 m 
+Sleep efficiency: 90% 
+Bedtime: 🌒 11:05 PM 
+Wakeup time: 🌞 6:02 AM)"
+54,2022-06-10,sleep,💤 8 h 10 m,"Deep sleep: 1 h 32 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:14 PM 
+Wakeup time: 🌞 5:54 AM)"
+55,2022-06-11,sleep,💤 7 h 51 m,"Deep sleep: 1 h 46 m 
+Sleep efficiency: 97% 
+Bedtime: 🌒 10:26 PM 
+Wakeup time: 🌞 6:28 AM)"
+56,2022-06-12,sleep,💤 7 h 51 m,"Deep sleep: 1 h 46 m 
+Sleep efficiency: 97% 
+Bedtime: 🌒 10:26 PM 
+Wakeup time: 🌞 6:28 AM)"
+57,2022-06-13,sleep,💤 7 h 12 m,"Deep sleep: 1 h 48 m 
+Sleep efficiency: 99% 
+Bedtime: 🌒 11:45 PM 
+Wakeup time: 🌞 7:01 AM)"
+58,2022-06-14,sleep,💤 6 h 43 m,"Deep sleep: 1 h 33 m 
+Sleep efficiency: 94% 
+Bedtime: 🌒 10:15 PM 
+Wakeup time: 🌞 5:22 AM)"
+59,2022-06-15,sleep,💤 7 h 47 m,"Deep sleep: 1 h 15 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 12:00 AM 
+Wakeup time: 🌞 7:47 AM)"
+60,2022-06-16,sleep,💤 6 h 45 m,"Deep sleep: 0 h 31 m 
+Sleep efficiency: 91% 
+Bedtime: 🌒 10:03 PM 
+Wakeup time: 🌞 5:25 AM)"
+61,2022-06-17,sleep,💤 7 h 6 m,"Deep sleep: 1 h 5 m 
+Sleep efficiency: 75% 
+Bedtime: 🌒 10:15 PM 
+Wakeup time: 🌞 7:40 AM)"
+62,2022-06-18,sleep,💤 8 h 42 m,"Deep sleep: 2 h 0 m 
+Sleep efficiency: 74% 
+Bedtime: 🌒 8:15 PM 
+Wakeup time: 🌞 7:00 AM)"
+63,2022-06-19,sleep,💤 9 h 21 m,"Deep sleep: 2 h 4 m 
+Sleep efficiency: 97% 
+Bedtime: 🌒 10:20 PM 
+Wakeup time: 🌞 7:56 AM)"
+64,2022-06-20,sleep,💤 9 h 6 m,"Deep sleep: 4 h 48 m 
+Sleep efficiency: 94% 
+Bedtime: 🌒 10:30 PM 
+Wakeup time: 🌞 6:59 AM)"
+65,2022-06-21,sleep,💤 7 h 32 m,"Deep sleep: 1 h 30 m 
+Sleep efficiency: 97% 
+Bedtime: 🌒 10:49 PM 
+Wakeup time: 🌞 6:33 AM)"
+66,2022-06-22,sleep,💤 7 h 48 m,"Deep sleep: 1 h 0 m 
+Sleep efficiency: 96% 
+Bedtime: 🌒 10:00 PM 
+Wakeup time: 🌞 6:04 AM)"
+67,2022-06-23,sleep,💤 9 h 16 m,"Deep sleep: 1 h 48 m 
+Sleep efficiency: 99% 
+Bedtime: 🌒 10:33 PM 
+Wakeup time: 🌞 7:51 AM)"
+68,2022-06-24,sleep,💤 9 h 6 m,"Deep sleep: 2 h 29 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 9:49 PM 
+Wakeup time: 🌞 5:48 AM)"
+69,2022-06-25,sleep,💤 7 h 28 m,"Deep sleep: 3 h 36 m 
+Sleep efficiency: 96% 
+Bedtime: 🌒 10:46 PM 
+Wakeup time: 🌞 6:29 AM)"
+70,2022-06-26,sleep,💤 7 h 47 m,"Deep sleep: 0 h 30 m 
+Sleep efficiency: 93% 
+Bedtime: 🌒 11:30 PM 
+Wakeup time: 🌞 7:32 AM)"
+71,2022-06-27,sleep,💤 7 h 51 m,"Deep sleep: 2 h 31 m 
+Sleep efficiency: 95% 
+Bedtime: 🌒 11:15 PM 
+Wakeup time: 🌞 7:27 AM)"
+72,2022-06-28,sleep,💤 6 h 16 m,"Deep sleep: 1 h 45 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:31 PM 
+Wakeup time: 🌞 5:47 AM)"
+73,2022-06-29,sleep,💤 7 h 34 m,"Deep sleep: 1 h 0 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:00 PM 
+Wakeup time: 🌞 5:34 AM)"
+74,2022-06-30,sleep,💤 7 h 54 m,"Deep sleep: 1 h 31 m 
+Sleep efficiency: 99% 
+Bedtime: 🌒 10:18 PM 
+Wakeup time: 🌞 6:15 AM)"
+75,2022-07-01,sleep,💤 7 h 54 m,"Deep sleep: 1 h 31 m 
+Sleep efficiency: 99% 
+Bedtime: 🌒 10:18 PM 
+Wakeup time: 🌞 6:15 AM)"
+76,2022-07-02,sleep,💤 8 h 25 m,"Deep sleep: 0 h 59 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:21 PM 
+Wakeup time: 🌞 6:46 AM)"
+77,2022-07-03,sleep,💤 6 h 59 m,"Deep sleep: 0 h 44 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:16 PM 
+Wakeup time: 🌞 6:15 AM)"
+78,2022-07-04,sleep,💤 7 h 26 m,"Deep sleep: 2 h 49 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:41 PM 
+Wakeup time: 🌞 7:07 AM)"
+79,2022-07-05,sleep,💤 7 h 39 m,"Deep sleep: 2 h 2 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:17 PM 
+Wakeup time: 🌞 6:56 AM)"
+80,2022-07-06,sleep,💤 7 h 25 m,"Deep sleep: 0 h 30 m 
+Sleep efficiency: 96% 
+Bedtime: 🌒 10:45 PM 
+Wakeup time: 🌞 6:25 AM)"
+81,2022-07-07,sleep,💤 8 h 14 m,"Deep sleep: 1 h 29 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:17 PM 
+Wakeup time: 🌞 7:31 AM)"
+82,2022-07-08,sleep,💤 7 h 48 m,"Deep sleep: 2 h 15 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:29 PM 
+Wakeup time: 🌞 6:17 AM)"
+83,2022-07-09,sleep,💤 7 h 44 m,"Deep sleep: 2 h 29 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:16 PM 
+Wakeup time: 🌞 7:00 AM)"
+84,2022-07-10,sleep,💤 7 h 53 m,"Deep sleep: 2 h 32 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:46 PM 
+Wakeup time: 🌞 6:39 AM)"
+85,2022-07-11,sleep,💤 6 h 14 m,"Deep sleep: 1 h 29 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 12:17 AM 
+Wakeup time: 🌞 6:31 AM)"
+86,2022-07-12,sleep,💤 7 h 58 m,"Deep sleep: 3 h 14 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:30 PM 
+Wakeup time: 🌞 7:28 AM)"
+87,2022-07-13,sleep,💤 7 h 21 m,"Deep sleep: 1 h 0 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:45 PM 
+Wakeup time: 🌞 6:06 AM)"
+88,2022-07-14,sleep,💤 8 h 15 m,"Deep sleep: 2 h 0 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 11:15 PM 
+Wakeup time: 🌞 7:30 AM)"
+89,2022-07-15,sleep,💤 7 h 14 m,"Deep sleep: 1 h 29 m 
+Sleep efficiency: 100% 
+Bedtime: 🌒 10:46 PM 
+Wakeup time: 🌞 6:00 AM)"
+90,2022-06-01,activity,"🔥 10,957 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+91,2022-06-02,activity,"🔥 10,639 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+92,2022-06-03,activity,"🔥 13,124 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+93,2022-06-04,activity,"🔥 9,345 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+94,2022-06-05,activity,"🔥 8,875 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+95,2022-06-06,activity,"🔥 11,716 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+96,2022-06-07,activity,"🔥 14,449 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+97,2022-06-08,activity,"🔥 14,780 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+98,2022-06-09,activity,"🔥 13,597 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+99,2022-06-10,activity,"🔥 8,614 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+100,2022-06-11,activity,"🔥 10,618 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+101,2022-06-12,activity,"🔥 11,828 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+102,2022-06-13,activity,"🔥 15,534 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+103,2022-06-14,activity,"🔥 11,485 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+104,2022-06-15,activity,"🔥 15,360 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+105,2022-06-16,activity,"🔥 8,390 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+106,2022-06-17,activity,"🔥 5,461 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+107,2022-06-18,activity,"🔥 11,050 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+108,2022-06-19,activity,"🔥 4,661 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+109,2022-06-20,activity,"🔥 11,951 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+110,2022-06-21,activity,"🔥 12,134 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+111,2022-06-22,activity,"🔥 9,324 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+112,2022-06-23,activity,"🔥 13,519 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+113,2022-06-24,activity,"🔥 13,092 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+114,2022-06-25,activity,"🔥 11,068 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+115,2022-06-26,activity,"🔥 13,934 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+116,2022-06-27,activity,"🔥 11,200 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+117,2022-06-28,activity,"🔥 16,008 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+118,2022-06-29,activity,"🔥 14,554 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+119,2022-06-30,activity,"🔥 14,346 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+120,2022-07-01,activity,"🔥 12,934 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+121,2022-07-02,activity,"🔥 15,445 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+122,2022-07-03,activity,"🔥 16,770 steps 🏃 0 🧘 0",0 mins of exercise and 0 mindful mins
+123,2022-07-04,activity,"🔥 10,125 steps 🏃 0 🧘 0",30 mins of exercise and 0 mindful mins
+124,2022-07-05,activity,"🔥 10,931 steps 🏃 1 🧘 0",40 mins of exercise and 0 mindful mins
+125,2022-07-06,activity,"🔥 15,244 steps 🏃 1 🧘 1",44 mins of exercise and 10 mindful mins
+126,2022-07-07,activity,"🔥 15,733 steps 🏃 1 🧘 0",46 mins of exercise and 0 mindful mins
+127,2022-07-08,activity,"🔥 12,787 steps 🏃 1 🧘 0",40 mins of exercise and 0 mindful mins
+128,2022-07-09,activity,"🔥 20,532 steps 🏃 1 🧘 0",87 mins of exercise and 0 mindful mins
+129,2022-07-10,activity,"🔥 17,783 steps 🏃 1 🧘 0",77 mins of exercise and 0 mindful mins
+130,2022-07-11,activity,"🔥 13,756 steps 🏃 1 🧘 1",80 mins of exercise and 10 mindful mins
+131,2022-07-12,activity,"🔥 11,925 steps 🏃 1 🧘 0",40 mins of exercise and 0 mindful mins
+132,2022-07-13,activity,"🔥 15,649 steps 🏃 1 🧘 1",50 mins of exercise and 10 mindful mins
+133,2022-07-14,activity,"🔥 16,446 steps 🏃 1 🧘 0",101 mins of exercise and 0 mindful mins
+134,2022-07-15,activity,"🔥 12,831 steps 🏃 1 🧘 0",48 mins of exercise and 0 mindful mins
