@@ -18,12 +18,13 @@
         'Date': 'date',
         'Apple Exercise Time (min)': "exercise_mins",
         'Carbohydrates (g)': 'carbs',
+        'Fiber (g)': 'fibre',
         'Mindful Minutes (min)': "mindful_mins",
         'Protein (g)': 'protein',
         'Total Fat (g)': 'fat',
         'Sleep Analysis [In Bed] (hr)': 'sleep_in_bed',
         'Sleep Analysis [Asleep] (hr)': 'sleep_asleep',
         'Step Count (count)': 'steps',
-        'Weight & Body Mass (kg) ': 'weight'
+        'Weight & Body Mass (kg) ': 'body_weight'
   }
 }

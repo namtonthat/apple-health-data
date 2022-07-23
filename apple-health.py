@@ -17,7 +17,7 @@ from ics import Calendar, Event
 def ts_to_dt(ts):
     return datetime.fromtimestamp(ts)
 
-def process_health_data(file):
+def process_health_data(file, path_prefix):
     """
     Create [date, source] columns from files read in.
     :param file: as exported by Auto Health Export / Autosleep
@@ -31,6 +31,8 @@ def process_health_data(file):
         return df
     else:
         print(f'No data in {file.name}\r\n')
+        os.remove(f'{path_prefix}/{file.name}')
+        print(f'Removed {file.name}')
 
 def read_raw_files(str_path):
     """
@@ -43,9 +45,10 @@ def read_raw_files(str_path):
     print('Reading files..')
     file_list = os.scandir(str_path)
     csv_files = [f for f in file_list if f.name.endswith('.csv')]
+    sorted_csv = sorted(csv_files, key = lambda e: e.name)
 
-    for i in csv_files:
-        df_tmp = process_health_data(i)
+    for i in sorted_csv:
+        df_tmp = process_health_data(file = i, path_prefix = str_path)
         if i.name.startswith('HealthAutoExport'):
             df_health = pd.concat([df_health, df_tmp])
         elif i.name.startswith('AutoSleep'):
@@ -86,9 +89,8 @@ def update_columns(df, col_map):
 
     # convert column types
     df['date'] = pd.to_datetime(df['date']).dt.date
-    # df['sleep_eff'] = df['sleep_eff'].fillna(0)
     # force apply float64 type for weight
-    df['weight'] = df['weight'].astype(float)
+    df['body_weight'] = df['body_weight'].fillna(method = 'ffill')
 
     # Update column types
     df['calories'] = df['carbs'] * 4 + df['fat'] * 9 + df['protein'] * 4
@@ -147,6 +149,7 @@ def create_description_cols(df, is_autosleep=False):
         df['sleep'] = df.agg(lambda x: f"{x['asleep']}", axis = 1)
         print(df.head())
         return df
+
     # cleansing Apple Health Data
     else:
         for i in df.columns:
@@ -155,8 +158,9 @@ def create_description_cols(df, is_autosleep=False):
             elif df[i].dtypes in ('int64', 'Int64'):
                 df[i] = df[i].map('{:,.0f}'.format)
 
+        print(df.columns)
         # Create columns descriptions for event description
-        df['dsc_food'] = [f"{a}C / {b}P / {c}F" for a,b,c in zip(df['carbs'], df['protein'], df['fat'])]
+        df['dsc_food'] = [f"{a}C / {b}P / {c}F\r\nFibre: {d} g" for a,b,c,d in zip(df['carbs'], df['protein'], df['fat'], df['fibre'])]
 
         df['dsc_activity'] = df.agg(lambda x:
             f"{x['exercise_mins']} mins of exercise and "
@@ -174,6 +178,7 @@ def create_description_cols(df, is_autosleep=False):
         df['food'] = [f"{a} calories" for a in df['calories']]
         df['activity'] = [f"{a} steps" for a in df['steps']]
         df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
+        df['weight'] = [f"{a} kg" for a in df['body_weight']]
 
         # Cleanse data
         df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
@@ -231,7 +236,8 @@ def make_event_name(event_type, description):
         'activity'  : "🔥",
         'food'      : "🥞",
         'mindful'   : "🧘",
-        'exercise'  : "🏃"
+        'exercise'  : "🏃",
+        'weight'    : "🎚️"
     }
 
     emoticon = emoticons.get(event_type)
@@ -265,9 +271,9 @@ def create_events_df(df):
     Unpivot dataframe and updates descriptions with emoticons
     """
     print("Generating calendar (as .CSV)")
-    df_events = df[['date', 'food','sleep','activity', 'exercise', 'mindful']].melt(
+    df_events = df[['date', 'food', 'weight', 'sleep','activity', 'exercise', 'mindful']].melt(
         id_vars = ['date'],
-        value_vars = ['food', 'sleep', 'activity', 'exercise', 'mindful'],
+        value_vars = ['food', 'weight', 'sleep', 'activity', 'exercise', 'mindful'],
         var_name = 'event_type',
         value_name = 'event_name'
     )
@@ -285,6 +291,8 @@ def create_events_df(df):
     df_events['event_name'] = [make_event_name(a,b) for a,b in zip(df_events['event_type'], df_events['event_name'])]
 
     df_events = join_events(df_events, list_events=['activity', 'mindful', 'exercise'])
+
+    df_events = join_events(df_events, list_events=['food', 'weight'])
 
     # merge description into the events if available
     df_events = pd.merge(df_events, df_events_dsc, on = ['date','event_type'], how = 'left')
@@ -418,7 +426,7 @@ if __name__ == "__main__":
     col_map = config.get('col_map')
 
     df, df_sleep = read_raw_files(input_path)
-
+    print(df.columns)
     df = update_columns(df, col_map)
     df = round_df(df)
     df = dedup_df(df)
