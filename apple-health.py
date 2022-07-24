@@ -92,6 +92,8 @@ def update_columns(df, col_map):
     df['date'] = pd.to_datetime(df['date']).dt.date
     # force apply float64 type for weight
     df['body_weight'] = df['body_weight'].fillna(method = 'ffill')
+    df['body_weight'] = df['body_weight'].astype('float64')
+
 
     # Update column types
     df['calories'] = df['carbs'] * 4 + df['fat'] * 9 + df['protein'] * 4
@@ -99,8 +101,9 @@ def update_columns(df, col_map):
     df['sleep_eff'] = df['sleep_eff'].fillna(0)
     df['sleep_eff'] = df['sleep_eff'].astype('int64')
 
-    df['exercise'] = [1 if x > 30 else 0 for x in df['exercise_mins']]
-    df['mindful'] = [1 if x > 5 else 0 for x in df['mindful_mins']]
+    # Round sessions of exercise and mindfulness to 60 mins and 7 min interavls respectively
+    df['exercise'] = [round(float(x/60),0) for x in df['exercise_mins']]
+    df['mindful'] = [round(float(x/7), 0) for x in df['mindful_mins']]
 
     return df
 
@@ -140,7 +143,7 @@ def weekly_average(df):
     # create rolling 7 day average but filter out for Sunday
     df_avg = df[num_cols].rolling(on = 'date', window = 7).mean().dropna()
     df_avg['day'] = [i.weekday() for i in df_avg['date']]
-    df_avg = df_avg[df_avg['day'] == 0].reset_index()
+    df_avg = df_avg[df_avg['day'] == 6].reset_index()
 
     # calculate total
     df_sum = df[['date', 'calories']].rolling(on = 'date', window = 7).sum().dropna()
@@ -161,16 +164,20 @@ def weekly_average(df):
         'calories_y': 'calories_sum'
     }, inplace = True)
 
-    # create description column
-    df_wa['average'] = df_wa.agg(lambda x:
-        f"Average weekly calories:"
+
+    df_wa['dsc_average'] = df_wa.agg(lambda x:
         f"{x['protein']} P / {x['carbs']} C / {x['fat']} F\r\n"
-        f"Average: {x['calories_avg']} calories\r\n"
+        f"{x['body_weight']} kg\r\n"
         f"Total Budget: {x['calories_sum']} calories",
         axis = 1
     )
 
-    return df_wa[['date', 'average']]
+    df_wa['average'] = df_wa.agg(lambda x:
+        f"{x['calories_avg']} calories",
+        axis = 1
+    )
+
+    return df_wa[['date', 'dsc_average', 'average']]
 
 # %%
 def create_description_cols(df, is_autosleep=False):
@@ -229,9 +236,10 @@ def create_description_cols(df, is_autosleep=False):
         # Cleanse data
         df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
 
+        print(df_wa)
         # merge with weekly average data
         df = pd.merge(left = df, right = df_wa, how = 'left', on = 'date').fillna('')
-        print(df.head())
+        print(df[df['dsc_average'] != ""].head())
 
         return df
 
@@ -332,9 +340,9 @@ def create_events_df(df):
     # remove values that are empty
     df_events = df_events[df_events['event_name'] != ''].reset_index()
 
-    df_events_dsc = df[['date', 'dsc_food', 'dsc_sleep','dsc_activity']].melt(
+    df_events_dsc = df[['date', 'dsc_food', 'dsc_sleep','dsc_activity', 'dsc_average']].melt(
         id_vars = ['date'],
-        value_vars = ['dsc_food', 'dsc_sleep','dsc_activity'],
+        value_vars = ['dsc_food', 'dsc_sleep','dsc_activity', 'dsc_average'],
         var_name = 'event_type',
         value_name = 'dsc'
     )
@@ -469,7 +477,6 @@ def get_config(config_file):
 
 if __name__ == "__main__":
     # TODO: create function to calculate percentage of how close you are to your goal
-    # TODO: create weekly summary statistics for Sunday
     # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: add in dropbox functionality
     # TODO: add serverless framework
