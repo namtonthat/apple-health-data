@@ -26,5 +26,6 @@
         'Sleep Analysis [Asleep] (hr)': 'sleep_asleep',
         'Step Count (count)': 'steps',
         'Weight & Body Mass (kg) ': 'body_weight'
-  }
+  },
+
 }

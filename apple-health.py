@@ -3,6 +3,7 @@ Simple Python script to render Apple Health data from Auto Exports
 """
 from operator import truediv
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 import numpy as np
 from datetime import datetime
 import boto3
@@ -108,7 +109,7 @@ def round_df(df):
     Round all numerical columns to closest integer except for one d.p. cols
     Replaces all NaN with null
     """
-    one_dp_cols = ['sleep_asleep', 'sleep_in_bed', 'weight']
+    one_dp_cols = ['sleep_asleep', 'sleep_in_bed', 'body_weight']
     for i in df.columns:
         if df[i].dtypes == 'float64':
             if i in one_dp_cols:
@@ -127,6 +128,49 @@ def dedup_df(df):
     df_dedup = df_sort.drop_duplicates(subset = 'date', keep = 'last')
 
     return df_dedup
+
+def weekly_average(df):
+    """
+    Calculates the weekly average statistics for any numeric columns
+    Resets on Sunday
+    """
+    num_cols = [i for i in df.columns if is_numeric_dtype(df[i])]
+    num_cols.append('date')
+
+    # create rolling 7 day average but filter out for Sunday
+    df_avg = df[num_cols].rolling(on = 'date', window = 7).mean().dropna()
+    df_avg['day'] = [i.weekday() for i in df_avg['date']]
+    df_avg = df_avg[df_avg['day'] == 0].reset_index()
+
+    # calculate total
+    df_sum = df[['date', 'calories']].rolling(on = 'date', window = 7).sum().dropna()
+
+    # join data together
+    df_wa = round_df(
+            pd.merge(
+                left = df_avg,
+                right = df_sum,
+                how = 'inner',
+                on = 'date'
+            )
+        )
+
+    # renaming
+    df_wa.rename(columns = {
+        'calories_x': 'calories_avg',
+        'calories_y': 'calories_sum'
+    }, inplace = True)
+
+    # create description column
+    df_wa['average'] = df_wa.agg(lambda x:
+        f"Average weekly calories:"
+        f"{x['protein']} P / {x['carbs']} C / {x['fat']} F\r\n"
+        f"Average: {x['calories_avg']} calories\r\n"
+        f"Total Budget: {x['calories_sum']} calories",
+        axis = 1
+    )
+
+    return df_wa[['date', 'average']]
 
 # %%
 def create_description_cols(df, is_autosleep=False):
@@ -152,6 +196,8 @@ def create_description_cols(df, is_autosleep=False):
 
     # cleansing Apple Health Data
     else:
+        df_wa = weekly_average(df)
+        # adding commas to thousand
         for i in df.columns:
             if df[i].dtypes == 'float64':
                 df[i] = df[i].apply(lambda x: f"{x:,.1f}")
@@ -160,7 +206,7 @@ def create_description_cols(df, is_autosleep=False):
 
         print(df.columns)
         # Create columns descriptions for event description
-        df['dsc_food'] = [f"{a}C / {b}P / {c}F\r\nFibre: {d} g" for a,b,c,d in zip(df['carbs'], df['protein'], df['fat'], df['fibre'])]
+        df['dsc_food'] = [f"{a}P / {b}C / {c}F\r\nFibre: {d} g" for a,b,c,d in zip(df['protein'], df['carbs'], df['fat'], df['fibre'])]
 
         df['dsc_activity'] = df.agg(lambda x:
             f"{x['exercise_mins']} mins of exercise and "
@@ -182,6 +228,10 @@ def create_description_cols(df, is_autosleep=False):
 
         # Cleanse data
         df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
+
+        # merge with weekly average data
+        df = pd.merge(left = df, right = df_wa, how = 'left', on = 'date').fillna('')
+        print(df.head())
 
         return df
 
@@ -237,7 +287,8 @@ def make_event_name(event_type, description):
         'food'      : "🥞",
         'mindful'   : "🧘",
         'exercise'  : "🏃",
-        'weight'    : "🎚️"
+        'weight'    : "🎚️",
+        'average'   : "📈"
     }
 
     emoticon = emoticons.get(event_type)
@@ -271,12 +322,15 @@ def create_events_df(df):
     Unpivot dataframe and updates descriptions with emoticons
     """
     print("Generating calendar (as .CSV)")
-    df_events = df[['date', 'food', 'weight', 'sleep','activity', 'exercise', 'mindful']].melt(
+    df_events = df[['date', 'food', 'weight', 'sleep', 'activity', 'exercise', 'mindful', 'average']].melt(
         id_vars = ['date'],
-        value_vars = ['food', 'weight', 'sleep', 'activity', 'exercise', 'mindful'],
+        value_vars = ['food', 'weight', 'sleep', 'activity', 'exercise', 'mindful', 'average'],
         var_name = 'event_type',
         value_name = 'event_name'
     )
+
+    # remove values that are empty
+    df_events = df_events[df_events['event_name'] != ''].reset_index()
 
     df_events_dsc = df[['date', 'dsc_food', 'dsc_sleep','dsc_activity']].melt(
         id_vars = ['date'],
@@ -285,17 +339,20 @@ def create_events_df(df):
         value_name = 'dsc'
     )
 
-    # TODO: make this into a function to speed up
+    # Add description to events
     df_events_dsc['event_type'] = [x.split('dsc_')[-1] for x in df_events_dsc['event_type']]
 
+    # Adding emoticons to prettify
     df_events['event_name'] = [make_event_name(a,b) for a,b in zip(df_events['event_type'], df_events['event_name'])]
 
+    # Coalesce events together
     df_events = join_events(df_events, list_events=['activity', 'mindful', 'exercise'])
 
     df_events = join_events(df_events, list_events=['food', 'weight'])
 
     # merge description into the events if available
-    df_events = pd.merge(df_events, df_events_dsc, on = ['date','event_type'], how = 'left')
+    df_events = pd.merge(df_events, df_events_dsc, on = ['date','event_type'], how = 'left').fillna("")
+
 
     return df_events
 
@@ -338,7 +395,6 @@ def generate_calendar(df, outputs, aws_region: None):
     calendar_file_name = f'{file_name}.ics'
 
     df_event = create_events_df(df)
-
     print("Generating calendar (as .ICS)")
     c = Calendar()
     for _, row in df_event.iterrows():
@@ -413,8 +469,8 @@ def get_config(config_file):
 
 if __name__ == "__main__":
     # TODO: create function to calculate percentage of how close you are to your goal
-    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: create weekly summary statistics for Sunday
+    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: add in dropbox functionality
     # TODO: add serverless framework
     config = get_config('config.yml')
@@ -426,7 +482,6 @@ if __name__ == "__main__":
     col_map = config.get('col_map')
 
     df, df_sleep = read_raw_files(input_path)
-    print(df.columns)
     df = update_columns(df, col_map)
     df = round_df(df)
     df = dedup_df(df)
