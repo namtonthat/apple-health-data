@@ -163,11 +163,13 @@ def weekly_average(df):
         'calories_x': 'calories_avg',
         'calories_y': 'calories_sum'
     }, inplace = True)
-
+    print(df_wa.columns)
 
     df_wa['dsc_average'] = df_wa.agg(lambda x:
         f"{x['protein']} P / {x['carbs']} C / {x['fat']} F\r\n"
         f"{x['body_weight']} kg\r\n"
+        f"{x['steps']} steps\r\n"
+        f"{x['sleep_asleep']} h of sleep\r\n"
         f"Total Budget: {x['calories_sum']} calories",
         axis = 1
     )
