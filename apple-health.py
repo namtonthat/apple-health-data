@@ -479,6 +479,7 @@ def get_config(config_file):
 
 if __name__ == "__main__":
     # TODO: create function to calculate percentage of how close you are to your goal
+    # TODO: fix weekly average and scrape from autosleep
     # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
     # TODO: add in dropbox functionality
     # TODO: add serverless framework
