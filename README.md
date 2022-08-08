@@ -8,3 +8,8 @@ graph TD
     B[apple-health.py] --> C[fa:fa-aws AWS Lambda]
     C --> D[AWS S3 Bucket as .ics]
 ```
+
+## Minimal viable product:
+- Automate exports from iPhone
+- Trigger workflow automatically when AutoExport uploads into S3 endpoint
+- Files are refreshed in S3 bucket that personal Google Calendar is subscribed to
