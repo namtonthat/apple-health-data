@@ -132,44 +132,46 @@ def dedup_df(df):
 
     return df_dedup
 
-def weekly_average(df):
+def weekly_average(df, df_health_sleep):
     """
     Calculates the weekly average statistics for any numeric columns
     Resets on Sunday
     """
-    num_cols = [i for i in df.columns if is_numeric_dtype(df[i])]
-    num_cols.append('date')
+    wa_cols= ['date', 'body_weight', 'calories', 'carbs', 'exercise', 'exercise_mins', 'fat', 'fibre', 'protein', 'steps']
 
     # create rolling 7 day average but filter out for Sunday
-    df_avg = df[num_cols].rolling(on = 'date', window = 7).mean().dropna()
+    df_avg = df[wa_cols].rolling(on = 'date', window = 7).mean().dropna()
     df_avg['day'] = [i.weekday() for i in df_avg['date']]
     df_avg = df_avg[df_avg['day'] == 6].reset_index()
 
     # calculate total
     df_sum = df[['date', 'calories']].rolling(on = 'date', window = 7).sum().dropna()
-
-    # join data together
+    # join data together (average plus sleep)
     df_wa = round_df(
             pd.merge(
-                left = df_avg,
-                right = df_sum,
-                how = 'inner',
+                left = pd.merge(
+                    left = df_avg,
+                    right = df_sum,
+                    how = 'inner',
+                    on = 'date'
+                ),
+                right = df_health_sleep,
+                how = 'left',
                 on = 'date'
-            )
         )
+    )
 
     # renaming
     df_wa.rename(columns = {
         'calories_x': 'calories_avg',
         'calories_y': 'calories_sum'
     }, inplace = True)
-    print(df_wa.columns)
 
     df_wa['dsc_average'] = df_wa.agg(lambda x:
         f"{x['protein']} P / {x['carbs']} C / {x['fat']} F\r\n"
         f"{x['body_weight']} kg\r\n"
         f"{x['steps']} steps\r\n"
-        f"{x['sleep_asleep']} h of sleep\r\n"
+        f"{x['asleepAvg7']} of sleep\r\n"
         f"Total Budget: {x['calories_sum']} calories",
         axis = 1
     )
@@ -182,68 +184,49 @@ def weekly_average(df):
     return df_wa[['date', 'dsc_average', 'average']]
 
 # %%
-def create_description_cols(df, is_autosleep=False):
+def create_description_cols(df, df_health_sleep):
     """
     Create description columns for the generating events
     Converts events into boolean
     """
     print("Creating description columns for calendar events")
-    # cleansing Autosleep data
-    if is_autosleep:
-        print("Updating sleep statistics")
-        df['dsc_sleep'] =  df.agg(lambda x:
-            f"Deep sleep: {x['deep']} \r\n"
-            f"Sleep efficiency: {int(x['efficiency'])}% \r\n"
-            f"Bedtime: 🌒 {x['bedtime']} \r\n"
-            f"Wakeup time: 🌞 {x['waketime']}",
-            axis=1
-        )
-
-        df['sleep'] = df.agg(lambda x: f"{x['asleep']}", axis = 1)
-        print(df.head())
-        return df
-
     # cleansing Apple Health Data
-    else:
-        df_wa = weekly_average(df)
-        # adding commas to thousand
-        for i in df.columns:
-            if df[i].dtypes == 'float64':
-                df[i] = df[i].apply(lambda x: f"{x:,.1f}")
-            elif df[i].dtypes in ('int64', 'Int64'):
-                df[i] = df[i].map('{:,.0f}'.format)
+    df_wa = weekly_average(df, df_health_sleep)
+    # adding commas to thousand
+    for i in df.columns:
+        if df[i].dtypes == 'float64':
+            df[i] = df[i].apply(lambda x: f"{x:,.1f}")
+        elif df[i].dtypes in ('int64', 'Int64'):
+            df[i] = df[i].map('{:,.0f}'.format)
 
-        print(df.columns)
-        # Create columns descriptions for event description
-        df['dsc_food'] = [f"{a}P / {b}C / {c}F\r\nFibre: {d} g" for a,b,c,d in zip(df['protein'], df['carbs'], df['fat'], df['fibre'])]
+    # Create columns descriptions for event description
+    df['dsc_food'] = [f"{a}P / {b}C / {c}F\r\nFibre: {d} g" for a,b,c,d in zip(df['protein'], df['carbs'], df['fat'], df['fibre'])]
 
-        df['dsc_activity'] = df.agg(lambda x:
-            f"{x['exercise_mins']} mins of exercise and "
-            f"{x['mindful_mins']} mindful mins",
-            axis=1
-        )
+    df['dsc_activity'] = df.agg(lambda x:
+        f"{x['exercise_mins']} mins of exercise and "
+        f"{x['mindful_mins']} mindful mins",
+        axis=1
+    )
 
-        df['dsc_sleep'] = df.agg(lambda x:
-            f"{x['sleep_asleep']} hrs asleep and "
-            f"{x['sleep_in_bed']} hrs in bed",
-            axis=1
-        )
+    df['dsc_sleep'] = df.agg(lambda x:
+        f"{x['sleep_asleep']} hrs asleep and "
+        f"{x['sleep_in_bed']} hrs in bed",
+        axis=1
+    )
 
-        # Create basic column descriptions for event names
-        df['food'] = [f"{a} calories" for a in df['calories']]
-        df['activity'] = [f"{a} steps" for a in df['steps']]
-        df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
-        df['weight'] = [f"{a} kg" for a in df['body_weight']]
+    # Create basic column descriptions for event names
+    df['food'] = [f"{a} calories" for a in df['calories']]
+    df['activity'] = [f"{a} steps" for a in df['steps']]
+    df['sleep'] = [f"{a} h ({b} % eff.)" for a,b in zip(df['sleep_asleep'], df['sleep_eff'])]
+    df['weight'] = [f"{a} kg" for a in df['body_weight']]
 
-        # Cleanse data
-        df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
+    # Cleanse data
+    df['sleep'] = df['sleep'].replace('nan h (0% eff.)', 'No sleep data.')
 
-        print(df_wa)
-        # merge with weekly average data
-        df = pd.merge(left = df, right = df_wa, how = 'left', on = 'date').fillna('')
-        print(df[df['dsc_average'] != ""].head())
+    # merge with weekly average data
+    df = pd.merge(left = df, right = df_wa, how = 'left', on = 'date').fillna('')
 
-        return df
+    return df
 
 def convert_autosleep_time(time, is_24h=False):
     """
@@ -268,7 +251,7 @@ def etl_autosleep_data(df):
     #  Clean up the time columns with either 12 h format (AM / PM) or with hours and minutes
     time_dict = {
         '24h': ['bedtime', 'waketime'],
-        'hrs': ['asleep', 'deep']
+        'hrs': ['asleep', 'deep', 'asleepAvg7']
     }
     for time_type, time_cols in time_dict.items():
         is_24h = 0
@@ -279,7 +262,16 @@ def etl_autosleep_data(df):
     # Collect the date
     df['date'] = df['ISO8601'].apply(lambda x: datetime.strptime(x.split("T")[0], '%Y-%m-%d').date())
 
-    df = create_description_cols(df, is_autosleep=True)
+    # create description cols
+    df['dsc_sleep'] =  df.agg(lambda x:
+            f"Deep sleep: {x['deep']} \r\n"
+            f"Sleep efficiency: {int(x['efficiency'])}% \r\n"
+            f"Bedtime: 🌒 {x['bedtime']} \r\n"
+            f"Wakeup time: 🌞 {x['waketime']}",
+            axis=1
+        )
+
+    df['sleep'] = df.agg(lambda x: f"{x['asleep']}", axis = 1)
 
     # Remove duplicates
     df = dedup_df(df)
@@ -357,7 +349,6 @@ def create_events_df(df):
 
     # Coalesce events together
     df_events = join_events(df_events, list_events=['activity', 'mindful', 'exercise'])
-
     df_events = join_events(df_events, list_events=['food', 'weight'])
 
     # merge description into the events if available
@@ -478,11 +469,9 @@ def get_config(config_file):
     return config
 
 if __name__ == "__main__":
-    # TODO: create function to calculate percentage of how close you are to your goal
-    # TODO: fix weekly average and scrape from autosleep
-    # TODO: refactor code so that the columns are parameterise - based on what they want to see in each event
-    # TODO: add in dropbox functionality
+    # TODO: merge with autosleep earlier in the transformation
     # TODO: add serverless framework
+    # TODO: create function to calculate percentage of how close you are to your goal
     config = get_config('config.yml')
     input_path = config.get('input.raw_path')
     output_path = config.get('output.raw_path')
@@ -492,23 +481,22 @@ if __name__ == "__main__":
     col_map = config.get('col_map')
 
     df, df_sleep = read_raw_files(input_path)
+    # If Autosleep data is available, use that instead of Apple Health sleep data
+    if len(df_sleep) > 0:
+        df_health_sleep = etl_autosleep_data(df_sleep)[['date', 'dsc_sleep', 'sleep' , 'asleepAvg7']]
+
     df = update_columns(df, col_map)
     df = round_df(df)
     df = dedup_df(df)
-    df = create_description_cols(df)
+    df = create_description_cols(df, df_health_sleep)
     df = df.reset_index(drop=True)
 
-    # If Autosleep data is available, use that instead of Apple Health sleep data
-    if len(df_sleep) > 0:
-        df_health_sleep = etl_autosleep_data(df_sleep)
-        df_merge = pd.merge(df, df_health_sleep[['date', 'dsc_sleep', 'sleep']],  on = 'date', how= 'left')
 
-        # Take autosleep first but if not, take Apple Health
-        df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
-        df_merge['dsc_sleep'] = df_merge['dsc_sleep_y'].mask(pd.isnull, df_merge['dsc_sleep_x'])
+    df_merge = pd.merge(df, df_health_sleep[['date', 'dsc_sleep', 'sleep']],  on = 'date', how= 'left')
 
-        # duplicated dataframe because if it doesn't exist, df_merge doesn't exist
-        df = df_merge.copy()
+    # Take autosleep first but if not, take Apple Health
+    df_merge['sleep'] = df_merge['sleep_y'].mask(pd.isnull, df_merge['sleep_x'])
+    df_merge['dsc_sleep'] = df_merge['dsc_sleep_y'].mask(pd.isnull, df_merge['dsc_sleep_x'])
 
     # Upload into S3 / public access bucket
-    df = generate_calendar(df, outputs = [output_path, output_cal, output_file_name], aws_region = region)
+    generate_calendar(df_merge, outputs = [output_path, output_cal, output_file_name], aws_region = region)
