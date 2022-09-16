@@ -1,9 +1,7 @@
 """
 Simple Python script to render Apple Health data from Auto Exports
 """
-from operator import truediv
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
 import numpy as np
 from datetime import datetime
 import boto3
