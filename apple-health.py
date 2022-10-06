@@ -11,6 +11,10 @@ import flatdict
 
 from ics import Calendar, Event
 
+import logging
+logging.basicConfig()
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
 
 # %%
 def ts_to_dt(ts):
@@ -394,7 +398,8 @@ def generate_calendar(df, outputs, aws_region: None):
     calendar_file_name = f'{file_name}.ics'
 
     df_event = create_events_df(df)
-    print("Generating calendar (as .ICS)")
+
+    LOGGER.info("Generating calendar (as .ICS)")
     c = Calendar()
     for _, row in df_event.iterrows():
         e = create_event(row['date'], row['event_name'], row['dsc'])
