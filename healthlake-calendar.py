@@ -4,6 +4,19 @@ import glob
 import os
 import pandas as pd
 
+
+def convert_kj_to_cal(row, new_name):
+    """Converts kj to calories"""
+    row_dict = row.to_dict()
+    calorie_value = int(row['qty']/4)
+
+    # assign new value s
+    row_dict['qty'] = calorie_value
+    row_dict['name'] = new_name
+    row_dict['units'] = 'kcal'
+
+    return pd.DataFrame(row_dict, index=[0])
+
 if __name__ == "__main__":
     base_folder = os.getcwd()
     source_folder = base_folder + '/healthlake/'
@@ -33,7 +46,7 @@ if __name__ == "__main__":
         json_raw = pd.read_json(json_file, lines = True)
         df_raw = pd.concat([df_raw, json_raw])
 
-    #
+    ## Start of transformations
 
     df_ahc = df_raw.copy()
 
@@ -44,22 +57,19 @@ if __name__ == "__main__":
 
     # create calories
 
-    active_energy = df_ahc[df_ahc['name'] == 'active_energy'][cols]
-    calorie_name = "calories"
-    calorie_unit = 'kcal'
+    active_energy_rows = df_ahc[df_ahc['name'] == 'active_energy'][cols]
+    dietary_energy_rows = df_ahc[df_ahc['name'] == 'dietary_energy'][cols]
 
-    for _, row in active_energy.iterrows():
-        row_dict = row.to_dict()
-        calorie_value = int(row['qty']/4)
+    for _, row in active_energy_rows.iterrows():
+        df_row = convert_kj_to_cal(row, 'calories_burnt')
+        df_ahc = pd.concat([df_ahc, df_row])
 
-        # update values
-        row_dict['qty'] = calorie_value
-        row_dict['units'] = calorie_unit
-        row_dict['name'] = calorie_name
-
-        calorie_row = pd.DataFrame(row_dict, index=[0])
-        # append
-        df_ahc = pd.concat([df_ahc, calorie_row])
-
+    for _, row in dietary_energy_rows.iterrows():
+        df_row = convert_kj_to_cal(row, 'calories_consumed')
+        df_ahc = pd.concat([df_ahc, df_row])
     # filter out values
     df_ahc = df_ahc[df_ahc['name'].isin(names)][cols].reset_index(drop = True)
+
+    # round values
+    df_ahc['qty'] = df_ahc['qty'].round(2)
+
