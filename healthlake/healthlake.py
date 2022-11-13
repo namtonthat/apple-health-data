@@ -13,7 +13,28 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
 @dataclass
-class food:
+class Time:
+    "A basic time object"
+    time: float
+
+    @property
+    def hours(self) -> float:
+        hours = int(self.time)
+        return hours
+
+    @property
+    def minutes(self) -> str:
+        minutes = int((self.time - self.hours) * 60)
+        return minutes
+
+    @property
+    def title(self) -> str:
+        title = f"{self.hours}h {self.minutes}m"
+        return title
+
+
+@dataclass
+class Food:
     carbs: float
     protein: float
     fat: float
@@ -29,23 +50,33 @@ class food:
         title = f"{self.carbs}g C, {self.protein}g P, {self.fat}g F"
         return title
 
+@dataclass
+class Sleep:
+    time_asleep: Time
+    time_in_bed: Time
+
+    @property
+    def efficiency(self) -> float:
+        efficiency = self.time_asleep.time / self.time_in_bed.time * 100
+        return efficiency
+
+    @property
+    def efficiency_title(self) -> str:
+        title = f"{self.efficiency:.0f}%"
+        return title
+
 
 @dataclass
-class sleep:
-    "Convert sleep"
-    time: float
+class Activity:
+    activity_mins: Time
+    mindful_mins: Time
 
     @property
-    def hours(self) -> float:
-        hours = int(self.time)
-        return hours
+    def activity_title(self) -> str:
+        title = f"{self.activity_mins.title} active"
+        return title
 
     @property
-    def minutes(self) -> str:
-        minutes = int((self.time - self._hours) * 60)
-        return minutes
-
-    @property
-    def title(self) -> str:
-        title = f"{self.hours}h {self.minutes}m"
+    def mindful_title(self) -> str:
+        title = f"{self.mindful_mins.minutes} mins mindful"
         return title

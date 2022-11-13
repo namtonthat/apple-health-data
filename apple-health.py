@@ -351,7 +351,7 @@ def create_events_df(df):
 
     # Coalesce events together
     df_events = join_events(df_events, list_events=['activity', 'mindful', 'exercise'])
-    df_events = join_events(df_events, list_events=['food', 'weight'])
+    df_events = join_events(df_events, list_events=['food', 'wweight'])
 
     # merge description into the events if available
     df_events = pd.merge(df_events, df_events_dsc, on = ['date','event_type'], how = 'left').fillna("")
