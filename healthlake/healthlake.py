@@ -11,7 +11,6 @@ import logging
 logging.basicConfig()
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
-
 @dataclass
 class Time:
     "A basic time object"
@@ -50,6 +49,15 @@ class Food:
         title = f"{self.carbs}g C, {self.protein}g P, {self.fat}g F"
         return title
 
+    @property
+    def description(self) -> str:
+        description = f"""
+        Calories: {self.calories}
+        Macros: {self.title}
+        Fiber: {self.fiber}g
+        """
+        return description
+
 @dataclass
 class Sleep:
     time_asleep: Time
@@ -62,8 +70,22 @@ class Sleep:
 
     @property
     def efficiency_title(self) -> str:
-        title = f"{self.efficiency:.0f}%"
+        efficiency_title = f"{self.efficiency:.0f}%"
+        return efficiency_title
+
+    @property
+    def title(self) -> str:
+        title = f"{self.time_asleep.title} asleep"
         return title
+
+    @property
+    def description(self) -> str:
+        description = f"""
+        Time asleep: {self.time_asleep.title}
+        Time in bed: {self.time_in_bed.title}
+        Efficiency: {self.efficiency_title}
+        """
+        return description
 
 
 @dataclass
@@ -80,3 +102,15 @@ class Activity:
     def mindful_title(self) -> str:
         title = f"{self.mindful_mins.minutes} mins mindful"
         return title
+
+    @property
+    def title(self) -> str:
+        title = f"{self.mindful_title}"
+
+    @property
+    def description(self) -> str:
+        description = f"""
+        Activity: {self.activity_title}
+        Mindful: {self.mindful_title}
+        """
+        return description
