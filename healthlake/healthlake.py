@@ -11,6 +11,8 @@ import logging
 logging.basicConfig()
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
+
+
 @dataclass
 class Time:
     "A basic time object"
@@ -46,15 +48,15 @@ class Food:
 
     @property
     def title(self) -> str:
-        title = f"{self.carbs}g C, {self.protein}g P, {self.fat}g F"
+        title = f"🔥 {self.calories:.0f} cals ({self.carbs:.0f}C, {self.protein:.0f}P, {self.fat:.0f}F)"
         return title
 
     @property
     def description(self) -> str:
         description = f"""
-        Calories: {self.calories}
-        Macros: {self.title}
-        Fiber: {self.fiber}g
+        🔥 {self.calories:.0f} kcal
+        🥞 {self.title}
+        🍇 {self.fiber:.0f}
         """
         return description
 
@@ -62,6 +64,9 @@ class Food:
 class Sleep:
     time_asleep: Time
     time_in_bed: Time
+
+    # time in which you were in bed
+    time_sleep: str
 
     @property
     def efficiency(self) -> float:
@@ -75,15 +80,15 @@ class Sleep:
 
     @property
     def title(self) -> str:
-        title = f"{self.time_asleep.title} asleep"
+        title = f"💤 {self.time_asleep.title} ({self.time_sleep})"
         return title
 
     @property
     def description(self) -> str:
         description = f"""
-        Time asleep: {self.time_asleep.title}
-        Time in bed: {self.time_in_bed.title}
-        Efficiency: {self.efficiency_title}
+        💤 Time asleep: {self.time_asleep.title}
+        🛏️ Time in bed: {self.time_in_bed.title}
+        🧮 Efficiency: {self.efficiency_title}
         """
         return description
 
@@ -105,12 +110,12 @@ class Activity:
 
     @property
     def title(self) -> str:
-        title = f"{self.mindful_title}"
+        title = f"🧠 {self.mindful_title}"
 
     @property
     def description(self) -> str:
         description = f"""
-        Activity: {self.activity_title}
-        Mindful: {self.mindful_title}
+        🚴‍♂️ Activity: {self.activity_title}
+        🧘 Mindful: {self.mindful_title}
         """
         return description
