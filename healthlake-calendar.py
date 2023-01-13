@@ -151,64 +151,46 @@ class Sleep:
 @dataclass
 class Activity:
     "A basic activity for activity and mindfulness"
-    apple_exercise_time: Time
-    mindful_minutes: Time = None
+    apple_exercise_time: Time # will almost always have exercise time logged
+    mindful_minutes: Time = None # most likely won't have meditation
 
     def __post_init__(self):
-        self.activity_mins = self.apple_exercise_time
-        self.mindful_mins = self.mindful_minutes if self.mindful_minutes else Time(0)
+        # rename objects for easier usage
+        self.apple_exercise_time = Time(self.apple_exercise_time) if self.apple_exercise_time else Time(0)
+        self.mindful_minutes = Time(self.mindful_minutes) if self.mindful_minutes else Time(0)
 
     @property
     def activity_description(self) -> str:
-        title = f"{self.activity_mins.title} active"
-        return title
-
-    @property
-    def mindful_title(self) -> str:
-        block = np.floor(self.mindful_mins / 10)
-        title = f"{block}"
+        a_description = ""
+        if self.apple_exercise_time != Time(0):
+            a_description = f"🚴‍♂️ Activity: {self.apple_exercise_time.title} active"
+        return a_description
 
     @property
     def mindful_description(self) -> str:
-        title = f"{self.mindful_mins.minutes} mins mindful"
+        m_description = ""
+        if self.mindful_minutes != Time(0):
+            m_description = f"🧘 Mindful: {self.mindful_minutes.minutes} mindful"
+        return m_description
+
+    @property
+    def mindful_title(self) -> str:
+        block = np.floor(self.mindful_minutes.minutes / 10)
+        title = f"{block}"
         return title
 
     @property
     def title(self) -> str:
-        title = f"{self.mindful_title} 🧠"
+        title = f"🧠 {self.mindful_title}"
         return title
 
     @property
     def description(self) -> str:
         description = f"""
-        🚴‍♂️ Activity: {self.activity_description}
-        🧘 Mindful: {self.mindful_description}
+        {self.activity_description}
+        {self.mindful_description}
         """
         return description
-
-#  Calendar functions
-def make_event_name(event_type, description):
-    """
-    Creates an event name with an emoticon
-    """
-    emoticons = {
-        "sleep": "💤",
-        "activity": "🔥",
-        "food": "🥞",
-        "mindful": "🧘",
-        "exercise": "🏃",
-        "weight": "🎚️",
-        "average": "📈",
-    }
-
-    emoticon = emoticons.get(event_type)
-
-    # case statement to catch events that were not completed
-    if description == 1:
-        description = ""
-
-    event_name = f"{emoticon} {description}"
-    return event_name
 
 
 # %%
