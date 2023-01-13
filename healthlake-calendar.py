@@ -3,6 +3,8 @@
 import glob
 import os
 import pandas as pd
+from dataclasses import dataclass, field
+from datetime import datetime
 
 from ics import Calendar, Event
 
@@ -12,6 +14,177 @@ logging.basicConfig()
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
+@dataclass
+class AppleHealthEvent(Event):
+    """
+    An event derived from Apple Health data
+    For usage within .ics format
+    """
+    date: datetime.date
+    description: str
+    title: str
+
+    @property
+    def event(self):
+        all_day_date = f"{self.date} 00:00:00"
+        e = Event()
+        e.name = self.title
+        e.description = self.description
+        e.begin = all_day_date
+        e.end = all_day_date
+        e.make_all_day()
+
+        return e
+
+@dataclass
+class HealthStat:
+    """
+    A health stat derived from Apple Health data
+    """
+    name: str
+    qty: float
+    units: str
+
+
+# Define properties
+@dataclass
+class Time:
+    "A basic time object"
+    time: float
+
+    @property
+    def hours(self) -> float:
+        hours = int(self.time)
+        return hours
+
+    @property
+    def minutes(self) -> str:
+        minutes = int((self.time - self.hours) * 60)
+        return minutes
+
+    @property
+    def title(self) -> str:
+        if (self.minutes != 0) | (self.hours != 0):
+            title = f"{self.hours}h {self.minutes}m"
+        else:
+            title = ""
+
+        return title
+
+
+@dataclass
+class Food:
+    "A basic food object"
+    carbohydrates: float
+    protein: float
+    total_fat: float
+    fiber: float
+
+
+    def __post_init__(self):
+        # rename objects for easier usage
+        self.carb = self.carbohydrates
+        self.fat = self.total_fat
+
+    @property
+    def calories(self) -> float:
+        calories = (self.carb + self.protein) * 4 + (self.fat) * 9
+        return calories
+
+    @property
+    def macros(self) -> str:
+        return f"{self.carb:.0f}C, {self.protein:.0f}P, {self.fat:.0f}F"
+
+    @property
+    def title(self) -> str:
+        title = f"🔥 {self.calories:.0f} cals ({self.macros})"
+        return title
+
+    @property
+    def description(self) -> str:
+        description = f"""
+        🔥 {self.calories:.0f} kcal
+        🥞 {self.macros}
+        🍇 {self.fiber:.0f}
+        """
+        return description
+
+@dataclass
+class Sleep:
+    "A basic sleep object"
+    asleep: Time
+    inBed: Time
+    inBedStart: str
+
+    def __post_init__(self):
+        # rename objects for easier usage
+        self.time_asleep = self.asleep
+        self.time_in_bed = self.inBed
+        self.in_bed_time = self.inBedStart
+
+    @property
+    def efficiency(self) -> float:
+        efficiency = self.time_asleep.time / self.time_in_bed.time * 100
+        return efficiency
+
+    @property
+    def efficiency_title(self) -> str:
+        efficient = f"{self.efficiency:.0f}%"
+        efficiency_title = f"🛏️ {efficient}"
+        return efficiency_title
+
+    @property
+    def title(self) -> str:
+        title = f"💤 {self.time_asleep.title} ({self.in_bed_time})"
+        return title
+
+    @property
+    def description(self) -> str:
+        description = f"""
+        💤 Time asleep: {self.time_asleep.title}
+        🛏️ Time in bed: {self.time_in_bed.title}
+        🧮 Efficiency: {self.efficiency_title}
+        """
+        return description
+
+
+@dataclass
+class Activity:
+    "A basic activity for activity and mindfulness"
+    apple_exercise_time: Time
+    mindful_minutes: Time = None
+
+    def __post_init__(self):
+        self.activity_mins = self.apple_exercise_time
+        self.mindful_mins = self.mindful_minutes if self.mindful_minutes else Time(0)
+
+    @property
+    def activity_description(self) -> str:
+        title = f"{self.activity_mins.title} active"
+        return title
+
+    @property
+    def mindful_title(self) -> str:
+        block = np.floor(self.mindful_mins / 10)
+        title = f"{block}"
+
+    @property
+    def mindful_description(self) -> str:
+        title = f"{self.mindful_mins.minutes} mins mindful"
+        return title
+
+    @property
+    def title(self) -> str:
+        title = f"{self.mindful_title} 🧠"
+        return title
+
+    @property
+    def description(self) -> str:
+        description = f"""
+        🚴‍♂️ Activity: {self.activity_description}
+        🧘 Mindful: {self.mindful_description}
+        """
+        return description
 
 #  Calendar functions
 def make_event_name(event_type, description):
@@ -101,6 +274,34 @@ def generate_calendar(df):
 
     LOGGER.info("Outputing CSV and ICS to: %s", csv_file_name)
     return
+
+
+
+def create_day_calendar(stats: pd.DataFrame, event_date: str):
+    """
+    Iterate through different event types (food / activity / sleep)
+    and generate events to add to the daily calendar only if event exists
+    """
+    day_calendar = Calendar()
+    for types, col_names in EVENT_TYPES.items():
+
+        # collect object name and arguments
+        dataclass_name = types.capitalize()
+        dataclass_obj = globals()[dataclass_name]
+        obj_args = stats[stats['name'].isin(col_names)][['name', 'qty']]
+        obj_args = dict(obj_args.values)
+
+        if obj_args:
+            obj = dataclass_obj(**obj_args)
+            e = AppleHealthEvent(
+                date = event_date,
+                title = obj.title,
+                description = obj.description
+            ).event
+            day_calendar.events.add(e)
+
+
+    return day_calendar
 
 
 def convert_kj_to_cal(row, new_name):
