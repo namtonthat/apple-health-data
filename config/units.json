@@ -1,0 +1,23 @@
+{
+    "names": [
+        "apple_exercise_time",
+        "active_energy",
+        "calories_burnt",
+        "calories_consumed",
+        "carbohydrates",
+        "dietary_caffeine",
+        "dietary_energy",
+        "dietary_sugar",
+        "fiber",
+        "protein",
+        "sleep_analysis",
+        "total_fat",
+        "weight_body_mass"
+    ],
+    "cols": [
+        "qty",
+        "dates",
+        "name",
+        "units"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "food": [
+        "carbohydrates",
+        "protein",
+        "total_fat",
+        "fiber"
+    ],
+    "activity": [
+        "apple_exercise_time",
+        "mindful_minutes"
+    ],
+    "sleep": [
+        "asleep",
+        "inBed",
+        "inBedStart"
+    ]
+}
