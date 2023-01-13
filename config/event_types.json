@@ -1,15 +1,18 @@
+// dictionary defines which data to pull in from Apple Health data
+// key: name of the defined dataclass
+// value: column names required
 {
-    "food": [
+    "Food": [
         "carbohydrates",
         "protein",
         "total_fat",
         "fiber"
     ],
-    "activity": [
+    "Activity": [
         "apple_exercise_time",
         "mindful_minutes"
     ],
-    "sleep": [
+    "Sleep": [
         "asleep",
         "inBed",
         "inBedStart"
