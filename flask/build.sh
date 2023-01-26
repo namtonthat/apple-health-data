@@ -6,3 +6,4 @@ pip install -r requirements.txt
 # install serverless packages
 sls plugin install -n serverless-wsgi
 sls plugin install -n serverless-python-requirements
+sls plugin install -n serverless-plugin-existing-s3

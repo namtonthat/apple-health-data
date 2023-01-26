@@ -20,9 +20,6 @@ provider:
       Resource:
         Fn::Join: ["", [Fn::GetAtt: [MyBucket, Arn], "/*"]]
 
-plugins:
-  - serverless-wsgi
-  - serverless-python-requirements
 resources:
   Resources:
     MyBucket:
@@ -31,6 +28,10 @@ resources:
       Properties:
         BucketName: "ntonthat-apple-health-data"
 
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+
 functions:
   healthlake:
     handler: wsgi_handler.handler
@@ -38,17 +39,33 @@ functions:
       - http: ANY /
       - http: "ANY /{proxy+}"
 
-  # parse_as_parquet:
-  #   handler: parse_as_parquet.handler
-  #   events:
-  #     - s3:
-  #       bucket: s3:ObjectCreated:*
-  #       rules:
-  #         - prefix: sync/
-  #         - suffix: .json
+  parse_parquet:
+    handler: parse_parquet.run
+    events:
+      - s3:
+          bucket: "ntonthat-apple-health-data"
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: syncs/
+            - suffix: .json
+          existing: true
 
+  create_calendar:
+    handler: create_calendar.run
+    package:
+      patterns:
+        - config/mapping.json
+        - config/latest_data.sql
+    events:
+      - s3:
+          bucket: "ntonthat-apple-health-data"
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: parquets/
+            - suffix: .parquet
+          existing: true
 custom:
   wsgi:
     app: healthlake.app
   pythonRequirements:
-    dockerizePip: "false"
+    dockerizePip: false
