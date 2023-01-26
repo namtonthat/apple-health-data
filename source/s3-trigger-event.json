@@ -27,7 +27,7 @@
                     "arn": "arn:aws:s3:::sourcebucket"
                 },
                 "object": {
-                    "key": "syncs/2023-01-18T09:39:59.479199.json",
+                    "key": "syncs/2023-01-26T06:11:46.119648.json",
                     "size": 1024,
                     "eTag": "d41d8cd98f00b204e9800998ecf8427e",
                     "versionId": "096fKKXTRTtl3on89fVO.nfljtsv6qko"
