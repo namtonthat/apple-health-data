@@ -28,7 +28,7 @@ def store(rows):
     key_name = "syncs/" + datetime.utcnow().isoformat() + ".json"
 
     # athena and glue prefer a row of JSON per line
-    json_rows = [json.dumps(row).strip() for row in rows]
+    json_rows = [json.dumps(row, default=str).strip() for row in rows]
     content = "\n".join(json_rows)
 
     s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)

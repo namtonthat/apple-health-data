@@ -38,14 +38,14 @@ functions:
       - http: ANY /
       - http: "ANY /{proxy+}"
 
-  parse_as_parquet:
-    handler: parse_as_parquet.handler
-    events:
-      - s3:
-        bucket: s3:ObjectCreated:*
-        rules:
-          - prefix: sync/
-          - suffix: .json
+  # parse_as_parquet:
+  #   handler: parse_as_parquet.handler
+  #   events:
+  #     - s3:
+  #       bucket: s3:ObjectCreated:*
+  #       rules:
+  #         - prefix: sync/
+  #         - suffix: .json
 
 custom:
   wsgi:
