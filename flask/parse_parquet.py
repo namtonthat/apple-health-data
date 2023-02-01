@@ -2,69 +2,60 @@ import logging
 import pandas as pd
 import boto3
 import json
+import urllib.parse
+import io
+import tempfile
+
+s3 = boto3.client("s3")
 
 
-def get_s3_keys(bucket):
-    """Get a list of keys in an S3 bucket."""
-    keys = []
-    personal = boto3.Session(profile_name='personal')
-    s3 = personal.client('s3')
-    resp = s3.list_objects(Bucket=bucket)
-    for obj in resp['Contents']:
-        keys.append(obj['Key'])
-    return keys
-
-
-def load_json_from_s3(bucket, key):
-    """Parse a json file from s3 and return the contents"""
+def run(event, context):
+    bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
+    key = urllib.parse.unquote_plus(
+        event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
+    )
     # personal = boto3.Session(profile_name='personal')
     # s3 = personal.resource('s3')
-
-    obj = s3.Object(bucket, key)
-    body = obj.get()['Body']
-    body = body.read().decode('utf-8')
-    return body
-
-
-def read_s3_trigger(trigger_event):
-    """Read the s3 event trigger and return the bucket and key"""
-    logging.info('Reading s3 event trigger')
-    s3_event = json.loads(open(f'{trigger_event}', 'r').read())
-
-    s3_key = s3_event.get("Records")[0].get('s3').get('object').get('key')
-    s3_bucket = s3_event.get("Records")[0].get('s3').get('bucket').get('name')
-
-    return s3_bucket, s3_key
-
-
-def run(event):
-    s3 = boto3.resource('s3')
-    # personal = boto3.Session(profile_name='personal')
-    # s3 = personal.resource('s3')
-    bucket, key = read_s3_trigger(event)
 
     # convert contents to native python string
-    json_data = load_json_from_s3(bucket, key)
+    try:
+        response = s3.get_object(Bucket=bucket, Key=key)
+        print("CONTENT TYPE: " + response["ContentType"])
+        json_data = response.get("Body").read().decode("utf-8")
+    except Exception as e:
+        print(e)
+        print(
+            "Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.".format(
+                key, bucket
+            )
+        )
+        raise e
 
     source_data = []
 
     for line in json_data.splitlines():
         source_data.append(json.loads(line))
 
-    logging.info('Converting to dataframe')
+    logging.info("Converting to dataframe")
     df = pd.DataFrame.from_records(source_data)
 
     # force conversion types
-    df['qty'] = df['qty'].astype(str)
-    df['date'] = pd.to_datetime(df['date']).dt.date
+    df["qty"] = df["qty"].astype(str)
+    df["date"] = pd.to_datetime(df["date"]).dt.date.astype(str)
 
-    logging.info('Converting to parquet')
+    logging.info("Converting to parquet")
 
     # write to parquet
-    file_name = key.split('/')[-1].split('.')[0]
-    parquet_file_name = f'outputs/parquets/{file_name}.parquet'
-    df.to_parquet(f'{parquet_file_name}')
+    file_name = key.split("/")[-1].split(".")[0]
+    with tempfile.NamedTemporaryFile() as tmp:
+        df.to_parquet(tmp.name, compression="gzip", engine="fastparquet")
+        with open(tmp.name, "rb") as fh:
+            parquet_buffer = io.BytesIO(fh.read())
 
-    s3.meta.client.upload_file(f'{parquet_file_name}', bucket, f'parquets/{parquet_file_name}')
+    response = s3.put_object(
+        Bucket=bucket,
+        Key=f"parquets/{file_name}.parquet",
+        Body=parquet_buffer.getvalue(),
+    )
 
     return

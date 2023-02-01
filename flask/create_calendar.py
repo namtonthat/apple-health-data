@@ -6,7 +6,8 @@ import logging
 from dataclasses import dataclass, field
 from pydantic import validate_arguments
 from datetime import datetime
-import json
+import io
+import tempfile
 from pandasql import sqldf
 
 
@@ -16,6 +17,7 @@ class AppleHealthEvent(Event):
     An event derived from Apple Health data
     For usage within .ics format
     """
+
     date: datetime.date
     description: str
     title: str
@@ -40,6 +42,7 @@ class AppleHealthData:
     A dataclass to hold all the data from Apple Health
     Parsing from AWS API Gateway and S3
     """
+
     date: str
     date_updated: str
     name: str
@@ -48,8 +51,8 @@ class AppleHealthData:
     source: Optional[str] = None
 
     def __post_init__(self):
-        self.date = datetime.strptime(self.date, '%Y-%m-%d %H:%M:%S %z')
-        self.date_updated = datetime.strptime(self.date_updated, '%Y-%m-%d %H:%M:%S.%f')
+        self.date = datetime.strptime(self.date, "%Y-%m-%d %H:%M:%S %z")
+        self.date_updated = datetime.strptime(self.date_updated, "%Y-%m-%d %H:%M:%S.%f")
 
 
 @validate_arguments
@@ -62,7 +65,6 @@ class Time:
     def __post_init__(self):
         if self.timeInMinutes:
             self.time = self.timeInMinutes / 60
-
 
     @property
     def hours(self) -> float:
@@ -79,6 +81,7 @@ class Time:
         title = f"{self.hours}h {self.minutes}m"
         return title
 
+
 @validate_arguments
 @dataclass
 class Food:
@@ -93,7 +96,7 @@ class Food:
         # rename objects for easier usage
         self.carb = self.carbohydrates
         self.fat = self.total_fat
-        self.calories_burnt = round(self.calories_burnt / 4,2)
+        self.calories_burnt = round(self.calories_burnt / 4, 2)
 
     @property
     def calories_ate(self) -> float:
@@ -118,6 +121,7 @@ class Food:
         🍇 {self.fiber:.0f} g
         """
         return description
+
 
 @validate_arguments
 @dataclass
@@ -207,6 +211,7 @@ class Sleep:
         """
         return s_description
 
+
 # Functions
 def convert_to_12_hr(time_str: str) -> str:
     "Lambda function to convert 24 hour time to 12 hour time"
@@ -216,9 +221,8 @@ def convert_to_12_hr(time_str: str) -> str:
 
 
 def collect_event_stats(
-    stats_df: pd.DataFrame,
-    column_names: List[str]
-)-> pd.DataFrame:
+    stats_df: pd.DataFrame, column_names: List[str]
+) -> pd.DataFrame:
     """
     Extract health data from stats dataframe in the format
     [['name', 'qty']] where:
@@ -228,16 +232,14 @@ def collect_event_stats(
     Output:
         - DataFrame of health data in the format [['name', 'qty']]
     """
-    filtered_stats = stats_df[stats_df['name'].isin(column_names)]
-    event_type_stats  = filtered_stats[['name', 'qty']]
+    filtered_stats = stats_df[stats_df["name"].isin(column_names)]
+    event_type_stats = filtered_stats[["name", "qty"]]
 
     return event_type_stats
 
 
 def create_day_events(
-    stats: pd.DataFrame,
-    event_date: str,
-    object_mapping: dict
+    stats: pd.DataFrame, event_date: str, object_mapping: dict
 ) -> List[Event]:
     """
     Iterate through different event types (food / activity / sleep)
@@ -253,8 +255,7 @@ def create_day_events(
         dataclass_obj = globals()[dataclass_name]
 
         dataclass_obj_stats = collect_event_stats(
-            stats_df=stats,
-            column_names=col_names
+            stats_df=stats, column_names=col_names
         )
 
         obj_args = dict(dataclass_obj_stats.values)
@@ -262,9 +263,7 @@ def create_day_events(
         if obj_args:
             obj = dataclass_obj(**obj_args)
             e = AppleHealthEvent(
-                date = event_date,
-                title = obj.title,
-                description = obj.description
+                date=event_date, title=obj.title, description=obj.description
             ).event
             day_events.append(e)
 
@@ -277,42 +276,54 @@ def get_latest_health_data(bucket):
     parquet_path = f"s3://{bucket}/parquets"
     df = pd.read_parquet(parquet_path)
     # df = pd.read_parquet(parquet_path, storage_options={'profile': 'personal'})
-    sql_query = open('flask/config/latest_data.sql').read()
+    sql_query = open("config/latest_data.sql").read()
     df_latest = sqldf(sql_query, locals())
 
     return df_latest
 
 
-def run(event):
+def run(event, context):
     """Main handler for lambda event"""
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource("s3")
     # personal = boto3.Session(profile_name='personal')
     # s3 = personal.resource('s3')
-    bucket = event.get("Records")[0].get('s3').get('bucket').get('name')
+    bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
 
-    event_objects_mapping = s3.Object(bucket, 'config/event_objects_mapping.json')
+    event_objects_mapping = open("config/event_objects_mapping.json").read()
 
     df = get_latest_health_data(bucket)
 
-    df.to_parquet('outputs/latest_data.parquet', index=False)
+    with tempfile.NamedTemporaryFile() as tmp:
+        df.to_parquet(tmp.name, compression="gzip", engine="fastparquet", index=False)
+        with open(tmp.name, "rb") as fh:
+            parquet_buffer = io.BytesIO(fh.read())
+
+    response = s3.put_object(
+        Bucket=bucket,
+        Key="latest_data.parquet",
+        Body=parquet_buffer.getvalue(),
+    )
 
     c = Calendar()
-    available_dates = df['date'].unique()
+    available_dates = df["date"].unique()
 
     for date in available_dates:
-        daily_stats = df[df['date'] == date]
+        daily_stats = df[df["date"] == date]
         daily_calendar = create_day_events(
-            stats=daily_stats,
-            event_date=date,
-            object_mapping=event_objects_mapping
+            stats=daily_stats, event_date=date, object_mapping=event_objects_mapping
         )
         for event in daily_calendar:
             c.events.add(event)
 
     calendar_file_name = "outputs/apple-health-calendar.ics"
-    with open(calendar_file_name, 'w') as f:
+
+    with open(calendar_file_name, "w") as f:
         logging.info("Writing calendar to file locally")
         f.write(c.serialize())
         f.close()
 
-    s3.meta.client.upload_file(calendar_file_name, bucket, calendar_file_name)
+    s3.put_object(
+        Bucket=bucket, Key=f"calendars/{calendar_file_name}", body=calendar_file_name
+    )
+
+    return response

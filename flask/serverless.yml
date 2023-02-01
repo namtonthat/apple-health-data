@@ -1,5 +1,11 @@
 service: apple-health
 
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!venv/**"
+  excludeDevDependencies: true
+
 provider:
   name: aws
   runtime: python3.9
@@ -30,6 +36,7 @@ resources:
 
 plugins:
   - serverless-wsgi
+  - serverless-plugin-common-excludes
   - serverless-python-requirements
 
 functions:
@@ -41,6 +48,8 @@ functions:
 
   parse_parquet:
     handler: parse_parquet.run
+    layers:
+      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:5
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
@@ -52,6 +61,8 @@ functions:
 
   create_calendar:
     handler: create_calendar.run
+    layers:
+      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:5
     package:
       patterns:
         - config/mapping.json
@@ -67,5 +78,8 @@ functions:
 custom:
   wsgi:
     app: healthlake.app
-  pythonRequirements:
-    dockerizePip: false
+
+    # dockerizePip: non-linux
+    # slim: true
+    # slimPatterns:
+    #   - "**/*.egg-info*"
