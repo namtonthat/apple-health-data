@@ -48,7 +48,7 @@ def run(event, context):
     # write to parquet
     file_name = key.split("/")[-1].split(".")[0]
     with tempfile.NamedTemporaryFile() as tmp:
-        df.to_parquet(tmp.name, compression="gzip", engine="fastparquet")
+        df.to_parquet(tmp.name, engine="fastparquet")
         with open(tmp.name, "rb") as fh:
             parquet_buffer = io.BytesIO(fh.read())
 

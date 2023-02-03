@@ -1,11 +1,8 @@
 from datetime import datetime
-
-import arrow
 import conf
 import flask
 import boto3
 import json
-import time
 import csv
 import sys
 
@@ -14,7 +11,6 @@ from typing import Dict, List
 # initialize our app and our S3 and Athena clients
 app = flask.Flask(__name__)
 s3 = boto3.client("s3")
-athena = boto3.client("athena")
 
 # force the ability to parse very large CSV files
 csv.field_size_limit(sys.maxsize)
@@ -99,7 +95,7 @@ def transform(data):
 
     # add a date_updated field to each row
     for entry in rows:
-        entry['date_updated'] = datetime.now()
+        entry["date_updated"] = datetime.now()
 
     return rows
 

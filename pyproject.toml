@@ -15,6 +15,11 @@ fsspec = "^2023.1.0"
 dvc = { extras = ["s3"], version = "^2.43.1" }
 pydantic = "^1.10.4"
 pandasql = "^0.7.3"
+s3fs = "^2023.1.0"
+fastparquet = "^2023.1.0"
+flask = "^2.2.2"
+werkzeug = "^2.2.2"
+aiobotocore = "^2.4.2"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"

@@ -4,11 +4,21 @@ import pandas as pd
 from typing import List, Optional, List
 import logging
 from dataclasses import dataclass, field
-from pydantic import validate_arguments
 from datetime import datetime
 import io
 import tempfile
 from pandasql import sqldf
+import os
+import s3fs
+import fastparquet as fp
+
+
+try:
+    import pysqlite3 as sqlite3
+except ModuleNotFoundError:
+    import sqlite3  # for local testing because pysqlite3-binary couldn't be installed on macos
+
+print(f"{sqlite3.sqlite_version=}")
 
 
 @dataclass
@@ -35,7 +45,6 @@ class AppleHealthEvent(Event):
         return e
 
 
-@validate_arguments
 @dataclass
 class AppleHealthData:
     """
@@ -55,7 +64,6 @@ class AppleHealthData:
         self.date_updated = datetime.strptime(self.date_updated, "%Y-%m-%d %H:%M:%S.%f")
 
 
-@validate_arguments
 @dataclass
 class Time:
     "A basic time object in hours"
@@ -82,7 +90,6 @@ class Time:
         return title
 
 
-@validate_arguments
 @dataclass
 class Food:
     "A basic food object"
@@ -123,7 +130,6 @@ class Food:
         return description
 
 
-@validate_arguments
 @dataclass
 class Activity:
     "A basic activity for activity and mindfulness"
@@ -171,7 +177,6 @@ class Activity:
         return title
 
 
-@validate_arguments
 @dataclass
 class Sleep:
     "A basic sleep object"
@@ -270,13 +275,23 @@ def create_day_events(
     return day_events
 
 
-def get_latest_health_data(bucket):
+def get_latest_health_data(bucket, config_path):
     """Parse all parquest files and return unique data for all metrics"""
-    # parquet_path = Path('outputs/parquets')
-    parquet_path = f"s3://{bucket}/parquets"
-    df = pd.read_parquet(parquet_path)
+    # Read the parquet file
+    s3fileSystem = s3fs.S3FileSystem()
+    fs = s3fs.core.S3FileSystem()
+
+    bucket_uri = f"{bucket}/parquets/*.parquet"
+    all_paths_from_s3 = fs.glob(path=bucket_uri)
+    df = pd.DataFrame()
+    for s3_file in all_paths_from_s3:
+        fp_obj = fp.ParquetFile(s3_file, open_with=s3fileSystem.open)
+        # convert to pandas dataframe
+        df_s3_file = fp_obj.to_pandas()
+        df = pd.concat([df, df_s3_file])
+
     # df = pd.read_parquet(parquet_path, storage_options={'profile': 'personal'})
-    sql_query = open("config/latest_data.sql").read()
+    sql_query = open(f"{config_path}/latest_data.sql").read()
     df_latest = sqldf(sql_query, locals())
 
     return df_latest
@@ -288,10 +303,10 @@ def run(event, context):
     # personal = boto3.Session(profile_name='personal')
     # s3 = personal.resource('s3')
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
+    config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
+    event_objects_mapping = open(f"{config_path}/mapping.json").read()
 
-    event_objects_mapping = open("config/event_objects_mapping.json").read()
-
-    df = get_latest_health_data(bucket)
+    df = get_latest_health_data(bucket, config_path)
 
     with tempfile.NamedTemporaryFile() as tmp:
         df.to_parquet(tmp.name, compression="gzip", engine="fastparquet", index=False)
