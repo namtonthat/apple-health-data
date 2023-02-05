@@ -7,19 +7,14 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import io
 import tempfile
-from pandasql import sqldf
 import os
 import s3fs
 import fastparquet as fp
+import numpy as np
+import json
+from pydantic import validate_arguments
 
-
-try:
-    import pysqlite3 as sqlite3
-except ModuleNotFoundError:
-    import sqlite3  # for local testing because pysqlite3-binary couldn't be installed on macos
-
-print(f"{sqlite3.sqlite_version=}")
-
+s3 = boto3.client("s3")
 
 @dataclass
 class AppleHealthEvent(Event):
@@ -44,7 +39,7 @@ class AppleHealthEvent(Event):
 
         return e
 
-
+@validate_arguments
 @dataclass
 class AppleHealthData:
     """
@@ -63,7 +58,7 @@ class AppleHealthData:
         self.date = datetime.strptime(self.date, "%Y-%m-%d %H:%M:%S %z")
         self.date_updated = datetime.strptime(self.date_updated, "%Y-%m-%d %H:%M:%S.%f")
 
-
+@validate_arguments
 @dataclass
 class Time:
     "A basic time object in hours"
@@ -89,7 +84,7 @@ class Time:
         title = f"{self.hours}h {self.minutes}m"
         return title
 
-
+@validate_arguments
 @dataclass
 class Food:
     "A basic food object"
@@ -291,25 +286,31 @@ def get_latest_health_data(bucket, config_path):
         df = pd.concat([df, df_s3_file])
 
     # df = pd.read_parquet(parquet_path, storage_options={'profile': 'personal'})
-    sql_query = open(f"{config_path}/latest_data.sql").read()
-    df_latest = sqldf(sql_query, locals())
+    # sql_query = text(open(f"{config_path}/latest_data.sql").read())
+    df['date'] = df['date'].astype('str')
+    df['date'] = [f[:10] for f in df['date']]
+    # df_latest = sqldf(sql_query, locals())
+    cte_latest_data = df.groupby(['date', 'name']).agg({'date_updated': np.max})
+    df_latest = df.merge(cte_latest_data, on=['date', 'name', 'date_updated'], how='inner')
 
     return df_latest
 
 
 def run(event, context):
     """Main handler for lambda event"""
-    s3 = boto3.resource("s3")
     # personal = boto3.Session(profile_name='personal')
     # s3 = personal.resource('s3')
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
     config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
-    event_objects_mapping = open(f"{config_path}/mapping.json").read()
+    # config_path = "config"
+    calendar_file_name = "apple-health-calendar.ics"
+    event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
 
     df = get_latest_health_data(bucket, config_path)
 
+    logging.info('Writing latest data into a single parquet file')
     with tempfile.NamedTemporaryFile() as tmp:
-        df.to_parquet(tmp.name, compression="gzip", engine="fastparquet", index=False)
+        df.to_parquet(tmp.name, engine="fastparquet", index=False)
         with open(tmp.name, "rb") as fh:
             parquet_buffer = io.BytesIO(fh.read())
 
@@ -330,15 +331,9 @@ def run(event, context):
         for event in daily_calendar:
             c.events.add(event)
 
-    calendar_file_name = "outputs/apple-health-calendar.ics"
-
-    with open(calendar_file_name, "w") as f:
-        logging.info("Writing calendar to file locally")
-        f.write(c.serialize())
-        f.close()
-
+    logging.info('Writing data to calendar ics file')
     s3.put_object(
-        Bucket=bucket, Key=f"calendars/{calendar_file_name}", body=calendar_file_name
+        Bucket=bucket, Key=f"calendars/{calendar_file_name}", Body=c.serialize()
     )
 
     return response

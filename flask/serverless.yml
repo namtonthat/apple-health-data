@@ -49,7 +49,7 @@ functions:
   parse_parquet:
     handler: parse_parquet.run
     layers:
-      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:9
+      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:10
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
@@ -62,7 +62,7 @@ functions:
   create_calendar:
     handler: create_calendar.run
     layers:
-      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:9
+      - arn:aws:lambda:ap-southeast-2:110386608476:layer:python-numpy:10
     package:
       patterns:
         - config/mapping.json
