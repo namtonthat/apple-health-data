@@ -1,8 +1,0 @@
-# folders
-node_modules/
-venv/
-
-# dependencies and packages
-.serverless/
-package-lock.json
-package.json
