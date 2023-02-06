@@ -63,8 +63,8 @@ functions:
 
   parse_parquet:
     handler: parse_parquet.run
-    layers:
-      - !Ref PythonRequirementsLambdaLayer
+    # layers:
+    # - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
@@ -76,17 +76,15 @@ functions:
 
   create_calendar:
     handler: create_calendar.run
-    layers:
-      - !Ref PythonRequirementsLambdaLayer
+    # layers:
+    # - !Ref PythonRequirementsLambdaLayer
     package:
       patterns:
         - config/mapping.json
-        - config/latest_data.sql
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: parquets/
             - suffix: .parquet
           existing: true

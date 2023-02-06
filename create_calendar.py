@@ -5,18 +5,17 @@ from typing import List, Optional, List
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-import io
-import tempfile
 import os
-import s3fs
-import fastparquet as fp
-import numpy as np
 import json
 from pydantic import validate_arguments
+import s3fs
+import fastparquet as fp
+import urllib
+
 
 s3 = boto3.client("s3")
 # personal = boto3.Session(profile_name='personal')
-# s3 = personal.resource('s3')
+# s3 = personal.client('s3')
 
 
 @dataclass
@@ -276,27 +275,15 @@ def create_day_events(
     return day_events
 
 
-def get_latest_health_data(bucket, config_path):
+def get_latest_health_data(bucket, key):
     """Parse all parquest files and return unique data for all metrics"""
     # Read the parquet file
     s3fileSystem = s3fs.S3FileSystem()
     fs = s3fs.core.S3FileSystem()
+    s3_file_path = fs.glob(path=f"{bucket}/{key}")
 
-    bucket_uri = f"{bucket}/parquets/*.parquet"
-    all_paths_from_s3 = fs.glob(path=bucket_uri)
-    df = pd.DataFrame()
-    for s3_file in all_paths_from_s3:
-        fp_obj = fp.ParquetFile(s3_file, open_with=s3fileSystem.open)
-        # convert to pandas dataframe
-        df_s3_file = fp_obj.to_pandas()
-        df = pd.concat([df, df_s3_file])
-
-    df["date"] = df["date"].astype("str")
-    df["date"] = [f[:10] for f in df["date"]]
-    cte_latest_data = df.groupby(["date", "name"]).agg({"date_updated": np.max})
-    df_latest = df.merge(
-        cte_latest_data, on=["date", "name", "date_updated"], how="inner"
-    )
+    fp_obj = fp.ParquetFile(s3_file_path, open_with=s3fileSystem.open)
+    df_latest = fp_obj.to_pandas()
 
     return df_latest
 
@@ -304,23 +291,14 @@ def get_latest_health_data(bucket, config_path):
 def run(event, context):
     """Main handler for lambda event"""
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
+    key = urllib.parse.unquote_plus(
+        event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
+    )
     config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
     calendar_file_name = "apple-health-calendar.ics"
     event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
 
-    df = get_latest_health_data(bucket, config_path)
-
-    logging.info("Writing latest data into a single parquet file")
-    with tempfile.NamedTemporaryFile() as tmp:
-        df.to_parquet(tmp.name, engine="fastparquet", index=False)
-        with open(tmp.name, "rb") as fh:
-            parquet_buffer = io.BytesIO(fh.read())
-
-    response = s3.put_object(
-        Bucket=bucket,
-        Key="latest_data.parquet",
-        Body=parquet_buffer.getvalue(),
-    )
+    df = get_latest_health_data(bucket, key)
 
     c = Calendar()
     available_dates = df["date"].unique()
@@ -335,7 +313,10 @@ def run(event, context):
 
     logging.info("Writing data to calendar ics file")
     s3.put_object(
-        Bucket=bucket, Key=f"calendars/{calendar_file_name}", Body=c.serialize()
+        Bucket=bucket,
+        Key=f"calendars/{calendar_file_name}",
+        Body=c.serialize(),
+        ACL="public-read",
     )
 
-    return response
+    return

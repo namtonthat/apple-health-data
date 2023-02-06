@@ -1,0 +1,456 @@
+{"qty": 569.1440000000008, "source": null, "date": "2023-01-26 00:00:00 +1100", "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318890"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 719.2239999999982, "source": null, "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318899"}
+{"qty": 915.1440898625723, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318900"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 723.438910137426, "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318901"}
+{"qty": 710.5140000000083, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318902"}
+{"date": "2023-01-31 00:00:00 +1100", "source": null, "qty": 708.7980000000002, "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318903"}
+{"source": null, "qty": 392.94699999999995, "date": "2023-02-01 00:00:00 +1100", "name": "active_energy", "units": "kcal", "date_updated": "2023-02-01 06:45:05.318904"}
+{"qty": 45, "date": "2023-01-26 00:00:00 +1100", "source": null, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318904"}
+{"qty": 60, "date": "2023-01-27 00:00:00 +1100", "source": null, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318905"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 90, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318907"}
+{"qty": 58, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318908"}
+{"source": null, "date": "2023-01-30 00:00:00 +1100", "qty": 97, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318909"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 88, "source": null, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318910"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 40, "source": null, "name": "apple_exercise_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318911"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 15, "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318912"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 16, "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318913"}
+{"qty": 17, "date": "2023-01-28 00:00:00 +1100", "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318913"}
+{"qty": 16, "date": "2023-01-29 00:00:00 +1100", "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318914"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 10, "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318915"}
+{"qty": 13, "date": "2023-01-31 00:00:00 +1100", "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318916"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 8, "name": "apple_stand_hour", "units": "count", "date_updated": "2023-02-01 06:45:05.318917"}
+{"qty": 132, "source": null, "date": "2023-01-26 00:00:00 +1100", "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318917"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 242, "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318918"}
+{"qty": 209, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318919"}
+{"source": null, "qty": 233, "date": "2023-01-29 00:00:00 +1100", "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318920"}
+{"qty": 157, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318921"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 183, "source": null, "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318921"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 92, "source": null, "name": "apple_stand_time", "units": "min", "date_updated": "2023-02-01 06:45:05.318922"}
+{"qty": 7557.347773060209, "date": "2023-01-26 00:00:00 +1100", "source": null, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318923"}
+{"qty": 7533.972767896095, "date": "2023-01-27 00:00:00 +1100", "source": null, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318925"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 7578.889766200369, "source": null, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318926"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 7536.1296317722, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318927"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 7648.019983164788, "source": null, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318928"}
+{"qty": 7618.827723486856, "date": "2023-01-31 00:00:00 +1100", "source": null, "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318929"}
+{"qty": 5568.378122419534, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "basal_energy_burned", "units": "kJ", "date_updated": "2023-02-01 06:45:05.318929"}
+{"qty": 97.57894736842105, "date": "2023-01-26 00:00:00 +1100", "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318930"}
+{"qty": 97.53333333333333, "date": "2023-01-27 00:00:00 +1100", "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318931"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 97.16666666666667, "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318932"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 98.46666666666667, "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318932"}
+{"qty": 96.75, "date": "2023-01-30 00:00:00 +1100", "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318933"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 97.28571428571429, "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318934"}
+{"qty": 97.4, "date": "2023-02-01 00:00:00 +1100", "name": "blood_oxygen_saturation", "units": "%", "date_updated": "2023-02-01 06:45:05.318935"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 298.4529012331, "source": null, "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318935"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 122.90867284, "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318936"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 653.56276000075, "source": null, "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318937"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 81.67483605, "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318938"}
+{"qty": 689.5584799999999, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318939"}
+{"qty": 158.56481481575003, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318939"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 228.29563142150002, "source": null, "name": "calcium", "units": "mg", "date_updated": "2023-02-01 06:45:05.318940"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 260.94753087175, "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318942"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 263.1889876678, "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318943"}
+{"qty": 258.4180550034, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318944"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 229.24701456325, "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318945"}
+{"qty": 221.83445333133338, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318946"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 187.67037037725, "source": null, "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318946"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 192.06025383014997, "name": "carbohydrates", "units": "g", "date_updated": "2023-02-01 06:45:05.318947"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 0.35629321099999994, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318948"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 0.766849384, "source": null, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318949"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 0.8827150000000001, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318950"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 0.77724173, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318950"}
+{"qty": 0.5003200000000001, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318951"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 0.25626851900000003, "source": null, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318952"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 0.985859692, "name": "copper", "units": "mg", "date_updated": "2023-02-01 06:45:05.318954"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 2.2999899999999998, "name": "dietary_caffeine", "units": "mg", "date_updated": "2023-02-01 06:45:05.319024"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 4.5999799999999995, "source": null, "name": "dietary_caffeine", "units": "mg", "date_updated": "2023-02-01 06:45:05.319025"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 191.0000000003, "source": null, "name": "dietary_cholesterol", "units": "mg", "date_updated": "2023-02-01 06:45:05.319026"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 30, "name": "dietary_cholesterol", "units": "mg", "date_updated": "2023-02-01 06:45:05.319027"}
+{"qty": 440.9534000007499, "date": "2023-01-28 00:00:00 +1100", "source": null, "name": "dietary_cholesterol", "units": "mg", "date_updated": "2023-02-01 06:45:05.319028"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 306.50000000075, "name": "dietary_cholesterol", "units": "mg", "date_updated": "2023-02-01 06:45:05.319029"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 305.6000000015, "source": null, "name": "dietary_cholesterol", "units": "mg", "date_updated": "2023-02-01 06:45:05.319030"}
+{"source": null, "qty": 9283.749537068346, "date": "2023-01-26 00:00:00 +1100", "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319031"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 9086.71516346811, "source": null, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319032"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 8834.257705762388, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319033"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 8907.220179300495, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319034"}
+{"source": null, "date": "2023-01-30 00:00:00 +1100", "qty": 7938.330473013215, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319034"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 8952.869376294937, "source": null, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319037"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 8127.733016941493, "name": "dietary_energy", "units": "kJ", "date_updated": "2023-02-01 06:45:05.319038"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 87.53183420855119, "source": null, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319039"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 106.8401234566, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319040"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 78.43077500605001, "source": null, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319041"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 75.65849431837502, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319042"}
+{"qty": 88.54635999780001, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319042"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 36.761296302750004, "source": null, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319043"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 77.04071173075, "name": "dietary_sugar", "units": "g", "date_updated": "2023-02-01 06:45:05.319044"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 207.87250000000006, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319045"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 449.29800000000006, "source": null, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319046"}
+{"source": null, "qty": 664.2629300000001, "date": "2023-01-28 00:00:00 +1100", "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319046"}
+{"qty": 446.5405100000001, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319047"}
+{"qty": 1008.54104, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319050"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 359.0525000000001, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319050"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 726.1172600000003, "source": null, "name": "dietary_water", "units": "mL", "date_updated": "2023-02-01 06:45:05.319051"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 52.4458311633768, "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319052"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 60.99711812482321, "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319053"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 61.98805184329885, "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319054"}
+{"qty": 57.77264093927769, "date": "2023-01-29 00:00:00 +1100", "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319055"}
+{"qty": 54.90111401965061, "date": "2023-01-30 00:00:00 +1100", "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319056"}
+{"qty": 56.06129178783295, "date": "2023-01-31 00:00:00 +1100", "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319056"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 56.68915867885246, "name": "environmental_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319057"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 21.525705472260718, "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319058"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 34.6587654378, "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319059"}
+{"qty": 42.5338899925, "date": "2023-01-28 00:00:00 +1100", "source": null, "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319059"}
+{"qty": 32.390346785875, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319060"}
+{"qty": 29.217559997800002, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319061"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 25.462037027500003, "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319062"}
+{"qty": 26.771062714000003, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "fiber", "units": "g", "date_updated": "2023-02-01 06:45:05.319063"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 1, "source": null, "name": "flights_climbed", "units": "count", "date_updated": "2023-02-01 06:45:05.319064"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 1, "source": null, "name": "flights_climbed", "units": "count", "date_updated": "2023-02-01 06:45:05.319065"}
+{"qty": 41, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "flights_climbed", "units": "count", "date_updated": "2023-02-01 06:45:05.319065"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 4, "name": "flights_climbed", "units": "count", "date_updated": "2023-02-01 06:45:05.319067"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 4, "source": null, "name": "flights_climbed", "units": "count", "date_updated": "2023-02-01 06:45:05.319068"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 42.740740741, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319069"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 51.703703704000006, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319070"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 332.11168499999997, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319071"}
+{"qty": 52.55771963000001, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319072"}
+{"source": null, "date": "2023-01-30 00:00:00 +1100", "qty": 486.51236, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319073"}
+{"qty": 269.38888888799994, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319073"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 161.84059685200006, "name": "folate", "units": "mcg", "date_updated": "2023-02-01 06:45:05.319074"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 4, "name": "handwashing", "units": "s", "date_updated": "2023-02-01 06:45:05.319075"}
+{"qty": 4, "date": "2023-01-29 00:00:00 +1100", "name": "handwashing", "units": "s", "date_updated": "2023-02-01 06:45:05.319076"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 9, "name": "handwashing", "units": "s", "date_updated": "2023-02-01 06:45:05.319077"}
+{"qty": 5, "date": "2023-02-01 00:00:00 +1100", "name": "handwashing", "units": "s", "date_updated": "2023-02-01 06:45:05.319077"}
+{"qty": 73.1573054531675, "date": "2023-01-26 00:00:00 +1100", "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319078"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 77.3146756206111, "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319079"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 41.452824405572734, "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319080"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 27.127487182617188, "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319080"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 37.20192488879231, "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319081"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 55.0149468770717, "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319082"}
+{"qty": 54.08707118183525, "date": "2023-02-01 00:00:00 +1100", "name": "headphone_audio_exposure", "units": "dBASPL", "date_updated": "2023-02-01 06:45:05.319083"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-26 00:00:00 +1100", "qty": 122.99999999999999, "date_updated": "2023-02-01 06:45:05.319083"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-26 00:00:00 +1100", "qty": 49, "date_updated": "2023-02-01 06:45:05.319084"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-26 00:00:00 +1100", "qty": 68.22211041648154, "date_updated": "2023-02-01 06:45:05.319085"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-27 00:00:00 +1100", "qty": 118, "date_updated": "2023-02-01 06:45:05.319086"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-27 00:00:00 +1100", "qty": 45, "date_updated": "2023-02-01 06:45:05.319086"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-27 00:00:00 +1100", "qty": 69.50984683473486, "date_updated": "2023-02-01 06:45:05.319087"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-28 00:00:00 +1100", "qty": 136, "date_updated": "2023-02-01 06:45:05.319088"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-28 00:00:00 +1100", "qty": 69.13742835372186, "date_updated": "2023-02-01 06:45:05.319088"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-28 00:00:00 +1100", "qty": 47, "date_updated": "2023-02-01 06:45:05.319089"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-29 00:00:00 +1100", "qty": 126, "date_updated": "2023-02-01 06:45:05.319090"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-29 00:00:00 +1100", "qty": 74.30366934636858, "date_updated": "2023-02-01 06:45:05.319091"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-29 00:00:00 +1100", "qty": 45, "date_updated": "2023-02-01 06:45:05.319091"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-30 00:00:00 +1100", "qty": 48, "date_updated": "2023-02-01 06:45:05.319092"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-30 00:00:00 +1100", "qty": 125.00000000000001, "date_updated": "2023-02-01 06:45:05.319093"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-30 00:00:00 +1100", "qty": 73.41875053686876, "date_updated": "2023-02-01 06:45:05.319093"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-01-31 00:00:00 +1100", "qty": 126, "date_updated": "2023-02-01 06:45:05.319094"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-01-31 00:00:00 +1100", "qty": 46.00000000000001, "date_updated": "2023-02-01 06:45:05.319095"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-01-31 00:00:00 +1100", "qty": 68.91796278963025, "date_updated": "2023-02-01 06:45:05.319096"}
+{"name": "heart_rate_Max", "units": "count/min", "date": "2023-02-01 00:00:00 +1100", "qty": 121, "date_updated": "2023-02-01 06:45:05.319096"}
+{"name": "heart_rate_Min", "units": "count/min", "date": "2023-02-01 00:00:00 +1100", "qty": 50, "date_updated": "2023-02-01 06:45:05.339162"}
+{"name": "heart_rate_Avg", "units": "count/min", "date": "2023-02-01 00:00:00 +1100", "qty": 68.40380425680691, "date_updated": "2023-02-01 06:45:05.339163"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 55.71700357310308, "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339164"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 53.459100701238185, "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339165"}
+{"qty": 62.33333806539928, "date": "2023-01-28 00:00:00 +1100", "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339166"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 70.18587537065834, "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339167"}
+{"qty": 49.317470102780774, "date": "2023-01-30 00:00:00 +1100", "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339168"}
+{"qty": 53.800717994958376, "date": "2023-01-31 00:00:00 +1100", "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339169"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 33.56778834529186, "name": "heart_rate_variability", "units": "ms", "date_updated": "2023-02-01 06:45:05.339170"}
+{"qty": 4.992822219000001, "source": null, "date": "2023-01-26 00:00:00 +1100", "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339171"}
+{"qty": 8.341177775999999, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339173"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 11.488609999000001, "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339174"}
+{"qty": 5.947952220000001, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339175"}
+{"qty": 24.37432, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339184"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 11.4916666665, "source": null, "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339185"}
+{"source": null, "qty": 8.940258888999999, "date": "2023-02-01 00:00:00 +1100", "name": "iron", "units": "mg", "date_updated": "2023-02-01 06:45:05.339186"}
+{"source": null, "qty": 165.540123458, "date": "2023-01-26 00:00:00 +1100", "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339187"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 212.817283952, "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339188"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 157.92958000000004, "source": null, "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339189"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 203.77526494, "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339190"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 223.31464000000003, "source": null, "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339191"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 560.2314814810001, "source": null, "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339193"}
+{"qty": 275.278026976, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "magnesium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339194"}
+{"qty": 2.5709907410000006, "date": "2023-01-26 00:00:00 +1100", "source": null, "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339195"}
+{"qty": 4.705903704, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339196"}
+{"qty": 1.76153, "date": "2023-01-28 00:00:00 +1100", "source": null, "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339196"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 4.66897963, "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339199"}
+{"qty": 3.0411, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339200"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 1.1411388890000003, "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339201"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 3.021736852, "name": "manganese", "units": "mg", "date_updated": "2023-02-01 06:45:05.339202"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 14.63677247732143, "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339203"}
+{"qty": 17.678249412000003, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339203"}
+{"qty": 19.788235000000004, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339204"}
+{"qty": 21.39440114375, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339205"}
+{"source": null, "qty": 3.384860002, "date": "2023-01-30 00:00:00 +1100", "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339206"}
+{"qty": 9.198467592, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339207"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 12.411288456, "name": "monounsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339207"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 22.692447529475007, "source": null, "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339208"}
+{"source": null, "qty": 6.74085432, "date": "2023-01-27 00:00:00 +1100", "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339209"}
+{"source": null, "qty": 16.416385, "date": "2023-01-28 00:00:00 +1100", "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339212"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 11.299707897375, "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339213"}
+{"qty": 18.5107599986, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339214"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 44.514620371, "source": null, "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339215"}
+{"qty": 41.115142160000005, "date": "2023-02-01 00:00:00 +1100", "source": null, "name": "niacin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339216"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 4.160277776999999, "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339217"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 2.251088888, "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339218"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 2.95342, "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339219"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 2.1671911099999996, "source": null, "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339220"}
+{"source": null, "qty": 1.42442, "date": "2023-01-30 00:00:00 +1100", "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339220"}
+{"qty": 6.175833332999998, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339221"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 7.608384444, "source": null, "name": "pantothenic_acid", "units": "mg", "date_updated": "2023-02-01 06:45:05.339222"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 5.007866020685714, "source": null, "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339223"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 5.421050707999999, "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339228"}
+{"source": null, "qty": 10.232064999999999, "date": "2023-01-28 00:00:00 +1100", "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339229"}
+{"qty": 6.963796507, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339230"}
+{"date": "2023-01-30 00:00:00 +1100", "source": null, "qty": 4.044039998400001, "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339231"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 8.209328703, "source": null, "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339232"}
+{"qty": 17.786111604000002, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "polyunsaturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339232"}
+{"qty": 1221.3448765416001, "source": null, "date": "2023-01-26 00:00:00 +1100", "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339233"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 1346.785216048, "source": null, "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339235"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 1957.9728199989997, "source": null, "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339235"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 1364.8179650600002, "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339236"}
+{"source": null, "qty": 1893.54828, "date": "2023-01-30 00:00:00 +1100", "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339237"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 1787.5185185180003, "source": null, "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339238"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 2973.4066230225, "source": null, "name": "potassium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339239"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 155.93974425811308, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339242"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 126.91419752240002, "source": null, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339243"}
+{"source": null, "qty": 130.17012000785, "date": "2023-01-28 00:00:00 +1100", "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339244"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 170.27840689617503, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339245"}
+{"qty": 180.96630665546667, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339245"}
+{"date": "2023-01-31 00:00:00 +1100", "source": null, "qty": 183.00907407775, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339246"}
+{"qty": 161.42537210215, "date": "2023-02-01 00:00:00 +1100", "source": null, "name": "protein", "units": "g", "date_updated": "2023-02-01 06:45:05.339247"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 15.098214285714286, "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339248"}
+{"qty": 15.5, "date": "2023-01-27 00:00:00 +1100", "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339249"}
+{"qty": 14.445652173913043, "date": "2023-01-28 00:00:00 +1100", "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339250"}
+{"qty": 15.574468085106384, "date": "2023-01-29 00:00:00 +1100", "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339251"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 15.377777777777778, "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339252"}
+{"qty": 14.99, "date": "2023-01-31 00:00:00 +1100", "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339252"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 14.932432432432432, "name": "respiratory_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339253"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 52, "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339254"}
+{"qty": 61, "date": "2023-01-27 00:00:00 +1100", "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339255"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 50, "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339256"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 63, "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339256"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 54, "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339257"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 53, "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339258"}
+{"qty": 58, "date": "2023-02-01 00:00:00 +1100", "name": "resting_heart_rate", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339259"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 0.45208950600000003, "source": null, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339259"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 0.289730864, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339260"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 1.534005, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339261"}
+{"qty": 0.31654358, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339262"}
+{"qty": 2.00122, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339263"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 1.572324075, "source": null, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339264"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 1.2965254319999997, "name": "riboflavin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339267"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 21.70608397565119, "source": null, "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339267"}
+{"qty": 14.4944089042, "date": "2023-01-27 00:00:00 +1100", "source": null, "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339268"}
+{"qty": 26.515960012899995, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339269"}
+{"qty": 7.829071124874999, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339270"}
+{"qty": 13.609326677466665, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339271"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 11.765173351, "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339272"}
+{"date": "2023-02-01 00:00:00 +1100", "source": null, "qty": 18.232794452649998, "name": "saturated_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339273"}
+{"qty": 92.56296296400001, "source": null, "date": "2023-01-26 00:00:00 +1100", "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339273"}
+{"qty": 23.314814816, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339274"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 101.79701500000002, "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339275"}
+{"qty": 30.500898520000003, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339276"}
+{"source": null, "date": "2023-01-30 00:00:00 +1100", "qty": 10.59952, "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339277"}
+{"qty": 133.95555555600004, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339279"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 140.82623740800003, "source": null, "name": "selenium", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339280"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 500, "name": "six_minute_walking_test_distance", "units": "m", "date_updated": "2023-02-01 06:45:05.339281"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": "AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339282"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 8.716666666666667, "date_updated": "2023-02-01 06:45:05.339283"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 0.7166666666666667, "date_updated": "2023-02-01 06:45:05.339284"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": "2023-01-26 06:44:00 +1100", "date_updated": "2023-02-01 06:45:05.339284"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 8.383333333333335, "date_updated": "2023-02-01 06:45:05.339285"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": "2023-01-25 22:01:00 +1100", "date_updated": "2023-02-01 06:45:05.339286"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 1.6833333333333331, "date_updated": "2023-02-01 06:45:05.339287"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 1.3583333333333332, "date_updated": "2023-02-01 06:45:05.339287"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-26 05:31:00 +1100", "qty": 4.833333333333333, "date_updated": "2023-02-01 06:45:05.339288"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": "2023-01-26 21:35:57 +1100", "date_updated": "2023-02-01 06:45:05.339289"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 1.0999999999999999, "date_updated": "2023-02-01 06:45:05.339289"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": "2023-01-27 05:35:46 +1100", "date_updated": "2023-02-01 06:45:05.339290"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 7.333333333333333, "date_updated": "2023-02-01 06:45:05.339291"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 7.99708745751116, "date_updated": "2023-02-01 06:45:05.339292"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 4.225, "date_updated": "2023-02-01 06:45:05.339292"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 0.10833333333333334, "date_updated": "2023-02-01 06:45:05.339293"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": 1.8583333333333332, "date_updated": "2023-02-01 06:45:05.339294"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-26 21:35:57 +1100", "qty": "iPhone|AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339295"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 8.679056443605159, "date_updated": "2023-02-01 06:45:05.339295"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 4.616666666666666, "date_updated": "2023-02-01 06:45:05.339296"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": "iPhone|AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339297"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 0.125, "date_updated": "2023-02-01 06:45:05.339298"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 7.333333333333334, "date_updated": "2023-02-01 06:45:05.339298"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 0.9666666666666667, "date_updated": "2023-02-01 06:45:05.339299"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": 1.75, "date_updated": "2023-02-01 06:45:05.339300"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": "2023-01-27 21:45:16 +1100", "date_updated": "2023-02-01 06:45:05.339300"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-27 21:45:16 +1100", "qty": "2023-01-28 06:26:00 +1100", "date_updated": "2023-02-01 06:45:05.339301"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 7.951785471273793, "date_updated": "2023-02-01 06:45:05.339302"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 1.1916666666666667, "date_updated": "2023-02-01 06:45:05.339303"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 4.133333333333334, "date_updated": "2023-02-01 06:45:05.339303"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 0.15833333333333333, "date_updated": "2023-02-01 06:45:05.339304"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 6.449999999999999, "date_updated": "2023-02-01 06:45:05.339305"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": "2023-01-28 22:02:56 +1100", "date_updated": "2023-02-01 06:45:05.339306"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": "2023-01-29 06:00:03 +1100", "date_updated": "2023-02-01 06:45:05.339306"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": "iPhone|AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339307"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-28 22:02:56 +1100", "qty": 1.1416666666666666, "date_updated": "2023-02-01 06:45:05.339308"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 1.4999999999999998, "date_updated": "2023-02-01 06:45:05.339309"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": "iPhone|AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339310"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 0.4, "date_updated": "2023-02-01 06:45:05.339310"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 7.715266592668162, "date_updated": "2023-02-01 06:45:05.339311"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": "2023-01-29 22:17:08 +1100", "date_updated": "2023-02-01 06:45:05.339312"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 1.1500000000000001, "date_updated": "2023-02-01 06:45:05.339313"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": "2023-01-30 06:00:02 +1100", "date_updated": "2023-02-01 06:45:05.339313"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 7.316666666666666, "date_updated": "2023-02-01 06:45:05.339314"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-30 05:15:59 +1100", "qty": 4.575, "date_updated": "2023-02-01 06:45:05.339315"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 7.283333333333333, "date_updated": "2023-02-01 06:45:05.339316"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 4.275, "date_updated": "2023-02-01 06:45:05.339316"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 8.002499285009172, "date_updated": "2023-02-01 06:45:05.339317"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 0.09999999999999999, "date_updated": "2023-02-01 06:45:05.339318"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": "iPhone|AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339319"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": "2023-01-30 21:59:54 +1100", "date_updated": "2023-02-01 06:45:05.339319"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 1.0416666666666665, "date_updated": "2023-02-01 06:45:05.339320"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": 1.75, "date_updated": "2023-02-01 06:45:05.339321"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-30 22:58:00 +1100", "qty": "2023-01-31 06:15:00 +1100", "date_updated": "2023-02-01 06:45:05.339321"}
+{"name": "sleep_analysis_deep", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 1.2083333333333335, "date_updated": "2023-02-01 06:45:05.339323"}
+{"name": "sleep_analysis_awake", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 0.19166666666666665, "date_updated": "2023-02-01 06:45:05.339323"}
+{"name": "sleep_analysis_source", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": "AutoSleep|Nam\u2019s Apple\u00a0Watch", "date_updated": "2023-02-01 06:45:05.339324"}
+{"name": "sleep_analysis_sleepStart", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": "2023-01-31 22:08:00 +1100", "date_updated": "2023-02-01 06:45:05.339325"}
+{"name": "sleep_analysis_asleep", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 7.616666666666666, "date_updated": "2023-02-01 06:45:05.339326"}
+{"name": "sleep_analysis_core", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 4.566666666666667, "date_updated": "2023-02-01 06:45:05.339327"}
+{"name": "sleep_analysis_inBed", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 7.983333333333333, "date_updated": "2023-02-01 06:45:05.339327"}
+{"name": "sleep_analysis_sleepEnd", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": "2023-02-01 06:07:00 +1100", "date_updated": "2023-02-01 06:45:05.339328"}
+{"name": "sleep_analysis_rem", "units": "hr", "date": "2023-01-31 22:30:00 +1100", "qty": 1.7000000000000002, "date_updated": "2023-02-01 06:45:05.339329"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 4224.849805995913, "source": null, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339330"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 1349.8445061766001, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339331"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 4969.190895011301, "source": null, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339332"}
+{"qty": 2772.4326227393753, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339333"}
+{"date": "2023-01-30 00:00:00 +1100", "source": null, "qty": 6968.246293352335, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339334"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 2593.564814838, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339335"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 2686.0444680968003, "source": null, "name": "sodium", "units": "mg", "date_updated": "2023-02-01 06:45:05.339336"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 0.41103804111480713, "name": "stair_speed_down", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339337"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 0.26065734164281323, "name": "stair_speed_down", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339338"}
+{"qty": 0.36669275164604187, "date": "2023-01-29 00:00:00 +1100", "name": "stair_speed_down", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339339"}
+{"qty": 0.3030314913817814, "date": "2023-01-30 00:00:00 +1100", "name": "stair_speed_down", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339339"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 0.37002238631248474, "name": "stair_speed_up", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339340"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 0.4695158004760742, "name": "stair_speed_up", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339341"}
+{"qty": 0.2725451493805105, "date": "2023-01-28 00:00:00 +1100", "name": "stair_speed_up", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339342"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 0.38150861859321594, "name": "stair_speed_up", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339342"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 0.4647812843322754, "name": "stair_speed_up", "units": "m/s", "date_updated": "2023-02-01 06:45:05.339343"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 12410.937740179908, "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339344"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 17724, "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339345"}
+{"qty": 19273, "date": "2023-01-28 00:00:00 +1100", "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339346"}
+{"qty": 19794, "date": "2023-01-29 00:00:00 +1100", "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339347"}
+{"qty": 14545, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339349"}
+{"qty": 17447.184630418888, "date": "2023-01-31 00:00:00 +1100", "source": null, "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339350"}
+{"qty": 8589.576334543333, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "step_count", "units": "count", "date_updated": "2023-02-01 06:45:05.339351"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 0.511074072, "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339352"}
+{"qty": 0.655570368, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339353"}
+{"qty": 1.432965, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339354"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 0.66409296, "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339355"}
+{"source": null, "qty": 0.45531999999999995, "date": "2023-01-30 00:00:00 +1100", "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339355"}
+{"qty": 1.2118888879999998, "date": "2023-01-31 00:00:00 +1100", "source": null, "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339356"}
+{"qty": 0.9106301840000002, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "thiamin", "units": "mg", "date_updated": "2023-02-01 06:45:05.339357"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 58.421913588425, "source": null, "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339358"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 62.656567918200004, "source": null, "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339359"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 68.86345998805, "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339360"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 61.677029882925005, "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339362"}
+{"qty": 35.946946668866666, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339363"}
+{"source": null, "qty": 67.93796294825, "date": "2023-01-31 00:00:00 +1100", "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339364"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 63.942553946299995, "source": null, "name": "total_fat", "units": "g", "date_updated": "2023-02-01 06:45:05.339365"}
+{"qty": 44.15, "date": "2023-01-26 00:00:00 +1100", "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339366"}
+{"qty": 44.12, "date": "2023-01-27 00:00:00 +1100", "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339366"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 44.41, "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339367"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 44.22, "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339368"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 44.205, "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339369"}
+{"qty": 44.58, "date": "2023-02-01 00:00:00 +1100", "name": "vo2_max", "units": "ml/(kg\u00b7min)", "date_updated": "2023-02-01 06:45:05.339370"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 29.7, "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339371"}
+{"source": null, "qty": 141.46, "date": "2023-01-27 00:00:00 +1100", "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339371"}
+{"qty": 483.77941666816, "source": null, "date": "2023-01-28 00:00:00 +1100", "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339372"}
+{"qty": 81.46000000000001, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339373"}
+{"qty": 69.321400009, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339374"}
+{"source": null, "qty": 51.300000000000004, "date": "2023-01-31 00:00:00 +1100", "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339375"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 531.0442499999999, "name": "vitamin_a", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339376"}
+{"date": "2023-01-26 00:00:00 +1100", "source": null, "qty": 0.5225, "name": "vitamin_b12", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339376"}
+{"source": null, "qty": 2.6564, "date": "2023-01-28 00:00:00 +1100", "name": "vitamin_b12", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339377"}
+{"source": null, "qty": 0.9024999999999999, "date": "2023-01-31 00:00:00 +1100", "name": "vitamin_b12", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339380"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 0.9109999999999999, "name": "vitamin_b12", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339380"}
+{"source": null, "date": "2023-01-26 00:00:00 +1100", "qty": 2.161885801, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339381"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 0.407612344, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339382"}
+{"date": "2023-01-28 00:00:00 +1100", "source": null, "qty": 0.598975, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339383"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 0.35847543000000004, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339384"}
+{"date": "2023-01-30 00:00:00 +1100", "source": null, "qty": 2.49834, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339385"}
+{"qty": 4.144379629, "date": "2023-01-31 00:00:00 +1100", "source": null, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339385"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 4.125021172, "name": "vitamin_b6", "units": "mg", "date_updated": "2023-02-01 06:45:05.339386"}
+{"qty": 33, "source": null, "date": "2023-01-27 00:00:00 +1100", "name": "vitamin_c", "units": "mg", "date_updated": "2023-02-01 06:45:05.339387"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 35.70525, "source": null, "name": "vitamin_c", "units": "mg", "date_updated": "2023-02-01 06:45:05.339388"}
+{"qty": 33, "source": null, "date": "2023-01-29 00:00:00 +1100", "name": "vitamin_c", "units": "mg", "date_updated": "2023-02-01 06:45:05.339389"}
+{"qty": 11.22, "date": "2023-01-30 00:00:00 +1100", "source": null, "name": "vitamin_c", "units": "mg", "date_updated": "2023-02-01 06:45:05.339390"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 33.497, "name": "vitamin_c", "units": "mg", "date_updated": "2023-02-01 06:45:05.339392"}
+{"qty": 0.1375, "date": "2023-01-26 00:00:00 +1100", "source": null, "name": "vitamin_d", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339393"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 2.024, "name": "vitamin_d", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339394"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 0.23750000000000002, "source": null, "name": "vitamin_d", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339395"}
+{"qty": 0.365, "source": null, "date": "2023-02-01 00:00:00 +1100", "name": "vitamin_d", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339395"}
+{"source": null, "qty": 2.8076759279999997, "date": "2023-01-26 00:00:00 +1100", "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339396"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 6.853504632, "source": null, "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339397"}
+{"source": null, "qty": 8.602025000000001, "date": "2023-01-28 00:00:00 +1100", "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339398"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 7.06273204, "source": null, "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339399"}
+{"qty": 2.6362799999999997, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339400"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 1.2423611119999998, "source": null, "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339400"}
+{"qty": 5.668864816000001, "date": "2023-02-01 00:00:00 +1100", "source": null, "name": "vitamin_e", "units": "mg", "date_updated": "2023-02-01 06:45:05.339401"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 9.509716048000001, "source": null, "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339402"}
+{"source": null, "date": "2023-01-27 00:00:00 +1100", "qty": 26.770746912, "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339405"}
+{"qty": 39.962985, "date": "2023-01-28 00:00:00 +1100", "source": null, "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339406"}
+{"source": null, "qty": 27.275628640000004, "date": "2023-01-29 00:00:00 +1100", "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339407"}
+{"qty": 397.25928000000005, "source": null, "date": "2023-01-30 00:00:00 +1100", "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339407"}
+{"qty": 2.4455925919999992, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339408"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 107.94669345599999, "name": "vitamin_k", "units": "mcg", "date_updated": "2023-02-01 06:45:05.339409"}
+{"qty": 9.07927890003212, "date": "2023-01-26 00:00:00 +1100", "source": null, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339410"}
+{"date": "2023-01-27 00:00:00 +1100", "source": null, "qty": 13.220092430798337, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339411"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 14.28930459985137, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339412"}
+{"date": "2023-01-29 00:00:00 +1100", "source": null, "qty": 14.358605780996848, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339412"}
+{"source": null, "date": "2023-01-30 00:00:00 +1100", "qty": 10.691722825157456, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339413"}
+{"source": null, "date": "2023-01-31 00:00:00 +1100", "qty": 12.577762504937882, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339414"}
+{"qty": 6.163352222024177, "date": "2023-02-01 00:00:00 +1100", "source": null, "name": "walking_running_distance", "units": "km", "date_updated": "2023-02-01 06:45:05.339415"}
+{"name": "walking_asymmetry_percentage_qty", "units": "%", "date": "2023-01-26 00:00:00 +1100", "qty": 0, "date_updated": "2023-02-01 06:45:05.339417"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 0.8372093023255814, "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339418"}
+{"qty": 2.0697674418604652, "date": "2023-01-28 00:00:00 +1100", "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339419"}
+{"qty": 0.3, "date": "2023-01-29 00:00:00 +1100", "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339420"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 0.08108108108108109, "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339420"}
+{"qty": 0.5777777777777777, "date": "2023-01-31 00:00:00 +1100", "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339421"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 0.3, "name": "walking_asymmetry_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339422"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 27.481132075471688, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339423"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 28.321126760563384, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339424"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 27.07794117647059, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339424"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 27.618367346938776, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339425"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 26.88333333333333, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339426"}
+{"qty": 26.96811594202898, "date": "2023-01-31 00:00:00 +1100", "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339426"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 26.410714285714295, "name": "walking_double_support_percentage", "units": "%", "date_updated": "2023-02-01 06:45:05.339427"}
+{"qty": 86, "date": "2023-01-26 00:00:00 +1100", "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339428"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 96, "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339429"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 81.5, "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339430"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 88, "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339431"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 95, "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339431"}
+{"qty": 90, "date": "2023-01-31 00:00:00 +1100", "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339432"}
+{"qty": 85, "date": "2023-02-01 00:00:00 +1100", "name": "walking_heart_rate_average", "units": "count/min", "date_updated": "2023-02-01 06:45:05.339433"}
+{"qty": 4.534000000000001, "date": "2023-01-26 00:00:00 +1100", "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339434"}
+{"qty": 4.198909090909092, "date": "2023-01-27 00:00:00 +1100", "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339434"}
+{"date": "2023-01-28 00:00:00 +1100", "qty": 4.6713417721519, "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339435"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 4.477846153846154, "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339436"}
+{"qty": 4.8220714285714275, "date": "2023-01-30 00:00:00 +1100", "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339437"}
+{"qty": 4.7559999999999985, "date": "2023-01-31 00:00:00 +1100", "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339437"}
+{"date": "2023-02-01 00:00:00 +1100", "qty": 4.786714285714285, "name": "walking_speed", "units": "km/hr", "date_updated": "2023-02-01 06:45:05.339438"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 66.11111111111111, "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339439"}
+{"qty": 61.688311688311686, "date": "2023-01-27 00:00:00 +1100", "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339440"}
+{"qty": 70.27848101265823, "date": "2023-01-28 00:00:00 +1100", "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339441"}
+{"qty": 65.15384615384616, "date": "2023-01-29 00:00:00 +1100", "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339441"}
+{"date": "2023-01-30 00:00:00 +1100", "qty": 68.19642857142857, "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339442"}
+{"date": "2023-01-31 00:00:00 +1100", "qty": 68.47222222222223, "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339443"}
+{"qty": 67.85714285714286, "date": "2023-02-01 00:00:00 +1100", "name": "walking_step_length", "units": "cm", "date_updated": "2023-02-01 06:45:05.339444"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 70.2, "name": "weight_body_mass", "units": "kg", "date_updated": "2023-02-01 06:45:05.339444"}
+{"date": "2023-01-27 00:00:00 +1100", "qty": 69.90000000000002, "name": "weight_body_mass", "units": "kg", "date_updated": "2023-02-01 06:45:05.339445"}
+{"date": "2023-01-29 00:00:00 +1100", "qty": 69.2, "name": "weight_body_mass", "units": "kg", "date_updated": "2023-02-01 06:45:05.339446"}
+{"qty": 70.59999999999998, "date": "2023-01-30 00:00:00 +1100", "name": "weight_body_mass", "units": "kg", "date_updated": "2023-02-01 06:45:05.339447"}
+{"qty": 69.59999999999998, "date": "2023-01-31 00:00:00 +1100", "name": "weight_body_mass", "units": "kg", "date_updated": "2023-02-01 06:45:05.339447"}
+{"date": "2023-01-26 00:00:00 +1100", "qty": 4.32509259, "source": null, "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339448"}
+{"source": null, "qty": 4.62096296, "date": "2023-01-27 00:00:00 +1100", "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339449"}
+{"source": null, "date": "2023-01-28 00:00:00 +1100", "qty": 7.031755, "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339450"}
+{"source": null, "date": "2023-01-29 00:00:00 +1100", "qty": 5.002103699999999, "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339451"}
+{"date": "2023-01-30 00:00:00 +1100", "source": null, "qty": 4.0626, "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339452"}
+{"qty": 8.62541111, "source": null, "date": "2023-01-31 00:00:00 +1100", "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339452"}
+{"source": null, "date": "2023-02-01 00:00:00 +1100", "qty": 6.36049148, "name": "zinc", "units": "mg", "date_updated": "2023-02-01 06:45:05.339453"}

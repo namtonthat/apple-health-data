@@ -1,9 +1,13 @@
 # folders
 node_modules/
 venv/
+.ipynb_checkpoints/
+__pycache__/
 
 # files
 .serverless
 package-lock.json
 package.json
 .DS_Store
+
+

@@ -1,0 +1,292 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230114
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 2m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:bd7b2cde-1c09-4120-9a40-8bc4fb5df0ce@bd7b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230129
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 58m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:5a3f2c40-516a-40ba-99d7-11ac6f975da9@5a3f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230128
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2174 kcal\n        🥞 258C\, 130P\, 69F\n        🍇 43 g\n        
+SUMMARY:🔥 2174 cals (258C\, 130P\, 69F)
+UID:cb696769-46b9-480e-b502-25934cc81e36@cb69.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230124
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2542 kcal\n        🥞 258C\, 167P\, 93F\n        🍇 23 g\n        
+SUMMARY:🔥 2542 cals (258C\, 167P\, 93F)
+UID:b108b06c-c358-40a9-8892-00f0a3d6d329@b108.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230127
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2124 kcal\n        🥞 263C\, 127P\, 63F\n        🍇 35 g\n        
+SUMMARY:🔥 2124 cals (263C\, 127P\, 63F)
+UID:3870ed7d-4d15-4774-b8d0-1b76a1ad8382@3870.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230116
+DESCRIPTION:\n        🚴‍♂️ Activity: 2h 8m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 2
+UID:b113f322-6cf3-4f99-89bf-6d22a71e2c1d@b113.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230114
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2420 kcal\n        🥞 259C\, 134P\, 94F\n        🍇 29 g\n        
+SUMMARY:🔥 2420 cals (259C\, 134P\, 94F)
+UID:e765bc49-c54f-4193-9c0a-24d45d48792f@e765.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230120
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 23m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:a2f45bb4-5cb5-4524-a68b-4f0d044be021@a2f4.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230120
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2202 kcal\n        🥞 265C\, 104P\, 81F\n        🍇 35 g\n        
+SUMMARY:🔥 2202 cals (265C\, 104P\, 81F)
+UID:4e7e9a36-4458-4e1e-a57c-5b43253bee04@4e7e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230130
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2353 kcal\n        🥞 316C\, 187P\, 38F\n        🍇 41 g\n        
+SUMMARY:🔥 2353 cals (316C\, 187P\, 38F)
+UID:9679cdd4-21b2-42f5-adeb-7210b4b30ab9@9679.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230116
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2023 kcal\n        🥞 206C\, 165P\, 60F\n        🍇 32 g\n        
+SUMMARY:🔥 2023 cals (206C\, 165P\, 60F)
+UID:aac64aa3-4196-4e87-b6c3-6350d16cb0a4@aac6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230122
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 54m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:e6efa873-34dc-4a04-9c8f-1ba0fa2bdc62@e6ef.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230125
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2204 kcal\n        🥞 291C\, 160P\, 44F\n        🍇 37 g\n        
+SUMMARY:🔥 2204 cals (291C\, 160P\, 44F)
+UID:2345179b-0a9d-4ac5-ba53-e4d35affb5be@2345.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230204
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 2m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:19c2c459-b99c-4ae5-99b7-6ada2e3377bb@19c2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230123
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2032 kcal\n        🥞 268C\, 149P\, 40F\n        🍇 21 g\n        
+SUMMARY:🔥 2032 cals (268C\, 149P\, 40F)
+UID:ccb77787-6667-43f2-9ee9-a2cedbeea51b@ccb7.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230130
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 37m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:5d74b181-801d-4f85-9c16-799a507b8d2c@5d74.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230202
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 1822 kcal\n        🥞 200C\, 155P\, 44F\n        🍇 30 g\n        
+SUMMARY:🔥 1822 cals (200C\, 155P\, 44F)
+UID:f1d85196-ebcc-43aa-b129-af5caec06ff9@f1d8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230121
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 16m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:02d2a7f8-1130-4693-8e96-0b17b02e0279@02d2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230126
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 45m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:ce84cbea-b851-4f59-90b2-20e146f592ba@ce84.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230112
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2461 kcal\n        🥞 316C\, 184P\, 51F\n        🍇 39 g\n        
+SUMMARY:🔥 2461 cals (316C\, 184P\, 51F)
+UID:7ee6722a-a026-4760-823c-634019d080c5@7ee6.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230113
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 53m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:6b095917-4df9-41d6-a19d-5a8f26fd1605@6b09.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230203
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2315 kcal\n        🥞 285C\, 179P\, 51F\n        🍇 39 g\n        
+SUMMARY:🔥 2315 cals (285C\, 179P\, 51F)
+UID:974eddc2-aeef-4e1f-8b27-f03136d57954@974e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230118
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 1887 kcal\n        🥞 212C\, 135P\, 56F\n        🍇 18 g\n        
+SUMMARY:🔥 1887 cals (212C\, 135P\, 56F)
+UID:b7a153d7-98d1-4b04-aa95-eeedfbe6563f@b7a1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230201
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2174 kcal\n        🥞 216C\, 165P\, 72F\n        🍇 28 g\n        
+SUMMARY:🔥 2174 cals (216C\, 165P\, 72F)
+UID:b1c20294-86c7-4390-9196-9c89b886a90a@b1c2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230118
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 58m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:5d024c8b-8915-4a6e-928f-ae47d1fd265f@5d02.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230128
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 30m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:a22da7a1-6382-4cc9-9f7b-30d84d5ebcb8@a22d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230202
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 21m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:c85a7fb3-a303-4993-90be-f99ccf5821b9@c85a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230131
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2197 kcal\n        🥞 206C\, 187P\, 70F\n        🍇 25 g\n        
+SUMMARY:🔥 2197 cals (206C\, 187P\, 70F)
+UID:0c1a8093-058f-4975-8498-d2e5d2186ed4@0c1a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230123
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 3m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:cd0e67c5-99da-4055-89ce-c218dd9c5478@cd0e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230115
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2239 kcal\n        🥞 215C\, 168P\, 78F\n        🍇 31 g\n        
+SUMMARY:🔥 2239 cals (215C\, 168P\, 78F)
+UID:d302cbf7-b4b4-42a9-989e-213e5afa94a2@d302.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230117
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 23m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:d0fe5f3f-23ac-407d-a515-83ad7acb6f80@d0fe.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230121
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2199 kcal\n        🥞 207C\, 166P\, 78F\n        🍇 37 g\n        
+SUMMARY:🔥 2199 cals (207C\, 166P\, 78F)
+UID:a9f120a7-0dd3-4125-b522-cedeecdab92f@a9f1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230204
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2248 kcal\n        🥞 230C\, 186P\, 65F\n        🍇 40 g\n        
+SUMMARY:🔥 2248 cals (230C\, 186P\, 65F)
+UID:bd24010c-fd52-42f5-b09c-ecf0eee048d5@bd24.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230113
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2452 kcal\n        🥞 296C\, 151P\, 73F\n        🍇 25 g\n        
+SUMMARY:🔥 2452 cals (296C\, 151P\, 73F)
+UID:a35555e2-b587-428f-b4f8-36cdbe1daaaa@a355.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230203
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 12m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:7b73d372-4321-440b-b138-91badb6bb3c9@7b73.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230205
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 19m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:444a01f8-2a08-427f-817f-36c9ce36f0f3@444a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230122
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2441 kcal\n        🥞 275C\, 147P\, 84F\n        🍇 37 g\n        
+SUMMARY:🔥 2441 cals (275C\, 147P\, 84F)
+UID:bf10d883-bd19-4fdd-ade5-60ea7197b9ba@bf10.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230131
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 27m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:2dcd1883-2d01-4c18-a881-1f9d17f4a1c5@2dcd.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230112
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 38m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:3bc0efa2-c44b-4edb-914b-13316368df6a@3bc0.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230201
+DESCRIPTION:\n        🚴‍♂️ Activity: 0h 43m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 0
+UID:14ae8998-fe16-4c1c-bc11-afa6b5b1e61b@14ae.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230205
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 1624 kcal\n        🥞 172C\, 78P\, 69F\n        🍇 31 g\n        
+SUMMARY:🔥 1624 cals (172C\, 78P\, 69F)
+UID:ca60347e-1919-4266-9608-c38dd57fcce0@ca60.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230124
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 55m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:3b7ea8dc-defe-4aae-86a6-107d6b130d63@3b7e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230115
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 2m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:a7322a39-3601-48ef-95ae-985d9234236d@a732.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230117
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2145 kcal\n        🥞 306C\, 128P\, 45F\n        🍇 56 g\n        
+SUMMARY:🔥 2145 cals (306C\, 128P\, 45F)
+UID:2e23022b-db11-4bcb-a6bf-efe16bdff793@2e23.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230126
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2193 kcal\n        🥞 261C\, 156P\, 58F\n        🍇 22 g\n        
+SUMMARY:🔥 2193 cals (261C\, 156P\, 58F)
+UID:262e4748-ebb0-4011-87a6-1d40889c8a54@262e.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230127
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 0m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:2095a620-6895-4dff-a18c-f9d48f7aa6e2@2095.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230129
+DESCRIPTION:\n        🔥 0 kcal\n        🍽️ 2153 kcal\n        🥞 229C\, 170P\, 62F\n        🍇 32 g\n        
+SUMMARY:🔥 2153 cals (229C\, 170P\, 62F)
+UID:9bfba2b7-9cfa-446c-97d0-69bd80c97436@9bfb.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230125
+DESCRIPTION:\n        🚴‍♂️ Activity: 1h 3m active\n        🧘 Mindful: 0h 0m mindful\n        
+SUMMARY:🧠 0 mins  | 🚴‍♂️ 1
+UID:46efb030-a81a-4c49-abcf-7cd45a05966d@46ef.org
+END:VEVENT
+END:VCALENDAR
