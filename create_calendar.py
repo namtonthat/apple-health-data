@@ -1,28 +1,22 @@
-"""Process Apple Health export to create a calendar of events."""
-
-import glob
-import os
+import boto3
+from ics import Calendar, Event
 import pandas as pd
-import json
+from typing import List, Optional, List
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from ics import Event, Calendar
-from typing import List, Optional
-import itertools
+import io
+import tempfile
+import os
+import s3fs
+import fastparquet as fp
+import numpy as np
+import json
+from pydantic import validate_arguments
 
-import logging
-
-logging.basicConfig()
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.INFO)
-
-# read configs
-with open("config/user_config.json", "r") as f:
-    user_config = json.load(f)
-
-analysis_cols = ["qty", "dates", "name", "units"]
-RAW_DATA_COLUMNS = user_config.get("raw_data_columns")
-EVENT_TYPES = user_config.get("event_types")
+s3 = boto3.client("s3")
+# personal = boto3.Session(profile_name='personal')
+# s3 = personal.resource('s3')
 
 
 @dataclass
@@ -49,9 +43,27 @@ class AppleHealthEvent(Event):
         return e
 
 
-from typing import Optional
+@validate_arguments
+@dataclass
+class AppleHealthData:
+    """
+    A dataclass to hold all the data from Apple Health
+    Parsing from AWS API Gateway and S3
+    """
+
+    date: str
+    date_updated: str
+    name: str
+    qty: float
+    units: str
+    source: Optional[str] = None
+
+    def __post_init__(self):
+        self.date = datetime.strptime(self.date, "%Y-%m-%d %H:%M:%S %z")
+        self.date_updated = datetime.strptime(self.date_updated, "%Y-%m-%d %H:%M:%S.%f")
 
 
+@validate_arguments
 @dataclass
 class Time:
     "A basic time object in hours"
@@ -78,6 +90,7 @@ class Time:
         return title
 
 
+@validate_arguments
 @dataclass
 class Food:
     "A basic food object"
@@ -85,12 +98,13 @@ class Food:
     protein: float
     total_fat: float
     fiber: float
-    calories_burnt: float
+    calories_burnt: Optional[float] = field(default=0)
 
     def __post_init__(self):
         # rename objects for easier usage
         self.carb = self.carbohydrates
         self.fat = self.total_fat
+        self.calories_burnt = round(self.calories_burnt / 4, 2)
 
     @property
     def calories_ate(self) -> float:
@@ -120,8 +134,8 @@ class Food:
 @dataclass
 class Activity:
     "A basic activity for activity and mindfulness"
-    apple_exercise_time: Time
-    mindful_minutes: Time = None
+    apple_exercise_time: float
+    mindful_minutes: float = None
 
     def __post_init__(self):
         # rename objects for easier usage
@@ -167,15 +181,15 @@ class Activity:
 @dataclass
 class Sleep:
     "A basic sleep object"
-    asleep: Time
-    inBed: Time
+    asleep: float
+    inBed: float
     inBedStartTime: str
 
     def __post_init__(self):
         # rename objects for easier usage
         self.time_asleep = Time(time=self.asleep)
         self.time_in_bed = Time(self.inBed)
-        self.in_bed_time = self.inBedStartTime
+        self.in_bed_time = convert_to_12_hr(self.inBedStartTime)
 
     @property
     def efficiency(self) -> float:
@@ -204,24 +218,7 @@ class Sleep:
         return s_description
 
 
-# %%
-def create_event(date, event_name, description: None):
-    """
-    Create an all day event for the given date and type
-    :param date: date as type datetime.date
-    :param event_name: name of event as string
-    """
-    all_day_date = f"{date} 00:00:00"
-    e = Event()
-    e.name = event_name
-    e.description = description
-    e.begin = all_day_date
-    e.end = all_day_date
-    e.make_all_day()
-
-    return e
-
-
+# Functions
 def convert_to_12_hr(time_str: str) -> str:
     "Lambda function to convert 24 hour time to 12 hour time"
     time_as_24_hr = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S %z").time()
@@ -247,20 +244,22 @@ def collect_event_stats(
     return event_type_stats
 
 
-def create_day_events(stats: pd.DataFrame, event_date: str) -> List[Event]:
+def create_day_events(
+    stats: pd.DataFrame, event_date: str, object_mapping: dict
+) -> List[Event]:
     """
     Iterate through different event types (food / activity / sleep)
     and generate events to add to the daily calendar only if event exists
     """
     day_events = []
 
-    for types, col_names in EVENT_TYPES.items():
+    for types, col_names in object_mapping.items():
+        logging.info(f"Creating {types} event")
         # collect object name and arguments
         # dynamically create event type objects
         dataclass_name = types
         dataclass_obj = globals()[dataclass_name]
 
-        # collect object arguments to initialise objects from stats
         dataclass_obj_stats = collect_event_stats(
             stats_df=stats, column_names=col_names
         )
@@ -277,96 +276,66 @@ def create_day_events(stats: pd.DataFrame, event_date: str) -> List[Event]:
     return day_events
 
 
-def convert_kj_to_cal(row, new_name):
-    """Converts kj to calories"""
-    row_dict = row.to_dict()
-    calorie_value = int(row["qty"] / 4)
+def get_latest_health_data(bucket, config_path):
+    """Parse all parquest files and return unique data for all metrics"""
+    # Read the parquet file
+    s3fileSystem = s3fs.S3FileSystem()
+    fs = s3fs.core.S3FileSystem()
 
-    # assign new value s
-    row_dict["qty"] = calorie_value
-    row_dict["name"] = new_name
-    row_dict["units"] = "kcal"
+    bucket_uri = f"{bucket}/parquets/*.parquet"
+    all_paths_from_s3 = fs.glob(path=bucket_uri)
+    df = pd.DataFrame()
+    for s3_file in all_paths_from_s3:
+        fp_obj = fp.ParquetFile(s3_file, open_with=s3fileSystem.open)
+        # convert to pandas dataframe
+        df_s3_file = fp_obj.to_pandas()
+        df = pd.concat([df, df_s3_file])
 
-    return pd.DataFrame(row_dict, index=[0])
-
-
-if __name__ == "__main__":
-    base_folder = os.getcwd()
-    source_folder = base_folder + "/healthlake/"
-    apple_health_files = glob.glob(source_folder + "*.json")
-
-    df_raw = pd.DataFrame()
-
-    # collate all json files into one dataframe
-    for json_file in apple_health_files:
-        json_raw = pd.read_json(json_file, lines=True)
-        df_raw = pd.concat([df_raw, json_raw])
-
-    ## write data to outputs/transformations
-    df_raw.to_csv("outputs/transformations/raw.csv", index=False)
-    LOGGER.info("Raw files saved")
-
-    ## Start of transformations
-    df_ahc = df_raw.copy()
-
-    # define transformations to go from df_raw to df_ahc (apple-health-calendar)
-    # cleaning values
-    df_ahc["dates"] = pd.to_datetime(df_ahc["date"]).dt.date
-    df_ahc["qty"] = df_ahc["qty"].fillna(df_ahc["asleep"])
-
-    # create calories
-    LOGGER.info("Generating calories columns for %s", df_ahc.shape[0])
-    active_energy_rows = df_ahc[df_ahc["name"] == "active_energy"][analysis_cols]
-
-    for _, row in active_energy_rows.iterrows():
-        df_row = convert_kj_to_cal(row, "calories_burnt")
-        df_ahc = pd.concat([df_ahc, df_row])
-
-    # unpivot sleep columns into its own
-    df_sleep = df_ahc[df_ahc["name"].isin(["sleep_analysis"])]
-    sleep_data = df_sleep[["asleep", "inBed", "inBedStart", "dates"]].reset_index(
-        drop=True
+    df["date"] = df["date"].astype("str")
+    df["date"] = [f[:10] for f in df["date"]]
+    cte_latest_data = df.groupby(["date", "name"]).agg({"date_updated": np.max})
+    df_latest = df.merge(
+        cte_latest_data, on=["date", "name", "date_updated"], how="inner"
     )
 
-    # convert inBedStart to 12 hour time into new column inBedStartTime
-    sleep_data["inBedStartTime"] = sleep_data.apply(
-        lambda row: convert_to_12_hr(row["inBedStart"]), axis=1
+    return df_latest
+
+
+def run(event, context):
+    """Main handler for lambda event"""
+    bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
+    config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
+    calendar_file_name = "apple-health-calendar.ics"
+    event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
+
+    df = get_latest_health_data(bucket, config_path)
+
+    logging.info("Writing latest data into a single parquet file")
+    with tempfile.NamedTemporaryFile() as tmp:
+        df.to_parquet(tmp.name, engine="fastparquet", index=False)
+        with open(tmp.name, "rb") as fh:
+            parquet_buffer = io.BytesIO(fh.read())
+
+    response = s3.put_object(
+        Bucket=bucket,
+        Key="latest_data.parquet",
+        Body=parquet_buffer.getvalue(),
     )
-
-    # Lambda functions (apply functions by rows)
-    df_sleep_data = pd.melt(
-        sleep_data, id_vars=["dates"], value_vars=["asleep", "inBed", "inBedStartTime"]
-    ).rename(columns={"variable": "name", "value": "qty"})
-
-    # merge back to original data
-    df_ahc = pd.concat([df_ahc, df_sleep_data])
-
-    # filter out values
-    df_ahc = df_ahc[df_ahc["name"].isin(RAW_DATA_COLUMNS)][analysis_cols].reset_index(
-        drop=True
-    )
-
-    # CHECKPOINT
-    df_ahc.to_csv("outputs/transformations/ahc.csv", index=False)
-    LOGGER.info('Transformations completed. Saved to "outputs/transformations/ahc.csv"')
 
     c = Calendar()
-    available_dates = df_ahc["dates"].unique()
+    available_dates = df["date"].unique()
 
-    weekly_events = []
     for date in available_dates:
-        LOGGER.info("Generating events for %s", date)
-        daily_stats = df_ahc[df_ahc["dates"] == date]
-        daily_events = create_day_events(stats=daily_stats, event_date=date)
-        weekly_events.append(daily_events)
+        daily_stats = df[df["date"] == date]
+        daily_calendar = create_day_events(
+            stats=daily_stats, event_date=date, object_mapping=event_objects_mapping
+        )
+        for event in daily_calendar:
+            c.events.add(event)
 
-    all_events = list(itertools.chain(*weekly_events))
-    ## ADD CHECKPOINT HERE
-    LOGGER.info("Adding events into single calendar")
-    for event in all_events:
-        c.events.add(event)
+    logging.info("Writing data to calendar ics file")
+    s3.put_object(
+        Bucket=bucket, Key=f"calendars/{calendar_file_name}", Body=c.serialize()
+    )
 
-    with open("outputs/apple_health_calendar.ics", "w") as f:
-        f.writelines(c.serialize())
-        LOGGER.info("Calendar saved to outputs/apple_health_calendar.ics")
-# %%
+    return response

@@ -1,30 +1,21 @@
-from datetime import datetime, date, timedelta
-from io import StringIO
-
-import arrow
+from datetime import datetime
 import conf
 import flask
 import boto3
 import json
-import time
 import csv
 import sys
 
+from typing import Dict, List
 
 # initialize our app and our S3 and Athena clients
 app = flask.Flask(__name__)
 s3 = boto3.client("s3")
-athena = boto3.client("athena")
 
 # force the ability to parse very large CSV files
 csv.field_size_limit(sys.maxsize)
 
 
-#
-# Utility Functions
-#
-
-
 def store(rows):
     """
     Store rows of health export data in our S3 bucket.
@@ -33,7 +24,7 @@ def store(rows):
     key_name = "syncs/" + datetime.utcnow().isoformat() + ".json"
 
     # athena and glue prefer a row of JSON per line
-    json_rows = [json.dumps(row).strip() for row in rows]
+    json_rows = [json.dumps(row, default=str).strip() for row in rows]
     content = "\n".join(json_rows)
 
     s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
@@ -53,37 +44,32 @@ def store_workouts(workouts):
     s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
 
 
-#
-# Utility Functions
-#
-
-
-def store(rows):
+def unnest_data_points(data: Dict) -> List[Dict]:
     """
-    Store rows of health export data in our S3 bucket.
+    Unnest data points from a single metric.
+    Parent column fields are 'name', 'units', and 'date'.
     """
+    unnest_rows = []
 
-    key_name = "syncs/" + datetime.utcnow().isoformat() + ".json"
+    # parent data point values
+    prefix = data["name"]
+    nested_unit = data["units"]
+    date = data["date"]
+    parent_data_points = ["name", "units", "date"]
 
-    # athena and glue prefer a row of JSON per line
-    json_rows = [json.dumps(row).strip() for row in rows]
-    content = "\n".join(json_rows)
+    for col_name, qty in data.items():
+        # filter out parent values
+        if col_name not in parent_data_points:
+            point = {}
+            col_name = f"{prefix}_{col_name}"
 
-    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
+            point["name"] = col_name
+            point["units"] = nested_unit
+            point["date"] = date
+            point["qty"] = qty
+            unnest_rows.append(point)
 
-
-def store_workouts(workouts):
-    """
-    Store rows of workout data in our S3 bucket.
-    """
-
-    key_name = "workouts/" + datetime.utcnow().isoformat() + ".json"
-
-    # athena and glue prefer a row of JSON per line
-    json_rows = [json.dumps(workout).strip() for workout in workouts]
-    content = "\n".join(json_rows)
-
-    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
+    return unnest_rows
 
 
 def transform(data):
@@ -100,7 +86,16 @@ def transform(data):
         for point in metric.get("data", []):
             point["name"] = name
             point["units"] = units
-            rows.append(point)
+            has_qty = point.get("qty")
+            if has_qty:
+                rows.append(point)
+            else:
+                unnested_data_points = unnest_data_points(point)
+                rows.extend(unnested_data_points)
+
+    # add a date_updated field to each row
+    for entry in rows:
+        entry["date_updated"] = datetime.now()
 
     return rows
 
@@ -108,7 +103,7 @@ def transform(data):
 def transform_workouts(data):
     """
     Flatten the nested JSON data structure from Health Export
-    for workouts to make it easier to index and query with Athena.
+    for workouts to make it e`a`sier to index and query with Athena.
     """
 
     workouts = []
