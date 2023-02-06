@@ -1,9 +1,0 @@
-# folders
-node_modules/
-venv/
-
-# files
-.serverless
-package-lock.json
-package.json
-.DS_Store
