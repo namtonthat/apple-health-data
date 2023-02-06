@@ -14,8 +14,8 @@ import urllib
 
 
 s3 = boto3.client("s3")
-# personal = boto3.Session(profile_name='personal')
-# s3 = personal.client('s3')
+# personal = boto3.Session(profile_name="personal")
+# s3 = personal.client("s3")
 
 
 @dataclass
@@ -180,15 +180,18 @@ class Activity:
 @dataclass
 class Sleep:
     "A basic sleep object"
-    asleep: float
-    inBed: float
-    inBedStartTime: str
+    sleep_analysis_asleep: float
+    sleep_analysis_inBed: float
+    sleep_analysis_inBedStart: str = ""
 
     def __post_init__(self):
         # rename objects for easier usage
-        self.time_asleep = Time(time=self.asleep)
-        self.time_in_bed = Time(self.inBed)
-        self.in_bed_time = convert_to_12_hr(self.inBedStartTime)
+        self.time_asleep = Time(time=self.sleep_analysis_asleep)
+        self.time_in_bed = Time(self.sleep_analysis_inBed)
+        if self.sleep_analysis_inBedStart != "":
+            self.in_bed_time = convert_to_12_hr(self.sleep_analysis_inBedStart)
+        else:
+            self.in_bed_time = "No data"
 
     @property
     def efficiency(self) -> float:
@@ -204,7 +207,6 @@ class Sleep:
     @property
     def title(self) -> str:
         title = f"💤 {self.time_asleep.title} ({self.in_bed_time})"
-        print(title)
         return title
 
     @property
@@ -251,20 +253,20 @@ def create_day_events(
     and generate events to add to the daily calendar only if event exists
     """
     day_events = []
-
     for types, col_names in object_mapping.items():
         logging.info(f"Creating {types} event")
         # collect object name and arguments
         # dynamically create event type objects
         dataclass_name = types
         dataclass_obj = globals()[dataclass_name]
+        print(dataclass_obj)
 
         dataclass_obj_stats = collect_event_stats(
             stats_df=stats, column_names=col_names
         )
 
         obj_args = dict(dataclass_obj_stats.values)
-
+        print(obj_args)
         if obj_args:
             obj = dataclass_obj(**obj_args)
             e = AppleHealthEvent(
@@ -295,6 +297,7 @@ def run(event, context):
         event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
     )
     config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
+    # config_path = "config"
     calendar_file_name = "apple-health-calendar.ics"
     event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
 
@@ -311,6 +314,8 @@ def run(event, context):
         for event in daily_calendar:
             c.events.add(event)
 
+    # with open(f"outputs/{calendar_file_name}", "w") as f:
+    # f.write(c.serialize())
     logging.info("Writing data to calendar ics file")
     s3.put_object(
         Bucket=bucket,

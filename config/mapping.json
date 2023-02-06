@@ -11,8 +11,8 @@
         "mindful_minutes"
     ],
     "Sleep": [
-        "asleep",
-        "inBed",
-        "inBedStartTime"
+        "sleep_analysis_asleep",
+        "sleep_analysis_inBed",
+        "sleep_analysis_inBedStart"
     ]
 }

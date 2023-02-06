@@ -57,14 +57,16 @@ plugins:
 functions:
   healthlake:
     handler: wsgi_handler.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - http: ANY /
       - http: "ANY /{proxy+}"
 
   parse_parquet:
     handler: parse_parquet.run
-    # layers:
-    # - !Ref PythonRequirementsLambdaLayer
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
@@ -76,8 +78,8 @@ functions:
 
   create_calendar:
     handler: create_calendar.run
-    # layers:
-    # - !Ref PythonRequirementsLambdaLayer
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
     package:
       patterns:
         - config/mapping.json
