@@ -100,7 +100,7 @@ def run(event, context):
 
     s3.put_object(
         Bucket=bucket,
-        Key="latest_data.parquet",
+        Key="outputs/latest_data.parquet",
         Body=parquet_buffer.getvalue(),
         ACL="public-read",
     )

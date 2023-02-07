@@ -314,14 +314,16 @@ def run(event, context):
         for event in daily_calendar:
             c.events.add(event)
 
-    # with open(f"outputs/{calendar_file_name}", "w") as f:
-    # f.write(c.serialize())
     logging.info("Writing data to calendar ics file")
     s3.put_object(
         Bucket=bucket,
-        Key=f"calendars/{calendar_file_name}",
+        Key=f"outputs/{calendar_file_name}",
         Body=c.serialize(),
-        ACL="public-read",
     )
+
+    # aws_region = "ap-southeast-2"
+    bucket_location = boto3.client("s3").get_bucket_location(Bucket=bucket)
+    s3_website_url = f"https://{bucket}.s3-{bucket_location}.amazonaws.com/outputs/{calendar_file_name}"
+    logging.info("Object now publically available at %s", s3_website_url)
 
     return

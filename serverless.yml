@@ -88,5 +88,18 @@ functions:
           bucket: "ntonthat-apple-health-data"
           event: s3:ObjectCreated:*
           rules:
+            - prefix: outputs/
             - suffix: .parquet
+          existing: true
+
+  copy_to_public_bucket:
+    handler: copy_to_public_bucket.run
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+    events:
+      - s3:
+          bucket: "ntonthat-apple-health-data"
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: outputs/
           existing: true
