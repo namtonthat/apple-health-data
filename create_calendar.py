@@ -133,8 +133,8 @@ class Food:
 @dataclass
 class Activity:
     "A basic activity for activity and mindfulness"
-    apple_exercise_time: float
-    mindful_minutes: float = None
+    apple_exercise_time: Optional[float] = field(default=0)
+    mindful_minutes: Optional[float] = field(default=0)
 
     def __post_init__(self):
         # rename objects for easier usage
@@ -180,9 +180,9 @@ class Activity:
 @dataclass
 class Sleep:
     "A basic sleep object"
-    sleep_analysis_asleep: float
-    sleep_analysis_inBed: float
-    sleep_analysis_inBedStart: str = ""
+    sleep_analysis_asleep: Optional[float] = field(default=0)
+    sleep_analysis_inBed: Optional[float] = field(default=0)
+    sleep_analysis_inBedStart: Optional[str] = field(default="")
 
     def __post_init__(self):
         # rename objects for easier usage

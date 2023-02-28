@@ -1,3 +1,7 @@
+"""
+Parse the json extracts from Apple Health Data as a parquet
+"""
+
 import logging
 import pandas as pd
 import boto3
