@@ -28,7 +28,6 @@ def create_latest_health_dataset(bucket):
         # convert to pandas dataframe
         df_s3_file = fp_obj.to_pandas()
         df = pd.concat([df, df_s3_file])
-    # df = wr.s3.read_parquet(path=f"s3://{bucket}/parquets/*.parquet", dataset=True)
 
     df["date"] = df["date"].astype("str")
     df["date"] = [f[:10] for f in df["date"]]

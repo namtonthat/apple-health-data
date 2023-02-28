@@ -187,7 +187,7 @@ class Sleep:
     def __post_init__(self):
         # rename objects for easier usage
         self.time_asleep = Time(time=self.sleep_analysis_asleep)
-        self.time_in_bed = Time(self.sleep_analysis_inBed)
+        self.time_in_bed = Time(time=self.sleep_analysis_inBed)
         if self.sleep_analysis_inBedStart != "":
             self.in_bed_time = convert_to_12_hr(self.sleep_analysis_inBedStart)
         else:
@@ -195,7 +195,10 @@ class Sleep:
 
     @property
     def efficiency(self) -> float:
-        efficiency = self.time_asleep.time / self.time_in_bed.time * 100
+        if self.time_in_bed.time != 0:
+            efficiency = self.time_asleep.time / self.time_in_bed.time * 100
+        else:
+            efficiency = 0
         return efficiency
 
     @property
@@ -297,7 +300,7 @@ def run(event, context):
         event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
     )
     config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
-    # config_path = "config"
+    config_path = "config"
     calendar_file_name = "apple-health-calendar.ics"
     event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
 
