@@ -4,7 +4,7 @@
         "protein",
         "total_fat",
         "fiber",
-        "calories_burnt"
+        "active_energy"
     ],
     "Activity": [
         "apple_exercise_time",

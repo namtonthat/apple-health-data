@@ -93,17 +93,17 @@ class Time:
 @dataclass
 class Food:
     "A basic food object"
-    carbohydrates: float
-    protein: float
-    total_fat: float
-    fiber: float
-    calories_burnt: Optional[float] = field(default=0)
+    carbohydrates: Optional[float] = field(default=0)
+    protein: Optional[float] = field(default=0)
+    total_fat: Optional[float] = field(default=0)
+    fiber: Optional[float] = field(default=0)
+    active_energy: Optional[float] = field(default=0)
 
     def __post_init__(self):
         # rename objects for easier usage
         self.carb = self.carbohydrates
         self.fat = self.total_fat
-        self.calories_burnt = round(self.calories_burnt / 4, 2)
+        self.active_energy = round(self.active_energy / 4, 2)
 
     @property
     def calories_ate(self) -> float:
@@ -116,13 +116,13 @@ class Food:
 
     @property
     def title(self) -> str:
-        title = f"🔥 {self.calories_ate:.0f} cals ({self.macros})"
+        title = f"🍽️ {self.calories_ate:.0f} cals ({self.macros})"
         return title
 
     @property
     def description(self) -> str:
         description = f"""
-        🔥 {self.calories_burnt:.0f} kcal
+        🔥 {self.active_energy:.0f} kcal
         🍽️ {self.calories_ate:.0f} kcal
         🥞 {self.macros}
         🍇 {self.fiber:.0f} g
@@ -322,6 +322,7 @@ def run(event, context):
         Bucket=bucket,
         Key=f"outputs/{calendar_file_name}",
         Body=c.serialize(),
+        ACL="public-read"
     )
 
     # aws_region = "ap-southeast-2"

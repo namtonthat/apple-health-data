@@ -8,6 +8,7 @@ import tempfile
 import s3fs
 import fastparquet as fp
 import numpy as np
+from datetime import datetime
 
 s3 = boto3.client("s3")
 # personal = boto3.Session(profile_name="personal")
@@ -69,14 +70,17 @@ def run(event, context):
 
     # force conversion types
     df["qty"] = df["qty"].astype(str)
-    df["date"] = pd.to_datetime(df["date"]).dt.date.astype(str)
+    df["date"] = df['date'].apply(lambda x: datetime.strptime(x,"%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d"))
+
+    df_cols = ['date', 'source', 'qty', 'name', 'units', 'date_updated']
+    df_parquet = df[df_cols]
 
     logging.info("Converting to parquet")
 
     # write to parquet
     file_name = key.split("/")[-1].split(".")[0]
     with tempfile.NamedTemporaryFile() as tmp:
-        df.to_parquet(tmp.name, engine="fastparquet")
+        df_parquet.to_parquet(tmp.name, engine="fastparquet")
         with open(tmp.name, "rb") as fh:
             parquet_buffer = io.BytesIO(fh.read())
 
@@ -86,10 +90,10 @@ def run(event, context):
         Body=parquet_buffer.getvalue(),
     )
 
-    df.to_parquet(f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet")
+    df_parquet.to_parquet(f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet")
 
     logging.info("Creating latest dataset")
-    df_latest = create_latest_health_dataset(bucket)
+    df_latest = create_latest_health_dataset(bucket)[df_cols]
 
     logging.info("Writing latest data into a single parquet file")
     with tempfile.NamedTemporaryFile() as tmp:
