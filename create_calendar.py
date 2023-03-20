@@ -24,7 +24,6 @@ class AppleHealthEvent(Event):
     An event derived from Apple Health data
     For usage within .ics format
     """
-
     date: datetime.date
     description: str
     title: str
@@ -49,7 +48,6 @@ class AppleHealthData:
     A dataclass to hold all the data from Apple Health
     Parsing from AWS API Gateway and S3
     """
-
     date: str
     date_updated: str
     name: str

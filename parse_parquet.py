@@ -37,9 +37,7 @@ def create_latest_health_dataset(bucket):
     df["date"] = df["date"].astype("str")
     df["date"] = [f[:10] for f in df["date"]]
     cte_latest_data = df.groupby(["date", "name"]).agg({"date_updated": np.max})
-    df_latest = df.merge(
-        cte_latest_data, on=["date", "name", "date_updated"], how="inner"
-    )
+    df_latest = df.merge(cte_latest_data, on=["date", "name", "date_updated"], how="inner")
 
     return df_latest
 
@@ -74,9 +72,11 @@ def run(event, context):
 
     # force conversion types
     df["qty"] = df["qty"].astype(str)
-    df["date"] = df['date'].apply(lambda x: datetime.strptime(x,"%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d"))
+    df["date"] = df["date"].apply(
+        lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d")
+    )
 
-    df_cols = ['date', 'source', 'qty', 'name', 'units', 'date_updated']
+    df_cols = ["date", "source", "qty", "name", "units", "date_updated"]
     df_parquet = df[df_cols]
 
     logging.info("Converting to parquet")
