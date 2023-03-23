@@ -37,9 +37,7 @@ def create_latest_health_dataset(bucket):
     df["date"] = df["date"].astype("str")
     df["date"] = [f[:10] for f in df["date"]]
     cte_latest_data = df.groupby(["date", "name"]).agg({"date_updated": np.max})
-    df_latest = df.merge(
-        cte_latest_data, on=["date", "name", "date_updated"], how="inner"
-    )
+    df_latest = df.merge(cte_latest_data, on=["date", "name", "date_updated"], how="inner")
 
     return df_latest
 
