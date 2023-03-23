@@ -31,6 +31,10 @@ fastparquet = "0.8.3"
 pydantic = "1.10.4"
 
 [tool.poetry.group.dev.dependencies]
+polars = "^0.16.14"
+smart-open = "^6.3.0"
+awswrangler = "^2.20.1"
+black = "^23.1.0"
 
 
 [build-system]
