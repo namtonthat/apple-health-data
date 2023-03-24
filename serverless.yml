@@ -60,15 +60,15 @@ functions:
   healthlake:
     handler: wsgi_handler.handler
     layers:
-      # - !Ref PythonRequirementsLambdaLayer
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - http: ANY /
       - http: "ANY /{proxy+}"
 
-  parse_parquet_pl:
-    handler: parse_parquet_pl.run
+  parse_parquet:
+    handler: parse_parquet.run
     layers:
-      # - !Ref PythonRequirementsLambdaLayer
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"

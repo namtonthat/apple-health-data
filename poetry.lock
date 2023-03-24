@@ -1413,18 +1413,18 @@ files = [
 
 [[package]]
 name = "polars"
-version = "0.16.14"
+version = "0.16.15"
 description = "Blazingly fast DataFrame library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "polars-0.16.14-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:83801a9c9401d956539d64a97716adcf985fd85c5e98382bea078e98fab97157"},
-    {file = "polars-0.16.14-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:446def109d7dad62f1f86ffffa5eaeabc16341a9d092b56117561e1cf676f0f1"},
-    {file = "polars-0.16.14-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9a85f47d28e237e7604558f62d0d66e7813042a7995035505161efba4e9b089e"},
-    {file = "polars-0.16.14-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd0f1091708892b3abaa0ef31adeee92cbefd1e775657cfbb3a7481143a7fee0"},
-    {file = "polars-0.16.14-cp37-abi3-win_amd64.whl", hash = "sha256:8bb942a749c5f673de0389ee2699ef6deb45097ef9205c861941ae7a5a17ef6c"},
-    {file = "polars-0.16.14.tar.gz", hash = "sha256:1fa9d837113d15b848023d66c3c1251637ed1dc60c8ecce9accb14d6b0727df0"},
+    {file = "polars-0.16.15-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:b28dc72bdb265e86f41a658618201623b1a0a6cce2ea6290842e079436fdb21f"},
+    {file = "polars-0.16.15-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:bb4f9f14b31bca8ef38772d62c897a22cce29e4e5e4af27f825be1feb4c9741b"},
+    {file = "polars-0.16.15-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:04741c3baed96d58131f35f50e3280acfd3f8a39364e53242336f0a4e6ecbde4"},
+    {file = "polars-0.16.15-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a2fbc4cf8acc8c0d7bd54ac7a52fdd9ad86a4480d23cdf8d250d819e7c1d81e3"},
+    {file = "polars-0.16.15-cp37-abi3-win_amd64.whl", hash = "sha256:6a96192bff661398d480a19c960a34a9ca8145c5186cad36619bda18d6f6636a"},
+    {file = "polars-0.16.15.tar.gz", hash = "sha256:eac47735e7c2cc0df4d11c9c3fd10ccc3c8e593227b3aba264431679d501fab9"},
 ]
 
 [package.dependencies]
@@ -1433,7 +1433,7 @@ typing_extensions = {version = ">=4.0.1", markers = "python_version < \"3.11\""}
 [package.extras]
 all = ["polars[connectorx,deltalake,fsspec,matplotlib,numpy,pandas,pyarrow,sqlalchemy,timezone,xlsx2csv,xlsxwriter]"]
 connectorx = ["connectorx"]
-deltalake = ["deltalake (>=0.6.2)"]
+deltalake = ["deltalake (>=0.8.0)"]
 fsspec = ["fsspec"]
 matplotlib = ["matplotlib"]
 numpy = ["numpy (>=1.16.0)"]
@@ -2071,4 +2071,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.9.16"
-content-hash = "f6241a86c59da6f9787700ea30dcdbbf2856eb1b5ab13053a86701a0c511cff4"
+content-hash = "ba646a6816128b4d64935b6bc5092b1b14e443de29b7ad80d8505888424d6754"
