@@ -14,9 +14,9 @@ import fastparquet as fp
 import numpy as np
 from datetime import datetime
 
-s3 = boto3.client("s3")
-# personal = boto3.Session(profile_name="personal")
-# s3 = personal.client("s3")
+# s3 = boto3.client("s3")
+personal = boto3.Session(profile_name="personal")
+s3 = personal.client("s3")
 
 
 def create_latest_health_dataset(bucket):
@@ -94,7 +94,9 @@ def run(event, context):
         Body=parquet_buffer.getvalue(),
     )
 
-    df_parquet.to_parquet(f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet")
+    df_parquet.to_parquet(
+        f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet"
+    )
 
     logging.info("Creating latest dataset")
     df_latest = create_latest_health_dataset(bucket)[df_cols]

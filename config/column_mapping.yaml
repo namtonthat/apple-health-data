@@ -1,0 +1,33 @@
+carbohydrates:
+  name: carbohydrates
+  emoticon: 🍞
+total_fat:
+  name: fats
+  emoticon: 🧁
+protein:
+  name: protein
+  emoticon: 🍗
+fiber:
+  name: fibre
+  emoticon: 🥦
+sleep_analysis_asleep:
+  name: asleep
+  emoticon: 🌒
+sleep_analysis_inBed:
+  name: in bed
+  emoticon: 🛏️
+sleep_analysis_sleepStart:
+  name: bedtime
+  emoticon: 💤
+step_count:
+  name: steps
+  emoticon: 👣
+mindful_minutes:
+  name: meditation
+  emoticon: 🧘‍♂️
+apple_exercise_time:
+  name: exercise
+  emoticon: 🚲
+weight_body_mass:
+  name: weight
+  emoticon: 🐻

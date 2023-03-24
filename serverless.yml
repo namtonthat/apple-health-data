@@ -6,6 +6,8 @@ provider:
   region: ap-southeast-2
   memorySize: 128
   timeout: 30
+  layers:
+    - arn:aws:lambda:ap-southeast-2:336392948345:layer:AWSSDKPandas-Python39:5
   apiGateway:
     shouldStartNameWithService: false
   iamRoleStatements:
@@ -58,15 +60,15 @@ functions:
   healthlake:
     handler: wsgi_handler.handler
     layers:
-      - !Ref PythonRequirementsLambdaLayer
+      # - !Ref PythonRequirementsLambdaLayer
     events:
       - http: ANY /
       - http: "ANY /{proxy+}"
 
-  parse_parquet:
-    handler: parse_parquet.run
+  parse_parquet_pl:
+    handler: parse_parquet_pl.run
     layers:
-      - !Ref PythonRequirementsLambdaLayer
+      # - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"

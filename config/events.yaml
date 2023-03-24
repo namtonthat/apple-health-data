@@ -1,0 +1,15 @@
+# always use the original column names
+macros:
+  - carbohydrates
+  - protein
+  - total_fat
+  - fiber
+sleep:
+  - sleep_analysis_inBed
+  - sleep_analysis_asleep
+  - sleep_analysis_sleepStart
+dailys:
+  - apple_exercise_time
+  - mindful_minutes
+  - step_count
+  - weight_body_mass
