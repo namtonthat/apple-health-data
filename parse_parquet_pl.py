@@ -73,6 +73,8 @@ def run(event, context):
         logging.info("Converting to dataframe")
 
         df = pl.from_records(source_data, infer_schema_length=None)
+
+        logging.info("cleansing data")
         cleansed_df = (
             df.with_columns(pl.col("qty").cast(pl.Utf8).alias("qty"))
             .with_columns(pl.col("date").str.strptime(pl.Date, "%Y-%m-%d %H:%M:%S %z"))
@@ -81,6 +83,7 @@ def run(event, context):
         )
 
         for event_name, event_cols in events.items():
+            logging.info("creating view %s", event_name)
             create_view(data=cleansed_df, view_name=event_name, view_values=event_cols)
 
     except Exception as e:
