@@ -13,21 +13,10 @@ import s3fs
 import fastparquet as fp
 import numpy as np
 from datetime import datetime
-from common_functions import transform
 
 s3 = boto3.client("s3")
 # personal = boto3.Session(profile_name="personal")
 # s3 = personal.client("s3")
-
-
-def parse_historical_exports(response_data: dict):
-    """Parse the historical json extracts from Apple Health Data"""
-    row_data = transform(response_data)
-    json_rows = [json.dumps(row, default=str).strip() for row in row_data]
-
-    df = pd.DataFrame.from_records(json_rows)
-
-    return df
 
 
 def parse_automated_exports(response_data: dict):
@@ -87,12 +76,10 @@ def run(event, context):
         raise e
 
     try:
-        if "HealthAutoExport" in key:
-            df = parse_automated_exports(json_data)
-        else:
-            df = parse_historical_exports(json_data)
+        df = parse_automated_exports(json_data)
 
         # force conversion types
+        logging.info("forcing type conversions for `qty` and `date` columns")
         df["qty"] = df["qty"].astype(str)
         df["date"] = df["date"].apply(
             lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d")
