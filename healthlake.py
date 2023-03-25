@@ -1,4 +1,5 @@
 import flask
+import os
 import boto3
 import csv
 import sys
@@ -35,7 +36,7 @@ def store_raw_data(data):
 
     # athena and glue prefer a row of JSON per line
 
-    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=data.encode("utf-8"))
+    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=json.dumps(data))
 
 
 def store_workouts(workouts):
@@ -157,9 +158,21 @@ def syncs():
 
     # fetch the raw JSON data
     raw_data = flask.request.json
-    # print(raw_data.get("data"))
+    store_raw_data(raw_data)
 
     # parse the data
     transform_and_store(raw_data)
 
     return flask.jsonify(success=True, message="Successfully received and stored sync data.")
+
+
+"""
+TODO: convert the below to a test
+import json
+raw_auto_export = '../source/apple-health/HealthAutoExport-2022-12-25-2023-03-25.json'
+with open(raw_auto_export, 'r') as ae:
+    raw_data = json.loads(ae.read())
+
+import requests
+requests.post('http://localhost:8082/syncs', json=raw_data)
+"""
