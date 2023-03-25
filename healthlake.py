@@ -1,7 +1,5 @@
 import flask
-import os
 import boto3
-import csv
 import sys
 import json
 import conf
@@ -146,9 +144,6 @@ def transform_and_store(data):
 # initialize our app and our S3 and Athena clients
 app = flask.Flask(__name__)
 
-# force the ability to parse very large CSV files
-csv.field_size_limit(sys.maxsize)
-
 
 @app.route("/syncs", methods=["POST"])
 def syncs():
@@ -159,6 +154,21 @@ def syncs():
     # fetch the raw JSON data
     raw_data = flask.request.json
     store_raw_data(raw_data)
+
+    # parse the data
+    transform_and_store(raw_data)
+
+    return flask.jsonify(success=True, message="Successfully received and stored sync data.")
+
+
+@app.route("/raws", methods=["POST"])
+def raw():
+    """
+    Sync results from Health Export into our data lake.
+    """
+
+    # fetch the raw JSON data
+    raw_data = flask.request.json
 
     # parse the data
     transform_and_store(raw_data)
