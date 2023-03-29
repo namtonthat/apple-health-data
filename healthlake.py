@@ -134,17 +134,6 @@ def syncs():
     raw_data = flask.request.json
     store_raw_data(raw_data)
 
-    # parse the data
-    """
-    TODO: convert the below to a test
-    import json
-    raw_auto_export = '../source/apple-health/HealthAutoExport-2022-12-25-2023-03-25.json'
-    with open(raw_auto_export, 'r') as ae:
-        raw_data = json.loads(ae.read())
-
-    import requests
-    requests.post('http://localhost:8082/syncs', json=raw_data)
-    """
     # transform the sync data and store it
     logging.info("transform raw data")
     transformed = transform(raw_data)
