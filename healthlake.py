@@ -1,19 +1,14 @@
-from datetime import datetime
-import conf
 import flask
 import boto3
 import json
-import csv
-import sys
-
+import conf
 from typing import Dict, List
+from datetime import datetime
+import logging
 
 # initialize app and S3 and Athena clients
 app = flask.Flask(__name__)
 s3 = boto3.client("s3")
-
-# force the ability to parse very large CSV files
-csv.field_size_limit(sys.maxsize)
 
 
 def store_raw_data(data: dict) -> dict:
@@ -129,21 +124,34 @@ def transform_workouts(data: dict) -> List[Dict]:
     return workouts
 
 
-@app.route("/sync", methods=["POST"])
-def sync():
+@app.route("/syncs", methods=["POST"])
+def syncs():
     """
     Sync results from Health Export into data lake.
     """
 
     # fetch the raw JSON data
     raw_data = flask.request.json
-
-    # transform the sync data and store it
     store_raw_data(raw_data)
+
+    # parse the data
+    """
+    TODO: convert the below to a test
+    import json
+    raw_auto_export = '../source/apple-health/HealthAutoExport-2022-12-25-2023-03-25.json'
+    with open(raw_auto_export, 'r') as ae:
+        raw_data = json.loads(ae.read())
+
+    import requests
+    requests.post('http://localhost:8082/syncs', json=raw_data)
+    """
+    # transform the sync data and store it
+    logging.info("transform raw data")
     transformed = transform(raw_data)
     store(transformed)
 
     # transform the workout data and store it
+    logging.info("transform workout data")
     workouts = transform_workouts(raw_data)
     store_workouts(workouts)
 

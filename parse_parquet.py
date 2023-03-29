@@ -14,9 +14,22 @@ import fastparquet as fp
 import numpy as np
 from datetime import datetime
 
-# s3 = boto3.client("s3")
-personal = boto3.Session(profile_name="personal")
-s3 = personal.client("s3")
+s3 = boto3.client("s3")
+# personal = boto3.Session(profile_name="personal")
+# s3 = personal.client("s3")
+
+
+def parse_automated_exports(response_data: dict):
+    """Parse the automated json extracts from Apple Health Data"""
+    source_data = []
+
+    for line in response_data.splitlines():
+        source_data.append(json.loads(line))
+
+    logging.info("Converting to dataframe")
+    df = pd.DataFrame.from_records(source_data)
+
+    return df
 
 
 def create_latest_health_dataset(bucket):
@@ -51,7 +64,7 @@ def run(event, context):
     # convert contents to native python string
     try:
         response = s3.get_object(Bucket=bucket, Key=key)
-        print(response)
+        response.raise_for_status()
         json_data = response.get("Body").read().decode("utf-8")
     except Exception as e:
         print(e)
@@ -62,22 +75,21 @@ def run(event, context):
         )
         raise e
 
-    source_data = []
+    try:
+        df = parse_automated_exports(json_data)
 
-    for line in json_data.splitlines():
-        source_data.append(json.loads(line))
+        # force conversion types
+        logging.info("forcing type conversions for `qty` and `date` columns")
+        df["qty"] = df["qty"].astype(str)
+        df["date"] = df["date"].apply(
+            lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d")
+        )
 
-    logging.info("Converting to dataframe")
-    df = pd.DataFrame.from_records(source_data)
-
-    # force conversion types
-    df["qty"] = df["qty"].astype(str)
-    df["date"] = df["date"].apply(
-        lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S %z").strftime("%Y-%m-%d")
-    )
-
-    df_cols = ["date", "source", "qty", "name", "units", "date_updated"]
-    df_parquet = df[df_cols]
+        df_cols = ["date", "source", "qty", "name", "units", "date_updated"]
+        df_parquet = df[df_cols]
+    except json.JSONDecodeError as e:
+        logging.error("Error parsing json")
+        raise e
 
     logging.info("Converting to parquet")
 
@@ -94,9 +106,7 @@ def run(event, context):
         Body=parquet_buffer.getvalue(),
     )
 
-    df_parquet.to_parquet(
-        f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet"
-    )
+    df_parquet.to_parquet(f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet")
 
     logging.info("Creating latest dataset")
     df_latest = create_latest_health_dataset(bucket)[df_cols]

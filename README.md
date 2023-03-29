@@ -4,11 +4,13 @@ A serverless framework that automates the conversion of past daily statistics fr
 ```mermaid
 graph TD
     A[fa:fa-mobile iPhone / Apple Watch] -->|Auto Health Export|B
-    B[AWS Rest API <br> s3 bucket `/syncs`] --> C[fa:fa-aws AWS Lambda]
-    C -->|create-calendar.py| D[apple-health-calendar.ics]
-    C -->|parse_as_parquet.py| E[latest_data.parquet]
+    B[AWS REST API] --> C[fa:fa-aws AWS Lambda]
+    C -->|healthlake.py| D[convert to json to parquet]
+    D -->|parse_parquet.py| E[collect latest stats <br> `latest_data.parquet`]
+    E -->|create-calendar.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 ## Project Goals:
 - Automate exports from iPhone
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
-- Files are refreshed in S3 bucket that personal Google Calendar is subscribed to.
+- Create `read-only` data available in AWS S3 bucket.
+- Files are refreshed in S3 bucket that personal calendar is subscribed to.

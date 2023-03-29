@@ -182,14 +182,14 @@ class Sleep:
     "A basic sleep object"
     sleep_analysis_asleep: Optional[float] = field(default=0)
     sleep_analysis_inBed: Optional[float] = field(default=0)
-    sleep_analysis_inBedStart: Optional[str] = field(default="")
+    sleep_analysis_sleepStart: Optional[str] = field(default="")
 
     def __post_init__(self):
         # rename objects for easier usage
         self.time_asleep = Time(time=self.sleep_analysis_asleep)
         self.time_in_bed = Time(time=self.sleep_analysis_inBed)
-        if self.sleep_analysis_inBedStart != "":
-            self.in_bed_time = convert_to_12_hr(self.sleep_analysis_inBedStart)
+        if self.sleep_analysis_sleepStart != "":
+            self.in_bed_time = convert_to_12_hr(self.sleep_analysis_sleepStart)
         else:
             self.in_bed_time = "No data"
 
