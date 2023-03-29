@@ -24,6 +24,7 @@ class AppleHealthEvent(Event):
     An event derived from Apple Health data
     For usage within .ics format
     """
+
     date: datetime.date
     description: str
     title: str
@@ -48,6 +49,7 @@ class AppleHealthData:
     A dataclass to hold all the data from Apple Health
     Parsing from AWS API Gateway and S3
     """
+
     date: str
     date_updated: str
     name: str
@@ -228,9 +230,7 @@ def convert_to_12_hr(time_str: str) -> str:
     return time_as_12_hr
 
 
-def collect_event_stats(
-    stats_df: pd.DataFrame, column_names: List[str]
-) -> pd.DataFrame:
+def collect_event_stats(stats_df: pd.DataFrame, column_names: List[str]) -> pd.DataFrame:
     """
     Extract health data from stats dataframe in the format
     [['name', 'qty']] where:
@@ -246,9 +246,7 @@ def collect_event_stats(
     return event_type_stats
 
 
-def create_day_events(
-    stats: pd.DataFrame, event_date: str, object_mapping: dict
-) -> List[Event]:
+def create_day_events(stats: pd.DataFrame, event_date: str, object_mapping: dict) -> List[Event]:
     """
     Iterate through different event types (food / activity / sleep)
     and generate events to add to the daily calendar only if event exists
@@ -262,9 +260,7 @@ def create_day_events(
         dataclass_obj = globals()[dataclass_name]
         print(dataclass_obj)
 
-        dataclass_obj_stats = collect_event_stats(
-            stats_df=stats, column_names=col_names
-        )
+        dataclass_obj_stats = collect_event_stats(stats_df=stats, column_names=col_names)
 
         obj_args = dict(dataclass_obj_stats.values)
         print(obj_args)
@@ -317,15 +313,14 @@ def run(event, context):
 
     logging.info("Writing data to calendar ics file")
     s3.put_object(
-        Bucket=bucket,
-        Key=f"outputs/{calendar_file_name}",
-        Body=c.serialize(),
-        ACL="public-read"
+        Bucket=bucket, Key=f"outputs/{calendar_file_name}", Body=c.serialize(), ACL="public-read"
     )
 
     # aws_region = "ap-southeast-2"
     bucket_location = boto3.client("s3").get_bucket_location(Bucket=bucket)
-    s3_website_url = f"https://{bucket}.s3-{bucket_location}.amazonaws.com/outputs/{calendar_file_name}"
+    s3_website_url = (
+        f"https://{bucket}.s3-{bucket_location}.amazonaws.com/outputs/{calendar_file_name}"
+    )
     logging.info("Object now publically available at %s", s3_website_url)
 
     return
