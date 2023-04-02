@@ -64,7 +64,6 @@ def run(event, context):
     # convert contents to native python string
     try:
         response = s3.get_object(Bucket=bucket, Key=key)
-        response.raise_for_status()
         json_data = response.get("Body").read().decode("utf-8")
     except Exception as e:
         print(e)
