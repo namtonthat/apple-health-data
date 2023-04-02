@@ -1,3 +1,3 @@
 bucket = "ntonthat-apple-health-data"
-database = "health"
 tz = "Australia/Melbourne"
+calendar_name = "apple-health-calendar.ics"

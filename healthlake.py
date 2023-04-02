@@ -1,19 +1,28 @@
 import flask
 import boto3
-import sys
 import json
 import conf
 from typing import Dict, List
 from datetime import datetime
-import boto3
 import logging
 
+# initialize app and S3 and Athena clients
+app = flask.Flask(__name__)
 s3 = boto3.client("s3")
 
 
-def store(rows):
+def store_raw_data(data: dict) -> dict:
     """
-    Store rows of health export data in S3 bucket.
+    Store raw health export data in raw/ prefix S3 bucket.
+    """
+    key_name = "raw/" + datetime.utcnow().isoformat() + ".json"
+
+    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=json.dumps(data))
+
+
+def store(rows: List[dict]) -> dict:
+    """
+    Store rows of health export data in syncs/ S3 bucket.
     """
 
     key_name = "syncs/" + datetime.utcnow().isoformat() + ".json"
@@ -25,21 +34,9 @@ def store(rows):
     s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
 
 
-def store_raw_data(data):
+def store_workouts(workouts: List[dict]) -> dict:
     """
-    Store raw health export data in S3 bucket.
-    """
-
-    key_name = "raw/" + datetime.utcnow().isoformat() + ".json"
-
-    # athena and glue prefer a row of JSON per line
-
-    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=json.dumps(data))
-
-
-def store_workouts(workouts):
-    """
-    Store rows of workout data in our S3 bucket.
+    Store rows of workout data in S3 bucket.
     """
 
     key_name = "workouts/" + datetime.utcnow().isoformat() + ".json"
@@ -79,7 +76,7 @@ def unnest_data_points(data: Dict) -> List[Dict]:
     return unnest_rows
 
 
-def transform(data):
+def transform(data: dict) -> List[Dict]:
     """
     Flatten the nested JSON data structure from Health Export
     in order to make it easier to index and query with Athena.
@@ -107,7 +104,7 @@ def transform(data):
     return rows
 
 
-def transform_workouts(data):
+def transform_workouts(data: dict) -> List[Dict]:
     """
     Flatten the nested JSON data structure from Health Export
     for workouts to make it e`a`sier to index and query with Athena.
@@ -127,62 +124,24 @@ def transform_workouts(data):
     return workouts
 
 
-def transform_and_store(data):
-    # transform the sync data and store it
-    logging.info("transform raw data")
-    transformed = transform(data)
-    store(transformed)
-
-    # transform the workout data and store it
-    logging.info("transform workout data")
-    workouts = transform_workouts(data)
-    store_workouts(workouts)
-
-    return
-
-
-# initialize our app and our S3 and Athena clients
-app = flask.Flask(__name__)
-
-
 @app.route("/syncs", methods=["POST"])
 def syncs():
     """
-    Sync results from Health Export into our data lake.
+    Sync results from Health Export into data lake.
     """
 
     # fetch the raw JSON data
     raw_data = flask.request.json
     store_raw_data(raw_data)
 
-    # parse the data
-    transform_and_store(raw_data)
+    # transform the sync data and store it
+    logging.info("transform raw data")
+    transformed = transform(raw_data)
+    store(transformed)
+
+    # transform the workout data and store it
+    logging.info("transform workout data")
+    workouts = transform_workouts(raw_data)
+    store_workouts(workouts)
 
     return flask.jsonify(success=True, message="Successfully received and stored sync data.")
-
-
-@app.route("/raws", methods=["POST"])
-def raw():
-    """
-    Sync results from Health Export into our data lake.
-    """
-
-    # fetch the raw JSON data
-    raw_data = flask.request.json
-
-    # parse the data
-    transform_and_store(raw_data)
-
-    return flask.jsonify(success=True, message="Successfully received and stored sync data.")
-
-
-"""
-TODO: convert the below to a test
-import json
-raw_auto_export = '../source/apple-health/HealthAutoExport-2022-12-25-2023-03-25.json'
-with open(raw_auto_export, 'r') as ae:
-    raw_data = json.loads(ae.read())
-
-import requests
-requests.post('http://localhost:8082/syncs', json=raw_data)
-"""
