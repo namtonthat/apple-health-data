@@ -1,4 +1,6 @@
 bucket = "ntonthat-apple-health-data"
 tz = "Australia/Melbourne"
+latest_parquet_file_path = "outputs/latest_data.parquet"
+repo_parquet_file_path = "data/latest_data.parquet"
 calendar_name = "apple-health-calendar.ics"
 column_mapping_file = "config/column_mapping.yml"

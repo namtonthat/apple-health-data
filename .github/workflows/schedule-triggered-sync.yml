@@ -1,4 +1,4 @@
-name: download
+name: schedule-triggered-sync
 
 on:
   schedule:
@@ -16,7 +16,7 @@ on:
           - debug
 
 jobs:
-  download_and_update:
+  sync_s3_data:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,3 +43,13 @@ jobs:
 
     - name: install dependencies
       run: poetry install --no-interaction --no-root --without dev
+
+    - name: Run download script
+      run: python download.py
+
+    - name: Commit files
+      run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || (git commit -a -m "updated data/*" --allow-empty)
