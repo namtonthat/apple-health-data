@@ -10,7 +10,7 @@ graph TD
     E -->|create-calendar.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 ## Project Goals:
-- Automate exports from iPhone
+- Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
 - Create `read-only` data available in AWS S3 bucket.
 - Files are refreshed in S3 bucket that personal calendar is subscribed to.
