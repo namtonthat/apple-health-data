@@ -45,7 +45,7 @@ jobs:
       run: poetry install --no-interaction --no-root --without dev
 
     - name: Run download script
-      run: python download.py
+      run: poetry run python download.py
 
     - name: Commit files
       run: |
