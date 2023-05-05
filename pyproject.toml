@@ -27,6 +27,10 @@ werkzeug = "2.2.2"
 ics = "0.7.2"
 fastparquet = "0.8.3"
 pydantic = "1.10.4"
+smart-open = "^6.3.0"
+pytest = "^7.3.1"
+pytest-mock = "^3.10.0"
+pyyaml = "^6.0"
 
 [tool.poetry.group.dev.dependencies]
 polars = "^0.16.15"

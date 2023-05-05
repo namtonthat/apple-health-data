@@ -76,7 +76,7 @@ def run(event, context):
 
     try:
         df = parse_automated_exports(json_data)
-
+        print(df.head())
         # force conversion types
         logging.info("forcing type conversions for `qty` and `date` columns")
         df["qty"] = df["qty"].astype(str)

@@ -84,12 +84,16 @@ def run(event, context):
     key = urllib.parse.unquote_plus(
         event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
     )
-    config_path = os.environ["LAMBDA_TASK_ROOT"] + "/config"
-    config_path = "config"
+
     calendar_file_name = conf.calendar_name
-    # event_objects_mapping = json.loads(open(f"{config_path}/mapping.json").read())
-    # event_objects_mapping = yaml.safe_load(open(f"{config_path}/events.yaml").read())
-    event_objects_mapping = yaml.safe_load(open("config/events.yaml").read())
+    column_mapping = yaml.safe_load(open(conf.column_mapping_file, "r"))
+    grouped = {}
+    for key, value in column_mapping.items():
+        group = value["group"]
+        if group not in grouped:
+            grouped[group] = []
+        grouped[group].append(key)
+    event_objects_mapping = grouped
 
     df = get_latest_health_data(bucket, key)
 

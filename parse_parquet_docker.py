@@ -1,12 +1,32 @@
 import polars as pl
 from smart_open import open
-import urllib.parse
-import boto3
 import json
 import yaml
 import logging
+import s3fs
+from typing import List
 
-personal = boto3.Session(profile_name="personal")
+# personal = boto3.Session(profile_name="personal")
+bucket = "ntonthat-apple-heatlh-data"
+prefix = "raw/"
+fs = s3fs.S3FileSystem()
+
+
+def get_file_list(bucket: str, prefix: str) -> List[str]:
+    """
+    Returns a list of files located in the specified S3 bucket and prefix.
+
+    Parameters:
+        - bucket (str): The name of the S3 bucket to list files from.
+        - prefix (str): The prefix for the S3 object keys to include in the list.
+
+    Returns:
+        - List[str]: A list of S3 object keys (i.e., file paths) that match the specified prefix.
+    """
+    url = f"s3://{bucket}/{prefix}/"
+    file_list = fs.ls(url)
+
+    return file_list
 
 
 # functions
@@ -22,7 +42,28 @@ def make_dict_from_column_mapping(column_mapping, key):
     return dict_
 
 
-def create_view(data: pl.DataFrame, view_name: str, view_values: str) -> pl.DataFrame:
+def create_view(data: pl.DataFrame, view_name: str, view_values: List[str]) -> pl.DataFrame:
+    """
+    Creates a new view DataFrame from the specified data, with rows filtered by a list of values.
+
+    Parameters:
+        - data (pl.DataFrame): The input DataFrame to create the view from.
+        - view_name (str): The name to use for the new view.
+        - view_values (List[str]): A list of values to use for filtering the rows.
+
+    Returns:
+        - pl.DataFrame: The resulting view DataFrame with columns following the VIEW_SCHEMA.
+
+    VIEW_SCHEMA:
+    - "date" (str): The date the record was created.
+    - "source" (str): The source of the record.
+    - "qty" (float): The quantity value of the record.
+    - "name" (str): The name of the record.
+    - "units" (str): The unit of measurement for the record.
+    - "date_updated" (str): The date the record was last updated.
+    - "mapped_name" (str): The mapped name value for the record.
+    - "mapped_event" (str): The mapped event value for the record.
+    """
     view_df = data.filter(pl.col("name").is_in(view_values)).select(VIEW_SCHEMA)
     view_df.write_parquet(f"outputs/parquets/{view_name}.parquet", compression="snappy")
 
@@ -53,19 +94,13 @@ NEW_COLUMNS = [
 VIEW_SCHEMA = SCHEMA + NEW_COLUMNS
 
 
-def run(event, context):
-    bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
-    key = urllib.parse.unquote_plus(
-        event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
-    )
-    url = f"s3://{bucket}/{key}"
-
+if __name__ == "__main__":
     # convert contents to native python string
-    try:
-        with open(url, "rb", transport_params={"client": personal.client("s3")}) as f:
-            json_data = f.read().decode("utf-8")
+    latest_file = get_file_list(bucket, prefix)[-1]
 
-        # logging.info("Converting to dataframe")
+    try:
+        with open(f"s3://{latest_file}", "rb") as f:
+            json_data = f.read().decode("utf-8")
         source_data = []
 
         for line in json_data.splitlines():
@@ -90,7 +125,7 @@ def run(event, context):
         print(e)
         print(
             "Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.".format(
-                key, bucket
+                prefix, bucket
             )
         )
         raise e
