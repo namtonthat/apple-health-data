@@ -1,4 +1,4 @@
-name: schedule-triggered-sync
+name: sync-s3-data
 
 on:
   schedule:
