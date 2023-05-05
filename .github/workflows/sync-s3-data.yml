@@ -45,7 +45,11 @@ jobs:
       run: poetry install --no-interaction --no-root --without dev
 
     - name: Run download script
+      env:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: poetry run python download.py
+
 
     - name: Commit files
       run: |
