@@ -1,10 +1,12 @@
-import boto3
 import conf
+import s3fs
 
 
 def download_parquet_file(bucket_name, file_path, local_path):
-    s3 = boto3.client("s3")
-    s3.download_file(bucket_name, file_path, local_path)
+    s3 = s3fs.S3FileSystem()
+    with s3.open(f"{bucket_name}/{file_path}", "rb") as s3_file:
+        with open(local_path, "wb") as local_file:
+            local_file.write(s3_file.read())
 
 
 if __name__ == "__main__":
