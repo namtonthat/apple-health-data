@@ -1,24 +1,28 @@
-from datetime import datetime
-import conf
 import flask
 import boto3
 import json
-import csv
-import sys
-
+import conf
 from typing import Dict, List
+from datetime import datetime
+import logging
 
-# initialize our app and our S3 and Athena clients
+# initialize app and S3 and Athena clients
 app = flask.Flask(__name__)
 s3 = boto3.client("s3")
 
-# force the ability to parse very large CSV files
-csv.field_size_limit(sys.maxsize)
 
-
-def store(rows):
+def store_raw_data(data: dict) -> dict:
     """
-    Store rows of health export data in our S3 bucket.
+    Store raw health export data in raw/ prefix S3 bucket.
+    """
+    key_name = "raw/" + datetime.utcnow().isoformat() + ".json"
+
+    s3.put_object(Bucket=conf.bucket, Key=key_name, Body=json.dumps(data))
+
+
+def store(rows: List[dict]) -> dict:
+    """
+    Store rows of health export data in syncs/ S3 bucket.
     """
 
     key_name = "syncs/" + datetime.utcnow().isoformat() + ".json"
@@ -30,9 +34,9 @@ def store(rows):
     s3.put_object(Bucket=conf.bucket, Key=key_name, Body=content)
 
 
-def store_workouts(workouts):
+def store_workouts(workouts: List[dict]) -> dict:
     """
-    Store rows of workout data in our S3 bucket.
+    Store rows of workout data in S3 bucket.
     """
 
     key_name = "workouts/" + datetime.utcnow().isoformat() + ".json"
@@ -72,7 +76,7 @@ def unnest_data_points(data: Dict) -> List[Dict]:
     return unnest_rows
 
 
-def transform(data):
+def transform(data: dict) -> List[Dict]:
     """
     Flatten the nested JSON data structure from Health Export
     in order to make it easier to index and query with Athena.
@@ -100,7 +104,7 @@ def transform(data):
     return rows
 
 
-def transform_workouts(data):
+def transform_workouts(data: dict) -> List[Dict]:
     """
     Flatten the nested JSON data structure from Health Export
     for workouts to make it e`a`sier to index and query with Athena.
@@ -120,23 +124,24 @@ def transform_workouts(data):
     return workouts
 
 
-@app.route("/sync", methods=["POST"])
-def sync():
+@app.route("/syncs", methods=["POST"])
+def syncs():
     """
-    Sync results from Health Export into our data lake.
+    Sync results from Health Export into data lake.
     """
 
     # fetch the raw JSON data
     raw_data = flask.request.json
+    store_raw_data(raw_data)
 
     # transform the sync data and store it
+    logging.info("transform raw data")
     transformed = transform(raw_data)
     store(transformed)
 
     # transform the workout data and store it
+    logging.info("transform workout data")
     workouts = transform_workouts(raw_data)
     store_workouts(workouts)
 
-    return flask.jsonify(
-        success=True, message="Successfully received and stored sync data."
-    )
+    return flask.jsonify(success=True, message="Successfully received and stored sync data.")

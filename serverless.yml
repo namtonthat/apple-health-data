@@ -4,8 +4,8 @@ provider:
   name: aws
   runtime: python3.9
   region: ap-southeast-2
-  memorySize: 128
-  timeout: 30
+  layers:
+    - arn:aws:lambda:ap-southeast-2:336392948345:layer:AWSSDKPandas-Python39-Arm64:5
   apiGateway:
     shouldStartNameWithService: false
   iamRoleStatements:
@@ -27,8 +27,8 @@ custom:
   pythonRequirements:
     dockerizePip: true
     layer:
-      name: pandas-numpy
-      description: "Layer which contains pandas and numpy library"
+      name: apple-health
+      description: "apple-health-* package requirements"
       compatibleRuntimes:
         - python3.9
       slim: true
@@ -57,6 +57,8 @@ plugins:
 functions:
   healthlake:
     handler: wsgi_handler.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - http: ANY /
       - http: "ANY /{proxy+}"
@@ -81,12 +83,11 @@ functions:
     package:
       patterns:
         - config/mapping.json
-        - config/latest_data.sql
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: parquets/
+            - prefix: outputs/
             - suffix: .parquet
           existing: true
