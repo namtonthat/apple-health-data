@@ -14,9 +14,9 @@ import urllib
 from models import AppleHealthEvent, AppleHealthData, Time, Macros, Dailys, Sleep
 
 
-# s3 = boto3.client("s3")
-personal = boto3.Session(profile_name="personal")
-s3 = personal.client("s3")
+s3 = boto3.client("s3")
+# personal = boto3.Session(profile_name="personal")
+# s3 = personal.client("s3")
 
 
 def collect_event_stats(stats_df: pd.DataFrame, column_names: List[str]) -> pd.DataFrame:
