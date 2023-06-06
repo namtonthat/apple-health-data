@@ -5,7 +5,7 @@ provider:
   runtime: python3.9
   region: ap-southeast-2
   layers:
-    - arn:aws:lambda:ap-southeast-2:336392948345:layer:AWSSDKPandas-Python39-Arm64:5
+    - arn:aws:lambda:ap-southeast-2:336392948345:layer:AWSSDKPandas-Python39-Arm64:7
   apiGateway:
     shouldStartNameWithService: false
   iamRoleStatements:

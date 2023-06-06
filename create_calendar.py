@@ -48,13 +48,11 @@ def create_day_events(stats: pd.DataFrame, event_date: str, object_mapping: dict
         dataclass_name = types.title()
         dataclass_obj = globals()[dataclass_name]
         logging.info("object to create %s", dataclass_obj)
-        print(dataclass_obj)
 
         dataclass_obj_stats = collect_event_stats(stats_df=stats, column_names=col_names)
 
         obj_args = dict(dataclass_obj_stats.values)
         logging.info("object args %s", obj_args)
-        print(obj_args)
         if obj_args:
             obj = dataclass_obj(**obj_args)
             e = AppleHealthEvent(
@@ -78,6 +76,22 @@ def get_latest_health_data(bucket, key):
     return df_latest
 
 
+def collect_groups(column_mapping):
+    """Collect all groups from column mapping"""
+    grouped = {}
+
+    for column, mapping in column_mapping.items():
+        group = mapping["group"]
+
+        if group == "sleep_times":
+            group = "sleep"
+
+        if group not in grouped:
+            grouped[group] = []
+        grouped[group].append(column)
+
+    return grouped
+
 def run(event, context):
     """Main handler for lambda event"""
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
@@ -87,14 +101,7 @@ def run(event, context):
 
     calendar_file_name = conf.calendar_name
     column_mapping = yaml.safe_load(open(conf.column_mapping_file, "r"))
-    grouped = {}
-    for key, value in column_mapping.items():
-        group = value["group"]
-        if group not in grouped:
-            grouped[group] = []
-        grouped[group].append(key)
-    event_objects_mapping = grouped
-
+    event_objects_mapping = collect_groups(column_mapping)
     df = get_latest_health_data(bucket, key)
 
     c = Calendar()
