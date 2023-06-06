@@ -99,6 +99,9 @@ def run(event, context):
         event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
     )
 
+    print('bucket', bucket)
+    print('key', key)
+
     calendar_file_name = conf.calendar_name
     column_mapping = yaml.safe_load(open(conf.column_mapping_file, "r"))
     event_objects_mapping = collect_groups(column_mapping)
