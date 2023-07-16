@@ -99,7 +99,7 @@ sls plugin install -n serverless-python-requirements
 
 
 ### Advanced
-You can update the emojis and definitiosn by looking at the `config/column.mapping.yaml` file. 
+You can update the emojis and definitions by looking at the `config/column.mapping.yaml` file. 
 
 ### Inspiration
 
