@@ -53,7 +53,7 @@ resources:
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
-
+  - serverless-plugin-existing-s3
 functions:
   healthlake:
     handler: wsgi_handler.handler
