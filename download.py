@@ -45,6 +45,6 @@ def download_parquet_file(bucket_name: str, file_path: str, local_path: str) -> 
 if __name__ == "__main__":
     download_parquet_file(
         bucket_name=conf.bucket,
-        file_path=conf.latest_parquet_file_path,
-        local_path=conf.repo_parquet_file_path,
+        file_path=conf.latest_parquet_file_path + conf.parquet_file_name,
+        local_path=conf.repo_parquet_file_path + conf.parquet_file_name,
     )

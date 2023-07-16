@@ -19,7 +19,7 @@ s3 = boto3.client("s3")
 # s3 = personal.client("s3")
 
 
-def parse_automated_exports(response_data: dict):
+def parse_automated_exports(response_data: str):
     """Parse the automated json extracts from Apple Health Data"""
     source_data = []
 

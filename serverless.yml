@@ -80,9 +80,6 @@ functions:
     handler: create_calendar.run
     layers:
       - !Ref PythonRequirementsLambdaLayer
-    package:
-      patterns:
-        - config/mapping.json
     events:
       - s3:
           bucket: "ntonthat-apple-health-data"
