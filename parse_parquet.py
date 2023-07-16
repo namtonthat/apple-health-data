@@ -12,6 +12,7 @@ import tempfile
 import s3fs
 import fastparquet as fp
 import numpy as np
+import conf
 from datetime import datetime
 
 s3 = boto3.client("s3")
@@ -19,7 +20,7 @@ s3 = boto3.client("s3")
 # s3 = personal.client("s3")
 
 
-def parse_automated_exports(response_data: dict):
+def parse_automated_exports(response_data: str):
     """Parse the automated json extracts from Apple Health Data"""
     source_data = []
 
@@ -118,7 +119,7 @@ def run(event, context):
 
     s3.put_object(
         Bucket=bucket,
-        Key="outputs/latest_data.parquet",
+        Key=f"outputs/{conf.parquet_file_name}.parquet",
         Body=parquet_buffer.getvalue(),
         ACL="public-read",
     )

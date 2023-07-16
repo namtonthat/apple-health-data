@@ -86,7 +86,11 @@ class Time:
         title = f"{self.hours}h {self.minutes}m"
         return title
 
-
+    @property
+    def title_minutes_only(self) -> str:
+        title = f"{self.minutes}m"
+        return title
+    
 @validate_arguments
 @dataclass
 class Macros:
@@ -138,8 +142,8 @@ class Dailys:
 
     def __post_init__(self):
         # rename objects for easier usage
-        self.apple_exercise_time = Time(timeInMinutes=self.apple_exercise_time)
-        self.mindful_minutes = Time(timeInMinutes=self.mindful_minutes)
+        self.apple_exercise_time: Time = Time(timeInMinutes=self.apple_exercise_time)
+        self.mindful_minutes: Time = Time(timeInMinutes=self.mindful_minutes)
         self.step_count = float(self.step_count)
         self.weight_body_mass = float(self.weight_body_mass)
 
@@ -150,18 +154,21 @@ class Dailys:
 
     @property
     def mindful_description(self) -> str:
-        m_description = f"🧘 Mindful: {self.mindful_minutes.title} mindful"
+        m_description = f"🧘 Mindful: {self.mindful_minutes.title_minutes_only} mindful"
         return m_description
 
     @property
     def step_count_description(self) -> str:
-        s_description = f"👣 Steps: {self.step_count:.0f} steps"
+        s_description = f"👣 Steps: {self.step_count:,.0f} steps"
         return s_description
 
     @property
     def weight_description(self) -> str:
-        w_description = f"⚖️ Weight: {self.weight_body_mass:.0f} lbs"
-        return w_description
+        if self.weight_body_mass != 0:
+            w_description = f"⚖️ Weight: {self.weight_body_mass:.0f} kg"
+            return w_description
+        else: 
+            return ""
 
     @property
     def description(self) -> str:
@@ -187,7 +194,7 @@ class Dailys:
 
     @property
     def step_count_title(self) -> str:
-        title = f"👣 {self.step_count:.0f} steps"
+        title = f"👣 {self.step_count:,.0f} steps"
         return title
 
     @property
