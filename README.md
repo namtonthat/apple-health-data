@@ -95,7 +95,7 @@ sls plugin install -n serverless-python-requirements
 
 4. Trigger API export from `health-auto-export` using the API endpoint - remember to include the `/syncs` suffix to the endpoint because that's where the `serverless` will trigger the processes.
 
-![iOS Health Auto Export - AWS Export](./images/auto-export-ios.png)
+![iOS Health Auto Export - AWS Export](./images/auto-export-ios.PNG)
 
 
 ### Advanced
