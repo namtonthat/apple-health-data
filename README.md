@@ -98,6 +98,9 @@ sls plugin install -n serverless-python-requirements
 ![iOS Health Auto Export - AWS Export](./images/auto-export-ios.png)
 
 
+### Advanced
+You can update the emojis and definitiosn by looking at the `config/column.mapping.yaml` file. 
+
 ### Inspiration
 
 * Work done by [`cleverdevil/healthlake`](https://github.com/cleverdevil/healthlake).

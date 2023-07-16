@@ -194,7 +194,7 @@ class Dailys:
 
     @property
     def step_count_title(self) -> str:
-        title = f"👣 {self.step_count:.0f} steps"
+        title = f"👣 {self.step_count:,.0f} steps"
         return title
 
     @property
