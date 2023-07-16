@@ -69,7 +69,7 @@ classDiagram
         weight_body_mass
     }
 ```
-## Project Goals:
+## Project Goals
 - Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
 - Create `read-only` data available in AWS S3 bucket.
