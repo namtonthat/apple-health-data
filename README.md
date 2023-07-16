@@ -6,24 +6,59 @@ graph TD
     A[fa:fa-mobile iPhone / Apple Watch] -->|Auto Health Export|B
     B[AWS REST API] --> C[fa:fa-aws AWS Lambda]
     C -->|healthlake.py| D[convert to json to parquet]
-    D -->|parse_parquet.py| E[collect latest stats <br> `latest_data.parquet`]
+    D -->|parse_parquet.py| E[collect latest stats <br> `health.parquet`]
     E -->|create-calendar.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
+## Entity Relationship Diagram
 
-
---- 
 ```mermaid
 classDiagram
 direction LR
-class health { 
+
+AppleHealthData --|> Sleep
+AppleHealthData --|> Dailys
+AppleHealthData --|> Macros
+
+Dailys  --|>AppleHealthEvent
+Macros --|>AppleHealthEvent
+Sleep --|>AppleHealthEvent
+
+class AppleHealthData { 
     date
-    source
-    qty
-    name
-    units
     date_updated
+    name
+    qty
+    source
+    units
 }
----
+
+class AppleHealthEvent { 
+    date
+    description
+    title
+}
+
+class Sleep { 
+    sleep_analysis_asleep
+    sleep_analysis_inBed
+    sleep_analysis_sleepStart
+}
+
+
+class Macros { 
+    carbohydrates
+    protein
+    total_fat
+    fiber
+    active_energy
+}
+
+class Dailys { 
+    apple_exercise_time
+    mindful_minutes
+    step_count
+    weight_body_mass
+}
 ```
 ## Project Goals:
 - Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
