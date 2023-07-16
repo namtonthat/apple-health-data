@@ -11,7 +11,7 @@ graph TD
 ```
 
 
-### 
+--- 
 ```mermaid
 classDiagram
 direction LR
@@ -23,7 +23,7 @@ class outputs/health {
     units
     date_updated
 }
-
+---
 ```
 ## Project Goals:
 - Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
