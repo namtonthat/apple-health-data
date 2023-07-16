@@ -15,7 +15,7 @@ graph TD
 ```mermaid
 classDiagram
 direction LR
-class outputs/health { 
+class health { 
     date
     source
     qty
