@@ -1,46 +1,4 @@
-[tool.poetry]
+[project] 
 name = "apple-health-calendar"
-version = "0.1.0"
-description = ""
-authors = ["Nam Tonthat <n.nam.tonthat@gmail.com>"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "3.9.16"
-certifi = "2020.12.5"
-chardet = "4.0.0"
-click = "8.0.3"
-flask = "2.2.2"
-greenlet = "1.0.0"
-idna = "2.10"
-itsdangerous = "2.0"
-jinja2 = "3.0"
-jmespath = "0.10.0"
-markupsafe = ">=2.0.0rc2"
-msgpack = "1.0.2"
-pynvim = "0.4.2"
-python-dateutil = "2.8.1"
-requests = "2.25.1"
-s3fs = "2023.1.0"
-urllib3 = "1.26.3"
-werkzeug = "2.2.2"
-ics = "0.7.2"
-fastparquet = "0.8.3"
-pydantic = "1.10.4"
-smart-open = "^6.3.0"
-pytest = "^7.3.1"
-pytest-mock = "^3.10.0"
-pyyaml = "^6.0"
-black = "^23.3.0"
-autopep8 = "^2.0.2"
-
-[tool.poetry.group.dev.dependencies]
-polars = "^0.16.15"
-smart-open = "^6.3.0"
-numpy = "^1.21.1"
-pandas = "^1.5.0"
-awswrangler = "^2.20.1"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+dynamic = ['version']
+requires-python = ">=3.13.1"
