@@ -10,3 +10,7 @@ source .venv/bin/activate
 
 echo "syncing"
 uv sync
+
+echo "install precommit"
+pre-commit clean
+pre-commit install

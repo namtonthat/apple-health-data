@@ -8,4 +8,4 @@ help: # Show help for each of the Makefile recipes.
 .PHONY: setup
 setup: # Install packages required for local development
 	@echo "Installing packages required for local development"
-	./setup.sh
+	./scripts/setup.sh
