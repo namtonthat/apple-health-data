@@ -16,5 +16,5 @@ tofu init --upgrade
 echo "planning"
 tofu plan
 
-echo "applying"
-tofu apply -auto-approve
+# echo "applying"
+# tofu apply -auto-approve
