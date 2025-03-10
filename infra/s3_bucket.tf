@@ -23,13 +23,13 @@ resource "aws_s3_bucket_acl" "health_data_bucket" {
 }
 
 # Notification to trigger DBT Lambda when an object is created in the landing/ prefix
-resource "aws_s3_bucket_notification" "notify_dbt" {
-  bucket = aws_s3_bucket.health_data_bucket.id
-
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.dbt_lambda.arn
-    events              = ["s3:ObjectCreated:*"]
-  }
-
-  depends_on = [aws_lambda_permission.s3_invoke_dbt_lambda]
-}
+# resource "aws_s3_bucket_notification" "notify_dbt" {
+#   bucket = aws_s3_bucket.health_data_bucket.id
+#
+#   lambda_function {
+#     lambda_function_arn = aws_lambda_function.dbt_lambda.arn
+#     events              = ["s3:ObjectCreated:*"]
+#   }
+#
+#   depends_on = [aws_lambda_permission.s3_invoke_dbt_lambda]
+# }
