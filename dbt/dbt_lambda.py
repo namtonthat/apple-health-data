@@ -10,11 +10,9 @@ def handler(event, context):
     # Log the incoming S3 event
     logger.info("Received S3 event", extra=event)
 
-    # Set the working directory for your DBT project
     dbt_project_path = "/var/dbt_project"
 
     try:
-        # Run the DBT command (e.g., "dbt run")
         result = subprocess.run(
             ["dbt", "run"], cwd=dbt_project_path, capture_output=True, text=True
         )
