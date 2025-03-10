@@ -11,9 +11,9 @@ resource "null_resource" "build_push_ingest" {
 
   provisioner "local-exec" {
     command = <<EOT
-      aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.ingest_repo.repository_url}
-      docker build --build-arg HANDLER_FILE=ingest_lambda.py -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ../ingest
-      docker push ${aws_ecr_repository.ingest_repo.repository_url}:latest
+      aws ecr get-login-password --region ${var.aws_region} | podman login --username AWS --password-stdin ${aws_ecr_repository.ingest_repo.repository_url}
+      podman buildx build --build-arg HANDLER_FILE=ingest_lambda.py -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ../ingest
+      podman push ${aws_ecr_repository.ingest_repo.repository_url}:latest
     EOT
     environment = {
       aws_region = var.aws_region

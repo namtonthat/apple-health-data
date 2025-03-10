@@ -11,9 +11,9 @@
 #
 #   provisioner "local-exec" {
 #     command = <<EOT
-#       aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.dbt_repo.repository_url}
-#       docker build --build-arg HANDLER_FILE=dbt_lambda.py -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ../dbt
-#       docker push ${aws_ecr_repository.dbt_repo.repository_url}:latest
+#       aws ecr get-login-password --region ${var.aws_region} | podman login --username AWS --password-stdin ${aws_ecr_repository.dbt_repo.repository_url}
+#       podman build --build-arg HANDLER_FILE=dbt_lambda.py -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ../dbt
+#       podman push ${aws_ecr_repository.dbt_repo.repository_url}:latest
 #     EOT
 #     environment = {
 #       aws_region = var.aws_region
