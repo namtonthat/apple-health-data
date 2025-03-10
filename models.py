@@ -24,7 +24,7 @@ class AppleHealthEvent(Event):
     """
 
     date: datetime.date
-    description: str
+    _description: str
     title: str
 
     @property
@@ -32,7 +32,7 @@ class AppleHealthEvent(Event):
         all_day_date = f"{self.date} 00:00:00"
         e = Event()
         e.name = self.title
-        e.description = self.description
+        e.description = self._description
         e.begin = all_day_date
         e.end = all_day_date
         e.make_all_day()
