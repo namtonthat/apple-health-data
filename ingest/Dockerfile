@@ -9,11 +9,9 @@ COPY pyproject.toml .
 
 # Install uv and initialize a virtual environment, then sync dependencies
 RUN pip install uv && \
-  uv venv && \
-  . .venv/bin/activate && \
-  uv sync
+  uv pip install -r pyproject.toml
 
 # Use a build argument to specify which handler file to use (e.g., ingest_lambda.py or dbt_lambda.py)
 COPY ingest/lambda.py handler.py
 
-CMD [".venv/bin/python", "-m", "handler", "handler"]
+CMD ["handler.handler"]

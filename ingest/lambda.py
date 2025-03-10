@@ -2,11 +2,10 @@ import os
 import json
 import time
 import boto3
-from aws_lambda_powertools import Logger, Tracer
+from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler.api_gateway import APIGatewayHttpResolver
 
 logger = Logger()
-tracer = Tracer()
 app = APIGatewayHttpResolver()
 
 s3_client = boto3.client("s3")
