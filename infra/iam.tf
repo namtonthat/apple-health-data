@@ -52,3 +52,5 @@ resource "aws_iam_role_policy_attachment" "lambda_ingest_s3_attach" {
 # }
 #
 
+
+

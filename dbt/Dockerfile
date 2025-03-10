@@ -1,5 +1,5 @@
-# Use a Python 3.13.1 slim base image
-FROM python:3.13.1-slim
+# NOTE: Use a AWS's Python 3.13 to work with lambdas
+FROM public.ecr.aws/lambda/python:3.13
 
 # Set the Lambda task root directory
 ENV LAMBDA_TASK_ROOT=/var/task

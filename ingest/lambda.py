@@ -1,7 +1,7 @@
-import os
 import json
 import time
 import boto3
+import os
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler.api_gateway import APIGatewayHttpResolver
 
@@ -29,5 +29,8 @@ def ingest():
         return {"error": str(e)}, 500
 
 
-def handler(event, context):
+def lambda_handler(event, context):
+    # Log the entire event to see what's being received
+    logger.info("Raw event received", extra={"event": event})
+
     return app.resolve(event, context)
