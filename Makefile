@@ -1,5 +1,4 @@
 default: help
-# set default env variables
 
 .PHONY: help
 help: # Show help for each of the Makefile recipes.

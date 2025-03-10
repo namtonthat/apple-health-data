@@ -3,7 +3,6 @@ from ics import Calendar, Event
 import pandas as pd
 from typing import List
 import logging
-import os
 import conf
 
 # import json
@@ -11,7 +10,7 @@ import yaml
 import s3fs
 import fastparquet as fp
 import urllib
-from models import AppleHealthEvent, AppleHealthData, Time, Macros, Dailys, Sleep
+from models import AppleHealthEvent
 
 
 s3 = boto3.client("s3")
@@ -19,7 +18,9 @@ s3 = boto3.client("s3")
 # s3 = personal.client("s3")
 
 
-def collect_event_stats(stats_df: pd.DataFrame, column_names: List[str]) -> pd.DataFrame:
+def collect_event_stats(
+    stats_df: pd.DataFrame, column_names: List[str]
+) -> pd.DataFrame:
     """
     Extract health data from stats dataframe in the format
     [['name', 'qty']] where:
@@ -35,7 +36,9 @@ def collect_event_stats(stats_df: pd.DataFrame, column_names: List[str]) -> pd.D
     return event_type_stats
 
 
-def create_day_events(stats: pd.DataFrame, event_date: str, object_mapping: dict) -> List[Event]:
+def create_day_events(
+    stats: pd.DataFrame, event_date: str, object_mapping: dict
+) -> List[Event]:
     """
     Iterate through different event types (food / activity / sleep)
     and generate events to add to the daily calendar only if event exists
@@ -49,7 +52,9 @@ def create_day_events(stats: pd.DataFrame, event_date: str, object_mapping: dict
         dataclass_obj = globals()[dataclass_name]
         logging.info("object to create %s", dataclass_obj)
 
-        dataclass_obj_stats = collect_event_stats(stats_df=stats, column_names=col_names)
+        dataclass_obj_stats = collect_event_stats(
+            stats_df=stats, column_names=col_names
+        )
 
         obj_args = dict(dataclass_obj_stats.values)
         logging.info("object args %s", obj_args)
@@ -92,6 +97,7 @@ def collect_groups(column_mapping):
 
     return grouped
 
+
 def run(event, context):
     """Main handler for lambda event"""
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
@@ -99,8 +105,8 @@ def run(event, context):
         event.get("Records")[0].get("s3").get("object").get("key"), encoding="utf-8"
     )
 
-    print('bucket', bucket)
-    print('key', key)
+    print("bucket", bucket)
+    print("key", key)
 
     calendar_file_name = conf.calendar_name
     column_mapping = yaml.safe_load(open(conf.column_mapping_file, "r"))
@@ -120,14 +126,15 @@ def run(event, context):
 
     logging.info("Writing data to calendar ics file")
     s3.put_object(
-        Bucket=bucket, Key=f"outputs/{calendar_file_name}", Body=c.serialize(), ACL="public-read"
+        Bucket=bucket,
+        Key=f"outputs/{calendar_file_name}",
+        Body=c.serialize(),
+        ACL="public-read",
     )
 
     # aws_region = "ap-southeast-2"
     bucket_location = boto3.client("s3").get_bucket_location(Bucket=bucket)
-    s3_website_url = (
-        f"https://{bucket}.s3-{bucket_location}.amazonaws.com/outputs/{calendar_file_name}"
-    )
+    s3_website_url = f"https://{bucket}.s3-{bucket_location}.amazonaws.com/outputs/{calendar_file_name}"
     logging.info("Object now publically available at %s", s3_website_url)
 
     return

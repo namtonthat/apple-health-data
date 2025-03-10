@@ -51,7 +51,9 @@ def create_latest_health_dataset(bucket):
     df["date"] = df["date"].astype("str")
     df["date"] = [f[:10] for f in df["date"]]
     cte_latest_data = df.groupby(["date", "name"]).agg({"date_updated": np.max})
-    df_latest = df.merge(cte_latest_data, on=["date", "name", "date_updated"], how="inner")
+    df_latest = df.merge(
+        cte_latest_data, on=["date", "name", "date_updated"], how="inner"
+    )
 
     return df_latest
 
@@ -106,7 +108,9 @@ def run(event, context):
         Body=parquet_buffer.getvalue(),
     )
 
-    df_parquet.to_parquet(f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet")
+    df_parquet.to_parquet(
+        f"s3://{bucket}/parquets/{file_name}.parquet", engine="fastparquet"
+    )
 
     logging.info("Creating latest dataset")
     df_latest = create_latest_health_dataset(bucket)[df_cols]

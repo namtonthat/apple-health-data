@@ -1,6 +1,7 @@
 """
 Datamodels used in the project
 """
+
 from pydantic import validate_arguments
 from dataclasses import dataclass, field
 from typing import Optional
@@ -64,6 +65,7 @@ class AppleHealthData:
 @dataclass
 class Time:
     "A basic time object in hours"
+
     time: Optional[float] = field(default=0)
     timeInMinutes: Optional[float] = field(default=0)
 
@@ -90,11 +92,13 @@ class Time:
     def title_minutes_only(self) -> str:
         title = f"{self.minutes}m"
         return title
-    
+
+
 @validate_arguments
 @dataclass
 class Macros:
     "A basic food object"
+
     carbohydrates: Optional[float] = field(default=0)
     protein: Optional[float] = field(default=0)
     total_fat: Optional[float] = field(default=0)
@@ -135,6 +139,7 @@ class Macros:
 @dataclass
 class Dailys:
     "A basic daily event"
+
     apple_exercise_time: Optional[float] = field(default=0)
     mindful_minutes: Optional[float] = field(default=0)
     step_count: Optional[float] = field(default=0)
@@ -167,7 +172,7 @@ class Dailys:
         if self.weight_body_mass != 0:
             w_description = f"⚖️ Weight: {self.weight_body_mass:.0f} kg"
             return w_description
-        else: 
+        else:
             return ""
 
     @property
@@ -211,6 +216,7 @@ class Dailys:
 @dataclass
 class Sleep:
     "A basic sleep object"
+
     sleep_analysis_asleep: Optional[float] = field(default=0)
     sleep_analysis_inBed: Optional[float] = field(default=0)
     sleep_analysis_sleepStart: Optional[str] = field(default="")

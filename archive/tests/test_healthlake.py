@@ -32,4 +32,6 @@ def test_sync_apple_health_data(mocker, raw_data_fixture):
     json.loads.assert_called_once_with(expected_data)
 
     # Verify the requests.post call
-    requests.post.assert_called_once_with("http://localhost:8082/syncs", json=expected_data)
+    requests.post.assert_called_once_with(
+        "http://localhost:8082/syncs", json=expected_data
+    )

@@ -144,4 +144,6 @@ def syncs():
     workouts = transform_workouts(raw_data)
     store_workouts(workouts)
 
-    return flask.jsonify(success=True, message="Successfully received and stored sync data.")
+    return flask.jsonify(
+        success=True, message="Successfully received and stored sync data."
+    )
