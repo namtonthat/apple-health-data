@@ -1,0 +1,10 @@
+aws:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "dbt.duckdb"
+      extensions:
+        - httpfs
+        - parquet
+      use_credential_provider: aws

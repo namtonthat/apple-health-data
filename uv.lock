@@ -1,6 +1,6 @@
 version = 1
 revision = 1
-requires-python = ">=3.13.2"
+requires-python = ">=3.13.0"
 
 [[package]]
 name = "agate"
@@ -37,6 +37,7 @@ dependencies = [
     { name = "aws-lambda-powertools" },
     { name = "boto3" },
     { name = "dbt-core" },
+    { name = "dbt-duckdb" },
     { name = "duckdb" },
     { name = "ics" },
     { name = "polars" },
@@ -52,6 +53,7 @@ requires-dist = [
     { name = "aws-lambda-powertools", specifier = ">=3.8.0" },
     { name = "boto3", specifier = ">=1.37.9" },
     { name = "dbt-core", specifier = ">=1.9.3" },
+    { name = "dbt-duckdb", specifier = ">=1.9.2" },
     { name = "duckdb", specifier = ">=1.2.1" },
     { name = "ics", specifier = ">=0.7.2" },
     { name = "polars", specifier = ">=1.24.0" },
@@ -269,6 +271,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d2/df/44e62ac9525c3de15cca87822517252f2b5ff37edc46f734c148254608a4/dbt_core-1.9.3.tar.gz", hash = "sha256:f02aa336721e7ff7beae86b8269d0c81290e36aa1126dc6d7b52c327de8c94af", size = 867021 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/af/4d/7d9204669bbe90b8e9666893ef9267535082a9f66e6a060ea2b701e1f01c/dbt_core-1.9.3-py3-none-any.whl", hash = "sha256:cd1c7d379f43f8c7914798041bf5062af0070261dabb148775d77c62733bc5e5", size = 946057 },
+]
+
+[[package]]
+name = "dbt-duckdb"
+version = "1.9.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dbt-adapters" },
+    { name = "dbt-common" },
+    { name = "dbt-core" },
+    { name = "duckdb" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/70/51/047465e84f8b75684a6d3554edd72aa80386393b0258d8a76d07fd36378a/dbt_duckdb-1.9.2.tar.gz", hash = "sha256:11308af4ad567b4fac0417fc2adfcb85b7021f92dff2b441bca30785f292f933", size = 98530 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/ca/86bfe0177e0d0f50ddd7c1a35ad20922abc8d23be8b515956fcbc20862a0/dbt_duckdb-1.9.2-py3-none-any.whl", hash = "sha256:ce8b0781b84feb386e35f58b7538b7e1b78f8c0b2c21067f81404c4bf67bb523", size = 64705 },
 ]
 
 [[package]]
