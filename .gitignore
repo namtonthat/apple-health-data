@@ -11,4 +11,4 @@ outputs/
 *.ipynb
 
 # terraform
-lambda/.terraform/*
+*/.terraform/*
