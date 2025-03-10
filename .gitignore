@@ -7,9 +7,8 @@ __pycache__/
 outputs/
 
 # files
-.serverless
-package-lock.json
-package.json
 .DS_Store
 *.ipynb
 
+# terraform
+lambda/.terraform/*

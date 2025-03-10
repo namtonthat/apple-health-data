@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "lambda_ingest_basic_execution" {
 resource "aws_iam_policy" "lambda_ingest_s3_policy" {
   name        = "lambda_ingest_s3_policy"
   description = "Allow ingest lambda to put objects in S3 under landing/"
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
       Effect   = "Allow",
@@ -110,9 +110,9 @@ resource "aws_iam_role_policy_attachment" "lambda_dbt_basic_execution" {
 resource "null_resource" "build_push_ingest" {
   # Trigger rebuild if Dockerfile, pyproject.toml, or ingest_lambda.py changes.
   triggers = {
-    dockerfile_hash = filesha256("lambda/Dockerfile")
-    pyproject_hash  = filesha256("lambda/pyproject.toml")
-    code_hash       = filesha256("lambda/ingest_lambda.py")
+    dockerfile_hash = filesha256("Dockerfile")
+    pyproject_hash  = filesha256("../pyproject.toml")
+    code_hash       = filesha256("ingest_lambda.py")
   }
 
   provisioner "local-exec" {
@@ -130,9 +130,9 @@ resource "null_resource" "build_push_ingest" {
 ## DBT Lambda Image
 resource "null_resource" "build_push_dbt" {
   triggers = {
-    dockerfile_hash = filesha256("lambda/Dockerfile")
-    pyproject_hash  = filesha256("lambda/pyproject.toml")
-    code_hash       = filesha256("lambda/dbt_lambda.py")
+    dockerfile_hash = filesha256("Dockerfile")
+    pyproject_hash  = filesha256("../pyproject.toml")
+    code_hash       = filesha256("dbt_lambda.py")
   }
 
   provisioner "local-exec" {
