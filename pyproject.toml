@@ -2,3 +2,12 @@
 name = "apple-health-calendar"
 dynamic = ['version']
 requires-python = ">=3.13.1"
+dependencies = [
+    "dbt>=1.0.0.38.30",
+    "ics>=0.7.2",
+    "polars>=1.24.0",
+    "pydantic>=2.10.6",
+    "pytest>=8.3.5",
+    "pyyaml>=6.0.2",
+    "ruff>=0.9.10",
+]
