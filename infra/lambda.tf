@@ -6,13 +6,13 @@ resource "null_resource" "build_push_ingest" {
   triggers = {
     dockerfile_hash = filesha256("../ingest/Dockerfile")
     pyproject_hash  = filesha256("../pyproject.toml")
-    code_hash       = filesha256("../ingest/ingest_lambda.py")
+    code_hash       = filesha256("../ingest/lambda.py")
   }
 
   provisioner "local-exec" {
     command = <<EOT
       aws ecr get-login-password --region ${var.aws_region} | podman login --username AWS --password-stdin ${aws_ecr_repository.ingest_repo.repository_url}
-      podman buildx build --build-arg HANDLER_FILE=ingest_lambda.py -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ../ingest
+      podman build -f ../ingest/Dockerfile --build-arg HANDLER_FILE=lambda_code/ingest_lambda.py -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ..
       podman push ${aws_ecr_repository.ingest_repo.repository_url}:latest
     EOT
     environment = {
@@ -20,7 +20,6 @@ resource "null_resource" "build_push_ingest" {
     }
   }
 }
-
 resource "aws_lambda_function" "ingest_lambda" {
   function_name = "ingest_health_data"
   package_type  = "Image"

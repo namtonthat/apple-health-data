@@ -2,8 +2,7 @@
 FROM python:3.13.1-slim
 
 # Set the Lambda task root directory
-ENV LAMBDA_TASK_ROOT=/var/task
-WORKDIR ${LAMBDA_TASK_ROOT}
+WORKDIR /var/task
 
 # Copy dependency definition
 COPY pyproject.toml .
@@ -15,8 +14,6 @@ RUN pip install uv && \
   uv sync
 
 # Use a build argument to specify which handler file to use (e.g., ingest_lambda.py or dbt_lambda.py)
-ARG HANDLER_FILE
-COPY ${HANDLER_FILE} handler.py
+COPY ingest/lambda.py handler.py
 
-# Define the command to run your Lambda function; expects a function "handler" in handler.py
-CMD ["handler.handler"]
+CMD [".venv/bin/python", "-m", "handler", "handler"]

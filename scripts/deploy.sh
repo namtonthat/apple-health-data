@@ -15,5 +15,9 @@ tofu init --upgrade
 echo "planning"
 tofu plan
 
+echo "run podman"
+podman machine init
+podman machine start
+
 # echo "applying"
 # tofu apply -auto-approve
