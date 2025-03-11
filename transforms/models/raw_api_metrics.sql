@@ -17,4 +17,4 @@ with raw_api_metrics as (
 
 select *
 from raw_api_metrics
-order by metric_date asc, metric_name asc;
+order by metric_date asc, metric_name asc
