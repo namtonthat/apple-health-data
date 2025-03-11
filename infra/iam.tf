@@ -51,6 +51,3 @@ resource "aws_iam_role_policy_attachment" "lambda_dbt_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-
-
-
