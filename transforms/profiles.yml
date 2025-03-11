@@ -1,7 +1,7 @@
 aws:
-  target: dev
+  target: prod
   outputs:
-    dev:
+    prod:
       type: duckdb
       path: "dbt.duckdb"
       extensions:
