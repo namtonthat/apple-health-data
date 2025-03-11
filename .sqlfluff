@@ -39,5 +39,5 @@ capitalisation_policy = lower
 [sqlfluff:rules:capitalisation.literals]
 capitalisation_policy = lower
 
-[sqlfluff:rules:ambiguous.column_references]  # Number in group by
-group_by_and_order_by_style = implicit
+[sqlfluff:rules:ambiguous.column_references]  
+group_by_and_order_by_style = explicit
