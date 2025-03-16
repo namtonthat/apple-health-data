@@ -1,13 +1,14 @@
 {{
     config(
         post_hook=[
-            "COPY {{ this }} TO 's3://{{ var('s3_bucket') }}/raw/raw_api_metrics.parquet'"
+            "COPY {{ this }} TO 's3://{{ var('s3_bucket') }}/raw/api_metrics.parquet'"
         ]
     )
 }}
 
 with raw_api_metrics as (
     select
+        load_time,
         cast(unnest(data_fields).date as date) as metric_date,
         metric_name,
         units,
@@ -17,4 +18,4 @@ with raw_api_metrics as (
 
 select *
 from raw_api_metrics
-order by metric_date asc, metric_name asc
+order by load_time desc, metric_date asc, metric_name asc

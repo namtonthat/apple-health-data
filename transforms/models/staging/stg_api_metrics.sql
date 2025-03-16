@@ -11,7 +11,7 @@ unnested_data as (
 )
 
 select
-    from_unixtime(load_time) as load_time,
+    cast(load_time as timestamp) as load_time,
     struct_extract(data_metrics, 'data') as data_fields,
     struct_extract(data_metrics, 'name') as metric_name,
     struct_extract(data_metrics, 'units') as units

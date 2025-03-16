@@ -6,6 +6,7 @@ data "aws_ecr_image" "latest_image" {
   repository_name = aws_ecr_repository.ingest_repo.name
   image_tag       = "latest"
 }
+
 resource "null_resource" "build_push_ingest" {
   triggers = {
     dockerfile_hash = filesha256("../ingest/Dockerfile")
@@ -16,8 +17,8 @@ resource "null_resource" "build_push_ingest" {
   provisioner "local-exec" {
     command = <<EOT
       aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.ingest_repo.repository_url}
-      docker build --platform linux/arm64 -f ../ingest/Dockerfile -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ..
-      docker push ${aws_ecr_repository.ingest_repo.repository_url}:latest
+      podman build --platform linux/arm64 -f ../ingest/Dockerfile -t ${aws_ecr_repository.ingest_repo.repository_url}:latest ..
+      podman push ${aws_ecr_repository.ingest_repo.repository_url}:latest
     EOT
     environment = {
       aws_region = var.aws_region
