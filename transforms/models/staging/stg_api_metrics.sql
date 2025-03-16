@@ -5,14 +5,13 @@ with raw_data as (
 
 unnested_data as (
     select
-        raw_data.load_date,
+        raw_data.load_time,
         unnest(data.metrics) as data_metrics
     from raw_data
-
 )
 
 select
-    load_date,
+    from_unixtime(load_time) as load_time,
     struct_extract(data_metrics, 'data') as data_fields,
     struct_extract(data_metrics, 'name') as metric_name,
     struct_extract(data_metrics, 'units') as units
