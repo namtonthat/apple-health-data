@@ -4,18 +4,17 @@ version = "0.2.0"
 requires-python = ">=3.13.0"
 dependencies = [
   "aws-lambda-powertools>=3.8.0",
-  "boto3>=1.37.9",
-  "dbt-core>=1.9.3",
-  "dbt-duckdb>=1.9.2",
-  "duckdb>=1.2.1",
   "ics>=0.7.2",
   "pip>=25.0.1",
   "polars>=1.24.0",
   "pre-commit>=4.1.0",
   "pyarrow>=19.0.1",
   "pydantic>=2.10.6",
-  "pytest>=8.3.5",
   "pyyaml>=6.0.2",
   "ruff>=0.9.10",
   "sqlfluff-templater-dbt>=3.3.1",
 ]
+
+[dependency-groups]
+dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
+test = ["pytest"]

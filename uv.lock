@@ -35,40 +35,50 @@ version = "0.2.0"
 source = { virtual = "." }
 dependencies = [
     { name = "aws-lambda-powertools" },
-    { name = "boto3" },
-    { name = "dbt-core" },
-    { name = "dbt-duckdb" },
-    { name = "duckdb" },
     { name = "ics" },
     { name = "pip" },
     { name = "polars" },
     { name = "pre-commit" },
     { name = "pyarrow" },
     { name = "pydantic" },
-    { name = "pytest" },
     { name = "pyyaml" },
     { name = "ruff" },
     { name = "sqlfluff-templater-dbt" },
 ]
 
+[package.dev-dependencies]
+dbt = [
+    { name = "boto3" },
+    { name = "dbt-core" },
+    { name = "dbt-duckdb" },
+    { name = "duckdb" },
+]
+test = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "aws-lambda-powertools", specifier = ">=3.8.0" },
-    { name = "boto3", specifier = ">=1.37.9" },
-    { name = "dbt-core", specifier = ">=1.9.3" },
-    { name = "dbt-duckdb", specifier = ">=1.9.2" },
-    { name = "duckdb", specifier = ">=1.2.1" },
     { name = "ics", specifier = ">=0.7.2" },
     { name = "pip", specifier = ">=25.0.1" },
     { name = "polars", specifier = ">=1.24.0" },
     { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "pyarrow", specifier = ">=19.0.1" },
     { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "pytest", specifier = ">=8.3.5" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "ruff", specifier = ">=0.9.10" },
     { name = "sqlfluff-templater-dbt", specifier = ">=3.3.1" },
 ]
+
+[package.metadata.requires-dev]
+dbt = [
+    { name = "boto3", specifier = ">=1.37.9" },
+    { name = "dbt-core", specifier = ">=1.9.3" },
+    { name = "dbt-duckdb", specifier = ">=1.9.2" },
+    { name = "duckdb", specifier = ">=1.2.1" },
+]
+test = [{ name = "pytest" }]
 
 [[package]]
 name = "arrow"
