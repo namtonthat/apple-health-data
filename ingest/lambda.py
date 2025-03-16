@@ -19,8 +19,9 @@ def ingest():
         event_data = app.current_event.json_body
         logger.info("Received data", extra=event_data)
 
-        # Generate a unique key (e.g., using a timestamp)
-        key = f"landing/{int(time.time())}.json"
+        load_date = int(time.time())
+        event_data["load_date"] = load_date
+        key = f"landing/{load_date}.json"
         s3_client.put_object(Bucket=BUCKET, Key=key, Body=json.dumps(event_data))
 
         return {"message": f"Data saved to S3 at {key}"}
