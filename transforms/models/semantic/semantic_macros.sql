@@ -1,6 +1,6 @@
 with macros as (
     select *
-    from {{ ref('raw_api_metrics') }}
+    from {{ ref('raw_latest_api_metrics') }}
     where metric_name in (
         'carbohydrates',
         'fiber',
@@ -14,14 +14,5 @@ select
     metric_name,
     units,
     quantity
-from (
-    select
-        m.*,
-        row_number() over (
-            partition by m.metric_name, m.metric_date
-            order by m.load_time desc
-        ) as rn
-    from macros as m
-) as t
-where rn = 1
+from macros
 order by metric_date desc, metric_name asc

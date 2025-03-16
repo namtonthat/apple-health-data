@@ -16,3 +16,4 @@ select
     struct_extract(data_metrics, 'name') as metric_name,
     struct_extract(data_metrics, 'units') as units
 from unnested_data
+order by load_time desc
