@@ -4,10 +4,15 @@ with raw_data as (
 ),
 
 unnested_data as (
-    select unnest(data.metrics) as data_metrics from raw_data
+    select
+        raw_data.load_date,
+        unnest(data.metrics) as data_metrics
+    from raw_data
+
 )
 
 select
+    load_date,
     struct_extract(data_metrics, 'data') as data_fields,
     struct_extract(data_metrics, 'name') as metric_name,
     struct_extract(data_metrics, 'units') as units
