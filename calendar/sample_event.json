@@ -6,7 +6,7 @@
           "name": "api-health-data-ntonthat"
         },
         "object": {
-          "key": "raw/raw_api_metrics.parquet"
+          "key": "raw/latest_api_metrics.parquet"
         }
       }
     }

@@ -18,6 +18,7 @@ from models import (
 import conf
 
 # Set up logging
+# logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
 s3 = boto3.client("s3")
@@ -49,7 +50,7 @@ def get_latest_health_data(bucket: str, key: str) -> pl.DataFrame:
 
 def collect_event_stats(
     stats_df: pl.DataFrame, column_names: list[str]
-) -> dict[str, Any]:
+) -> pl.DataFrame:
     """
     Select and filter the DataFrame to only include rows with metric_name in column_names.
     Then, return a dictionary containing:
@@ -63,7 +64,8 @@ def collect_event_stats(
         pl.col("metric_name").is_in(column_names)
     ).select(["metric_date", "metric_name", "quantity"])
     if filtered.is_empty():
-        return {}
+        logging.warning("Empty")
+        return pl.DataFrame()
 
     return filtered
 
@@ -137,12 +139,12 @@ def create_day_events(
     day_events: list[Event] = []
     for group, col_names in object_mapping.items():
         logging.info("Creating %s event", group)
-        stats_dict = collect_event_stats(stats_df=stats, column_names=col_names)
-        logging.info("Object args: %s", stats_dict)
-        if stats_dict:
+        stats_df = collect_event_stats(stats_df=stats, column_names=col_names)
+        logging.debug("stats_df: %s", stats_df)
+        if stats_df.is_empty():
             event_creator = EVENT_CREATORS.get(group)
             if event_creator:
-                event = event_creator.create_from_stats(stats_dict, event_date)
+                event = event_creator.create_from_stats(stats_df, event_date)
                 day_events.append(event)
             else:
                 logging.warning("No event creator defined for group: %s", group)

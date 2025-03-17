@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from datetime import date
-from typing import Any
 from ics import Event
 from pydantic import BaseModel
+import polars as pl
 
 
 class AppleHealthEvent(BaseModel):
@@ -34,7 +34,7 @@ class AppleHealthEvent(BaseModel):
 class BaseHealthEventCreator(ABC):
     @classmethod
     @abstractmethod
-    def create_from_stats(cls, stats: dict[str, Any], event_date: str) -> Event:
+    def create_from_stats(cls, stats: pl.Dataframe, event_date: str) -> Event:
         """
         Create and return an ICS Event based on the provided stats and event_date.
         """
@@ -43,7 +43,7 @@ class BaseHealthEventCreator(ABC):
 
 class FoodEvent(BaseHealthEventCreator):
     @classmethod
-    def create_from_stats(cls, stats: dict[str, Any], event_date: str) -> Event:
+    def create_from_stats(cls, stats: pl.DataFrame, event_date: str) -> Event:
         # For demonstration, assume stats contains a 'calories' key.
         title = f"Food: {stats.get('calories', 0)} cals"
         description = "Food event details: " + ", ".join(
@@ -59,7 +59,7 @@ class FoodEvent(BaseHealthEventCreator):
 
 class ActivityEvent(BaseHealthEventCreator):
     @classmethod
-    def create_from_stats(cls, stats: dict[str, Any], event_date: str) -> Event:
+    def create_from_stats(cls, stats: pl.DataFrame, event_date: str) -> Event:
         title = f"Activity: {stats.get('duration', 0)} mins"
         description = "Activity event details: " + ", ".join(
             f"{k}: {v}" for k, v in stats.items()
@@ -74,7 +74,7 @@ class ActivityEvent(BaseHealthEventCreator):
 
 class SleepEvent(BaseHealthEventCreator):
     @classmethod
-    def create_from_stats(cls, stats: dict[str, Any], event_date: str) -> Event:
+    def create_from_stats(cls, stats: pl.DataFrame, event_date: str) -> Event:
         title = f"Sleep: {stats.get('sleep_hours', 0)} hrs"
         description = "Sleep event details: " + ", ".join(
             f"{k}: {v}" for k, v in stats.items()
@@ -89,7 +89,7 @@ class SleepEvent(BaseHealthEventCreator):
 
 class DailysEvent(BaseHealthEventCreator):
     @classmethod
-    def create_from_stats(cls, stats: dict[str, Any], event_date: str) -> Event:
+    def create_from_stats(cls, stats: pl.DataFrame, event_date: str) -> Event:
         """
         Creates an event for daily metrics that might include multiple measurements.
         Expected keys (example):
