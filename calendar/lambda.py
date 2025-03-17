@@ -1,12 +1,18 @@
+import logging
 import polars as pl
 import yaml
 import boto3
 from ics import Calendar, Event
 from datetime import datetime, time
 from dataclasses import dataclass, field
-from typing import Optional, Dict
 from pathlib import Path
+from typing import Optional
 import conf
+
+# Set up logging configuration
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 EVENT_FILE_NAME = "event_formats.yaml"
 
@@ -43,7 +49,7 @@ class ConfigManager:
     """Manages event configurations from YAML"""
 
     config_path: str
-    event_configs: Dict[str, EventConfig] = field(default_factory=dict)
+    event_configs: dict[str, EventConfig] = field(default_factory=dict)
 
     def get_config(self, group_name: str) -> EventConfig:
         """Get configuration for a specific group, loading if needed"""
@@ -62,7 +68,7 @@ class DataLoader:
     def load_from_s3(s3_bucket: str, s3_path: str) -> pl.DataFrame:
         """Load a Parquet file from S3"""
         s3_uri = f"s3://{s3_bucket}/{s3_path}"
-        print(f"Reading {s3_uri}")
+        logging.info(f"Reading {s3_uri}")
         return pl.read_parquet(s3_uri)
 
 
@@ -81,8 +87,8 @@ class EventFactory:
         # Check if all required metrics are available
         missing_metrics = [m for m in config.required_metrics if m not in metrics]
         if missing_metrics:
-            print(
-                f"Warning: Missing required metrics for {config.name} on {date}: {missing_metrics}"
+            logging.warning(
+                f"Missing required metrics for {config.name} on {date}: {missing_metrics}"
             )
             return None
 
@@ -93,14 +99,14 @@ class EventFactory:
         try:
             event.name = config.title_template.format(**metrics)
         except KeyError as e:
-            print(f"Warning: Missing metric {e} for title template on {date}")
+            logging.warning(f"Missing metric {e} for title template on {date}")
             event.name = f"{config.name.capitalize()} Summary for {date}"
 
         # Set description using template
         try:
             event.description = config.description_template.format(**metrics)
         except KeyError as e:
-            print(f"Warning: Missing metric {e} for description template on {date}")
+            logging.warning(f"Missing metric {e} for description template on {date}")
             event.description = f"Data for {date}"
 
         # Set date
@@ -152,7 +158,7 @@ class CalendarStorage:
         with open(file_path, "w") as f:
             f.write(ics_content)
 
-        print(f"Calendar saved locally to {filename}")
+        logging.info(f"Calendar saved locally to {filename}")
         return ics_content
 
     def save_to_s3(
@@ -173,7 +179,7 @@ class CalendarStorage:
             str: Public URL to the calendar file
         """
         if not self.s3_bucket:
-            print("No S3 bucket configured, skipping S3 upload")
+            logging.info("No S3 bucket configured, skipping S3 upload")
             return None
 
         # Generate ICS content if not provided
@@ -184,7 +190,7 @@ class CalendarStorage:
             s3 = boto3.client("s3")
             s3_key = f"calendar/{Path(filename).name}"
 
-            print(f"Uploading calendar to s3://{self.s3_bucket}/{s3_key}")
+            logging.info(f"Uploading calendar to s3://{self.s3_bucket}/{s3_key}")
 
             # Upload with public-read ACL
             s3.put_object(
@@ -197,11 +203,11 @@ class CalendarStorage:
 
             # Generate the public URL
             public_url = f"https://{self.s3_bucket}.s3.amazonaws.com/{s3_key}"
-            print(f"Calendar publicly available at: {public_url}")
+            logging.info(f"Calendar publicly available at: {public_url}")
 
             return public_url
         except Exception as e:
-            print(f"Error uploading calendar to S3: {e}")
+            logging.error(f"Error uploading calendar to S3: {e}")
             return None
 
 
@@ -238,11 +244,13 @@ class CalendarGenerator:
                 if event:
                     self.calendar.events.add(event)
 
-            print(f"Added {len(self.calendar.events)} {group_name} events to calendar")
+            logging.info(
+                f"Added {len(self.calendar.events)} {group_name} events to calendar"
+            )
         except Exception as e:
-            print(f"Error adding {group_name} events: {e}")
+            logging.error(f"Error adding {group_name} events: {e}")
 
-    def save_calendar(self, filename: str, save_to_s3: bool = False) -> None:
+    def save_calendar(self, filename: str, save_to_s3: bool = False) -> int:
         """Save the calendar locally and optionally to S3"""
         # Save locally
         ics_content = self.storage.save_local(self.calendar, filename)
@@ -251,7 +259,11 @@ class CalendarGenerator:
         if save_to_s3:
             self.storage.save_to_s3(self.calendar, filename, ics_content)
 
-        print(f"Calendar saved with {len(self.calendar.events)} events")
+        # Count events from the current calendar
+        event_count = len(self.calendar.events)
+        logging.info(f"Calendar saved with {event_count} events")
+
+        return event_count
 
 
 if __name__ == "__main__":
