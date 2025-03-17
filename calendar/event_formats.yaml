@@ -1,6 +1,6 @@
 groups:
   nutrition:
-    title: "🍽️ {calories} cals | ({carbohydrates} C, {protein} P, {total_fat} F)"
+    title: "🍽️ {calories:,.0f} cals | ({carbohydrates:,.0f} C, {protein:,.0f} P, {total_fat:,.0f} F)"
     description: |
       🔥 {active_energy:.0f} kcal
       🍽️ {calories:.0f} kcal
@@ -15,7 +15,7 @@ groups:
       - active_energy
 
   activity:
-    title: "🚴‍♂️ {apple_exercise_time}m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
+    title: "🚴‍♂️ {apple_exercise_time:.0f}m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
     description: |
       🚴‍♂️ Activity: {apple_exercise_time}m active
       👣 Steps: {step_count:,.0f} steps
