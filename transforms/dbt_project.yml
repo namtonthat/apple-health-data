@@ -31,6 +31,7 @@ clean-targets: # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   transforms:
+    # +post-hook: "COPY {{ this }} TO 's3://{{ var('s3_bucket') }}/{{ this.schema }}/{{ this.identifier }}.parquet'"
     raw:
       +schema: raw
     semantic:

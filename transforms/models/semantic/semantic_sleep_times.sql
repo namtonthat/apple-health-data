@@ -1,17 +1,17 @@
 with sleep_start as (
     select
-        cast(unnest(data_fields).date as date) as metric_date,
+        rs.metric_date,
         'sleep_start' as metric_name,
-        unnest(data_fields).sleepstart as quantity
-    from {{ ref('raw_sleep') }}
+        data_fields.sleepstart as quantity
+    from {{ ref('raw_sleep') }} as rs
 ),
 
 sleep_end as (
     select
-        cast(unnest(data_fields).date as date) as metric_date,
+        rs.metric_date,
         'sleep_end' as metric_name,
-        unnest(data_fields).sleepend as quantity
-    from {{ ref('raw_sleep') }}
+        data_fields.sleepend as quantity
+    from {{ ref('raw_sleep') }} as rs
 ),
 
 all_sleep_data as (
@@ -21,9 +21,9 @@ all_sleep_data as (
 )
 
 select
-    metric_date,
-    metric_name,
+    asd.metric_date,
+    asd.metric_name,
     'timestamp with timezone' as units,
-    strptime(quantity, '%Y-%m-%d %H:%M:%S %z') as sleep_times
-from all_sleep_data
-order by metric_date asc, metric_name asc
+    strptime(asd.quantity, '%Y-%m-%d %H:%M:%S %z') as sleep_times
+from all_sleep_data as asd
+order by asd.metric_date asc, asd.metric_name asc

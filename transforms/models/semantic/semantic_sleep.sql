@@ -2,29 +2,29 @@
 
 with in_bed as (
     select
-        cast(unnest(data_fields).date as date) as metric_date,
+        rs.metric_date,
         'in_bed' as metric_name,
-        units,
-        unnest(data_fields).inbed as quantity
-    from {{ ref('raw_sleep') }}
+        rs.units,
+        data_fields.inbed as quantity
+    from {{ ref('raw_sleep') }} as rs
 ),
 
 asleep as (
     select
-        cast(unnest(data_fields).date as date) as metric_date,
+        rs.metric_date,
         'asleep' as metric_name,
-        units,
-        unnest(data_fields).asleep as quantity
-    from {{ ref('raw_sleep') }}
+        rs.units,
+        data_fields.asleep as quantity
+    from {{ ref('raw_sleep') }} as rs
 ),
 
 deep as (
     select
-        cast(unnest(data_fields).date as date) as metric_date,
+        rs.metric_date,
         'deep_sleep' as metric_name,
-        units,
-        unnest(data_fields).deep as quantity
-    from {{ ref('raw_sleep') }}
+        rs.units,
+        data_fields.deep as quantity
+    from {{ ref('raw_sleep') }} as rs
 ),
 
 all_sleep_data as (
@@ -36,10 +36,10 @@ all_sleep_data as (
 )
 
 select
-    metric_date,
-    metric_name,
-    units,
-    round(quantity, 1) as quantity
-from all_sleep_data
+    asd.metric_date,
+    asd.metric_name,
+    asd.units,
+    round(asd.quantity, 1) as quantity
+from all_sleep_data as asd
 
-order by metric_date asc, metric_name asc
+order by asd.metric_date asc, asd.metric_name asc
