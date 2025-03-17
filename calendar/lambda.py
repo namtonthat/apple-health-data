@@ -232,20 +232,13 @@ class CalendarGenerator:
             dates = df.select("metric_date").unique().to_series().to_list()
 
             # Create events for each date
-            events_added = 0
             for date in dates:
-                # Filter data for this date
                 date_df = df.filter(pl.col("metric_date") == date)
-
-                # Create event
                 event = EventFactory.create_event_for_date(date, date_df, config)
-
-                # Add to calendar if created successfully
                 if event:
                     self.calendar.events.add(event)
-                    events_added += 1
 
-            print(f"Added {events_added} {group_name} events to calendar")
+            print(f"Added {len(self.calendar.events)} {group_name} events to calendar")
         except Exception as e:
             print(f"Error adding {group_name} events: {e}")
 
