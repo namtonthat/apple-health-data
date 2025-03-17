@@ -20,4 +20,4 @@ dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
 test = ["pytest"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
+select = ["E", "F", "G", "I", "PT", "PTH", "RUF", "SIM", "T20"]

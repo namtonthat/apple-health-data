@@ -28,14 +28,14 @@ class EventConfig:
     required_metrics: list[str]
 
     @classmethod
-    def from_yaml(cls, yaml_path: str, group_name: str) -> "EventConfig":
+    def from_yaml(cls, yaml_path: Path, group_name: str) -> "EventConfig":
         """Load configuration from a YAML file for a specific group"""
-        with open(yaml_path, "r") as f:
+        with Path.open(yaml_path) as f:
             config = yaml.safe_load(f)
 
         group_config = config.get("groups", {}).get(group_name, {})
         if not group_config:
-            raise ValueError(f"Group '{group_name}' not found in config")
+            raise ValueError("Group '%s' not found in config" % group_name)
 
         return cls(
             name=group_name,
@@ -56,7 +56,7 @@ class ConfigManager:
         """Get configuration for a specific group, loading if needed"""
         if group_name not in self.event_configs:
             self.event_configs[group_name] = EventConfig.from_yaml(
-                self.config_path, group_name
+                Path(self.config_path), group_name
             )
         return self.event_configs[group_name]
 
@@ -68,8 +68,8 @@ class DataLoader:
     @staticmethod
     def load_from_s3(s3_bucket: str, s3_path: str) -> pl.DataFrame:
         """Load a Parquet file from S3"""
-        s3_uri = f"s3://{s3_bucket}/{s3_path}"
-        logging.info(f"Reading {s3_uri}")
+        s3_uri = "s3://%s/%s" % (s3_bucket, s3_path)
+        logging.info("Reading %s", s3_uri)
         return pl.read_parquet(s3_uri)
 
 
@@ -89,8 +89,10 @@ class EventFactory:
         missing_metrics = [m for m in config.required_metrics if m not in metrics]
         if missing_metrics:
             logging.warning(
-                f"""Missing required metrics for {config.name} 
-                on {date}: {missing_metrics}"""
+                "Missing required metrics for %s on %s: %s",
+                config.name,
+                date,
+                missing_metrics,
             )
             return None
 
@@ -101,15 +103,15 @@ class EventFactory:
         try:
             event.name = config.title_template.format(**metrics)
         except KeyError as e:
-            logging.warning(f"Missing metric {e} for title template on {date}")
-            event.name = f"{config.name.capitalize()} Summary for {date}"
+            logging.warning("Missing metric %s for title template on %s", e, date)
+            event.name = "%s Summary for %s" % (config.name.capitalize(), date)
 
         # Set description using template
         try:
             event.description = config.description_template.format(**metrics)
         except KeyError as e:
-            logging.warning(f"Missing metric {e} for description template on {date}")
-            event.description = f"Data for {date}"
+            logging.warning("Missing metric %s for description template on %s", e, date)
+            event.description = "Data for %s" % date
 
         # Set date
         event.begin = datetime.combine(date, time(0, 0))
@@ -157,18 +159,18 @@ class CalendarStorage:
         file_path = Path(filename)
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(file_path, "w") as f:
+        with Path.open(file_path, "w") as f:
             f.write(ics_content)
 
-        logging.info(f"Calendar saved locally to {filename}")
+        logging.info("Calendar saved locally to %s", filename)
         return ics_content
 
     def save_to_s3(
         self,
         calendar: Calendar,
         filename: str,
-        ics_content: str = None,
-    ) -> str:
+        ics_content: Optional[str] = None,
+    ) -> Optional[str]:
         """
         Upload calendar to S3 with public read access
 
@@ -190,9 +192,9 @@ class CalendarStorage:
 
         try:
             s3 = boto3.client("s3")
-            s3_key = f"calendar/{Path(filename).name}"
+            s3_key = "calendar/%s" % Path(filename).name
 
-            logging.info(f"Uploading calendar to s3://{self.s3_bucket}/{s3_key}")
+            logging.info("Uploading calendar to s3://%s/%s", self.s3_bucket, s3_key)
 
             # Upload with public-read ACL
             s3.put_object(
@@ -205,8 +207,12 @@ class CalendarStorage:
 
             # Build the public URL including region if provided
             if conf.aws_region:
-                public_url = f"https://{self.s3_bucket}.s3.{conf.aws_region}.amazonaws.com/{s3_key}"
-                logging.info(f"Calendar publicly available at: {public_url}")
+                public_url = "https://%s.s3.%s.amazonaws.com/%s" % (
+                    self.s3_bucket,
+                    conf.aws_region,
+                    s3_key,
+                )
+                logging.info("Calendar publicly available at: %s", public_url)
 
                 return public_url
             else:
@@ -214,7 +220,7 @@ class CalendarStorage:
                     "`aws_region` key is missing from config, cannot build public URL."
                 )
         except Exception as e:
-            logging.error(f"Error uploading calendar to S3: {e}")
+            logging.error("Error uploading calendar to S3: %s", e)
             return None
 
 
@@ -252,10 +258,10 @@ class CalendarGenerator:
                     self.calendar.events.add(event)
 
             logging.info(
-                f"Added {len(self.calendar.events)} {group_name} events to calendar"
+                "Added %s %s events to calendar", len(self.calendar.events), group_name
             )
         except Exception as e:
-            logging.error(f"Error adding {group_name} events: {e}")
+            logging.error("Error adding %s events: %s", group_name, e)
 
     def save_calendar(self, filename: str, save_to_s3: bool = False) -> int:
         """Save the calendar locally and optionally to S3"""
@@ -268,7 +274,7 @@ class CalendarGenerator:
 
         # Count events from the current calendar
         event_count = len(self.calendar.events)
-        logging.info(f"Calendar saved with {event_count} events")
+        logging.info("Calendar saved with %s events", event_count)
 
         return event_count
 
