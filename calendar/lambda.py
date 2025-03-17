@@ -7,7 +7,6 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict
 from pathlib import Path
 import conf
-import logging
 
 EVENT_FILE_NAME = "event_formats.yaml"
 
@@ -63,7 +62,7 @@ class DataLoader:
     def load_from_s3(s3_bucket: str, s3_path: str) -> pl.DataFrame:
         """Load a Parquet file from S3"""
         s3_uri = f"s3://{s3_bucket}/{s3_path}"
-        logging.info(f"Reading {s3_uri}")
+        print(f"Reading {s3_uri}")
         return pl.read_parquet(s3_uri)
 
 
@@ -82,7 +81,7 @@ class EventFactory:
         # Check if all required metrics are available
         missing_metrics = [m for m in config.required_metrics if m not in metrics]
         if missing_metrics:
-            logging.info(
+            print(
                 f"Warning: Missing required metrics for {config.name} on {date}: {missing_metrics}"
             )
             return None
@@ -94,21 +93,18 @@ class EventFactory:
         try:
             event.name = config.title_template.format(**metrics)
         except KeyError as e:
-            logging.info(f"Warning: Missing metric {e} for title template on {date}")
+            print(f"Warning: Missing metric {e} for title template on {date}")
             event.name = f"{config.name.capitalize()} Summary for {date}"
 
         # Set description using template
         try:
             event.description = config.description_template.format(**metrics)
         except KeyError as e:
-            logging.info(
-                f"Warning: Missing metric {e} for description template on {date}"
-            )
+            print(f"Warning: Missing metric {e} for description template on {date}")
             event.description = f"Data for {date}"
 
         # Set date
-        event_date = datetime.strptime(date, "%Y-%m-%d")
-        event.begin = datetime.combine(event_date, time(0, 0))
+        event.begin = datetime.combine(date, time(0, 0))
         event.make_all_day()
 
         return event
@@ -122,7 +118,19 @@ class EventFactory:
         rows = df.select(["metric_name", "quantity"]).to_dicts()
         for row in rows:
             metric_name = row["metric_name"]
-            metrics[metric_name] = row["quantity"]
+            # Try to convert to float for proper formatting
+            try:
+                # If the quantity is already a string with formatting, keep it as is
+                if isinstance(row["quantity"], str) and any(
+                    c in row["quantity"] for c in ["%", "AM", "PM"]
+                ):
+                    metrics[metric_name] = row["quantity"]
+                else:
+                    # Otherwise, convert to float for numeric formatting
+                    metrics[metric_name] = float(row["quantity"])
+            except (ValueError, TypeError):
+                # If conversion fails, keep the original value
+                metrics[metric_name] = row["quantity"]
 
         return metrics
 
@@ -144,16 +152,29 @@ class CalendarStorage:
         with open(file_path, "w") as f:
             f.write(ics_content)
 
-        logging.info(f"Calendar saved locally to {filename}")
+        print(f"Calendar saved locally to {filename}")
         return ics_content
 
     def save_to_s3(
-        self, calendar: Calendar, filename: str, ics_content: str = None
-    ) -> None:
-        """Upload calendar to S3"""
+        self,
+        calendar: Calendar,
+        filename: str,
+        ics_content: str = None,
+    ) -> str:
+        """
+        Upload calendar to S3 with public read access
+
+        Args:
+            calendar: Calendar object to save
+            filename: Output filename
+            ics_content: Optional pre-generated ICS content
+
+        Returns:
+            str: Public URL to the calendar file
+        """
         if not self.s3_bucket:
-            logging.info("No S3 bucket configured, skipping S3 upload")
-            return
+            print("No S3 bucket configured, skipping S3 upload")
+            return None
 
         # Generate ICS content if not provided
         if ics_content is None:
@@ -163,11 +184,25 @@ class CalendarStorage:
             s3 = boto3.client("s3")
             s3_key = f"calendar/{Path(filename).name}"
 
-            logging.info(f"Uploading calendar to s3://{self.s3_bucket}/{s3_key}")
-            s3.put_object(Bucket=self.s3_bucket, Key=s3_key, Body=ics_content)
-            logging.info("Successfully uploaded calendar to S3")
+            print(f"Uploading calendar to s3://{self.s3_bucket}/{s3_key}")
+
+            # Upload with public-read ACL
+            s3.put_object(
+                Bucket=self.s3_bucket,
+                Key=s3_key,
+                Body=ics_content,
+                ACL="public-read",  # Set public read access
+                ContentType="text/calendar",  # Set correct content type for .ics files
+            )
+
+            # Generate the public URL
+            public_url = f"https://{self.s3_bucket}.s3.amazonaws.com/{s3_key}"
+            print(f"Calendar publicly available at: {public_url}")
+
+            return public_url
         except Exception as e:
-            logging.info(f"Error uploading calendar to S3: {e}")
+            print(f"Error uploading calendar to S3: {e}")
+            return None
 
 
 @dataclass
@@ -210,9 +245,9 @@ class CalendarGenerator:
                     self.calendar.events.add(event)
                     events_added += 1
 
-            logging.info(f"Added {events_added} {group_name} events to calendar")
+            print(f"Added {events_added} {group_name} events to calendar")
         except Exception as e:
-            logging.info(f"Error adding {group_name} events: {e}")
+            print(f"Error adding {group_name} events: {e}")
 
     def save_calendar(self, filename: str, save_to_s3: bool = False) -> None:
         """Save the calendar locally and optionally to S3"""
@@ -223,7 +258,7 @@ class CalendarGenerator:
         if save_to_s3:
             self.storage.save_to_s3(self.calendar, filename, ics_content)
 
-        logging.info(f"Calendar saved with {len(self.calendar.events)} events")
+        print(f"Calendar saved with {len(self.calendar.events)} events")
 
 
 if __name__ == "__main__":
@@ -231,7 +266,7 @@ if __name__ == "__main__":
     s3_paths = {
         "nutrition": "semantic/macros.parquet",
         "activity": "semantic/activity.parquet",
-        "sleep": "semantic/sleep.parquet",
+        # "sleep": "semantic/sleep.parquet",
     }
 
     # Create calendar generator

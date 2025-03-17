@@ -1,4 +1,94 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250315
+DESCRIPTION:🔥 717 kcal\n🍽️ 2598 kcal\n🥞 364g C\, 126g P\, 71g F\n🍇 14 g\n
+SUMMARY:🍽️ 2\,598 cals | (364 C\, 126 P\, 71 F)
+UID:4d1baec3-a42b-49ec-9a71-ed66b9732ac5@4d1b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250316
+DESCRIPTION:🚴‍♂️ Activity: 35.0m active\n👣 Steps: 7\,848 steps\n⚖️ Weight: 73.2 kg\n
+SUMMARY:🚴‍♂️ 35m | 👣 7\,848 steps | ⚖️ 73.2 kg
+UID:838d5613-2cdd-489a-9341-cbd8d1bd944d@838d.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250312
+DESCRIPTION:🔥 493 kcal\n🍽️ 2329 kcal\n🥞 331g C\, 148g P\, 46g F\n🍇 43 g\n
+SUMMARY:🍽️ 2\,329 cals | (331 C\, 148 P\, 46 F)
+UID:f98b563c-05dd-438f-ae53-7c40ceac4a40@f98b.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250311
+DESCRIPTION:🔥 658 kcal\n🍽️ 2393 kcal\n🥞 335g C\, 107g P\, 70g F\n🍇 23 g\n
+SUMMARY:🍽️ 2\,393 cals | (335 C\, 107 P\, 70 F)
+UID:2517231b-5900-47d2-ab13-5371e24b62af@2517.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250310
+DESCRIPTION:🚴‍♂️ Activity: 50.0m active\n👣 Steps: 13\,474 steps\n⚖️ Weight: 72.4 kg\n
+SUMMARY:🚴‍♂️ 50m | 👣 13\,474 steps | ⚖️ 72.4 kg
+UID:35c82021-3820-4202-b342-526d20bf1a6e@35c8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250312
+DESCRIPTION:🚴‍♂️ Activity: 34.0m active\n👣 Steps: 9\,012 steps\n⚖️ Weight: 72.4 kg\n
+SUMMARY:🚴‍♂️ 34m | 👣 9\,012 steps | ⚖️ 72.4 kg
+UID:9f8550f8-5538-4afe-bebf-66f0e31f77de@9f85.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250314
+DESCRIPTION:🔥 608 kcal\n🍽️ 2330 kcal\n🥞 254g C\, 177g P\, 67g F\n🍇 49 g\n
+SUMMARY:🍽️ 2\,330 cals | (254 C\, 177 P\, 67 F)
+UID:cd6c6ea0-a082-4c7a-aea1-e9bc241ac9e5@cd6c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250313
+DESCRIPTION:🚴‍♂️ Activity: 82.0m active\n👣 Steps: 14\,542 steps\n⚖️ Weight: 73.7 kg\n
+SUMMARY:🚴‍♂️ 82m | 👣 14\,542 steps | ⚖️ 73.7 kg
+UID:15d278fb-61b6-491b-8324-20deb406cd2c@15d2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250313
+DESCRIPTION:🔥 668 kcal\n🍽️ 2036 kcal\n🥞 260g C\, 100g P\, 66g F\n🍇 52 g\n
+SUMMARY:🍽️ 2\,036 cals | (260 C\, 100 P\, 66 F)
+UID:90eb0468-cb73-414c-a3a0-df7817715a83@90eb.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250303
+DESCRIPTION:🚴‍♂️ Activity: 89.0m active\n👣 Steps: 14\,611 steps\n⚖️ Weight: 72.6 kg\n
+SUMMARY:🚴‍♂️ 89m | 👣 14\,611 steps | ⚖️ 72.6 kg
+UID:6ca45155-69e1-4609-99e4-29d770d92d00@6ca4.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250308
+DESCRIPTION:🚴‍♂️ Activity: 58.0m active\n👣 Steps: 11\,942 steps\n⚖️ Weight: 73.1 kg\n
+SUMMARY:🚴‍♂️ 58m | 👣 11\,942 steps | ⚖️ 73.1 kg
+UID:e88a4e00-dbf5-4a41-9493-e1c62ed43ea8@e88a.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250305
+DESCRIPTION:🚴‍♂️ Activity: 74.0m active\n👣 Steps: 13\,564 steps\n⚖️ Weight: 70.4 kg\n
+SUMMARY:🚴‍♂️ 74m | 👣 13\,564 steps | ⚖️ 70.4 kg
+UID:febf0ff9-2765-49a6-bc26-32dfc6a6ec8a@febf.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250309
+DESCRIPTION:🚴‍♂️ Activity: 64.0m active\n👣 Steps: 12\,605 steps\n⚖️ Weight: 72.9 kg\n
+SUMMARY:🚴‍♂️ 64m | 👣 12\,605 steps | ⚖️ 72.9 kg
+UID:59a2e944-843b-47c3-a7fb-5b6bfb5827c4@59a2.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250304
+DESCRIPTION:🚴‍♂️ Activity: 98.0m active\n👣 Steps: 8\,576 steps\n⚖️ Weight: 72.0 kg\n
+SUMMARY:🚴‍♂️ 98m | 👣 8\,576 steps | ⚖️ 72.0 kg
+UID:5af1e774-c332-4e9a-88e3-2f673f2b6530@5af1.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250316
+DESCRIPTION:🔥 477 kcal\n🍽️ 2074 kcal\n🥞 259g C\, 127g P\, 59g F\n🍇 52 g\n
+SUMMARY:🍽️ 2\,074 cals | (259 C\, 127 P\, 59 F)
+UID:6bab7799-aad3-4f5b-981d-9e5ca8f09903@6bab.org
+END:VEVENT
 END:VCALENDAR
