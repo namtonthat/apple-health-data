@@ -266,7 +266,7 @@ if __name__ == "__main__":
     s3_paths = {
         "nutrition": "semantic/macros.parquet",
         "activity": "semantic/activity.parquet",
-        "sleep": "semantic/sleep.parquet",
+        "sleep": "semantic/sleeps.parquet",
     }
 
     # Create calendar generator
