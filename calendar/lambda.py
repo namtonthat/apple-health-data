@@ -1,227 +1,228 @@
-import boto3
-import duckdb
 import polars as pl
 import yaml
-import logging
-import urllib.parse
-from typing import Any
-from pathlib import Path
-from pyarrow.lib import Table
 from ics import Calendar, Event
-from models import (
-    DailysEvent,
-    FoodEvent,
-    ActivityEvent,
-    SleepEvent,
-    BaseHealthEventCreator,
-)
+from datetime import datetime, time
+from dataclasses import dataclass
+from typing import Optional
 import conf
+import logging
 
-# Set up logging
-# logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.INFO)
-
-s3 = boto3.client("s3")
-
-# Globals
-COLUMN_MAPPING_FILE = "column-mapping.yaml"
-
-EVENT_CREATORS: dict[str, BaseHealthEventCreator] = {
-    "food": FoodEvent,
-    "activity": ActivityEvent,
-    "sleep": SleepEvent,
-    "dailys": DailysEvent,
-}
+# Global
+EVENT_FILE_NAME = "event_formats.yaml"
 
 
-def get_latest_health_data(bucket: str, key: str) -> pl.DataFrame:
-    """
-    Read a Parquet file from S3 using DuckDB and return a Polars DataFrame.
-    """
-    s3_path = f"s3://{bucket}/{key}"
-    con = duckdb.connect(database=":memory:")
-    con.execute("INSTALL httpfs;")
-    con.execute("LOAD httpfs;")
-    con.execute("CALL load_aws_credentials();")
-    query = f"SELECT * FROM read_parquet('{s3_path}')"
-    arrow_table: Table = con.execute(query).arrow()
-    return pl.from_arrow(arrow_table)
+@dataclass
+class EventConfig:
+    """Configuration for a specific event type"""
 
+    name: str
+    title_template: str
+    description_template: str
+    required_metrics: list[str]
 
-def collect_event_stats(
-    stats_df: pl.DataFrame, column_names: list[str]
-) -> pl.DataFrame:
-    """
-    Select and filter the DataFrame to only include rows with metric_name in column_names.
-    Then, return a dictionary containing:
-      - 'date': the common date (assumed identical across all filtered rows)
-      - 'metrics': a dictionary mapping each metric_name to its quantity.
-
-    This is similar to performing a SELECT date, metric_name, quantity FROM table WHERE metric_name IN (...)
-    """
-    # Filter the DataFrame for the desired metrics and select the relevant columns.
-    filtered: pl.Dataframe = stats_df.filter(
-        pl.col("metric_name").is_in(column_names)
-    ).select(["metric_date", "metric_name", "quantity"])
-    if filtered.is_empty():
-        logging.warning("Empty")
-        return pl.DataFrame()
-
-    return filtered
-
-
-class ICSOutputHandler:
-    """
-    Handles saving an ICS file locally and optionally uploading it to S3.
-    """
-
-    def __init__(
-        self, calendar_file_name: str, local_dir: Path = Path("outputs")
-    ) -> None:
-        self.calendar_file_name = calendar_file_name
-        self.local_dir = local_dir
-        self.local_path = self.local_dir / self.calendar_file_name
-        # Ensure the output directory exists
-        self.local_dir.mkdir(parents=True, exist_ok=True)
-        logging.info("Output directory set to: %s", self.local_dir)
-
-    def write_locally(self, cal: Calendar) -> Path:
+    @classmethod
+    def from_yaml(cls, yaml_path: str, group_name: str) -> "EventConfig":
         """
-        Writes the ICS file to the local outputs directory.
-        Returns the Path to the saved file.
-        """
-        try:
-            with self.local_path.open("w", encoding="utf-8") as f:
-                f.write(cal.serialize())
-            logging.info("ICS file successfully written locally to %s", self.local_path)
-        except Exception as e:
-            logging.error("Failed to write ICS locally: %s", e)
-            raise
-        return self.local_path
+        Load configuration from a YAML file for a specific group
 
-    def upload_to_s3(self, local_path: Path, bucket: str) -> str:
+        Args:
+            yaml_path: Path to YAML configuration file
+            group_name: Name of the group to load
+
+        Returns:
+            EventConfig: Configuration for the specified group
         """
-        Uploads the ICS file from local_path to S3 and returns the public URL.
+        with open(yaml_path, "r") as f:
+            config = yaml.safe_load(f)
+
+        group_config = config.get("groups", {}).get(group_name, {})
+        if not group_config:
+            raise ValueError(f"Group '{group_name}' not found in config")
+
+        return cls(
+            name=group_name,
+            title_template=group_config.get("title", ""),
+            description_template=group_config.get("description", ""),
+            required_metrics=group_config.get("required_metrics", []),
+        )
+
+
+class UnifiedCalendarGenerator:
+    """
+    Class to generate a unified calendar with multiple event types
+    """
+
+    def __init__(self, config_path: str):
         """
-        try:
-            with local_path.open("rb") as f:
-                s3.put_object(
-                    Bucket=bucket,
-                    Key=f"outputs/{self.calendar_file_name}",
-                    Body=f.read(),
-                    ACL="public-read",
-                    ContentType="text/calendar",
-                )
-            logging.info(
-                "ICS file uploaded to S3 bucket %s in outputs/%s",
-                bucket,
-                self.calendar_file_name,
+        Initialize with configuration path
+
+        Args:
+            config_path: Path to YAML configuration file
+        """
+        self.config_path = config_path
+        self.calendar = Calendar()
+        self.event_configs = {}  # Store configs by name
+
+    def load_config(self, group_name: str) -> EventConfig:
+        """
+        Load configuration for a specific group
+
+        Args:
+            group_name: Name of the event group to use
+
+        Returns:
+            EventConfig: Configuration for the specified group
+        """
+        if group_name not in self.event_configs:
+            self.event_configs[group_name] = EventConfig.from_yaml(
+                self.config_path, group_name
             )
-        except Exception as e:
-            logging.error("Failed to upload ICS to S3: %s", e)
-            raise
+        return self.event_configs[group_name]
 
-        # Retrieve bucket region and construct the S3 URL
-        bucket_location = s3.get_bucket_location(Bucket=bucket)
-        region = bucket_location.get("LocationConstraint", conf.aws_region)
-        s3_url = f"https://{bucket}.s3-{region}.amazonaws.com/outputs/{self.calendar_file_name}"
-        logging.info("ICS file now publicly available at %s", s3_url)
-        return s3_url
+    def add_events_from_s3(self, s3_bucket: str, s3_path: str, group_name: str) -> None:
+        """
+        Add events from a parquet file in S3
 
+        Args:
+            s3_bucket: S3 bucket name
+            s3_path: Path to parquet file within the bucket
+            group_name: Name of the event group to use
+        """
+        # Load data using Polars
+        s3_uri = f"s3://{s3_bucket}/{s3_path}"
+        print(f"Reading {s3_uri}")
+        df = pl.read_parquet(s3_uri)
 
-def create_day_events(
-    stats: pl.DataFrame, event_date: str, object_mapping: dict[str, list[str]]
-) -> list[Event]:
-    """
-    For each group (e.g. food, activity, sleep), use the associated event creator
-    to generate an ICS event for the given event_date if data exists.
-    """
-    day_events: list[Event] = []
-    for group, col_names in object_mapping.items():
-        logging.info("Creating %s event", group)
-        stats_df = collect_event_stats(stats_df=stats, column_names=col_names)
-        logging.debug("stats_df: %s", stats_df)
-        if stats_df.is_empty():
-            event_creator = EVENT_CREATORS.get(group)
-            if event_creator:
-                event = event_creator.create_from_stats(stats_df, event_date)
-                day_events.append(event)
-            else:
-                logging.warning("No event creator defined for group: %s", group)
-    return day_events
+        # Add events
+        self.add_events(df, group_name)
 
+    def add_events(self, df: pl.DataFrame, group_name: str) -> None:
+        """
+        Add events of a specific type to the calendar
 
-def collect_groups(column_mapping: dict[str, dict[str, str]]) -> dict[str, list[str]]:
-    """
-    Build a mapping of groups to their corresponding metric names from the column mapping.
-    """
-    grouped: dict[str, list[str]] = {}
-    for column, mapping in column_mapping.items():
-        group = mapping.get("group", "")
-        if group == "sleep_times":
-            group = "sleep"
-        grouped.setdefault(group, []).append(column)
-    return grouped
+        Args:
+            df: Polars DataFrame with columns [metric_date, metric_name, units, quantity]
+            group_name: Name of the event group to use
+        """
+        # Load configuration for this group
+        config = self.load_config(group_name)
 
+        # Get unique dates
+        dates = df.select("metric_date").unique().to_series().to_list()
 
-def run(event: dict[str, Any], context: object) -> dict[str, Any]:
-    """
-    Main Lambda function handler.
-    """
-    record = event.get("Records", [])[0]
-    bucket = record.get("s3", {}).get("bucket", {}).get("name", "")
-    key = urllib.parse.unquote_plus(
-        record.get("s3", {}).get("object", {}).get("key", ""), encoding="utf-8"
-    )
-    logging.info("Processing file: s3://%s/%s", bucket, key)
+        # Process each date
+        for date in dates:
+            # Create event for this date
+            date_df = df.filter(pl.col("metric_date") == date)
+            event = self._create_event_for_date(date, date_df, config)
 
-    calendar_file_name = conf.calendar_name
-    with open(COLUMN_MAPPING_FILE, "r") as f:
-        column_mapping = yaml.safe_load(f)
-    event_objects_mapping = collect_groups(column_mapping)
+            # If event was created successfully, add to calendar
+            if event:
+                self.calendar.events.add(event)
 
-    df = get_latest_health_data(bucket, key)
-    unique_dates = df.select(pl.col("metric_date")).unique().to_series().to_list()
+    def _create_event_for_date(
+        self,
+        date: str,
+        df: pl.DataFrame,
+        config: EventConfig,
+    ) -> Optional[Event]:
+        """
+        Create a calendar event for a specific date and event type
 
-    cal = Calendar()
-    for event_date in unique_dates:
-        daily_stats = df.filter(pl.col("metric_date") == event_date)
-        day_events = create_day_events(daily_stats, event_date, event_objects_mapping)
-        for ev in day_events:
-            cal.events.add(ev)
+        Args:
+            date: Date string in YYYY-MM-DD format
+            df: DataFrame filtered for this date
+            config: Event configuration
 
-    output_handler = ICSOutputHandler(calendar_file_name)
-    local_file = output_handler.write_locally(cal)
+        Returns:
+            Event: Calendar event, or None if required metrics are missing
+        """
+        # Extract metrics from DataFrame
+        metrics = self._extract_metrics(df)
 
-    try:
-        if conf.write_to_s3 is True:
-            s3_url = output_handler.upload_to_s3(local_file, bucket)
-            logging.info("File uploaded to S3 and available at: %s", s3_url)
-    except Exception as e:
-        logging.error("Error uploading file to S3: %s", e)
+        # Check if all required metrics are available
+        missing_metrics = [m for m in config.required_metrics if m not in metrics]
+        if missing_metrics:
+            # Some required metrics are missing
+            print(
+                f"Warning: Missing required metrics for {config.name} on {date}: {missing_metrics}"
+            )
+            return None
 
-    return {"statusCode": 200, "body": "ICS generation completed successfully!"}
+        # Create event
+        event = Event()
 
+        # Set title using template
+        try:
+            event.name = config.title_template.format(**metrics)
+        except KeyError as e:
+            # Handle missing metrics in title template
+            print(f"Warning: Missing metric {e} for title template on {date}")
+            event.name = f"{config.name.capitalize()} Summary for {date}"
 
-def lambda_handler(event: dict[str, Any], context: object) -> dict[str, Any]:
-    return run(event, context)
+        # Set description using template
+        try:
+            event.description = config.description_template.format(**metrics)
+        except KeyError as e:
+            # Handle missing metrics in description template
+            print(f"Warning: Missing metric {e} for description template on {date}")
+            event.description = f"Data for {date}"
+
+        # Set date
+        event.begin = datetime.combine(date, time(0, 0))
+        event.make_all_day()
+
+        return event
+
+    def _extract_metrics(self, df: pl.DataFrame) -> dict[str, float]:
+        """
+        Extract metrics from DataFrame into a dictionary
+
+        Args:
+            df: DataFrame filtered for a specific date
+
+        Returns:
+            dict: Dictionary mapping metric names to values
+        """
+        metrics = {}
+
+        # Convert to Python dict
+        rows = df.select(["metric_name", "quantity"]).to_dicts()
+        for row in rows:
+            metric_name = row["metric_name"]
+            metrics[metric_name] = row["quantity"]
+
+        return metrics
+
+    def save_calendar(self, filename: str) -> None:
+        """
+        Save the calendar to an ICS file
+
+        Args:
+            filename: Output filename
+        """
+        with open(filename, "w") as f:
+            f.write(str(self.calendar))
 
 
 if __name__ == "__main__":
-    import json
+    # S3 bucket and paths
+    s3_paths = {
+        "nutrition": "semantic/macros.parquet",
+        "activity": "semantic/activity.parquet",
+        # "sleep": "semantic/sleep.parquet",
+    }
 
-    # Load a sample event JSON file for local testing
-    with open("sample_event.json", "r") as f:
-        sample_event = json.load(f)
+    # Create unified calendar generator
+    calendar_generator = UnifiedCalendarGenerator(EVENT_FILE_NAME)
 
-    class DummyContext:
-        function_name = "local_test"
-        memory_limit_in_mb = 128
-        invoked_function_arn = (
-            "arn:aws:lambda:us-east-1:123456789012:function:local_test"
-        )
-        aws_request_id = "dummy-id"
+    # Add events from each S3 parquet file
+    for group_name, s3_path in s3_paths.items():
+        calendar_generator.add_events_from_s3(conf.s3_bucket, s3_path, group_name)
 
-    dummy_context = DummyContext()
-    response = lambda_handler(sample_event, dummy_context)
-    print(response)
+    # Save the unified calendar
+    calendar_generator.save_calendar(conf.calendar_name)
+
+    logging.info(
+        f"Generated unified calendar with {len(calendar_generator.calendar.events)} events"
+    )

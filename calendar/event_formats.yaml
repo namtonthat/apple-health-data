@@ -1,0 +1,26 @@
+groups:
+  nutrition:
+    title: "🍽️ {calories} cals | ({carbohydrates} C, {protein} P, {total_fat} F)"
+    description: |
+      🔥 {active_energy:.0f} kcal
+      🍽️ {calories:.0f} kcal
+      🥞 {carbohydrates:.0f}g C, {protein:.0f}g P, {total_fat:.0f}g F
+      🍇 {fiber:.0f} g
+    required_metrics:
+      - calories
+      - carbohydrates
+      - protein
+      - total_fat
+      - fiber
+      - active_energy
+
+  activity:
+    title: "🚴‍♂️ {apple_exercise_time}m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
+    description: |
+      🚴‍♂️ Activity: {apple_exercise_time}m active
+      👣 Steps: {step_count:,.0f} steps
+      ⚖️ Weight: {weight_body_mass:.1f} kg
+    required_metrics:
+      - apple_exercise_time
+      - step_count
+      - weight_body_mass

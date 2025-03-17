@@ -4,8 +4,8 @@ with in_bed as (
     select
         rs.metric_date,
         'in_bed' as metric_name,
-        rs.units,
-        data_fields.inbed as quantity
+        data_fields.inbed as quantity,
+        rs.units
     from {{ ref('raw_sleep') }} as rs
 ),
 
@@ -13,8 +13,8 @@ asleep as (
     select
         rs.metric_date,
         'asleep' as metric_name,
-        rs.units,
-        data_fields.asleep as quantity
+        data_fields.asleep as quantity,
+        rs.units
     from {{ ref('raw_sleep') }} as rs
 ),
 
@@ -22,8 +22,8 @@ deep as (
     select
         rs.metric_date,
         'deep_sleep' as metric_name,
-        rs.units,
-        data_fields.deep as quantity
+        data_fields.deep as quantity,
+        rs.units
     from {{ ref('raw_sleep') }} as rs
 ),
 

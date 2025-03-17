@@ -10,8 +10,8 @@ select
     load_time,
     metric_date,
     metric_name,
-    units,
-    quantity
+    quantity,
+    units
 from (
     select
         m.*,
