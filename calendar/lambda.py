@@ -262,7 +262,6 @@ class CalendarGenerator:
 
 
 if __name__ == "__main__":
-    s3_bucket = "api-health-data-ntonthat"
     s3_paths = {
         "nutrition": "semantic/macros.parquet",
         "activity": "semantic/activity.parquet",
