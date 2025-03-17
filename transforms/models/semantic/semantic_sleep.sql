@@ -38,8 +38,8 @@ all_sleep_data as (
 select
     asd.metric_date,
     asd.metric_name,
-    asd.units,
-    round(asd.quantity, 1) as quantity
+    round(asd.quantity, 1) as quantity,
+    asd.units
 from all_sleep_data as asd
 
 order by asd.metric_date asc, asd.metric_name asc

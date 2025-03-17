@@ -23,7 +23,7 @@ all_sleep_data as (
 select
     asd.metric_date,
     asd.metric_name,
-    'timestamp with timezone' as units,
-    strptime(asd.quantity, '%Y-%m-%d %H:%M:%S %z') as sleep_times
+    strptime(asd.quantity, '%Y-%m-%d %H:%M:%S %z') as sleep_times,
+    'timestamp with timezone' as units
 from all_sleep_data as asd
 order by asd.metric_date asc, asd.metric_name asc
