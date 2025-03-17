@@ -201,11 +201,16 @@ class CalendarStorage:
                 ContentType="text/calendar",  # Set correct content type for .ics files
             )
 
-            # Generate the public URL
-            public_url = f"https://{self.s3_bucket}.s3.amazonaws.com/{s3_key}"
-            logging.info(f"Calendar publicly available at: {public_url}")
+            # Build the public URL including region if provided
+            if conf.aws_region:
+                public_url = f"https://{self.s3_bucket}.s3.{conf.aws_region}.amazonaws.com/{s3_key}"
+                logging.info(f"Calendar publicly available at: {public_url}")
 
-            return public_url
+                return public_url
+            else:
+                logging.warning(
+                    "`aws_region` key is missing from the config, cannot build the public URL."
+                )
         except Exception as e:
             logging.error(f"Error uploading calendar to S3: {e}")
             return None
