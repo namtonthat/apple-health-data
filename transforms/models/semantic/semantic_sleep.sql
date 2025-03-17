@@ -1,5 +1,3 @@
--- Data related to the user's time in bed
-
 with in_bed as (
     select
         rs.metric_date,
