@@ -1,13 +1,14 @@
 import logging
-import polars as pl
-import yaml
-import boto3
-from ics import Calendar, Event
-from datetime import datetime, time
 from dataclasses import dataclass, field
+from datetime import datetime, time
 from pathlib import Path
 from typing import Optional
+
+import boto3
 import conf
+import polars as pl
+import yaml
+from ics import Calendar, Event
 
 # Set up logging configuration
 logging.basicConfig(
@@ -88,7 +89,8 @@ class EventFactory:
         missing_metrics = [m for m in config.required_metrics if m not in metrics]
         if missing_metrics:
             logging.warning(
-                f"Missing required metrics for {config.name} on {date}: {missing_metrics}"
+                f"""Missing required metrics for {config.name} 
+                on {date}: {missing_metrics}"""
             )
             return None
 
@@ -209,7 +211,7 @@ class CalendarStorage:
                 return public_url
             else:
                 logging.warning(
-                    "`aws_region` key is missing from the config, cannot build the public URL."
+                    "`aws_region` key is missing from config, cannot build public URL."
                 )
         except Exception as e:
             logging.error(f"Error uploading calendar to S3: {e}")
