@@ -24,3 +24,17 @@ groups:
       - apple_exercise_time
       - step_count
       - weight_body_mass
+
+  sleep:
+    title: "💤 {asleep:.1f}h | 🛏️ {efficiency:.0f}% | {in_bed_time}"
+    description: |
+      💤 Time Asleep: {asleep:.1f} hours
+      🌙 Deep Sleep: {deep_sleep:.1f} hours
+      🛏️ Time in Bed: {in_bed:.1f} hours
+      📊 Sleep Efficiency: {efficiency:.0f}%
+    required_metrics:
+      - asleep
+      - in_bed
+      - deep_sleep
+      - in_bed_time
+      - efficiency
