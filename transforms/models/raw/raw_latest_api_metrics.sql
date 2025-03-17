@@ -1,11 +1,3 @@
-{{
-    config(
-        post_hook=[
-            "COPY {{ this }} TO 's3://{{ var('s3_bucket') }}/raw/latest_api_metrics.parquet'"
-        ]
-    )
-}}
-
 select
     load_time,
     metric_date,
