@@ -114,7 +114,7 @@ This project uses `uv` to manage environment and package dependencies
 
 4. Trigger API export from `health-auto-export` using the API endpoint.
 
-![Auto Export](./docs/images/api-gateway-ios.jpeg)
+![Auto Export](./docs/images/auto-export-ios.jpeg)
 
 ### Advanced
 
