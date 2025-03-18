@@ -12,7 +12,7 @@ resource "null_resource" "build_push_dbt" {
   provisioner "local-exec" {
     command = <<EOT
       aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.dbt_repo.repository_url}
-      docker build --platform linux/arm64 -f ../transforms/Dockerfile -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ..
+      docker build --platform linux/arm64 --provenance=false -f ../transforms/Dockerfile -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ..
       docker push ${aws_ecr_repository.dbt_repo.repository_url}:latest
     EOT
     environment = {
@@ -27,6 +27,7 @@ resource "aws_lambda_function" "dbt_lambda" {
   image_uri     = "${aws_ecr_repository.dbt_repo.repository_url}:latest"
   role          = aws_iam_role.lambda_dbt_role.arn
   depends_on    = [null_resource.build_push_dbt]
+  architectures = ["arm64"]
 
   environment {
     variables = {
