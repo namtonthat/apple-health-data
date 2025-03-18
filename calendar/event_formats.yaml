@@ -34,7 +34,7 @@ groups:
       📊 Sleep Efficiency: {efficiency:.0f}%
     required_metrics:
       - asleep
-      - in_bed
       - deep_sleep
-      - in_bed_time
       - efficiency
+      - in_bed
+      - in_bed_time

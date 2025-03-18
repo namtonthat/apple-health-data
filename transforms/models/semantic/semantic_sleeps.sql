@@ -26,7 +26,8 @@ aggregated as (
         ROUND(m.asleep, 1) as asleep,
         ROUND(m.in_bed, 1) as in_bed,
         ROUND(m.deep_sleep, 1) as deep_sleep,
-        ROUND((m.asleep / NULLIF(m.in_bed, 0) * 100), 0) as efficiency,
+        COALESCE(ROUND((m.asleep / NULLIF(m.in_bed, 0) * 100), 0), 0)
+            as efficiency,
         b.sleep_start
     from sleep_metrics as m
     left join bedtime as b

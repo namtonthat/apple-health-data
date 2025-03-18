@@ -238,7 +238,7 @@ class CalendarGenerator:
         self.config_manager = ConfigManager(self.config_path)
         self.storage = CalendarStorage(self.s3_bucket)
 
-    def add_events_from_s3(self, s3_bucket: str, s3_path: str, group_name: str) -> None:
+    def add_events_from_s3(self, s3_bucket: str, s3_path: str, group_name: str) -> int:
         """Add events from an S3 Parquet file"""
         try:
             # Load data
@@ -248,7 +248,7 @@ class CalendarGenerator:
             config = self.config_manager.get_config(group_name)
 
             # Get unique dates
-            dates = df.select("metric_date").unique().to_series().to_list()
+            dates = sorted(df.select("metric_date").unique().to_series().to_list())
 
             # Create events for each date
             for date in dates:
@@ -257,11 +257,13 @@ class CalendarGenerator:
                 if event:
                     self.calendar.events.add(event)
 
-            logging.info(
-                "Added %s %s events to calendar", len(self.calendar.events), group_name
-            )
+            events_added = len(self.calendar.events)
+            logging.info("Added %s %s events to calendar", events_added, group_name)
+
         except Exception as e:
             logging.error("Error adding %s events: %s", group_name, e)
+            events_added = 0
+        return events_added
 
     def save_calendar(self, filename: str, save_to_s3: bool = False) -> int:
         """Save the calendar locally and optionally to S3"""
@@ -290,8 +292,11 @@ if __name__ == "__main__":
     generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=conf.s3_bucket)
 
     # Add events from each S3 parquet file
+    total_events = 0
     for group_name, s3_path in s3_paths.items():
-        generator.add_events_from_s3(conf.s3_bucket, s3_path, group_name)
+        total_events += generator.add_events_from_s3(
+            conf.s3_bucket, s3_path, group_name
+        )
 
     # Save the calendar locally and to S3
     generator.save_calendar(conf.calendar_name, save_to_s3=True)
