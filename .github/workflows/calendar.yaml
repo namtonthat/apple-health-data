@@ -36,5 +36,8 @@ jobs:
       - name: Install required packages
         run: make setup
 
+      - name: Run dbt transforms
+        run: cd transforms && uv run dbt run
+
       - name: Create calendar
         run: make calendar
