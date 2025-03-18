@@ -2,6 +2,12 @@
 
 ![Apple Health Calendar](./docs/images/apple-health-calendar.jpg)
 
+### Github Actions
+
+[![calendar](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml)
+[![test](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml)
+[![infra](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml)
+
 A serverless framework that automates the conversion of past daily statistics from Apple Watch into a calendar event.
 
 ```mermaid
