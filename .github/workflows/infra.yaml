@@ -29,8 +29,5 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
 
-      - name: Install required packages
-        run: make setup
-
       - name: Create infra
         run: make infra
