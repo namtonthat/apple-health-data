@@ -7,7 +7,7 @@ logger = Logger()
 tracer = Tracer()
 
 
-def handler(event, context):
+def lambda_handler(event, context):
     # Log the incoming S3 event
     logger.info("Received S3 event", extra=event)
 
