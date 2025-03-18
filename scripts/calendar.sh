@@ -1,9 +1,7 @@
 #!/bin/bash
 
-set -e errexit
-# apply infra changes
-source .venv/bin/activate
+set -e
 
 pushd calendar
-python3 lambda.py
+uv run python3 lambda.py
 pushd
