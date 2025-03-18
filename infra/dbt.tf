@@ -35,6 +35,20 @@ resource "aws_lambda_function" "dbt_lambda" {
   }
 }
 
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.health_data_bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.dbt_lambda.arn
+    events              = ["s3:ObjectCreated:*"]
+
+    filter_prefix = "landing/"
+    filter_suffix = ".json"
+  }
+
+  depends_on = [aws_lambda_permission.s3_invoke_dbt_lambda]
+}
+
 # Grant S3 permission to invoke the DBT Lambda
 resource "aws_lambda_permission" "s3_invoke_dbt_lambda" {
   statement_id  = "AllowS3InvokeDBTLambda"
