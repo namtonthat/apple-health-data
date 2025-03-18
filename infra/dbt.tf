@@ -32,6 +32,7 @@ resource "aws_lambda_function" "dbt_lambda" {
   image_uri     = "${aws_ecr_repository.dbt_repo.repository_url}@${data.aws_ecr_image.latest_dbt_image.image_digest}"
   role          = aws_iam_role.lambda_dbt_role.arn
   depends_on    = [null_resource.build_push_dbt]
+  timeout       = 300
   architectures = ["arm64"]
 
   environment {
