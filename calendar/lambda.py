@@ -79,7 +79,7 @@ class EventFactory:
 
     @staticmethod
     def create_event_for_date(
-        date: str, df: pl.DataFrame, config: EventConfig
+        date: datetime, df: pl.DataFrame, config: EventConfig
     ) -> Optional[Event]:
         """Create a calendar event for a specific date and event type"""
         # Extract metrics from DataFrame
@@ -125,15 +125,13 @@ class EventFactory:
         metrics = {}
 
         # Convert to Python dict
-        rows = df.select(["metric_name", "quantity"]).to_dicts()
+        rows = df.select(["metric_name", "quantity", "units"]).to_dicts()
         for row in rows:
             metric_name = row["metric_name"]
             # Try to convert to float for proper formatting
             try:
                 # If the quantity is already a string with formatting, keep it as is
-                if isinstance(row["quantity"], str) and any(
-                    c in row["quantity"] for c in ["%", "AM", "PM"]
-                ):
+                if isinstance(row["quantity"], str):
                     metrics[metric_name] = row["quantity"]
                 else:
                     # Otherwise, convert to float for numeric formatting
@@ -265,7 +263,7 @@ class CalendarGenerator:
             events_added = 0
         return events_added
 
-    def save_calendar(self, filename: str, save_to_s3: bool = False) -> int:
+    def save_calendar(self, filename: str, save_to_s3: bool = False) -> None:
         """Save the calendar locally and optionally to S3"""
         # Save locally
         ics_content = self.storage.save_local(self.calendar, filename)
@@ -273,12 +271,6 @@ class CalendarGenerator:
         # Save to S3 if requested
         if save_to_s3:
             self.storage.save_to_s3(self.calendar, filename, ics_content)
-
-        # Count events from the current calendar
-        event_count = len(self.calendar.events)
-        logging.info("Calendar saved with %s events", event_count)
-
-        return event_count
 
 
 if __name__ == "__main__":
@@ -298,5 +290,6 @@ if __name__ == "__main__":
             conf.s3_bucket, s3_path, group_name
         )
 
+    logging.info("%s calendar events saved", total_events)
     # Save the calendar locally and to S3
     generator.save_calendar(conf.calendar_name, save_to_s3=True)

@@ -26,7 +26,7 @@ groups:
       - weight_body_mass
 
   sleep:
-    title: "💤 {asleep:.1f}h | 🛏️ {efficiency:.0f}% | {in_bed_time}"
+    title: "💤 {asleep:.1f}h | 🛏️ {efficiency:.0f}% | {in_bed_time}{in_bed_time_units}"
     description: |
       💤 Time Asleep: {asleep:.1f} hours
       🌙 Deep Sleep: {deep_sleep:.1f} hours
