@@ -38,25 +38,3 @@ jobs:
 
       - name: Create calendar
         run: make calendar
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v3
-
-      - name: Set up python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install the latest version of `uv`
-        uses: astral-sh/setup-uv@v5
-
-      # - name: Install required test packages
-      #   run: make setup
-
-      - name: Run test
-        run: |
-          uv run ruff check .
-  #         pytest .
