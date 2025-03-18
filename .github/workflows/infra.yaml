@@ -1,0 +1,36 @@
+name: infra
+env:
+  PYTHON_VERSION: "3.13.0"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.python-version }}
+
+      - name: Install the latest version of `uv`
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install required packages
+        run: make setup
+
+      - name: Create infra
+        run: make infra
