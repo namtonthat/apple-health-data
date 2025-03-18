@@ -2,7 +2,7 @@ resource "aws_ecr_repository" "ingest_repo" {
   name = "lambda_ingest_repo"
 }
 
-data "aws_ecr_image" "latest_image" {
+data "aws_ecr_image" "latest_ingest_image" {
   repository_name = aws_ecr_repository.ingest_repo.name
   image_tag       = "latest"
 }
@@ -28,7 +28,7 @@ resource "null_resource" "build_push_ingest" {
 resource "aws_lambda_function" "ingest_lambda" {
   function_name = "ingest_health_data"
   package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.ingest_repo.repository_url}@${data.aws_ecr_image.latest_image.image_digest}"
+  image_uri     = "${aws_ecr_repository.ingest_repo.repository_url}@${data.aws_ecr_image.latest_ingest_image.image_digest}"
   role          = aws_iam_role.lambda_ingest_role.arn
   depends_on    = [null_resource.build_push_ingest]
   architectures = ["arm64"]

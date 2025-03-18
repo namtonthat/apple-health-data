@@ -2,6 +2,11 @@ resource "aws_ecr_repository" "dbt_repo" {
   name = "lambda_dbt_repo"
 }
 
+data "aws_ecr_image" "latest_dbt_image" {
+  repository_name = aws_ecr_repository.dbt_repo.name
+  image_tag       = "latest"
+}
+
 resource "null_resource" "build_push_dbt" {
   triggers = {
     dockerfile_hash = filesha256("../transforms/Dockerfile")
@@ -24,7 +29,7 @@ resource "null_resource" "build_push_dbt" {
 resource "aws_lambda_function" "dbt_lambda" {
   function_name = "trigger_dbt_job"
   package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.dbt_repo.repository_url}:latest"
+  image_uri     = "${aws_ecr_repository.dbt_repo.repository_url}:@${data.aws_ecr_image.latest_dbt_image.image_digest}"
   role          = aws_iam_role.lambda_dbt_role.arn
   depends_on    = [null_resource.build_push_dbt]
   architectures = ["arm64"]
