@@ -1,4 +1,4 @@
-name: calendar
+name: infra
 env:
   PYTHON_VERSION: "3.13.0"
 
@@ -6,13 +6,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened]
-  schedule:
-    - cron: "0 13 * * 0" # Runs every Monday at midnight AEST
-    - cron: "0 13 * * 3" # Runs every Thursday at midnight AEST
+
 jobs:
-  calendar:
+  infra:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -36,5 +32,5 @@ jobs:
       - name: Install required packages
         run: make setup
 
-      - name: Create calendar
-        run: make calendar
+      - name: Create infra
+        run: make infra
