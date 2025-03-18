@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e errexit
+set -e
 
 echo "activate env"
 source .venv/bin/activate
