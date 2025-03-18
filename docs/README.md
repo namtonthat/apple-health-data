@@ -80,6 +80,8 @@
 ### IAM Role Permissions for Github Actions
 
 To have an automated scheduled process via Github Actions, you need to create a IAM role with the following permissions (replacing the values `AWS_REGION` and `AWS_ACCOUNT_ID` with your own)
+
+```
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -123,7 +125,9 @@ To have an automated scheduled process via Github Actions, you need to create a 
             "Effect": "Allow",
             "Action": [
                 "lambda:GetFunction",
-                "lambda:ListTags"
+                "lambda:ListTags",
+                "lambda:GetFunctionConfiguration",
+                "lambda:ListVersionsByFunction"
             ],
             "Resource": [
                 "arn:aws:lambda:<AWS_REGION>:<AWS_ACCOUNT_ID>:function:trigger_dbt_job",
