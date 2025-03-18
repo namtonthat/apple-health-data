@@ -5,7 +5,7 @@ FROM public.ecr.aws/lambda/python:3.13
 COPY pyproject.toml ${LAMBDA_TASK_ROOT}
 
 # Install uv and use it to sync dependencies
-RUN pip install uv
+RUN python3 -m pip install uv
 RUN uv pip install --system -r pyproject.toml
 
 COPY ingest/lambda.py ${LAMBDA_TASK_ROOT}/lambda_function.py
