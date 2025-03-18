@@ -1,0 +1,55 @@
+name: calendar
+env:
+  PYTHON_VERSION: "3.13.0"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: "0 13 * * 0" # Runs every Monday at midnight AEST
+    - cron: "0 13 * * 3" # Runs every Thursday at midnight AEST
+jobs:
+  calendar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.python-version }}
+
+      - name: Install the latest version of `uv`
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install required packages
+        run: make setup
+
+      - name: Create calendar
+        run: make calendar
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install the latest version of `uv`
+        uses: astral-sh/setup-uv@v5
+
+      # - name: Install required test packages
+      #   run: make setup
+
+      - name: Run test
+        run: |
+          uv run ruff check .
+  #         pytest .

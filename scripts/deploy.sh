@@ -19,5 +19,5 @@ echo "run podman"
 podman machine init
 podman machine start
 
-# echo "applying"
-# tofu apply -auto-approve
+echo "applying"
+tofu apply -auto-approve

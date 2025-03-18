@@ -1,7 +1,8 @@
 import json
-import time
-import boto3
 import os
+from datetime import datetime, timezone
+
+import boto3
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler.api_gateway import APIGatewayHttpResolver
 
@@ -19,8 +20,9 @@ def ingest():
         event_data = app.current_event.json_body
         logger.info("Received data", extra=event_data)
 
-        # Generate a unique key (e.g., using a timestamp)
-        key = f"landing/{int(time.time())}.json"
+        load_time = datetime.now(timezone.utc).isoformat()
+        event_data["load_time"] = load_time
+        key = f"landing/{load_time}.json"
         s3_client.put_object(Bucket=BUCKET, Key=key, Body=json.dumps(event_data))
 
         return {"message": f"Data saved to S3 at {key}"}

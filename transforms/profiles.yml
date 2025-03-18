@@ -2,6 +2,7 @@ aws:
   target: prod
   outputs:
     prod:
+      threads: 4
       type: duckdb
       path: "dbt.duckdb"
       extensions:

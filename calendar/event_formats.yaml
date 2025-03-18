@@ -1,0 +1,40 @@
+groups:
+  nutrition:
+    title: "🍽️ {calories:,.0f} cals | ({carbohydrates:,.0f} C, {protein:,.0f} P, {total_fat:,.0f} F)"
+    description: |
+      🔥 {active_energy:.0f} kcal
+      🍽️ {calories:.0f} kcal
+      🥞 {carbohydrates:.0f}g C, {protein:.0f}g P, {total_fat:.0f}g F
+      🍇 {fiber:.0f} g
+    required_metrics:
+      - calories
+      - carbohydrates
+      - protein
+      - total_fat
+      - fiber
+      - active_energy
+
+  activity:
+    title: "🚴‍♂️ {apple_exercise_time:.0f} m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
+    description: |
+      🚴‍♂️ Activity: {apple_exercise_time}m active
+      👣 Steps: {step_count:,.0f} steps
+      ⚖️ Weight: {weight_body_mass:.1f} kg
+    required_metrics:
+      - apple_exercise_time
+      - step_count
+      - weight_body_mass
+
+  sleep:
+    title: "💤 {asleep:.1f} hrs | 🛏️ {efficiency:.0f}% | {in_bed_time} {in_bed_time_units}"
+    description: |
+      💤 Time Asleep: {asleep:.1f} hours
+      🌙 Deep Sleep: {deep_sleep:.1f} hours
+      🛏️ Time in Bed: {in_bed:.1f} hours
+      📊 Sleep Efficiency: {efficiency:.0f}%
+    required_metrics:
+      - asleep
+      - deep_sleep
+      - efficiency
+      - in_bed
+      - in_bed_time

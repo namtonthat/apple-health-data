@@ -9,6 +9,11 @@ deploy: # deploying changes
 	@echo "deploying changes"
 	./scripts/deploy.sh
 
+.PHONY: calendar
+calendar: # make calendar
+	@echo "make calendar"
+	./scripts/calendar.sh
+
 .PHONY: setup
 setup: # Install packages required for local development
 	@echo "Installing packages required for local development"

@@ -4,11 +4,16 @@ with raw_data as (
 ),
 
 unnested_data as (
-    select unnest(data.metrics) as data_metrics from raw_data
+    select
+        raw_data.load_time,
+        unnest(data.metrics) as data_metrics
+    from raw_data
 )
 
 select
+    cast(load_time as timestamp) as load_time,
     struct_extract(data_metrics, 'data') as data_fields,
     struct_extract(data_metrics, 'name') as metric_name,
     struct_extract(data_metrics, 'units') as units
 from unnested_data
+order by load_time desc
