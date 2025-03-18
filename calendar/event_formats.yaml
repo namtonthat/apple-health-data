@@ -15,7 +15,7 @@ groups:
       - active_energy
 
   activity:
-    title: "🚴‍♂️ {apple_exercise_time:.0f}m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
+    title: "🚴‍♂️ {apple_exercise_time:.0f} m | 👣 {step_count:,.0f} steps | ⚖️ {weight_body_mass:.1f} kg"
     description: |
       🚴‍♂️ Activity: {apple_exercise_time}m active
       👣 Steps: {step_count:,.0f} steps
@@ -26,7 +26,7 @@ groups:
       - weight_body_mass
 
   sleep:
-    title: "💤 {asleep:.1f}h | 🛏️ {efficiency:.0f}% | {in_bed_time}{in_bed_time_units}"
+    title: "💤 {asleep:.1f} hrs | 🛏️ {efficiency:.0f}% | {in_bed_time} {in_bed_time_units}"
     description: |
       💤 Time Asleep: {asleep:.1f} hours
       🌙 Deep Sleep: {deep_sleep:.1f} hours

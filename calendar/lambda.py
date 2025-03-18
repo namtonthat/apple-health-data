@@ -84,15 +84,19 @@ class EventFactory:
         """Create a calendar event for a specific date and event type"""
         # Extract metrics from DataFrame
         metrics = EventFactory._extract_metrics(df)
+        _units = EventFactory._extract_units(df)
+        units = {f"{k}_units": v for (k, v) in _units.items()}
 
         # Check if all required metrics are available
-        missing_metrics = [m for m in config.required_metrics if m not in metrics]
-        if missing_metrics:
+        missing_fields = [
+            m for m in config.required_metrics if m not in {**metrics, **units}
+        ]
+        if missing_fields:
             logging.warning(
-                "Missing required metrics for %s on %s: %s",
+                "Missing required fields for %s on %s: %s",
                 config.name,
                 date,
-                missing_metrics,
+                missing_fields,
             )
             return None
 
@@ -101,7 +105,7 @@ class EventFactory:
 
         # Set title using template
         try:
-            event.name = config.title_template.format(**metrics)
+            event.name = config.title_template.format(**metrics, **units)
         except KeyError as e:
             logging.warning("Missing metric %s for title template on %s", e, date)
             event.name = "%s Summary for %s" % (config.name.capitalize(), date)
@@ -141,6 +145,26 @@ class EventFactory:
                 metrics[metric_name] = row["quantity"]
 
         return metrics
+
+    @staticmethod
+    def _extract_units(df: pl.DataFrame) -> dict[str, str]:
+        """Extract units from DataFrame into a dictionary"""
+        units = {}
+
+        # Convert to Python dict
+        rows = df.select(["metric_name", "units"]).to_dicts()
+        for row in rows:
+            metric_name = row["metric_name"]
+            # Try to convert to float for proper formatting
+            try:
+                units[metric_name] = (
+                    row["units"] if isinstance(row["units"], str) else str(row["units"])
+                )
+            except (ValueError, TypeError):
+                # If conversion fails, keep the original value
+                units[metric_name] = row["units"]
+
+        return units
 
 
 @dataclass
