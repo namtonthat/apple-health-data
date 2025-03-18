@@ -1,10 +1,9 @@
 import json
 import subprocess
 
-from aws_lambda_powertools import Logger, Tracer
+from aws_lambda_powertools import Logger
 
 logger = Logger()
-tracer = Tracer()
 
 
 def lambda_handler(event, context):
