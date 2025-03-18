@@ -12,8 +12,8 @@ resource "null_resource" "build_push_dbt" {
   provisioner "local-exec" {
     command = <<EOT
       aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.dbt_repo.repository_url}
-      podman build --platform linux/arm64 -f ../transforms/Dockerfile -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ..
-      podman push ${aws_ecr_repository.dbt_repo.repository_url}:latest
+      docker build --platform linux/arm64 -f ../transforms/Dockerfile -t ${aws_ecr_repository.dbt_repo.repository_url}:latest ..
+      docker push ${aws_ecr_repository.dbt_repo.repository_url}:latest
     EOT
     environment = {
       aws_region = var.aws_region

@@ -1,13 +1,13 @@
-## apple-health-calendar
+## 📱 apple-health-calendar
 
 Built with
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![python](https://img.shields.io/badge/Python-3.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
 ![Apple Health Calendar](./docs/images/apple-health-calendar.jpg)
-Overview of the health data as `calendar`events within Calendar App
+Overview of the health data as `calendar` events within Calendar App
 
-## Github Actions
+### 🚀 Github Actions
 
 [![calendar](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml)
 
@@ -26,28 +26,31 @@ graph LR
     E -->|calenadr/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 
-## Project Goals
+### 🎯 Project Goals
 
 - Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
 - Create `read-only` data available in AWS S3 bucket.
 - Files are refreshed in S3 bucket that personal calendar is subscribed to.
 
-## Getting Started
+### 🆕 Getting Started
 
 This project uses `uv` to manage environment and package dependencies
 
 1. Setup project dependencies using `make setup`
 2. Update `conf.py` to the location of the required `s3` buckets
-3. Run `make deploy` to deploy the terraform stack and collect the API endpoint to be used within the iOS app
+3. Run `make infra` to deploy the terraform stack and collect the API endpoint to be used within the iOS app
 4. Trigger API export from `health-auto-export` using the API endpoint.
 
-<img src="./docs/images/auto-export-ios.jpeg" alt="Auto Export" style="width:300px;">
+<figure style="text-align: center;">
+  <img src="./docs/images/auto-export-ios.jpeg" alt="Auto Export", width="300px">
+  <figcaption>Auto Export - iOS Version</figcaption>
+</figure>
 
-### Advanced
+#### ⚙️ Advanced
 
 You can update the emojis and definitions by looking at the [`calendar/event_formats.yaml`](calendar/event_formats.yaml) file.
 
-### Inspiration
+#### 💡 Inspiration
 
 - Work done by [`cleverdevil/healthlake`](https://github.com/cleverdevil/healthlake).
