@@ -23,9 +23,9 @@ bedtime as (
 aggregated as (
     select
         m.metric_date,
-        m.asleep,
-        m.in_bed,
-        m.deep_sleep,
+        ROUND(m.asleep, 1) as asleep,
+        ROUND(m.in_bed, 1) as in_bed,
+        ROUND(m.deep_sleep, 1) as deep_sleep,
         ROUND((m.asleep / NULLIF(m.in_bed, 0) * 100), 0) as efficiency,
         b.sleep_start
     from sleep_metrics as m
@@ -62,19 +62,14 @@ select
     '%' as units
 from aggregated
 union all
--- SELECT metric_date, 'in_bed_time' AS metric_name, sleep_start AS quantity,
--- '%' AS units,
--- FROM aggregated
 select
     metric_date,
     'in_bed_time' as metric_name,
-    -- Compute the bedtime as a number: 
-    -- the 12-hour clock hour plus minutes as fraction.
+    -- Compute the bedtime as a number: the 12-hour clock hour plus minutes
     ROUND(
         CAST(STRFTIME(sleep_start, '%I') as DOUBLE)
-        + (CAST(STRFTIME(sleep_start, '%M') as DOUBLE) / 60.0),
-        2
-    ) as quantity,
+        + CAST(STRFTIME(sleep_start, '%M') as DOUBLE) * 0.01, 2)
+        as quantity,
     -- Units is the period (AM or PM)
     STRFTIME(sleep_start, '%p') as units
 from aggregated
