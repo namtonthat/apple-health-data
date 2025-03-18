@@ -76,3 +76,61 @@
       CalendarGenerator --> Calendar : maintains
       CalendarGenerator ..> DataLoader : uses
   ```
+
+### IAM Role Permissions for Github Actions
+
+To have an automated scheduled process via Github Actions, you need to create a IAM role with the following permissions (replacing the values `AWS_REGION` and `AWS_ACCOUNT_ID` with your own)
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowECRActions",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:DescribeRepositories",
+                "ecr:ListTagsForResource",
+                "ecr:DescribeImages"
+            ],
+            "Resource": [
+                "arn:aws:ecr:<AWS_REGION>:<AWS_ACCOUNT_ID>:repository/lambda_dbt_repo",
+                "arn:aws:ecr:<AWS_REGION>:<AWS_ACCOUNT_ID>:repository/lambda_ingest_repo"
+            ]
+        },
+        {
+            "Sid": "AllowIAMRoleActions",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:ListRolePolicies",
+                "iam:ListAttachedRolePolicies"
+            ],
+            "Resource": [
+                "arn:aws:iam::<AWS_ACCOUNT_ID>:role/lambda_ingest_role",
+                "arn:aws:iam::<AWS_ACCOUNT_ID>:role/lambda_dbt_role"
+            ]
+        },
+        {
+            "Sid": "AllowIAMPolicyActions",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion"
+            ],
+            "Resource": "arn:aws:iam::<AWS_ACCOUNT_ID>:policy/lambda_ingest_s3_policy"
+        },
+        {
+            "Sid": "AllowLambdaActions",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:GetFunction",
+                "lambda:ListTags"
+            ],
+            "Resource": [
+                "arn:aws:lambda:<AWS_REGION>:<AWS_ACCOUNT_ID>:function:trigger_dbt_job",
+                "arn:aws:lambda:<AWS_REGION>:<AWS_ACCOUNT_ID>:function:ingest_health_data"
+            ]
+        }
+    ]
+}
+
+```
