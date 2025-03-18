@@ -127,7 +127,9 @@ To have an automated scheduled process via Github Actions, you need to create a 
                 "lambda:GetFunction",
                 "lambda:ListTags",
                 "lambda:GetFunctionConfiguration",
-                "lambda:ListVersionsByFunction"
+                "lambda:ListVersionsByFunction",
+                "lambda:GetPolicy",
+                "lambda:GetFunctionUrlConfig"
             ],
             "Resource": [
                 "arn:aws:lambda:<AWS_REGION>:<AWS_ACCOUNT_ID>:function:trigger_dbt_job",
