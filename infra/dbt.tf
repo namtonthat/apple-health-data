@@ -34,6 +34,7 @@ resource "aws_lambda_function" "dbt_lambda" {
   depends_on    = [null_resource.build_push_dbt]
   timeout       = 300
   architectures = ["arm64"]
+  memory_size   = 1024
 
   environment {
     variables = {

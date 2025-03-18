@@ -13,9 +13,7 @@ def lambda_handler(event, context):
     dbt_project_path = "/var/dbt_project"
 
     try:
-        result = subprocess.run(
-            ["dbt", "run"], cwd=dbt_project_path, capture_output=True, text=True
-        )
+        result = subprocess.run(["dbt", "run"], cwd=dbt_project_path, text=True)
 
         if result.returncode == 0:
             logger.info("DBT job succeeded", extra={"output": result.stdout})
