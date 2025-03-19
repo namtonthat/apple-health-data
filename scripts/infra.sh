@@ -17,4 +17,7 @@ if [ "$GITHUB_ACTIONS" = "true" ]; then
   tofu apply -auto-approve -var="show_sensitive_outputs=false"
 else
   tofu apply -auto-approve
+
+  echo "showing the github_actions secret access key"
+  tofu output -raw github_actions_secret_access_key
 fi
