@@ -67,8 +67,6 @@ data "aws_iam_policy_document" "github_actions_policy" {
     resources = [
       aws_s3_bucket.health_data_bucket.arn,
       "${aws_s3_bucket.health_data_bucket.arn}/*",
-      "arn:aws:s3:::${var.aws_s3_bucket_powerlifting}",
-      "arn:aws:s3:::${var.aws_s3_bucket_powerlifting}/*"
     ]
   }
 
