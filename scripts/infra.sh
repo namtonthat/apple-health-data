@@ -12,4 +12,9 @@ echo "planning"
 tofu plan
 
 echo "applying"
-tofu apply -auto-approve
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+  echo "Detected GitHub Actions environment. Setting show_sensitive_outputs to false."
+  tofu apply -auto-approve -var="show_sensitive_outputs=false"
+else
+  tofu apply -auto-approve
+fi
