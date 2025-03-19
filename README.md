@@ -1,11 +1,14 @@
-## 📱 apple-health-calendar
+## 📱 apple-health-data
 
 Built with
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![python](https://img.shields.io/badge/Python-3.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
-![Apple Health Calendar](./docs/images/apple-health-calendar.jpg)
-Overview of the health data as `calendar` events within Calendar App
+![Apple Health](./docs/images/apple-health-calendar.jpg)
+Overview of the health data as `calendar` events
+
+TODO: <INSERT DASHBOARD>
+Dashboard view of the apple health data
 
 ### 🚀 Github Actions
 
@@ -43,14 +46,15 @@ This project uses `uv` to manage environment and package dependencies
 3. Run `make infra` to deploy the terraform stack and collect the API endpoint to be used within the iOS app
 4. Trigger API export from `health-auto-export` using the API endpoint.
 
-<figure style="text-align: center;">
-  <img src="./docs/images/auto-export-ios.jpeg" alt="Auto Export", width="300px">
-  <figcaption>Auto Export - iOS Version</figcaption>
-</figure>
+<p align="center">
+  <img src="./docs/images/auto-export-ios.jpeg" alt="Auto Export" width="300px">
+  <br>
+  <em>Auto Export - iOS Version</em>
+</p>
 
 #### ⚙️ Advanced
 
-You can update the emojis and definitions by looking at the [`calendar/event_formats.yaml`](calendar/event_formats.yaml) file.
+You can update the emojis and definitions by looking at the [`calendar/event_formats.yaml`](https://github.com/namtonthat/apple-health-calendar/blob/main/calendar/events_formats.yaml) file.
 
 #### 💡 Inspiration
 
