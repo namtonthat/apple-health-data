@@ -1,11 +1,10 @@
-
-### Process
+### ➡️ Process
 
 1. A lambda function URL endpoint invokes the `ingest/lambda.py` handler function  to save the Apple Health export as is within the defined `S3` bucket.
 2. `dbt` alongside `duckdb` is used to transform and unnest this data to the format required for displaying information
 3. `calendar/lambda.py` creates an `ics` calendar file from the output `S3` buckets. You can subscribe to this `ics` calendar to integrate with any existing Calendar service.
 
-### Entity Relationship Diagram
+### 🔗 Entity Relationship Diagram
 
   ```mermaid
   classDiagram
@@ -77,7 +76,7 @@
       CalendarGenerator ..> DataLoader : uses
   ```
 
-### IAM Role Permissions for Github Actions
+### 🤖 IAM Role Permissions for Github Actions
 
 To have an automated scheduled process via Github Actions, you need to create a IAM role with the following permissions (replacing the values `AWS_REGION` and `AWS_ACCOUNT_ID` with your own)
 

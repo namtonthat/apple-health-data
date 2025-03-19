@@ -32,6 +32,7 @@ graph LR
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
 - Create `read-only` data available in AWS S3 bucket.
 - Files are refreshed in S3 bucket that personal calendar is subscribed to.
+- Details about the process and entity relationship diagram are provided in the [README](https://github.com/namtonthat/apple-health-calendar/blob/main/docs/README.md)
 
 ### 🆕 Getting Started
 
