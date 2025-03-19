@@ -258,9 +258,9 @@ class CalendarGenerator:
 
 if __name__ == "__main__":
     s3_paths = {
-        "nutrition": "semantic/macros.parquet",
-        "activity": "semantic/activity.parquet",
-        "sleep": "semantic/sleeps.parquet",
+        "nutrition": conf.key_macros,
+        "activity": conf.key_activity,
+        "sleep": conf.key_sleep,
     }
 
     generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=conf.s3_bucket)

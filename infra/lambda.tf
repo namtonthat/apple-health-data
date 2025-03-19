@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ingest_repo" {
-  name = "lambda_ingest_repo"
+  name = "apple_health_dbt"
 }
 
 data "aws_ecr_image" "latest_ingest_image" {

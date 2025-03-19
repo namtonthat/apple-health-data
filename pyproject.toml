@@ -16,10 +16,10 @@ dependencies = [
 ]
 
 [dependency-groups]
+dashboard = ["duckdb>=1.2.1", "streamlit>=1.43.2"]
 dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
-test = [
-    "pytest",
-]
+test = ["pytest"]
 
 [tool.ruff.lint]
 select = ["E", "F", "G", "I", "PT", "PTH", "RUF", "SIM", "T20"]
+ignore = ["E501"]
