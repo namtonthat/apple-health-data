@@ -8,14 +8,13 @@ from typing import Any
 import conf
 import httpx
 import utils
-import workout_entities as we  # Domain models and parsing functions
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Securely load API key from environment variables
-API_KEY: str = os.getenv("API_KEY", "default_api_key")
+API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
 BASE_URL: str = "https://api.hevyapp.com/v1"
 HEADERS: dict[str, str] = {
     "api-key": API_KEY,
@@ -28,9 +27,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Constant for the last processed date file name (as a string)
 LAST_PROCESSED_FILE: str = "last_processed_date.txt"
-# Define maximum page size as a constant (set to 10)
 MAX_PAGE_SIZE: int = 10
 
 # --- API fetching functions ---
@@ -52,14 +49,13 @@ async def fetch_workouts_page(
 
 async def fetch_all_events(
     since: str, page_size: int = MAX_PAGE_SIZE
-) -> list[we.Event]:
+) -> list[dict[str, Any]]:
     async with httpx.AsyncClient() as client:
         first_page_data: dict[str, Any] = await fetch_workouts_page(
             client, since, 1, page_size
         )
         total_pages: int = first_page_data.get("page_count", 1)
-        events_raw: list[dict[str, Any]] = first_page_data.get("events", [])
-        events: list[we.Event] = [we.parse_event(event) for event in events_raw]
+        events: list[dict[str, Any]] = first_page_data.get("events", [])
 
         tasks = [
             fetch_workouts_page(client, since, page, page_size)
@@ -67,8 +63,7 @@ async def fetch_all_events(
         ]
         results = await asyncio.gather(*tasks)
         for result in results:
-            events_raw = result.get("events", [])
-            events.extend([we.parse_event(event) for event in events_raw])
+            events.extend(result.get("events", []))
         return events
 
 
@@ -77,23 +72,33 @@ async def fetch_all_events(
 
 async def main() -> None:
     last_processed_date: str = utils.read_last_processed_date(LAST_PROCESSED_FILE)
-    events: list[we.Event] = await fetch_all_events(last_processed_date)
+    events: list[dict[str, Any]] = await fetch_all_events(last_processed_date)
 
     if events:
         for event in events:
+            workout = event.get("workout", {})
             logger.info(
-                "Workout ID: %s, Title: %s", event.workout.id, event.workout.title
+                "Workout ID: %s, Title: %s", workout.get("id"), workout.get("title")
             )
-        latest_date: str = max(event.workout.updated_at for event in events)
+
+        # Update the last processed date based on the latest event's updated_at field.
+        # Here, we assume every event contains a workout with an "updated_at" field.
+        latest_date: str = max(
+            (
+                event.get("workout", {}).get("updated_at", "")
+                for event in events
+                if event.get("workout")
+            ),
+            default=conf.start_ingest_date,
+        )
         utils.write_last_processed_date(LAST_PROCESSED_FILE, latest_date)
 
-        workouts_data_str: str = json.dumps(
-            [event.__dict__ for event in events], default=lambda o: o.__dict__
-        )
+        # Convert the events list to JSON (as is) for uploading
+        events_data_str: str = json.dumps(events)
         s3_key: str = (
             f"{conf.s3_key_prefix}{datetime.now().strftime('%Y-%m-%d')}_workouts.json"
         )
-        utils.upload_to_s3(workouts_data_str, conf.s3_bucket, s3_key)
+        utils.upload_to_s3(events_data_str, conf.s3_bucket, s3_key)
     else:
         logger.info("No new workouts found.")
 
