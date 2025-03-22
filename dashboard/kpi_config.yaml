@@ -1,0 +1,48 @@
+macros:
+  - label: "Calories (kcal)"
+    key: calories
+    format: "{:.0f}"
+  - label: "Carbohydrates (g)"
+    key: carbohydrates
+    format: "{:.0f}"
+  - label: "Protein (g)"
+    key: protein
+    format: "{:.0f}"
+  - label: "Fat (g)"
+    key: total_fat
+    format: "{:.0f}"
+  - label: "Fibre (g)"
+    key: fiber
+    format: "{:.0f}"
+
+activity:
+  - label: "Weight (kg)"
+    key: weight_body_mass
+    format: "{:.1f}"
+  - label: "Weight (kg)"
+    key: weight_body_mass
+    format: "{:.1f}"
+
+sleep:
+  - label: "Time Asleep (h)"
+    key: asleep
+    format: "{:.1f}h"
+    goal: 7
+  - label: "Deep Sleep (h)"
+    key: deep_sleep
+    format: "{:.1f}h"
+    goal: 2
+  - label: "Time in Bed (h)"
+    key: in_bed
+    format: "{:.1f}h"
+  - label: "Sleep Efficiency"
+    key: efficiency
+    format: "{:.0f}%"
+  - label: "Avg Sleep Start"
+    key: avg_sleep_start
+    format: "%I:%M %p"
+    is_time: true
+  - label: "Avg Sleep End"
+    key: avg_sleep_end
+    format: "%I:%M %p"
+    is_time: true
