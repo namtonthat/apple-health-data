@@ -37,15 +37,15 @@ activity:
 sleep:
   - label: "Time Asleep (h)"
     key: asleep
-    format: "{:.1f}h"
+    format: "{:.1f}"
     goal: 7
   - label: "Deep Sleep (h)"
     key: deep_sleep
-    format: "{:.1f}h"
+    format: "{:.1f}"
     goal: 2
   - label: "Time in Bed (h)"
     key: in_bed
-    format: "{:.1f}h"
+    format: "{:.1f}"
   - label: "Sleep Efficiency"
     key: efficiency
     format: "{:.0f}%"

@@ -5,4 +5,4 @@ set -e errexit
 source .venv/bin/activate
 echo "running dashboard"
 pushd dashboard
-streamlit run app.py
+streamlit run main.py

@@ -1,19 +1,18 @@
 """
 Helper functions module for the dashboard application.
 
-This module contains functions to read data from AWS S3 (in Parquet format)
-using Polars, and functions to load and insert reflections data into DuckDB.
+This module contains functions to read data from AWS S3 (in Parquet format) using Polars
 """
 
 import io
 import logging
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import boto3
 import conf
-import duckdb
 import polars as pl
 import pytz
+import streamlit as st
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -38,99 +37,17 @@ def read_parquet_from_s3(bucket: str, key: str) -> pl.DataFrame:
     return pl.read_parquet(data)
 
 
-def create_reflections_table(db_path: str) -> None:
-    """
-    Create the reflections table in DuckDB if it does not exist.
-
-    Args:
-        db_path: Path to the DuckDB database file.
-    """
-    con = duckdb.connect(database=db_path, read_only=False)
-    try:
-        con.execute(
-            """
-            CREATE TABLE IF NOT EXISTS reflections (
-                week VARCHAR,
-                q1 VARCHAR,
-                q2 VARCHAR,
-                q3 VARCHAR,
-                q4 VARCHAR,
-                q5 VARCHAR,
-                timestamp VARCHAR
-            )
-            """
-        )
-        logger.info("Reflections table ensured in %s", db_path)
-    except Exception as e:
-        logger.error("Error creating reflections table: %s", e)
-        raise
-    finally:
-        con.close()
+def filter_data(df, start_date, end_date):
+    """Filter a Polars DataFrame by date and reformat the metric_date column."""
+    return df.filter(
+        (pl.col("metric_date") >= start_date) & (pl.col("metric_date") <= end_date)
+    ).with_columns(pl.col("metric_date").dt.strftime("%Y-%m-%d").alias("metric_date"))
 
 
-def load_reflections_from_duckdb(db_path: str) -> pl.DataFrame:
-    """
-    Load reflections data from a DuckDB database and return a Polars DataFrame.
-
-    If the table does not exist, it is created first.
-
-    Args:
-        db_path: Path to the DuckDB database file.
-
-    Returns:
-        A Polars DataFrame with reflections data.
-    """
-    # Ensure the reflections table exists.
-    create_reflections_table(db_path)
-
-    con = duckdb.connect(database=db_path, read_only=False)
-    try:
-        # Use DuckDB's Arrow integration to fetch data.
-        arrow_table = con.execute("SELECT * FROM reflections").arrow()
-        df = pl.from_arrow(arrow_table)
-        logger.info("Loaded reflections data from %s", db_path)
-    except Exception as e:
-        logger.error("Error loading reflections: %s", e)
-        df = pl.DataFrame()
-    finally:
-        con.close()
-    return df
-
-
-def insert_reflections_into_duckdb(db_path: str, new_entry: dict[str, str]) -> None:
-    """
-    Insert a new reflections entry into the DuckDB database.
-
-    Assumes the reflections table has columns: week, q1, q2, q3, q4, q5, timestamp.
-
-    Args:
-        db_path: Path to the DuckDB database file.
-        new_entry: A dictionary representing the new reflections entry.
-    """
-    con = duckdb.connect(database=db_path, read_only=False)
-    columns = ", ".join(new_entry.keys())
-    values = ", ".join(f"'{v}'" for v in new_entry.values())
-    query = f"INSERT INTO reflections ({columns}) VALUES ({values})"
-    logger.info("Executing query: %s", query)
-    con.execute(query)
-    con.close()
-
-
-def get_average(agg_df: pl.DataFrame, metric: str):
-    """
-    Safely extract the average value for a given metric from the aggregated DataFrame.
-
-    Args:
-        agg_df (pl.DataFrame): Aggregated DataFrame containing "metric_name" and "avg_quantity".
-        metric (str): The metric name to extract.
-
-    Returns:
-        float | None: The average value if found, otherwise None.
-    """
-    df_metric = agg_df.filter(pl.col("metric_name") == metric)
-    if df_metric.is_empty():
-        return None
-    return df_metric["avg_quantity"][0]
+@st.cache_data
+def load_data_by_key(s3_key: str, start_date: date, end_date: date):
+    unfiltered_df = read_parquet_from_s3(conf.s3_bucket, s3_key)
+    return filter_data(unfiltered_df, start_date, end_date)
 
 
 def convert_column_to_timezone(
@@ -187,3 +104,34 @@ def compute_avg_sleep_time_from_midnight(
     # Return as a datetime today + offset (for display)
     midnight_today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
     return midnight_today + avg_offset
+
+
+def sidebar_date_filter() -> tuple[date, date]:
+    """
+    Render a shared sidebar date filter component and return start/end date.
+    """
+    st.sidebar.header("Date Filter")
+    filter_mode = st.sidebar.radio("Filter Mode", ("Quick Filter", "Custom Range"))
+
+    today = datetime.today().date()
+
+    if filter_mode == "Quick Filter":
+        quick_filter = st.sidebar.radio(
+            "Time Range", ["Last Week", "Last Month", "Last 3 Months", "Last 6 Months"]
+        )
+        delta_map = {
+            "Last Week": timedelta(weeks=1),
+            "Last Month": timedelta(days=30),
+            "Last 3 Months": timedelta(days=90),
+            "Last 6 Months": timedelta(days=180),
+        }
+        start_date = today - delta_map.get(quick_filter, timedelta(weeks=1))
+        end_date = today
+    else:
+        start_date = st.sidebar.date_input(
+            "Start Date", value=today - timedelta(days=30)
+        )
+        end_date = st.sidebar.date_input("End Date", value=today)
+
+    st.sidebar.caption(f"Showing data from `{start_date}` to `{end_date}`")
+    return start_date, end_date

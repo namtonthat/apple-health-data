@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import conf
+import polars as pl
 import streamlit as st
 import yaml
 
@@ -27,6 +28,23 @@ def load_kpi_config(
     with Path.open(yaml_path) as f:
         raw = yaml.safe_load(f)
     return {section: [KPI(**item) for item in items] for section, items in raw.items()}
+
+
+def get_average(agg_df: pl.DataFrame, metric: str):
+    """
+    Safely extract the average value for a given metric from the aggregated DataFrame.
+
+    Args:
+        agg_df (pl.DataFrame): Aggregated DataFrame containing "metric_name" and "avg_quantity".
+        metric (str): The metric name to extract.
+
+    Returns:
+        float | None: The average value if found, otherwise None.
+    """
+    df_metric = agg_df.filter(pl.col("metric_name") == metric)
+    if df_metric.is_empty():
+        return None
+    return df_metric["avg_quantity"][0]
 
 
 def render_kpis(section: str, values: dict[str, Any], config: dict[str, Any]) -> None:
@@ -65,3 +83,33 @@ def render_kpis(section: str, values: dict[str, Any], config: dict[str, Any]) ->
             val_str = "N/A"
 
         col.metric(kpi.label, val_str, delta)
+
+
+def render_kpi_section(
+    section: str,
+    df: pl.DataFrame,
+    kpi_config: dict[str, Any],
+    overrides: dict[str, Any] = dict(),
+) -> None:
+    """
+    Compute averages for a KPI section, optionally override values, and render.
+
+    Args:
+        section (str): Section name from config (e.g. "macros", "sleep", "activity").
+        df (pl.DataFrame): Filtered Polars DataFrame with metric_name and quantity.
+        kpi_config (dict[str, Any]): KPI config loaded from YAML.
+        overrides (dict[str, Any], optional): Manual override values by key.
+    """
+    overrides = overrides or {}
+
+    avg_df = df.group_by("metric_name").agg(
+        [pl.col("quantity").mean().alias("avg_quantity")]
+    )
+    keys = [k.key for k in kpi_config.get(section, [])]
+
+    values = {
+        key: overrides[key] if key in overrides else get_average(avg_df, key)
+        for key in keys
+    }
+
+    render_kpis(section, values, kpi_config)
