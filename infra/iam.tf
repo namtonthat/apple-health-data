@@ -73,13 +73,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
   statement {
     sid = "ECRAccess"
     actions = [
-      "ecr:BatchGetImage",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetAuthorizationToken",
-      "ecr:DescribeRepositories",
-      "ecr:ListImages",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:ListTagsForResource"
+      "ecr:*"
     ]
     resources = [
       aws_ecr_repository.dbt_repo.arn,
@@ -91,7 +85,10 @@ data "aws_iam_policy_document" "github_actions_policy" {
     actions = [
       "iam:GetRole",
       "iam:GetUser",
-      "iam:GetPolicy"
+      "iam:GetPolicy",
+      "iam:GetPolicyVersion",
+      "iam:ListRolePolicies",
+      "iam:ListAccessKeys"
     ]
     resources = [
       aws_iam_role.lambda_ingest_role.arn,
