@@ -34,7 +34,6 @@ class KPI:
     is_time: bool = False
 
 
-@st.cache_data
 def load_kpi_config(
     yaml_path: Path = Path(conf.kpi_config_path),
 ) -> dict[str, list[KPI]]:
@@ -145,14 +144,14 @@ filtered_sleep = filter_data(sleep_df, start_date, end_date)
 filtered_sleep_times = filter_data(sleep_times_df, start_date, end_date)
 
 # ---------------------- AVERAGE activity ----------------------
-st.header("activity")
+st.header("Activity")
 try:
-    activity_avg_df = filtered_activity.group_by("metric_name").agg(
+    avg_activity_df = filtered_activity.group_by("metric_name").agg(
         [pl.col("quantity").mean().alias("avg_quantity")]
     )
 
     macro_keys = [k.key for k in kpi_config.get("activity", [])]
-    activity_values = {key: get_average(activity_avg_df, key) for key in macro_keys}
+    activity_values = {key: get_average(avg_activity_df, key) for key in macro_keys}
     render_kpis("activity", activity_values, kpi_config)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")

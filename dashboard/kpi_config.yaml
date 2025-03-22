@@ -16,13 +16,18 @@ macros:
     format: "{:.0f}"
 
 activity:
+  - label: "Exercise Time"
+    key: apple_exercise_time
+    format: "{:.0f}"
+  - label: "Mindfulness"
+    key: mindful_minutes
+    format: "{:.0f}"
+  - label: "Step Count"
+    key: step_count
+    format: "{:.0f}"
   - label: "Weight (kg)"
     key: weight_body_mass
     format: "{:.1f}"
-  - label: "Weight (kg)"
-    key: weight_body_mass
-    format: "{:.1f}"
-
 sleep:
   - label: "Time Asleep (h)"
     key: asleep

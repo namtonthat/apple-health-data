@@ -117,7 +117,19 @@ def insert_reflections_into_duckdb(db_path: str, new_entry: dict[str, str]) -> N
 
 
 def get_average(agg_df: pl.DataFrame, metric: str):
+    """
+    Safely extract the average value for a given metric from the aggregated DataFrame.
+
+    Args:
+        agg_df (pl.DataFrame): Aggregated DataFrame containing "metric_name" and "avg_quantity".
+        metric (str): The metric name to extract.
+
+    Returns:
+        float | None: The average value if found, otherwise None.
+    """
     df_metric = agg_df.filter(pl.col("metric_name") == metric)
+    if df_metric.is_empty():
+        return None
     return df_metric["avg_quantity"][0]
 
 
