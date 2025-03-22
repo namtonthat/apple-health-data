@@ -20,8 +20,8 @@ load_dotenv()
 HEVY_API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
 AWS_REGION = os.getenv("AWS_REGION")
 S3_BUCKET = os.getenv("S3_BUCKET")
-S3_KEY_PREFIX = os.getenv("S3_KEY_EXERCISE_PREFIX")
 START_INGEST_DATE = os.getenv("START_INGEST_DATE")
+
 
 # Hevy Related Configuration
 BASE_URL: str = "https://api.hevyapp.com/v1"
@@ -130,6 +130,9 @@ async def fetch_workouts_since(
 
 
 async def main() -> None:
+    logging.info(AWS_REGION)
+    logging.info(S3_BUCKET)
+    logging.info(utils.S3_KEY_PREFIX)
     last_processed_date: str = utils.get_last_processed_date_from_s3()
 
     if last_processed_date != START_INGEST_DATE:
@@ -152,7 +155,9 @@ async def main() -> None:
 
         # Convert the events list to JSON (as is) for uploading
         events_data_str: str = json.dumps(events)
-        s3_key_with_filename: str = f"{S3_KEY_PREFIX}{datetime.now().isoformat()}.json"
+        s3_key_with_filename: str = (
+            f"{utils.S3_KEY_PREFIX}{datetime.now().isoformat()}.json"
+        )
         utils.upload_to_s3(events_data_str, S3_BUCKET, s3_key_with_filename)
         logger.info("Processed %s workouts.", len(events))
     else:
