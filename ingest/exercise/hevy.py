@@ -130,9 +130,6 @@ async def fetch_workouts_since(
 
 
 async def main() -> None:
-    logging.info(AWS_REGION)
-    logging.info(S3_BUCKET)
-    logging.info(utils.S3_KEY_PREFIX)
     last_processed_date: str = utils.get_last_processed_date_from_s3()
 
     if last_processed_date != START_INGEST_DATE:
