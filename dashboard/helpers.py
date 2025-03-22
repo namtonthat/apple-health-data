@@ -7,11 +7,13 @@ using Polars, and functions to load and insert reflections data into DuckDB.
 
 import io
 import logging
-from typing import Dict
+from datetime import datetime, timedelta
 
 import boto3
+import conf
 import duckdb
 import polars as pl
+import pytz
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -95,7 +97,7 @@ def load_reflections_from_duckdb(db_path: str) -> pl.DataFrame:
     return df
 
 
-def insert_reflections_into_duckdb(db_path: str, new_entry: Dict[str, str]) -> None:
+def insert_reflections_into_duckdb(db_path: str, new_entry: dict[str, str]) -> None:
     """
     Insert a new reflections entry into the DuckDB database.
 
@@ -117,3 +119,59 @@ def insert_reflections_into_duckdb(db_path: str, new_entry: Dict[str, str]) -> N
 def get_average(agg_df: pl.DataFrame, metric: str):
     df_metric = agg_df.filter(pl.col("metric_name") == metric)
     return df_metric["avg_quantity"][0]
+
+
+def convert_column_to_timezone(
+    df: pl.DataFrame, column: str, tz: str = conf.timezone
+) -> pl.DataFrame:
+    """
+    Converts a Polars datetime column to a specific timezone using Python datetime + pytz.
+
+    Note: Polars doesn't natively support timezone-aware datetime objects,
+    so this uses a Python UDF.
+    """
+
+    required_tz = pytz.timezone(tz)
+
+    return df.with_columns(
+        pl.col(column).map_elements(
+            lambda dt: dt.astimezone(required_tz).replace(tzinfo=None),
+            return_dtype=pl.Datetime,
+        )
+    )
+
+
+def compute_avg_sleep_time_from_midnight(
+    df: pl.DataFrame, time_col: str = "sleep_times"
+) -> datetime:
+    """
+    Computes the average sleep time as an offset from midnight,
+    treating times before midnight as negative offsets.
+
+    Args:
+        df: A Polars DataFrame with a datetime column (naive, in local time).
+        time_col: Name of the column with local sleep times.
+
+    Returns:
+        A datetime.datetime object representing the average sleep time (on today's date).
+    """
+    # Extract times as list of Python datetime objects
+    times = df[time_col].to_list()
+
+    offsets = []
+    for dt in times:
+        midnight = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+        offset = dt - midnight
+
+        # If the time is "late night" before midnight, treat as negative offset from midnight
+        if offset > timedelta(hours=12):
+            offset -= timedelta(days=1)
+
+        offsets.append(offset)
+
+    # Compute average offset
+    avg_offset = sum(offsets, timedelta()) / len(offsets)
+
+    # Return as a datetime today + offset (for display)
+    midnight_today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    return midnight_today + avg_offset

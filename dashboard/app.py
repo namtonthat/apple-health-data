@@ -3,12 +3,18 @@ Streamlit dashboard for apple-health-data
 """
 
 import logging
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Optional
 
 import conf
 import polars as pl
 import streamlit as st
+import yaml
 from helpers import (
+    compute_avg_sleep_time_from_midnight,
+    convert_column_to_timezone,
     get_average,
     read_parquet_from_s3,
 )
@@ -17,42 +23,90 @@ from helpers import (
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Global Variables
-PAGE_TITLE = "Nam Tonthat's Health Data"
-SLEEP_GOAL = 7
-DEEP_SLEEP_GOAL = 2
+
+# ---------------------- KPI CONFIG ----------------------
+@dataclass
+class KPI:
+    label: str
+    key: str
+    format: str = "{}"
+    goal: Optional[float] = None
+    is_time: bool = False
+
+
+@st.cache_data
+def load_kpi_config(
+    yaml_path: Path = Path(conf.kpi_config_path),
+) -> dict[str, list[KPI]]:
+    with Path.open(yaml_path) as f:
+        raw = yaml.safe_load(f)
+    return {section: [KPI(**item) for item in items] for section, items in raw.items()}
+
+
+def render_kpis(section: str, values: dict[str, Any], config: dict[str, Any]) -> None:
+    """
+    Render a section of KPI metrics to the Streamlit UI.
+
+    Args:
+        section (str): The section name (e.g. "macros", "sleep") to pull config for.
+        values (dict[str, Any]): Dictionary of computed KPI values keyed by metric name.
+        config (dict[str, Any]): Loaded YAML config mapping sections to KPI definitions.
+
+    This function looks up the metrics for the given section, formats each one according
+    to the provided rules (e.g., formatting, delta, time display), and renders them as
+    Streamlit metrics.
+    """
+    kpis = config.get(section, [])
+    cols = st.columns(len(kpis))
+
+    for col, kpi in zip(cols, kpis):
+        key = kpi.key
+        val = values.get(key)
+        fmt = kpi.format
+        is_time = kpi.is_time
+
+        goal = kpi.goal
+        delta = None
+        if goal is not None and val is not None and not is_time:
+            delta = fmt.format(val - goal)
+
+        if is_time and isinstance(val, datetime):
+            val_str = val.strftime(fmt)
+        elif val is not None:
+            val_str = fmt.format(val)
+        else:
+            val_str = "N/A"
+
+        col.metric(kpi.label, val_str, delta)
+
 
 # Page configuration
 st.set_page_config(
-    page_title=PAGE_TITLE,
+    page_title=conf.page_title,
     page_icon="🏂",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-st.title(PAGE_TITLE)
+st.title(conf.page_title)
 
-# === SIDEBAR DATE FILTER ===
-st.sidebar.header("Date Filter")
-filter_mode = st.sidebar.radio("Filter Mode", ("Quick Filter", "Custom Range"))
+
+# Sidebar date selection
 today = datetime.today().date()
+filter_mode = st.sidebar.radio("Filter Mode", ("Quick Filter", "Custom Range"))
 
 if filter_mode == "Quick Filter":
     quick_filter = st.sidebar.radio(
-        "Time Range",
-        ["Last Week", "Last Month", "Last 3 Months", "Last 6 Months"],
+        "Time Range", ["Last Week", "Last Month", "Last 3 Months", "Last 6 Months"]
     )
-    if quick_filter == "Last Month":
-        start_date = today - timedelta(days=30)
-    elif quick_filter == "Last 3 Months":
-        start_date = today - timedelta(days=90)
-    elif quick_filter == "Last 6 Months":
-        start_date = today - timedelta(days=180)
-    else:
-        # Default to last week
-        start_date = today - timedelta(weeks=1)
+    delta_map = {
+        "Last Week": timedelta(weeks=1),
+        "Last Month": timedelta(days=30),
+        "Last 3 Months": timedelta(days=90),
+        "Last 6 Months": timedelta(days=180),
+    }
+    start_date = today - delta_map.get(quick_filter, timedelta(weeks=1))
     end_date = today
-
 else:
     start_date = st.sidebar.date_input("Start Date", value=today - timedelta(days=30))
     end_date = st.sidebar.date_input("End Date", value=today)
@@ -61,10 +115,8 @@ st.sidebar.write(f"Data from `{start_date}` to `{end_date}`")
 
 
 @st.cache_data
-def load_data():
-    sleep_df = read_parquet_from_s3(conf.s3_bucket, conf.key_sleep)
-    macros_df = read_parquet_from_s3(conf.s3_bucket, conf.key_macros)
-    return sleep_df, macros_df
+def load_data_by_key(s3_key: str):
+    return read_parquet_from_s3(conf.s3_bucket, s3_key)
 
 
 def filter_data(df, start_date, end_date):
@@ -75,103 +127,129 @@ def filter_data(df, start_date, end_date):
 
 
 try:
-    sleep_df, macros_df = load_data()
-    filtered_sleep = filter_data(sleep_df, start_date, end_date)
-    filtered_macros = filter_data(macros_df, start_date, end_date)
+    activity_df = load_data_by_key(conf.key_activity)
+    macros_df = load_data_by_key(conf.key_macros)
+    sleep_df = load_data_by_key(conf.key_sleep)
+    sleep_times_df = load_data_by_key(conf.key_sleep_times)
+    # Load configuration
+    kpi_config = load_kpi_config()
+
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
 
-st.header("Average Macros")
+# Filtering data as per side bar filters
+filtered_activity = filter_data(activity_df, start_date, end_date)
+filtered_macros = filter_data(macros_df, start_date, end_date)
+filtered_sleep = filter_data(sleep_df, start_date, end_date)
+filtered_sleep_times = filter_data(sleep_times_df, start_date, end_date)
+
+# ---------------------- AVERAGE activity ----------------------
+st.header("activity")
 try:
-    # Calculate average macros using Polars group_by
-    avg_macros = filtered_macros.group_by("metric_name").agg(
+    activity_avg_df = filtered_activity.group_by("metric_name").agg(
         [pl.col("quantity").mean().alias("avg_quantity")]
     )
-    # Mapping of display labels to the corresponding metric keys
-    metrics = {
-        "Calories (kcal)": "calories",
-        "Carbohydrates (g)": "carbohydrates",
-        "Protein (g)": "protein",
-        "Fat (g)": "total_fat",
-        "Fibre (g)": "fiber",
-    }
 
-    # Calculate averages in one step
-    avg_values = {label: get_average(avg_macros, key) for label, key in metrics.items()}
+    macro_keys = [k.key for k in kpi_config.get("activity", [])]
+    activity_values = {key: get_average(activity_avg_df, key) for key in macro_keys}
+    render_kpis("activity", activity_values, kpi_config)
+except Exception as e:
+    st.error(f"Error computing macro KPIs: {e}")
 
-    # Create columns dynamically based on the number of metrics
-    cols = st.columns(len(metrics))
-    for col, (label, value) in zip(cols, avg_values.items()):
-        col.metric(label, f"{value:.0f}" if value is not None else "N/A")
+# ---------------------- AVERAGE MACROS ----------------------
+st.header("Macros")
+try:
+    avg_macros_df = filtered_macros.group_by("metric_name").agg(
+        [pl.col("quantity").mean().alias("avg_quantity")]
+    )
 
+    macro_keys = [k.key for k in kpi_config.get("macros", [])]
+    macros_values = {key: get_average(avg_macros_df, key) for key in macro_keys}
+    render_kpis("macros", macros_values, kpi_config)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
 
 # === BAR GRAPH: MACROS BREAKDOWN (EXCLUDING CALORIES) ===
 st.header("Macros Breakdown Bar Chart")
-try:
-    macros_columns = [
-        "carbohydrates",
-        "protein",
-        "total_fat",
-    ]
-    bar_macros = filtered_macros.filter(
-        pl.col("metric_name").is_in(macros_columns)
-    ).sort(pl.col(["metric_date", "metric_name"]))
+col1, col2 = st.columns(2)
+with col1:
+    try:
+        macros_columns = [
+            "carbohydrates",
+            "protein",
+            "total_fat",
+        ]
+        bar_macros = filtered_macros.filter(
+            pl.col("metric_name").is_in(macros_columns)
+        ).sort(pl.col(["metric_date", "metric_name"]))
 
-    bar_chart_data = bar_macros.group_by("metric_name").agg(
-        [pl.col("quantity").mean().alias("avg_quantity")]
-    )
-
-    # st.dataframe(bar_macros)
-
-    st.bar_chart(bar_macros, x="metric_date", y="quantity", color="metric_name")
-except Exception as e:
-    st.error(f"Error generating bar chart: {e}")
-
-# === LINE GRAPH: DAILY CALORIES using st.line_chart ===
-# st.header("Daily Calories Line Chart")
-try:
-    calories_df = filtered_macros.filter(pl.col("metric_name") == "calories").sort(
-        "metric_date"
-    )
-    # st.write(calories_df)
-    if calories_df.is_empty():
-        st.write("No calories data available for the selected date range.")
-    else:
-        st.line_chart(
-            calories_df.select("metric_date", "quantity"), x="metric_date", y="quantity"
+        bar_chart_data = bar_macros.group_by("metric_name").agg(
+            [pl.col("quantity").mean().alias("avg_quantity")]
         )
 
-except Exception as e:
-    st.error(f"Error generating line chart: {e}")
+        # st.dataframe(bar_macros)
+
+        st.bar_chart(
+            bar_macros,
+            x="metric_date",
+            y="quantity",
+            color="metric_name",
+            x_label="Date",
+            y_label="Quantity",
+        )
+    except Exception as e:
+        st.error(f"Error generating bar chart: {e}")
+with col2:
+    # === LINE GRAPH: DAILY CALORIES using st.line_chart ===
+    # st.header("Daily Calories Line Chart")
+    try:
+        calories_df = filtered_macros.filter(pl.col("metric_name") == "calories").sort(
+            "metric_date"
+        )
+        # st.write(calories_df)
+        if calories_df.is_empty():
+            st.write("No calories data available for the selected date range.")
+        else:
+            st.line_chart(
+                calories_df.select("metric_date", "quantity"),
+                x="metric_date",
+                y="quantity",
+                x_label="Date",
+                y_label="Calories",
+            )
+
+    except Exception as e:
+        st.error(f"Error generating line chart: {e}")
 
 st.header("Sleep Stats")
 try:
-    # Compute average sleep metrics.
-    avg_sleep = filtered_sleep.group_by("metric_name").agg(
+    # ---------------------- SLEEP KPIs ----------------------
+    sleep_avg_df = filtered_sleep.group_by("metric_name").agg(
         [pl.col("quantity").mean().alias("avg_quantity")]
     )
 
-    # Extract sleep metrics (assume these values exist because the data loaded successfully)
-    avg_asleep = get_average(avg_sleep, "asleep")
-    avg_deep = get_average(avg_sleep, "deep_sleep")
-    avg_in_bed = get_average(avg_sleep, "in_bed")
+    # Convert sleep_times to Melbourne timezone
+    sleep_times_local = convert_column_to_timezone(filtered_sleep_times, "sleep_times")
+    sleep_start_df = sleep_times_local.filter(pl.col("metric_name") == "sleep_start")
+    sleep_end_df = sleep_times_local.filter(pl.col("metric_name") == "sleep_end")
 
-    # Calculate sleep efficiency and deltas against goals.
-    efficiency = avg_asleep / avg_in_bed * 100
-    delta_asleep = avg_asleep - SLEEP_GOAL  # Goal: 7 hours asleep
-    delta_deep = avg_deep - DEEP_SLEEP_GOAL  # Goal: 2 hours deep sleep
+    # Compute averages
+    avg_sleep_start = compute_avg_sleep_time_from_midnight(sleep_start_df)
+    avg_sleep_end = compute_avg_sleep_time_from_midnight(sleep_end_df)
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Time Asleep (h)", f"{avg_asleep:.1f}", delta=f"{delta_asleep:+.1f}h")
-    with col2:
-        st.metric("Deep Sleep (h)", f"{avg_deep:.1f}", delta=f"{delta_deep:+.1f}h")
-    with col3:
-        st.metric("Time in Bed (h)", f"{avg_in_bed:.1f}")
-    with col4:
-        st.metric("Sleep Efficiency", f"{efficiency:.0f}%")
+    sleep_keys = [k.key for k in kpi_config.get("sleep", [])]
+    sleep_values = {
+        key: (
+            avg_sleep_start
+            if key == "avg_sleep_start"
+            else avg_sleep_end
+            if key == "avg_sleep_end"
+            else get_average(sleep_avg_df, key)
+        )
+        for key in sleep_keys
+    }
+
+    render_kpis("sleep", sleep_values, kpi_config)
 except Exception as e:
     st.error(f"Error computing sleep KPIs: {e}")
