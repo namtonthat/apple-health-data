@@ -9,8 +9,8 @@ on:
   schedule:
     - cron: "0 13 * * 0" # Runs every Monday at midnight AEST
     - cron: "0 13 * * 3" # Runs every Thursday at midnight AEST
-  pull_request:
-    types: [opened, synchronize, reopened]
+  # pull_request:
+  #   types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
