@@ -10,14 +10,15 @@ import httpx
 import utils
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 # Securely load API key from environment variables
-API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
+HEVY_API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
+
+# Hevy Related Configuration
 BASE_URL: str = "https://api.hevyapp.com/v1"
 HEADERS: dict[str, str] = {
-    "api-key": API_KEY,
+    "api-key": HEVY_API_KEY,
     "Accept": "application/json",
 }
 
@@ -29,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 LAST_PROCESSED_FILE: str = "last_processed_date.txt"
 MAX_PAGE_SIZE: int = 10
+TIMEOUT_LIMIT: float = 10.0
 
 # --- API fetching functions ---
 
@@ -42,7 +44,12 @@ async def fetch_workouts_page(
         "page": page,
         "pageSize": page_size,
     }
-    response = await client.get(url, headers=HEADERS, params=params, timeout=10.0)
+    response = await client.get(
+        url,
+        headers=HEADERS,
+        params=params,
+        timeout=TIMEOUT_LIMIT,
+    )
     response.raise_for_status()
     return response.json()
 
@@ -77,8 +84,10 @@ async def main() -> None:
     if events:
         for event in events:
             workout = event.get("workout", {})
-            logger.info(
-                "Workout ID: %s, Title: %s", workout.get("id"), workout.get("title")
+            logger.debug(
+                "Workout ID: %s, Title: %s",
+                workout.get("id"),
+                workout.get("title"),
             )
 
         # Update the last processed date based on the latest event's updated_at field.
@@ -95,9 +104,7 @@ async def main() -> None:
 
         # Convert the events list to JSON (as is) for uploading
         events_data_str: str = json.dumps(events)
-        s3_key: str = (
-            f"{conf.s3_key_prefix}{datetime.now().strftime('%Y-%m-%d')}_workouts.json"
-        )
+        s3_key: str = f"{conf.s3_key_prefix}{datetime.now()}.json"
         utils.upload_to_s3(events_data_str, conf.s3_bucket, s3_key)
     else:
         logger.info("No new workouts found.")
