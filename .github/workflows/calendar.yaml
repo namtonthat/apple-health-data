@@ -25,7 +25,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ var.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Set up python
         uses: actions/setup-python@v4
@@ -41,8 +41,8 @@ jobs:
       - name: Ingest data from `hevy`
         run: make hevy
         env:
-          AWS_REGION: ${{ var.AWS_REGION }}
-          S3_BUCKET: ${{ var.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
 
       - name: Run dbt transforms
         run: cd transforms && uv run dbt run
