@@ -1,14 +1,17 @@
 import logging
+import os
 from dataclasses import dataclass, field
 from datetime import date, datetime, time
 from pathlib import Path
 from typing import Optional
 
 import boto3
-import conf
 import polars as pl
 import yaml
+from dotenv import load_dotenv
 from ics import Calendar, Event
+
+load_dotenv()
 
 # Set up logging configuration
 logging.basicConfig(
@@ -16,6 +19,13 @@ logging.basicConfig(
 )
 
 EVENT_FILE_NAME = "event_formats.yaml"
+
+AWS_REGION = os.getenv("AWS_REGION")
+CALENDAR_NAME = os.getenv("CALENDAR_NAME")
+S3_BUCKET = os.getenv("S3_BUCKET")
+S3_KEY_MACROS = os.getenv("S3_KEY_MACROS")
+S3_KEY_SLEEP = os.getenv("S3_KEY_SLEEP")
+S3_KEY_ACTIVITY = os.getenv("S3_KEY_ACTIVITY")
 
 
 @dataclass
@@ -86,7 +96,7 @@ class EventFactory:
         metrics = EventFactory._extract_metrics(df)
         _units = EventFactory._extract_units(df)
         # Rename unit keys to match YAML template (e.g. in_bed_time_unit)
-        units = {f"{k}_unit": v for k, v in _units.items()}
+        units = {f"{k}_units": v for k, v in _units.items()}
 
         # Check if all required metrics are available in either metrics or units
         combined = {**metrics, **units}
@@ -202,13 +212,15 @@ class CalendarStorage:
                 ContentType="text/calendar",
             )
 
-            if conf.aws_region:
-                public_url = f"https://{self.s3_bucket}.s3.{conf.aws_region}.amazonaws.com/{s3_key}"
+            if AWS_REGION:
+                public_url = (
+                    f"https://{self.s3_bucket}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
+                )
                 logging.info("Calendar publicly available at: %s", public_url)
                 return public_url
             else:
                 logging.warning(
-                    "`aws_region` key is missing from config, cannot build public URL."
+                    "`AWS_REGION` key is missing from config, cannot build public URL."
                 )
         except Exception as e:
             logging.error("Error uploading calendar to S3: %s", e)
@@ -257,18 +269,20 @@ class CalendarGenerator:
 
 
 if __name__ == "__main__":
-    s3_paths = {
-        "nutrition": conf.key_macros,
-        "activity": conf.key_activity,
-        "sleep": conf.key_sleep,
+    s3_health_paths = {
+        "nutrition": S3_KEY_MACROS,
+        "activity": S3_KEY_ACTIVITY,
+        "sleep": S3_KEY_SLEEP,
     }
 
-    generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=conf.s3_bucket)
+    generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=S3_BUCKET)
     total_events = 0
-    for group_name, s3_path in s3_paths.items():
+    for group_name, s3_health_path in s3_health_paths.items():
         total_events += generator.add_events_from_s3(
-            conf.s3_bucket, s3_path, group_name
+            S3_BUCKET,
+            s3_health_path,
+            group_name,
         )
 
     logging.info("%s calendar events saved", total_events)
-    generator.save_calendar(conf.calendar_name, save_to_s3=True)
+    generator.save_calendar(CALENDAR_NAME, save_to_s3=True)
