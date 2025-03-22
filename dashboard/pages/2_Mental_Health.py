@@ -2,7 +2,6 @@
 Streamlit dashboard for apple-health-data
 """
 
-import logging
 from datetime import datetime
 
 import conf
@@ -19,20 +18,15 @@ from helpers import (
 )
 from kpi import load_kpi_config, render_kpi_section
 
-# Configure logging.
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 # Page configuration
 st.set_page_config(
-    page_title="Mental State",
+    page_title="Mental Health",
     page_icon="🌒",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-st.title("🌒 Mental State")
+st.title("🌒 Mental Health")
 
 
 # Sidebar date selection
@@ -50,8 +44,6 @@ try:
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
-
-# Filtering data as per side bar filters
 
 # ---------------------- AVERAGE activity ----------------------
 st.header("Activity")
