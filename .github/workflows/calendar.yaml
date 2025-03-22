@@ -40,6 +40,9 @@ jobs:
 
       - name: Ingest data from `hevy`
         run: make hevy
+        with:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
 
       - name: Run dbt transforms
         run: cd transforms && uv run dbt run
