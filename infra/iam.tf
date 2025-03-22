@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "lambda_ingest_role" {
   name = "lambda_ingest_role"
   assume_role_policy = jsonencode({
@@ -88,13 +90,25 @@ data "aws_iam_policy_document" "github_actions_policy" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
       "iam:ListRolePolicies",
-      "iam:ListAccessKeys"
+      "iam:ListAccessKeys",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListAttachedUserPolicies",
     ]
     resources = [
       aws_iam_role.lambda_ingest_role.arn,
       aws_iam_role.lambda_dbt_role.arn,
       aws_iam_policy.lambda_ingest_s3_policy.arn,
-      aws_iam_user.github_actions.arn
+      aws_iam_user.github_actions.arn,
+      "arn:aws:iam::110386608476:policy/github_actions_policy"
+    ]
+  }
+  statement {
+    sid = "LambdaAccess"
+    actions = [
+      "lambda:*"
+    ]
+    resources = [
+      "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:*"
     ]
   }
 }
