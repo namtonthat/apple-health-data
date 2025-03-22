@@ -40,7 +40,7 @@ jobs:
 
       - name: Ingest data from `hevy`
         run: make hevy
-        with:
+        env:
           AWS_REGION: ${{ env.AWS_REGION }}
           S3_BUCKET: ${{ env.S3_BUCKET }}
 
