@@ -78,11 +78,26 @@ data "aws_iam_policy_document" "github_actions_policy" {
       "ecr:GetAuthorizationToken",
       "ecr:DescribeRepositories",
       "ecr:ListImages",
-      "ecr:BatchCheckLayerAvailability"
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:ListTagsForResource"
     ]
     resources = [
       aws_ecr_repository.dbt_repo.arn,
       aws_ecr_repository.ingest_repo.arn
+    ]
+  }
+  statement {
+    sid = "IAMReadAccess"
+    actions = [
+      "iam:GetRole",
+      "iam:GetUser",
+      "iam:GetPolicy"
+    ]
+    resources = [
+      aws_iam_role.lambda_ingest_role.arn,
+      aws_iam_role.lambda_dbt_role.arn,
+      aws_iam_policy.lambda_ingest_s3_policy.arn,
+      aws_iam_user.github_actions.arn
     ]
   }
 }
