@@ -34,6 +34,9 @@ jobs:
       - name: Install required packages
         run: make setup
 
+      - name: Ingest data from `hevy`
+        run: make hevy
+
       - name: Run dbt transforms
         run: cd transforms && uv run dbt run
 

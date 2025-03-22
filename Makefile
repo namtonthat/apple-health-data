@@ -12,12 +12,19 @@ calendar: # make calendar
 .PHONY: dashboard
 dashboard: # make dashboard
 	@echo "make dashboard"
-	./scripts/dashboard.sh
+	@pushd dashboard
+	@streamlit run 0_🏠_Home.py
 
 .PHONY: infra
 infra: # deploy infra
 	@echo "infra changes"
 	./scripts/infra.sh
+
+.PHONY: hevy
+hevy: # ingest hevy data
+	@echo "ingest hevy data"
+	@echo "running ingestion for hevy data"
+	@uv run ingest/exercise/hevy.py
 
 .PHONY: rebuild
 rebuild: # deploy rebuild
