@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -12,8 +12,11 @@ load_dotenv()
 HEVY_API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
 AWS_REGION = os.getenv("AWS_REGION")
 S3_BUCKET = os.getenv("S3_BUCKET")
-S3_KEY_PREFIX = os.getenv("S3_KEY_EXERCISE_PREFIX")
-START_INGEST_DATE = os.getenv("START_INGEST_DATE")
+
+# Global variable
+S3_KEY_PREFIX = "exercise/"
+default_start = (datetime.now() - timedelta(days=365)).isoformat()
+START_INGEST_DATE = os.getenv("START_INGEST_DATE", default_start)
 
 logger = logging.getLogger(__name__)
 
