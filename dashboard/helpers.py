@@ -112,3 +112,8 @@ def insert_reflections_into_duckdb(db_path: str, new_entry: Dict[str, str]) -> N
     logger.info("Executing query: %s", query)
     con.execute(query)
     con.close()
+
+
+def get_average(agg_df: pl.DataFrame, metric: str):
+    df_metric = agg_df.filter(pl.col("metric_name") == metric)
+    return df_metric["avg_quantity"][0]
