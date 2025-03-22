@@ -21,11 +21,8 @@ logging.basicConfig(
 EVENT_FILE_NAME = "event_formats.yaml"
 
 AWS_REGION = os.getenv("AWS_REGION")
-CALENDAR_NAME = os.getenv("CALENDAR_NAME")
+CALENDAR_NAME = os.getenv("CALENDAR_NAME", "apple-health-calendar.ics")
 S3_BUCKET = os.getenv("S3_BUCKET")
-S3_KEY_MACROS = os.getenv("S3_KEY_MACROS")
-S3_KEY_SLEEP = os.getenv("S3_KEY_SLEEP")
-S3_KEY_ACTIVITY = os.getenv("S3_KEY_ACTIVITY")
 
 
 @dataclass
@@ -270,9 +267,9 @@ class CalendarGenerator:
 
 if __name__ == "__main__":
     s3_health_paths = {
-        "nutrition": S3_KEY_MACROS,
-        "activity": S3_KEY_ACTIVITY,
-        "sleep": S3_KEY_SLEEP,
+        "nutrition": "semantic/macros.parquet",
+        "activity": "semantic/activity.parquet",
+        "sleep": "semantic/sleeps.parquet",
     }
 
     generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=S3_BUCKET)
