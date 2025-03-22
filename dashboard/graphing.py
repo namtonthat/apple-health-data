@@ -1,8 +1,43 @@
+"""
+Helper functions for rendering graphs
+"""
+
 import altair as alt
 import polars as pl
 import streamlit as st
 
 MACROS_BAR_HEIGHT = 400
+
+
+def filter_metrics(
+    df: pl.DataFrame,
+    metrics: list[str],
+    rename_map: dict[str, str] = dict(),
+    sort: bool = True,
+) -> pl.DataFrame:
+    """
+    Filter a Polars DataFrame for specific metric_names, optionally rename and sort.
+
+    Args:
+        df (pl.DataFrame): The input DataFrame.
+        metrics (list[str]): List of metric_name values to filter for.
+        rename_map (dict[str, str], optional): Mapping to rename metric_name values.
+        sort (bool, optional): Whether to sort by metric_date and metric_name.
+
+    Returns:
+        pl.DataFrame: Filtered, optionally renamed and sorted DataFrame.
+    """
+    filtered = df.filter(pl.col("metric_name").is_in(metrics))
+
+    if rename_map:
+        filtered = filtered.with_columns(
+            pl.col("metric_name").replace(rename_map).alias("metric_name")
+        )
+
+    if sort:
+        filtered = filtered.sort(["metric_date", "metric_name"])
+
+    return filtered
 
 
 def render_macros_bar_chart(df: pl.DataFrame):
