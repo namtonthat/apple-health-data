@@ -23,6 +23,10 @@ S3_BUCKET = os.getenv("S3_BUCKET")
 S3_KEY_PREFIX = os.getenv("S3_KEY_EXERCISE_PREFIX")
 START_INGEST_DATE = os.getenv("START_INGEST_DATE")
 
+logging.info(AWS_REGION)
+logging.info(S3_BUCKET)
+logging.info(S3_KEY_PREFIX)
+
 # Hevy Related Configuration
 BASE_URL: str = "https://api.hevyapp.com/v1"
 HEADERS: dict[str, str] = {
