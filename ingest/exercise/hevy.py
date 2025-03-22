@@ -5,7 +5,6 @@ import os
 from datetime import datetime
 from typing import Any
 
-import conf
 import httpx
 import utils
 from dotenv import load_dotenv
@@ -18,8 +17,11 @@ from tenacity import (
 
 load_dotenv()
 
-# Securely load API key from environment variables
 HEVY_API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
+AWS_REGION = os.getenv("AWS_REGION")
+S3_BUCKET = os.getenv("S3_BUCKET")
+S3_KEY_PREFIX = os.getenv("S3_KEY_EXERCISE_PREFIX")
+START_INGEST_DATE = os.getenv("START_INGEST_DATE")
 
 # Hevy Related Configuration
 BASE_URL: str = "https://api.hevyapp.com/v1"
@@ -130,7 +132,7 @@ async def fetch_workouts_since(
 async def main() -> None:
     last_processed_date: str = utils.get_last_processed_date_from_s3()
 
-    if last_processed_date != conf.start_ingest_date:
+    if last_processed_date != START_INGEST_DATE:
         events: list[dict[str, Any]] = await fetch_workouts_since(
             last_processed_date,
             page_size=MAX_PAGE_SIZE,
@@ -150,8 +152,8 @@ async def main() -> None:
 
         # Convert the events list to JSON (as is) for uploading
         events_data_str: str = json.dumps(events)
-        s3_key: str = f"{conf.s3_key_prefix}{datetime.now().isoformat()}.json"
-        utils.upload_to_s3(events_data_str, conf.s3_bucket, s3_key)
+        s3_key_with_filename: str = f"{S3_KEY_PREFIX}{datetime.now().isoformat()}.json"
+        utils.upload_to_s3(events_data_str, S3_BUCKET, s3_key_with_filename)
         logger.info("Processed %s workouts.", len(events))
     else:
         logger.info("No new workouts found.")
