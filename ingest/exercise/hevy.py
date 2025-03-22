@@ -23,9 +23,6 @@ S3_BUCKET = os.getenv("S3_BUCKET")
 S3_KEY_PREFIX = os.getenv("S3_KEY_EXERCISE_PREFIX")
 START_INGEST_DATE = os.getenv("START_INGEST_DATE")
 
-logging.info(AWS_REGION)
-logging.info(S3_BUCKET)
-logging.info(S3_KEY_PREFIX)
 
 # Hevy Related Configuration
 BASE_URL: str = "https://api.hevyapp.com/v1"
@@ -134,6 +131,9 @@ async def fetch_workouts_since(
 
 
 async def main() -> None:
+    logging.info(AWS_REGION)
+    logging.info(S3_BUCKET)
+    logging.info(S3_KEY_PREFIX)
     last_processed_date: str = utils.get_last_processed_date_from_s3()
 
     if last_processed_date != START_INGEST_DATE:
