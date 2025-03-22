@@ -42,6 +42,7 @@ jobs:
         run: make hevy
         env:
           AWS_REGION: ${{ vars.AWS_REGION }}
+          HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
           S3_BUCKET: ${{ vars.S3_BUCKET }}
 
       - name: Run dbt transforms
