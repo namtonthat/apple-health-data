@@ -71,9 +71,7 @@ async def fetch_all_workouts(page_size: int = MAX_PAGE_SIZE) -> list[dict[str, A
             client, 1, page_size
         )
         total_pages: int = first_page_data.get("page_count", 1)
-        events: list[dict[str, Any]] = first_page_data.get(
-            "workouts", []
-        )  # Using 'workouts' key here
+        events: list[dict[str, Any]] = first_page_data.get("workouts", [])
 
         tasks = [
             _fetch_all_workouts(client, page, page_size)
