@@ -10,7 +10,7 @@ with calories as (
                 else 0
             end
         ) as quantity,
-        'g' as units
+        'kcal' as units
     from {{ ref('raw_macros') }}
     group by all
 ),
