@@ -64,6 +64,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dashboard = [
+    { name = "altair" },
     { name = "duckdb" },
     { name = "streamlit" },
     { name = "watchdog" },
@@ -94,6 +95,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dashboard = [
+    { name = "altair", specifier = ">=5.5.0" },
     { name = "duckdb", specifier = ">=1.2.1" },
     { name = "streamlit", specifier = ">=1.43.2" },
     { name = "watchdog", specifier = ">=6.0.0" },

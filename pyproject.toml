@@ -17,6 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dashboard = [
+    "altair>=5.5.0",
     "duckdb>=1.2.1",
     "streamlit>=1.43.2",
     "watchdog>=6.0.0",

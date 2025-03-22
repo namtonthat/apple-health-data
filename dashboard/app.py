@@ -12,6 +12,7 @@ import conf
 import polars as pl
 import streamlit as st
 import yaml
+from graphing import MACROS_BAR_HEIGHT, render_macros_bar_chart
 from helpers import (
     compute_avg_sleep_time_from_midnight,
     convert_column_to_timezone,
@@ -67,7 +68,8 @@ def render_kpis(section: str, values: dict[str, Any], config: dict[str, Any]) ->
         goal = kpi.goal
         delta = None
         if goal is not None and val is not None and not is_time:
-            delta = fmt.format(val - goal)
+            pct_change = (val - goal) / goal * 100
+            delta = f"{pct_change:+.0f}%"
 
         if is_time and isinstance(val, datetime):
             val_str = val.strftime(fmt)
@@ -169,58 +171,56 @@ try:
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
 
-# === BAR GRAPH: MACROS BREAKDOWN (EXCLUDING CALORIES) ===
+# Load required macros data
+try:
+    macros_columns = [
+        "carbohydrates",
+        "protein",
+        "total_fat",
+    ]
+    _bar_macros = filtered_macros.filter(pl.col("metric_name").is_in(macros_columns))
+
+    bar_macros = _bar_macros.with_columns(
+        pl.col("metric_name").replace("total_fat", "fat").alias("metric_name")
+    ).sort(pl.col(["metric_date", "metric_name"]))
+
+    calories_df = filtered_macros.filter(pl.col("metric_name") == "calories").sort(
+        "metric_date"
+    )
+    if calories_df.is_empty():
+        st.write("No calories data available for the selected date range.")
+except Exception as e:
+    st.error(f"Error generating data for macros chart: {e}")
+
+# === BAR GRAPH: MACROS BREAKDOWN ===
 st.header("Macros Breakdown Bar Chart")
 col1, col2 = st.columns(2)
 with col1:
-    try:
-        macros_columns = [
-            "carbohydrates",
-            "protein",
-            "total_fat",
-        ]
-        bar_macros = filtered_macros.filter(
-            pl.col("metric_name").is_in(macros_columns)
-        ).sort(pl.col(["metric_date", "metric_name"]))
+    st.bar_chart(
+        bar_macros,
+        x="metric_date",
+        y="quantity",
+        color="metric_name",
+        x_label="Date",
+        y_label="Quantity",
+        horizontal=True,
+        height=MACROS_BAR_HEIGHT,
+    )
 
-        bar_chart_data = bar_macros.group_by("metric_name").agg(
-            [pl.col("quantity").mean().alias("avg_quantity")]
-        )
-
-        # st.dataframe(bar_macros)
-
-        st.bar_chart(
-            bar_macros,
-            x="metric_date",
-            y="quantity",
-            color="metric_name",
-            x_label="Date",
-            y_label="Quantity",
-        )
-    except Exception as e:
-        st.error(f"Error generating bar chart: {e}")
 with col2:
     # === LINE GRAPH: DAILY CALORIES using st.line_chart ===
     # st.header("Daily Calories Line Chart")
-    try:
-        calories_df = filtered_macros.filter(pl.col("metric_name") == "calories").sort(
-            "metric_date"
-        )
-        # st.write(calories_df)
-        if calories_df.is_empty():
-            st.write("No calories data available for the selected date range.")
-        else:
-            st.line_chart(
-                calories_df.select("metric_date", "quantity"),
-                x="metric_date",
-                y="quantity",
-                x_label="Date",
-                y_label="Calories",
-            )
+    render_macros_bar_chart(bar_macros)
 
-    except Exception as e:
-        st.error(f"Error generating line chart: {e}")
-
+st.header("Calories")
+st.line_chart(
+    calories_df.select("metric_date", "quantity"),
+    x="metric_date",
+    y="quantity",
+    x_label="Date",
+    y_label="Calories",
+    height=400,
+)
 st.header("Sleep Stats")
 try:
     # ---------------------- SLEEP KPIs ----------------------
