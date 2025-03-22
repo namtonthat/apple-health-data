@@ -1,10 +1,11 @@
 resource "aws_ecr_repository" "dbt_repo" {
-  name = "lambda_dbt_repo"
+  name = "apple_health_dbt"
 }
 
 data "aws_ecr_image" "latest_dbt_image" {
   repository_name = aws_ecr_repository.dbt_repo.name
   image_tag       = "latest"
+  depends_on      = [null_resource.build_push_dbt, aws_iam_user.github_actions]
 }
 
 resource "null_resource" "build_push_dbt" {

@@ -1,0 +1,59 @@
+macros:
+  - label: "Calories (kcal)"
+    key: calories
+    goal: 2500
+    format: "{:.0f}"
+  - label: "Carbohydrates (g)"
+    key: carbohydrates
+    format: "{:.0f}"
+    goal: 300
+  - label: "Protein (g)"
+    key: protein
+    goal: 165
+    format: "{:.0f}"
+  - label: "Fat (g)"
+    key: total_fat
+    goal: 60
+    format: "{:.0f}"
+  - label: "Fibre (g)"
+    key: fiber
+    goal: 30
+    format: "{:.0f}"
+
+activity:
+  - label: "Exercise Time (mins)"
+    key: apple_exercise_time
+    format: "{:.0f}"
+  - label: "Mindfulness (mins)"
+    key: mindful_minutes
+    format: "{:.0f}"
+  - label: "Step Count"
+    key: step_count
+    goal: 10000
+    format: "{:,.0f}"
+  - label: "Weight (kg)"
+    key: weight_body_mass
+    format: "{:.1f}"
+sleep:
+  - label: "Time Asleep (h)"
+    key: asleep
+    format: "{:.1f}"
+    goal: 7
+  - label: "Deep Sleep (h)"
+    key: deep_sleep
+    format: "{:.1f}"
+    goal: 2
+  - label: "Time in Bed (h)"
+    key: in_bed
+    format: "{:.1f}"
+  - label: "Sleep Efficiency"
+    key: efficiency
+    format: "{:.0f}%"
+  - label: "Avg Sleep Start"
+    key: avg_sleep_start
+    format: "%I:%M %p"
+    is_time: true
+  - label: "Avg Sleep End"
+    key: avg_sleep_end
+    format: "%I:%M %p"
+    is_time: true

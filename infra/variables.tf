@@ -5,7 +5,7 @@ variable "aws_region" {
 }
 
 variable "aws_s3_bucket" {
-  description = "AWS region for deployment"
+  description = "Data to hold apple-health-data"
   type        = string
   default     = "api-health-data-ntonthat"
 }

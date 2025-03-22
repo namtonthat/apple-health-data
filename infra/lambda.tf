@@ -1,10 +1,11 @@
 resource "aws_ecr_repository" "ingest_repo" {
-  name = "lambda_ingest_repo"
+  name = "apple_health_ingest"
 }
 
 data "aws_ecr_image" "latest_ingest_image" {
   repository_name = aws_ecr_repository.ingest_repo.name
   image_tag       = "latest"
+  depends_on      = [null_resource.build_push_ingest, aws_iam_user.github_actions]
 }
 
 resource "null_resource" "build_push_ingest" {
