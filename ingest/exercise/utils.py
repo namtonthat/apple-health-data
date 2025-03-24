@@ -1,7 +1,9 @@
 import logging
 import os
 import re
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from typing import Any
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -17,6 +19,10 @@ S3_BUCKET = os.getenv("S3_BUCKET")
 S3_KEY_PREFIX = "landing/exercise/"
 default_start = (datetime.now() - timedelta(days=365)).isoformat()
 START_INGEST_DATE = os.getenv("START_INGEST_DATE", default_start)
+BUFFER_DAYS = timedelta(days=30)
+MAX_PAGE_SIZE: int = 10
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+
 
 logger = logging.getLogger(__name__)
 
@@ -80,3 +86,35 @@ def get_last_processed_date_from_s3() -> str:
     else:
         logger.info("No matching JSON files found. Using default date.")
         return START_INGEST_DATE
+
+
+@dataclass
+class WorkoutFetchConfig:
+    endpoint: str
+    params: dict[str, Any]
+    response_key: str
+
+
+def get_workout_fetch_config(last_processed_date: str) -> WorkoutFetchConfig:
+    """
+    Build the WorkoutFetchConfig based on the last_processed_date.
+    If last_processed_date is not START_INGEST_DATE, adjust the date using BUFFER_DAYS
+    and use the incremental endpoint.
+    """
+    if last_processed_date != START_INGEST_DATE:
+        dt = datetime.strptime(last_processed_date, DATE_FORMAT)
+        dt_with_buffer = dt - BUFFER_DAYS
+        adjusted_date = dt_with_buffer.strftime(DATE_FORMAT)
+        logger.info("Shifted processing date to %s", adjusted_date)
+        return WorkoutFetchConfig(
+            endpoint="workouts/events",
+            params={"since": adjusted_date, "page": 1, "pageSize": MAX_PAGE_SIZE},
+            response_key="events",
+        )
+    else:
+        logger.info("No valid last processed date found. Using full workouts endpoint.")
+        return WorkoutFetchConfig(
+            endpoint="workouts",
+            params={"page": 1, "pageSize": MAX_PAGE_SIZE},
+            response_key="workouts",
+        )
