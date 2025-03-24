@@ -40,16 +40,21 @@ def filter_metrics(
     return filtered
 
 
-def render_macros_bar_chart(df: pl.DataFrame):
-    chart_data = df.to_pandas()
+def create_dynamic_scale(df: pl.DataFrame, column: str) -> tuple[float, float]:
+    return (df["quantity"].min(), df["quantity"].max())
 
+
+def render_macros_bar_chart(df: pl.DataFrame):
     base = (
-        alt.Chart(chart_data)
+        alt.Chart(df)
         .encode(
             x=alt.X(
                 "metric_name:N", axis=alt.Axis(title=None, labels=False, ticks=False)
             ),
-            y=alt.Y("quantity:Q", title="Grams"),
+            y=alt.Y(
+                "quantity:Q",
+                title="Grams",
+            ),
             color=alt.Color("metric_name:N", title="Macro"),
             tooltip=["metric_date:N", "metric_name:N", "quantity:Q"],
         )
@@ -75,3 +80,20 @@ def render_macros_bar_chart(df: pl.DataFrame):
         .properties(title="Daily Macro Breakdown")
     )
     st.altair_chart(chart, use_container_width=True)
+
+
+def render_altair_line_chart(df: pl.DataFrame, title: str):
+    chart = (
+        alt.Chart(df)
+        .mark_line()
+        .encode(
+            x=alt.X("metric_date:N", title="Date"),
+            y=alt.Y(
+                "quantity:Q",
+                title=title,
+                scale=alt.Scale(domain=create_dynamic_scale(df, "quantity")),
+            ),
+        )
+    )
+
+    return st.altair_chart(chart)
