@@ -22,19 +22,3 @@ resource "aws_s3_bucket_acl" "health_data_bucket" {
   acl        = "private"
 }
 
-resource "aws_s3_bucket_policy" "semantic_public_policy" {
-  bucket = aws_s3_bucket.health_data_bucket.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "AllowPublicReadForSemanticFolder"
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.health_data_bucket.arn}/semantic/*"
-      }
-    ]
-  })
-}

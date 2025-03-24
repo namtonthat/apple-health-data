@@ -23,5 +23,5 @@ outputs/
 .env
 
 # streamlit
-.streamlit/*
+*/.streamlit/*
 
