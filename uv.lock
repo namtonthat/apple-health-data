@@ -63,21 +63,17 @@ name = "apple-health-calendar"
 version = "0.2.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "asyncio" },
     { name = "aws-lambda-powertools" },
     { name = "boto3" },
-    { name = "httpx" },
     { name = "ics" },
     { name = "pip" },
     { name = "polars" },
     { name = "pre-commit" },
     { name = "pyarrow" },
     { name = "pydantic" },
-    { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "ruff" },
     { name = "sqlfluff-templater-dbt" },
-    { name = "tenacity" },
 ]
 
 [package.dev-dependencies]
@@ -93,6 +89,12 @@ dbt = [
     { name = "dbt-duckdb" },
     { name = "duckdb" },
 ]
+ingest = [
+    { name = "asyncio" },
+    { name = "httpx" },
+    { name = "python-dotenv" },
+    { name = "tenacity" },
+]
 test = [
     { name = "pytest" },
     { name = "sqlfluff" },
@@ -100,21 +102,17 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "asyncio", specifier = ">=3.4.3" },
     { name = "aws-lambda-powertools", specifier = ">=3.8.0" },
     { name = "boto3", specifier = ">=1.37.9" },
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "ics", specifier = ">=0.7.2" },
     { name = "pip", specifier = ">=25.0.1" },
     { name = "polars", specifier = ">=1.24.0" },
     { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "pyarrow", specifier = ">=19.0.1" },
     { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "ruff", specifier = ">=0.9.10" },
     { name = "sqlfluff-templater-dbt", specifier = ">=3.3.1" },
-    { name = "tenacity", specifier = ">=9.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -129,6 +127,12 @@ dbt = [
     { name = "dbt-core", specifier = ">=1.9.3" },
     { name = "dbt-duckdb", specifier = ">=1.9.2" },
     { name = "duckdb", specifier = ">=1.2.1" },
+]
+ingest = [
+    { name = "asyncio", specifier = ">=3.4.3" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
+    { name = "tenacity", specifier = ">=9.0.0" },
 ]
 test = [
     { name = "pytest" },

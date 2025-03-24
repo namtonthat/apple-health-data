@@ -17,7 +17,7 @@ dashboard: # make dashboard
 .PHONY: dbt
 dbt: # run dbt models
 	@echo "running dbt models"
-	@cd transforms && uv run dbt run
+	@cd transforms && uv sync --group dbt && uv run dbt run
 
 .PHONY: infra
 infra: # deploy infra
@@ -28,7 +28,7 @@ infra: # deploy infra
 hevy: # ingest hevy data
 	@echo "ingest hevy data"
 	@echo "running ingestion for hevy data"
-	@uv run ingest/exercise/hevy.py
+	@uv sync --group ingest && uv run ingest/exercise/hevy.py
 
 .PHONY: rebuild
 rebuild: # deploy rebuild
@@ -43,4 +43,4 @@ setup: # Install packages required for local development
 .PHONY: test
 test: # run test
 	@echo "run ruff / sql tests"
-	./scripts/test.sh
+	@./scripts/test.sh
