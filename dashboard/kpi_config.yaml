@@ -1,3 +1,18 @@
+activity:
+  - label: "Exercise Time (mins)"
+    key: apple_exercise_time
+    format: "{:.0f}"
+  - label: "Mindfulness (mins)"
+    key: mindful_minutes
+    format: "{:.0f}"
+  - label: "Step Count"
+    key: step_count
+    goal: 10000
+    format: "{:,.0f}"
+  - label: "Weight (kg)"
+    key: weight_body_mass
+    format: "{:.1f}"
+
 macros:
   - label: "Calories (kcal)"
     key: calories
@@ -20,20 +35,6 @@ macros:
     goal: 30
     format: "{:.0f}"
 
-activity:
-  - label: "Exercise Time (mins)"
-    key: apple_exercise_time
-    format: "{:.0f}"
-  - label: "Mindfulness (mins)"
-    key: mindful_minutes
-    format: "{:.0f}"
-  - label: "Step Count"
-    key: step_count
-    goal: 10000
-    format: "{:,.0f}"
-  - label: "Weight (kg)"
-    key: weight_body_mass
-    format: "{:.1f}"
 sleep:
   - label: "Time Asleep (h)"
     key: asleep

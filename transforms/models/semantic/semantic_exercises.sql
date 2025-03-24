@@ -1,13 +1,16 @@
 select
-    id,
-    title as workout_name,
-    start_time,
-    end_time,
+    workout_name,
+    cast(start_time as date) as metric_date,
+    -- start_time,
+    -- end_time,
+    round(extract(epoch from workout_duration) / 60, 0)
+        as workout_duration_mins,
     index,
-    title_1 as exercise_name,
+    exercise_name,
     notes,
     set_type,
-    weight_kg,
+    round(weight_kg, 1) as weight_kg,
     reps,
     rpe
 from {{ ref('raw_exercises') }}
+order by metric_date asc

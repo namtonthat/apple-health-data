@@ -6,6 +6,7 @@ write_to_s3 = False
 
 # S3 paths
 key_activity = "semantic/activity.parquet"
+key_exercise = "semantic/exercises.parquet"
 key_macros = "semantic/macros.parquet"
 key_sleep = "semantic/sleeps.parquet"
 key_sleep_times = "semantic/sleep_times.parquet"
