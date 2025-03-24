@@ -96,6 +96,7 @@ ingest = [
 ]
 test = [
     { name = "pytest" },
+    { name = "sqlfluff" },
 ]
 
 [package.metadata]
@@ -131,7 +132,10 @@ ingest = [
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "tenacity", specifier = ">=9.0.0" },
 ]
-test = [{ name = "pytest" }]
+test = [
+    { name = "pytest" },
+    { name = "sqlfluff", specifier = ">=3.3.1" },
+]
 
 [[package]]
 name = "arrow"
