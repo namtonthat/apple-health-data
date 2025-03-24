@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.title("🤔 Exercise")
+st.title("🤔 Reflection")
 
 if not st.experimental_user.is_logged_in:
     if st.button("Log in with Google"):

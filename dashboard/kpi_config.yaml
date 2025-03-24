@@ -10,6 +10,11 @@ activity:
     goal: 10000
     format: "{:,.0f}"
 
+exercises:
+  - label: "Exercise Time (mins)"
+    key: apple_exercise_time
+    format: "{:.0f}"
+
 nutrition:
   - label: "Weight (kg)"
     key: weight_body_mass

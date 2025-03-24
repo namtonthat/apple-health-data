@@ -29,7 +29,12 @@ start_date, end_date = sidebar_datetime_filter()
 
 
 try:
-    filtered_exercise = load_filtered_s3_data(conf.key_exercise, start_date, end_date)
+    filtered_exercises = load_filtered_s3_data(conf.key_exercises, start_date, end_date)
+    filtered_exercises_kpis = load_filtered_s3_data(
+        conf.key_exercises_kpis,
+        start_date,
+        end_date,
+    )
     # Load configuration
     kpi_config = load_kpi_config()
 
@@ -40,6 +45,7 @@ except Exception as e:
 # ---------------------- AVERAGE activity ----------------------
 try:
     # render_kpi_section("exercise", filtered_exercise, kpi_config)
-    st.write(filtered_exercise)
+    st.write(filtered_exercises)
+    st.write(filtered_exercises_kpis)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")

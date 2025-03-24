@@ -1,8 +1,8 @@
 select
+    id,
     workout_name,
     cast(start_time as date) as metric_date,
-    -- start_time,
-    -- end_time,
+    start_time,
     round(extract(epoch from workout_duration) / 60, 0)
         as workout_duration_mins,
     index,
