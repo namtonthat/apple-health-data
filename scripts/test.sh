@@ -6,4 +6,4 @@ echo "run linting checks"
 uv run ruff check
 
 echo "run sqlfluff"
-sqlfluff lint --dialect duckdb --templater jinja transforms/models/
+uv run sqlfluff lint --dialect duckdb --templater jinja models/
