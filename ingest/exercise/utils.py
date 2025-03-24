@@ -14,7 +14,7 @@ AWS_REGION = os.getenv("AWS_REGION")
 S3_BUCKET = os.getenv("S3_BUCKET")
 
 # Global variable
-S3_KEY_PREFIX = "exercise/"
+S3_KEY_PREFIX = "landing/exercise/"
 default_start = (datetime.now() - timedelta(days=365)).isoformat()
 START_INGEST_DATE = os.getenv("START_INGEST_DATE", default_start)
 

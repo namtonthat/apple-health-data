@@ -1,6 +1,6 @@
 with raw_data as (
     select * from
-        read_json('s3://{{ var("s3_bucket") }}/exercise/*.json')
+        read_json('s3://{{ var("s3_bucket") }}/landing/exercise/*.json')
 ),
 
 unnested_data as (

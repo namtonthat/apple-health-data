@@ -15,6 +15,12 @@ dashboard: # make dashboard
 	@pushd dashboard
 	@streamlit run 0_🏠_Home.py
 
+.PHONY: dbt
+dbt: # run dbt models
+	@echo "running dbt models"
+	@pushd transforms
+	@uv run dbt run
+
 .PHONY: infra
 infra: # deploy infra
 	@echo "infra changes"
