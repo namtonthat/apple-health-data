@@ -27,6 +27,5 @@ jobs:
       # - name: Install required test packages
       #   run: make setup
 
-      - name: Run test
-        run: |
-          uv run ruff check .
+      - name: Run checks
+        run: make test

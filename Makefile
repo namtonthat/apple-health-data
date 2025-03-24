@@ -42,3 +42,7 @@ setup: # Install packages required for local development
 	@echo "Installing packages required for local development"
 	./scripts/setup.sh
 
+.PHONY: test
+test: # run test
+	@echo "run ruff / sql tests"
+	./scripts/test.sh
