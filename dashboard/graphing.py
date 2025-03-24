@@ -40,10 +40,6 @@ def filter_metrics(
     return filtered
 
 
-def create_dynamic_scale(df: pl.DataFrame, column: str) -> tuple[float, float]:
-    return (df["quantity"].min(), df["quantity"].max())
-
-
 def render_macros_bar_chart(df: pl.DataFrame):
     base = (
         alt.Chart(df)
@@ -83,6 +79,7 @@ def render_macros_bar_chart(df: pl.DataFrame):
 
 
 def render_altair_line_chart(df: pl.DataFrame, title: str):
+    """Generate a line chart of the data and limit the y values to their min/max."""
     chart = (
         alt.Chart(df)
         .mark_line()
@@ -91,7 +88,7 @@ def render_altair_line_chart(df: pl.DataFrame, title: str):
             y=alt.Y(
                 "quantity:Q",
                 title=title,
-                scale=alt.Scale(domain=create_dynamic_scale(df, "quantity")),
+                scale=alt.Scale(domain=[df["quantity"].min(), df["quantity"].max()]),
             ),
         )
     )
