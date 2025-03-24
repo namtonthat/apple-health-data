@@ -1,4 +1,4 @@
-with macros as (
+with nutrition as (
     select *
     from {{ ref('raw_latest_api_metrics') }}
     where metric_name in (
@@ -6,7 +6,8 @@ with macros as (
         'carbohydrates',
         'fiber',
         'protein',
-        'total_fat'
+        'total_fat',
+        'weight_body_mass'
     )
 )
 
@@ -15,5 +16,5 @@ select
     metric_name,
     quantity,
     units
-from macros
+from nutrition
 order by metric_date desc, metric_name asc

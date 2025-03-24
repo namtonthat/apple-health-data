@@ -11,21 +11,21 @@ with calories as (
             end
         ) as quantity,
         'kcal' as units
-    from {{ ref('raw_macros') }}
+    from {{ ref('raw_nutrition') }}
     group by all
 ),
 
-all_macros as (
+all_nutrition as (
     select * from calories
     where quantity != 0
     union all
-    select * from {{ ref('raw_macros') }}
+    select * from {{ ref('raw_nutrition') }}
 )
 
 select
     metric_date,
     metric_name,
-    cast(round(quantity, 0) as int) as quantity,
+    cast(round(quantity, 1) as float) as quantity,
     units
-from all_macros
+from all_nutrition
 order by metric_date desc, metric_name asc
