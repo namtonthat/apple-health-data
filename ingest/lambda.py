@@ -32,7 +32,6 @@ def ingest():
 
 
 def lambda_handler(event, context):
-    # Log the entire event to see what's being received
     logger.info("Raw event received", extra={"event": event})
 
     return app.resolve(event, context)
