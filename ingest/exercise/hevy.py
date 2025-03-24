@@ -119,7 +119,6 @@ async def main() -> None:
             workouts.append(workout)
 
         # Convert the events list to JSON (as is) for uploading
-        logger.info("workouts %s", workouts)
         workout_data: str = json.dumps(workouts)
         s3_key_with_filename: str = f"{utils.S3_KEY_PREFIX}{ctrl_load_date}.json"
         utils.upload_to_s3(workout_data, S3_BUCKET, s3_key_with_filename)
