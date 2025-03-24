@@ -14,7 +14,7 @@ from helpers import (
     compute_avg_sleep_time_from_midnight,
     convert_column_to_timezone,
     load_filtered_s3_data,
-    sidebar_date_filter,
+    sidebar_datetime_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
 
@@ -31,7 +31,7 @@ st.title("🌒 Mental Health")
 
 # Sidebar date selection
 today = datetime.today().date()
-start_date, end_date = sidebar_date_filter()
+start_date, end_date = sidebar_datetime_filter()
 
 
 try:

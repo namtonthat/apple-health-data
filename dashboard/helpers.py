@@ -6,7 +6,7 @@ This module contains functions to read data from AWS S3 (in Parquet format) usin
 
 import io
 import logging
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 import boto3
 import conf
@@ -106,7 +106,7 @@ def compute_avg_sleep_time_from_midnight(
     return midnight_today + avg_offset
 
 
-def sidebar_date_filter() -> tuple[date, date]:
+def sidebar_datetime_filter() -> tuple[datetime, datetime]:
     """
     Render a shared sidebar date filter component and return start/end date.
     """
@@ -133,5 +133,9 @@ def sidebar_date_filter() -> tuple[date, date]:
         )
         end_date = st.sidebar.date_input("End Date", value=today)
 
+    # Create datetime objects for filtering: start at midnight, end at 23:59:59
+    start_dt = datetime.combine(start_date, time.min)
+    end_dt = datetime.combine(end_date, time(23, 59, 59))
+
     st.sidebar.caption(f"Showing data from `{start_date}` to `{end_date}`")
-    return start_date, end_date
+    return start_dt, end_dt

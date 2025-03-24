@@ -8,7 +8,7 @@ import conf
 import streamlit as st
 from helpers import (
     load_filtered_s3_data,
-    sidebar_date_filter,
+    sidebar_datetime_filter,
 )
 from kpi import load_kpi_config
 
@@ -25,7 +25,7 @@ st.title("🏋️ Exercise")
 
 # Sidebar date selection
 today = datetime.today().date()
-start_date, end_date = sidebar_date_filter()
+start_date, end_date = sidebar_datetime_filter()
 
 
 try:

@@ -12,7 +12,7 @@ from graphing import (
 )
 from helpers import (
     load_filtered_s3_data,
-    sidebar_date_filter,
+    sidebar_datetime_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
 
@@ -26,7 +26,7 @@ st.set_page_config(
 
 st.title("🧑‍🍳 Nutrition")
 
-start_date, end_date = sidebar_date_filter()
+start_date, end_date = sidebar_datetime_filter()
 
 
 try:
