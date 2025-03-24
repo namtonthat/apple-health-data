@@ -21,3 +21,7 @@ outputs/
 
 # env 
 .env
+
+# streamlit
+.streamlit/*
+

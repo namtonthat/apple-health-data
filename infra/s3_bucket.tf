@@ -22,7 +22,6 @@ resource "aws_s3_bucket_acl" "health_data_bucket" {
   acl        = "private"
 }
 
-# Grant public read access to objects under semantic/*
 resource "aws_s3_bucket_policy" "semantic_public_policy" {
   bucket = aws_s3_bucket.health_data_bucket.id
 

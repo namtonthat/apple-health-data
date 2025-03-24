@@ -127,3 +127,30 @@ resource "aws_iam_user_policy_attachment" "github_actions_attach" {
 resource "aws_iam_access_key" "github_actions_key" {
   user = aws_iam_user.github_actions.name
 }
+
+resource "aws_iam_user" "streamlit" {
+  name = "streamlit"
+}
+
+resource "aws_iam_access_key" "streamlit" {
+  user = aws_iam_user.streamlit.name
+}
+
+resource "aws_iam_user_policy" "streamlit_policy" {
+  name = "streamlit_policy"
+  user = aws_iam_user.streamlit.name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowS3GetObject",
+        Effect = "Allow",
+        Action = "s3:GetObject",
+        Resource = [
+          "${aws_s3_bucket.health_data_bucket.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+

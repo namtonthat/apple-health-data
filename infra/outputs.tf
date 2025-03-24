@@ -16,3 +16,14 @@ output "github_actions_secret_access_key" {
   value       = aws_iam_access_key.github_actions_key.secret
   sensitive   = true
 }
+
+output "streamlit_access_key_id" {
+  description = "The access key ID for the streamlit IAM user"
+  value       = aws_iam_access_key.streamlit.id
+}
+
+output "streamlit_secret_access_key" {
+  description = "The access key ID for the streamlit IAM user"
+  value       = aws_iam_access_key.streamlit.secret
+  sensitive   = true
+}
