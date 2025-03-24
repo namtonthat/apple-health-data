@@ -28,10 +28,10 @@ latest_dates as (
 select
     rd.id,
     rd.title,
-    rd.start_time,
-    rd.end_time,
-    rd.updated_at,
-    rd.created_at,
+    timezone('Australia/Melbourne', rd.start_time) as start_time,
+    timezone('Australia/Melbourne', rd.end_time) as end_time,
+    timezone('Australia/Melbourne', rd.updated_at) as updated_at,
+    timezone('Australia/Melbourne', rd.created_at) as created_at,
     rd.ctrl_load_date,
     rd.exercises
 from casted_raw_data as rd

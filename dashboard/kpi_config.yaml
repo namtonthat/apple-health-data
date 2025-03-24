@@ -11,9 +11,15 @@ activity:
     format: "{:,.0f}"
 
 exercises:
-  - label: "Exercise Time (mins)"
-    key: apple_exercise_time
+  - label: "Workout Volume (tonnes)"
+    key: workout_volume_tonnes
+    format: "{:.1f}"
+  - label: "Workout Time (mins)"
+    key: workout_time_mins
     format: "{:.0f}"
+  - label: "Workout Time (hrs)"
+    key: workout_time_hours
+    format: "{:.1f}"
 
 nutrition:
   - label: "Weight (kg)"

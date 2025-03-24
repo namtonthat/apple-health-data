@@ -5,12 +5,14 @@ Streamlit dashboard for apple-health-data
 from datetime import datetime
 
 import conf
+import polars as pl
 import streamlit as st
+from graphing import render_altair_line_chart
 from helpers import (
     load_filtered_s3_data,
     sidebar_datetime_filter,
 )
-from kpi import load_kpi_config
+from kpi import load_kpi_config, render_kpi_section
 
 # Page configuration
 st.set_page_config(
@@ -42,10 +44,32 @@ except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
 
-# ---------------------- AVERAGE activity ----------------------
 try:
-    # render_kpi_section("exercise", filtered_exercise, kpi_config)
+    volume_df = filtered_exercises_kpis.filter(
+        pl.col("metric_name") == "workout_volume"
+    )
+    time_df = filtered_exercises_kpis.filter(pl.col("metric_name") == "workout_time")
+
+    sum_workout_volume_kg = volume_df.select(pl.col("quantity").sum()).item()
+    sum_workout_time_mins = time_df.select(pl.col("quantity").sum()).item()
+
+    # conversion
+    sum_workout_volume_tonnes = sum_workout_volume_kg / 1000
+    sum_workout_time_hours = sum_workout_time_mins / 60
+
+    kpi_overrides = {
+        "workout_volume_tonnes": sum_workout_volume_tonnes,
+        "workout_time_mins": sum_workout_time_mins,
+        "workout_time_hours": sum_workout_time_hours,
+    }
+
+    render_kpi_section("exercises", filtered_exercises_kpis, kpi_config, kpi_overrides)
     st.write(filtered_exercises)
     st.write(filtered_exercises_kpis)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
+
+st.write("Volume and Time Chart")
+
+render_altair_line_chart(volume_df, "Volume")
+render_altair_line_chart(time_df, "Time")
