@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
       aws_iam_role.lambda_dbt_role.arn,
       aws_iam_policy.lambda_ingest_s3_policy.arn,
       aws_iam_user.github_actions.arn,
-      "arn:aws:iam::110386608476:policy/github_actions_policy"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.github_actions_policy_name}"
     ]
   }
   statement {
@@ -114,7 +114,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
 }
 
 resource "aws_iam_policy" "github_actions_policy" {
-  name        = "github_actions_policy"
+  name        = var.github_actions_policy_name
   description = "Policy for github_actions to access S3 and ECR resources"
   policy      = data.aws_iam_policy_document.github_actions_policy.json
 }
