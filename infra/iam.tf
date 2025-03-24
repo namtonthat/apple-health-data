@@ -87,6 +87,7 @@ data "aws_iam_policy_document" "github_actions_policy" {
     actions = [
       "iam:GetRole",
       "iam:GetUser",
+      "iam:GetUserPolicy",
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
       "iam:ListRolePolicies",
