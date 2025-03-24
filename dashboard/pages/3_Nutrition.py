@@ -38,9 +38,8 @@ except Exception as e:
     st.stop()
 
 
-# ---------------------- AVERAGE MACROS ----------------------
 try:
-    render_kpi_section("macros", filtered_df, kpi_config)
+    render_kpi_section("nutrition", filtered_df, kpi_config)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
 
