@@ -23,7 +23,7 @@ class KPI:
 
 
 def load_kpi_config(
-    yaml_path: Path = Path(conf.kpi_config_path),
+    yaml_path: Path = Path(__file__).parent / conf.kpi_config_filename,
 ) -> dict[str, list[KPI]]:
     with Path.open(yaml_path) as f:
         raw = yaml.safe_load(f)
