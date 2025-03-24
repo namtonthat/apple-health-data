@@ -4,13 +4,6 @@
 --          row_number() over (partition by id order by ctrl_load_date desc) as rn
 --     from {{ ref('raw_exercises')}}
 -- )
-with latest_dates as (
-    select 
-        id,
-        max(ctrl_load_date) as latest_ctrl_load_date
-    from {{ ref('raw_exercises')}}
-    group by id
-)
 
 select
     f.id,
@@ -30,8 +23,5 @@ select
     f.rpe,
   f.ctrl_load_date
   from {{ ref('raw_exercises')}} f
-inner join latest_dates ld
-    on f.id = ld.id
-   and f.ctrl_load_date = ld.latest_ctrl_load_date
 -- from ranked 
 -- where rn = 1

@@ -103,25 +103,26 @@ async def main() -> None:
 
     if events:
         ctrl_load_date = datetime.now().isoformat()
+        workouts = []
         for event in events:
-            event["ctrl_load_date"] = ctrl_load_date
-
             # If event is an "updated" type and has a nested 'workout', use that.
-            if event.get("type") == "updated" and event.get("workout"):
-                workout = event["workout"]
-            else:
-                workout = event
+            workout = event["workout"] if config.incremental else event
+
+            # Append the processed date as a property
+            workout["ctrl_load_date"] = ctrl_load_date
 
             logger.debug(
                 "Workout ID: %s, Title: %s",
                 workout.get("id"),
                 workout.get("title"),
             )
+            workouts.append(workout)
 
         # Convert the events list to JSON (as is) for uploading
-        events_data_str: str = json.dumps(events)
+        logger.info("workouts %s", workouts)
+        workout_data: str = json.dumps(workouts)
         s3_key_with_filename: str = f"{utils.S3_KEY_PREFIX}{ctrl_load_date}.json"
-        utils.upload_to_s3(events_data_str, S3_BUCKET, s3_key_with_filename)
+        utils.upload_to_s3(workout_data, S3_BUCKET, s3_key_with_filename)
         logger.info("Processed %s workouts.", len(events))
     else:
         logger.info("No new workouts found.")

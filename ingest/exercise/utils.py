@@ -94,6 +94,10 @@ class WorkoutFetchConfig:
     params: dict[str, Any]
     response_key: str
 
+    @property
+    def incremental(self) -> bool:
+        return bool(self.endpoint == "workouts/events")
+
 
 def get_workout_fetch_config(last_processed_date: str) -> WorkoutFetchConfig:
     """
