@@ -13,7 +13,7 @@ from graphing import (
 from helpers import (
     compute_avg_sleep_time_from_midnight,
     convert_column_to_timezone,
-    load_data_by_key,
+    load_filtered_s3_data,
     sidebar_date_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
@@ -35,9 +35,13 @@ start_date, end_date = sidebar_date_filter()
 
 
 try:
-    filtered_activity = load_data_by_key(conf.key_activity, start_date, end_date)
-    filtered_sleep = load_data_by_key(conf.key_sleep, start_date, end_date)
-    filtered_sleep_times = load_data_by_key(conf.key_sleep_times, start_date, end_date)
+    filtered_activity = load_filtered_s3_data(conf.key_activity, start_date, end_date)
+    filtered_sleep = load_filtered_s3_data(conf.key_sleep, start_date, end_date)
+    filtered_sleep_times = load_filtered_s3_data(
+        conf.key_sleep_times,
+        start_date,
+        end_date,
+    )
     # Load configuration
     kpi_config = load_kpi_config()
 

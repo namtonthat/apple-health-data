@@ -45,7 +45,7 @@ def filter_data(df, start_date, end_date):
 
 
 @st.cache_data
-def load_data_by_key(s3_key: str, start_date: date, end_date: date):
+def load_filtered_s3_data(s3_key: str, start_date: date, end_date: date):
     unfiltered_df = read_parquet_from_s3(conf.s3_bucket, s3_key)
     return filter_data(unfiltered_df, start_date, end_date)
 

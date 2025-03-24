@@ -10,7 +10,7 @@ from graphing import (
     render_macros_bar_chart,
 )
 from helpers import (
-    load_data_by_key,
+    load_filtered_s3_data,
     sidebar_date_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
@@ -29,7 +29,7 @@ start_date, end_date = sidebar_date_filter()
 
 
 try:
-    filtered_df = load_data_by_key(conf.key_nutrition, start_date, end_date)
+    filtered_df = load_filtered_s3_data(conf.key_nutrition, start_date, end_date)
     # Load configuration
     kpi_config = load_kpi_config()
 

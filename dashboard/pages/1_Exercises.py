@@ -7,7 +7,7 @@ from datetime import datetime
 import conf
 import streamlit as st
 from helpers import (
-    load_data_by_key,
+    load_filtered_s3_data,
     sidebar_date_filter,
 )
 from kpi import load_kpi_config
@@ -29,7 +29,7 @@ start_date, end_date = sidebar_date_filter()
 
 
 try:
-    filtered_exercise = load_data_by_key(conf.key_exercise, start_date, end_date)
+    filtered_exercise = load_filtered_s3_data(conf.key_exercise, start_date, end_date)
     # Load configuration
     kpi_config = load_kpi_config()
 
