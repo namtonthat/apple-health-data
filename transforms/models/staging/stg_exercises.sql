@@ -11,19 +11,14 @@ unnested_data as (
         end_time,
         updated_at,
         created_at,
-        unnest(exercises, recursive := true) 
+        unnest(exercises, recursive := true)
     from raw_data
 )
 
 select
-    id,
-    title,
-    start_time,
-    end_time,
-    updated_at,
-    created_at,
-    unnest(sets).type as set_type,
-    unnest(sets).weight_kg as weight_kg,
-    unnest(sets).reps as reps,
-    unnest(sets).rpe as rpe
+    unnested_data.*,
+    unnest(unnested_data.sets).type as set_type,
+    unnest(unnested_data.sets).weight_kg as weight_kg,
+    unnest(unnested_data.sets).reps as reps,
+    unnest(unnested_data.sets).rpe as rpe
 from unnested_data

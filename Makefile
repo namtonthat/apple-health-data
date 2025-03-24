@@ -20,6 +20,7 @@ dbt: # run dbt models
 	@echo "running dbt models"
 	@pushd transforms
 	@uv run dbt run
+	@popd 
 
 .PHONY: infra
 infra: # deploy infra
