@@ -4,6 +4,7 @@ repos:
     hooks:
       - id: terraform_fmt
       # - id: terraform_validate
+
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.3.1
     hooks:
@@ -17,6 +18,7 @@ repos:
         # args: [--rules, "LT02,CP02"]
         args: [--FIX-EVEN-UNPARSABLE]
         additional_dependencies: ["dbt-duckdb", "sqlfluff-templater-dbt"]
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.9.10

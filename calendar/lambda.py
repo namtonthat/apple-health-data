@@ -267,7 +267,7 @@ class CalendarGenerator:
 
 if __name__ == "__main__":
     s3_health_paths = {
-        "nutrition": "semantic/macros.parquet",
+        "nutrition": "semantic/nutrition.parquet",
         "activity": "semantic/activity.parquet",
         "sleep": "semantic/sleeps.parquet",
     }

@@ -22,7 +22,7 @@ def ingest():
 
         load_time = datetime.now(timezone.utc).isoformat()
         event_data["load_time"] = load_time
-        key = f"landing/{load_time}.json"
+        key = f"landing/health/{load_time}.json"
         s3_client.put_object(Bucket=BUCKET, Key=key, Body=json.dumps(event_data))
 
         return {"message": f"Data saved to S3 at {key}"}
@@ -32,7 +32,6 @@ def ingest():
 
 
 def lambda_handler(event, context):
-    # Log the entire event to see what's being received
     logger.info("Raw event received", extra={"event": event})
 
     return app.resolve(event, context)

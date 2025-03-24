@@ -24,9 +24,5 @@ jobs:
       - name: Install the latest version of `uv`
         uses: astral-sh/setup-uv@v5
 
-      # - name: Install required test packages
-      #   run: make setup
-
-      - name: Run test
-        run: |
-          uv run ruff check .
+      - name: Run checks
+        run: make test

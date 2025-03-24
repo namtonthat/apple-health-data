@@ -32,13 +32,13 @@ resource "aws_iam_role_policy_attachment" "lambda_ingest_basic_execution" {
 
 resource "aws_iam_policy" "lambda_ingest_s3_policy" {
   name        = "lambda_ingest_s3_policy"
-  description = "Allow ingest lambda to put objects in S3 under landing/"
+  description = "Allow ingest lambda to put objects in S3 under landing/health"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
       Effect   = "Allow",
       Action   = ["s3:PutObject"],
-      Resource = "${aws_s3_bucket.health_data_bucket.arn}/landing/*"
+      Resource = "${aws_s3_bucket.health_data_bucket.arn}/landing/health/*"
     }]
   })
 }

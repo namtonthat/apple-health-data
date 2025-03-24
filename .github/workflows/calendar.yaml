@@ -9,12 +9,10 @@ on:
   schedule:
     - cron: "0 13 * * 0" # Runs every Monday at midnight AEST
     - cron: "0 13 * * 3" # Runs every Thursday at midnight AEST
-  # pull_request:
-  #   types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
-  calendar:
+  dbt:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out
@@ -27,16 +25,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Set up python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.python-version }}
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install the latest version of `uv`
         uses: astral-sh/setup-uv@v5
-
-      - name: Install required packages
-        run: make setup
 
       - name: Ingest data from `hevy`
         run: make hevy
@@ -47,6 +42,21 @@ jobs:
 
       - name: Run dbt transforms
         run: cd transforms && uv run dbt run
+
+  calendar:
+    runs-on: ubuntu-24.04-arm
+    needs: dbt
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install the latest version of `uv`
+        uses: astral-sh/setup-uv@v5
 
       - name: Create calendar
         run: make calendar

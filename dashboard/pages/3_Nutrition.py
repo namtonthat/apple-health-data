@@ -29,7 +29,7 @@ start_date, end_date = sidebar_date_filter()
 
 
 try:
-    filtered_df = load_data_by_key(conf.key_macros, start_date, end_date)
+    filtered_df = load_data_by_key(conf.key_nutrition, start_date, end_date)
     # Load configuration
     kpi_config = load_kpi_config()
 
@@ -38,9 +38,8 @@ except Exception as e:
     st.stop()
 
 
-# ---------------------- AVERAGE MACROS ----------------------
 try:
-    render_kpi_section("macros", filtered_df, kpi_config)
+    render_kpi_section("nutrition", filtered_df, kpi_config)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
 
