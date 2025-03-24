@@ -21,3 +21,4 @@ resource "aws_s3_bucket_acl" "health_data_bucket" {
   bucket     = aws_s3_bucket.health_data_bucket.id
   acl        = "private"
 }
+
