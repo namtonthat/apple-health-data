@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  dbt:
+  ingest-hevy:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out
@@ -40,8 +40,30 @@ jobs:
           HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
           S3_BUCKET: ${{ vars.S3_BUCKET }}
 
+  dbt:
+    runs-on: ubuntu-24.04-arm
+    needs: ingest-hevy
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install the latest version of `uv`
+        uses: astral-sh/setup-uv@v5
+
       - name: Run dbt transforms
-        run: cd transforms && uv run dbt run
+        run: make dbt
 
   calendar:
     runs-on: ubuntu-24.04-arm
