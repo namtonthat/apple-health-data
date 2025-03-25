@@ -13,8 +13,8 @@ from graphing import (
 from helpers import (
     compute_avg_sleep_time_from_midnight,
     convert_column_to_timezone,
-    load_data_by_key,
-    sidebar_date_filter,
+    load_filtered_s3_data,
+    sidebar_datetime_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
 
@@ -31,13 +31,17 @@ st.title("🌒 Mental Health")
 
 # Sidebar date selection
 today = datetime.today().date()
-start_date, end_date = sidebar_date_filter()
+start_date, end_date = sidebar_datetime_filter()
 
 
 try:
-    filtered_activity = load_data_by_key(conf.key_activity, start_date, end_date)
-    filtered_sleep = load_data_by_key(conf.key_sleep, start_date, end_date)
-    filtered_sleep_times = load_data_by_key(conf.key_sleep_times, start_date, end_date)
+    filtered_activity = load_filtered_s3_data(conf.key_activity, start_date, end_date)
+    filtered_sleep = load_filtered_s3_data(conf.key_sleep, start_date, end_date)
+    filtered_sleep_times = load_filtered_s3_data(
+        conf.key_sleep_times,
+        start_date,
+        end_date,
+    )
     # Load configuration
     kpi_config = load_kpi_config()
 

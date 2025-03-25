@@ -1,13 +1,14 @@
 aws_region = "ap-southeast-2"
 s3_bucket = "api-health-data-ntonthat"
 calendar_name = "apple-health-calendar.ics"
-duckdb_path = "duckdb.db"
 write_to_s3 = False
 
 # S3 paths
 key_activity = "semantic/activity.parquet"
-key_exercise = "semantic/exercises.parquet"
+key_exercises = "semantic/exercises.parquet"
+key_health = "semantic/health.parquet"
 key_nutrition = "semantic/nutrition.parquet"
+key_reflections = "semantic/reflections.db"
 key_sleep = "semantic/sleeps.parquet"
 key_sleep_times = "semantic/sleep_times.parquet"
 

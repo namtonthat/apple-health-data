@@ -7,11 +7,12 @@ import streamlit as st
 from graphing import (
     MACROS_BAR_HEIGHT,
     filter_metrics,
+    render_altair_line_chart,
     render_macros_bar_chart,
 )
 from helpers import (
-    load_data_by_key,
-    sidebar_date_filter,
+    load_filtered_s3_data,
+    sidebar_datetime_filter,
 )
 from kpi import load_kpi_config, render_kpi_section
 
@@ -25,23 +26,17 @@ st.set_page_config(
 
 st.title("🧑‍🍳 Nutrition")
 
-start_date, end_date = sidebar_date_filter()
+start_date, end_date = sidebar_datetime_filter()
 
 
 try:
-    filtered_df = load_data_by_key(conf.key_nutrition, start_date, end_date)
+    filtered_df = load_filtered_s3_data(conf.key_nutrition, start_date, end_date)
     # Load configuration
     kpi_config = load_kpi_config()
 
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
-
-
-try:
-    render_kpi_section("nutrition", filtered_df, kpi_config)
-except Exception as e:
-    st.error(f"Error computing macro KPIs: {e}")
 
 # Load required macros data
 try:
@@ -51,9 +46,24 @@ try:
         rename_map={"total_fat": "fat"},
     )
     calories_df = filter_metrics(filtered_df, metrics=["calories"])
+    weight_df = filter_metrics(filtered_df, metrics=["weight_body_mass"])
 
 except Exception as e:
     st.error(f"Error generating data for macros chart: {e}")
+
+try:
+    render_kpi_section("nutrition", filtered_df, kpi_config)
+except Exception as e:
+    st.error(f"Error computing macro KPIs: {e}")
+
+
+st.header("Weight and Calories")
+col1, col2 = st.columns(2)
+with col1:
+    render_altair_line_chart(calories_df, "Calories")
+
+with col2:
+    render_altair_line_chart(weight_df, "Weight")
 
 # === BAR GRAPH: MACROS BREAKDOWN ===
 st.header("Breakdown Bar Chart")
@@ -74,13 +84,3 @@ with col2:
     # === LINE GRAPH: DAILY CALORIES using st.line_chart ===
     # st.header("Daily Calories Line Chart")
     render_macros_bar_chart(macros_df)
-
-st.header("Calories")
-st.line_chart(
-    calories_df.select("metric_date", "quantity"),
-    x="metric_date",
-    y="quantity",
-    x_label="Date",
-    y_label="Calories",
-    height=400,
-)
