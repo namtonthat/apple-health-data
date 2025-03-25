@@ -7,10 +7,10 @@ casted_raw_data as (
     select
         id,
         title,
-        cast(start_time as datetime) as start_time,
-        cast(end_time as datetime) as end_time,
-        cast(updated_at as datetime) as updated_at,
-        cast(created_at as datetime) as created_at,
+        {{ convert_utc_to_melbourne('start_time') }} as start_time,
+        {{ convert_utc_to_melbourne('end_time') }} as end_time,
+        {{ convert_utc_to_melbourne('updated_at') }} as updated_at,
+        {{ convert_utc_to_melbourne('created_at') }} as created_at,
         cast(ctrl_load_date as datetime) as ctrl_load_date,
         exercises
     from raw_data
@@ -28,10 +28,10 @@ latest_dates as (
 select
     rd.id,
     rd.title,
-    timezone('Australia/Melbourne', rd.start_time) as start_time,
-    timezone('Australia/Melbourne', rd.end_time) as end_time,
-    timezone('Australia/Melbourne', rd.updated_at) as updated_at,
-    timezone('Australia/Melbourne', rd.created_at) as created_at,
+    rd.start_time,
+    rd.end_time,
+    rd.updated_at,
+    rd.created_at,
     rd.ctrl_load_date,
     rd.exercises
 from casted_raw_data as rd
