@@ -5,6 +5,10 @@ activity:
   - label: "Mindfulness (mins)"
     key: mindful_minutes
     format: "{:.0f}"
+  - label: "Step Count"
+    key: step_count
+    goal: 10000
+    format: "{:,.0f}"
 
 exercises:
   - label: "Workout Volume (tonnes)"

@@ -64,6 +64,10 @@ exercise_type = st.sidebar.multiselect(
     options=WORKOUT_NAMES,
 )
 
+if exercise_type:
+    filtered_exercises = filtered_exercises.filter(
+        pl.col("workout_name").is_in(exercise_type)
+    )
 
 try:
     volumes_by_exercise_df = (
@@ -133,7 +137,7 @@ try:
         st.bar_chart(
             volumes_by_exercise_df,
             x="metric_date",
-            y="volume",
+            y="quantity",
             x_label="Date",
             y_label="Volume (kg)",
             color="exercise_name",
