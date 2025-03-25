@@ -4,11 +4,9 @@ Helper functions module for the dashboard application.
 This module contains functions to read data from AWS S3 (in Parquet format) using Polars
 """
 
-import io
 import logging
 from datetime import date, datetime, time, timedelta
 
-import boto3
 import conf
 import polars as pl
 import pytz
@@ -19,24 +17,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def read_parquet_from_s3(bucket: str, key: str) -> pl.DataFrame:
-    """
-    Read a Parquet file from AWS S3 and return a Polars DataFrame.
-
-    Args:
-        bucket: The S3 bucket name.
-        key: The S3 key/path of the Parquet file.
-
-    Returns:
-        A Polars DataFrame containing the data.
-    """
-    s3 = boto3.client("s3")
-    obj = s3.get_object(Bucket=bucket, Key=key)
-    logger.info("Reading Parquet data from s3://%s/%s", bucket, key)
-    data = io.BytesIO(obj["Body"].read())
-    return pl.read_parquet(data)
-
-
 def filter_data(df, start_date, end_date):
     """Filter a Polars DataFrame by date and reformat the metric_date column."""
     return df.filter(
@@ -45,8 +25,13 @@ def filter_data(df, start_date, end_date):
 
 
 @st.cache_data
-def load_filtered_s3_data(s3_key: str, start_date: date, end_date: date):
-    unfiltered_df = read_parquet_from_s3(conf.s3_bucket, s3_key)
+def load_filtered_s3_data(
+    s3_key: str,
+    start_date: date,
+    end_date: date,
+):
+    s3_path = f"s3://{conf.s3_bucket}/{s3_key}"
+    unfiltered_df = pl.read_parquet(s3_path)
     return filter_data(unfiltered_df, start_date, end_date)
 
 
