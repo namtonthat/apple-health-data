@@ -75,7 +75,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
     { name = "ruff" },
-    { name = "sqlfluff-templater-dbt" },
     { name = "streamlit" },
 ]
 
@@ -97,8 +96,10 @@ ingest = [
     { name = "tenacity" },
 ]
 test = [
+    { name = "dbt-duckdb" },
     { name = "pytest" },
     { name = "sqlfluff" },
+    { name = "sqlfluff-templater-dbt" },
 ]
 
 [package.metadata]
@@ -115,7 +116,6 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "ruff", specifier = ">=0.9.10" },
-    { name = "sqlfluff-templater-dbt", specifier = ">=3.3.1" },
     { name = "streamlit", specifier = ">=1.43.2" },
 ]
 
@@ -137,8 +137,10 @@ ingest = [
     { name = "tenacity", specifier = ">=9.0.0" },
 ]
 test = [
+    { name = "dbt-duckdb", specifier = ">=1.9.2" },
     { name = "pytest" },
     { name = "sqlfluff", specifier = ">=3.3.1" },
+    { name = "sqlfluff-templater-dbt", specifier = ">=3.3.1" },
 ]
 
 [[package]]
