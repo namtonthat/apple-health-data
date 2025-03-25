@@ -2,9 +2,6 @@
 
 set -e errexit
 
-echo "set dependencies to testing group"
-uv sync --group test
-
 echo "run linting checks"
 uv run ruff check
 
