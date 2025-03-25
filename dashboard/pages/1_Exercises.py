@@ -43,14 +43,8 @@ try:
         end_date,
     )
 
-    filtered_exercises_kpis = load_filtered_s3_data(
-        conf.key_exercises_kpis,
-        start_date,
-        end_date,
-    )
-
-    filtered_activity = load_filtered_s3_data(
-        conf.key_activity,
+    filtered_health = load_filtered_s3_data(
+        conf.key_health,
         start_date,
         end_date,
     )
@@ -58,7 +52,6 @@ try:
     # Load configuration
     kpi_config = load_kpi_config()
 
-    exercise_kpis = pl.concat([filtered_activity, filtered_exercises_kpis])
 
 except Exception as e:
     st.error(f"Error loading data: {e}")
@@ -73,34 +66,49 @@ exercise_type = st.sidebar.multiselect(
 
 
 try:
-    volumes_by_exercise_df = filtered_exercises.group_by(
-        ["metric_date", "workout_name", "exercise_name"],
-        maintain_order=True,
-    ).agg(pl.col("volume").sum())
-
-    volume_df = filtered_exercises_kpis.filter(
-        pl.col("metric_name") == "workout_volume"
+    volumes_by_exercise_df = (
+        filtered_exercises.group_by(
+            ["metric_date", "workout_name", "exercise_name"],
+            maintain_order=True,
+        )
+        .agg(pl.col("volume").sum())
+        .rename({"volume": "quantity"})
     )
 
-    time_df = filtered_exercises_kpis.filter(pl.col("metric_name") == "workout_time")
+    workout_volume_kg = volumes_by_exercise_df.select(["quantity"]).sum().item()
 
-    sum_workout_volume_kg = volume_df.select(pl.col("quantity").sum()).item()
-    sum_workout_time_mins = time_df.select(pl.col("quantity").sum()).item()
+    time_df = (
+        filtered_exercises.select(
+            ["metric_date", "workout_name", "workout_duration_mins"]
+        )
+        .unique()
+        .rename({"workout_duration_mins": "quantity"})
+    )
+
+    workout_time_mins = time_df.select(["quantity"]).sum().item()
 
     # conversion
-    sum_workout_volume_tonnes = sum_workout_volume_kg / 1000
-    sum_workout_time_hours = sum_workout_time_mins / 60
+    workout_volume_tonnes = workout_volume_kg / 1000
+    workout_time_hours = workout_time_mins / 60
 
     kpi_overrides = {
-        "workout_volume_tonnes": sum_workout_volume_tonnes,
-        "workout_time_mins": sum_workout_time_mins,
-        "workout_time_hours": sum_workout_time_hours,
+        "workout_volume_tonnes": workout_volume_tonnes,
+        "workout_time_mins": workout_time_mins,
+        "workout_time_hours": workout_time_hours,
     }
 
-    render_kpi_section("exercises", exercise_kpis, kpi_config, kpi_overrides)
 
+except Exception as e:
+    st.error(f"Error generating base dataframes: {e}")
+
+try:
+    render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
     col1, col2 = st.columns(2)
     with col1:
+        st.subheader("Total Volume By Exercise")
+        st.write(volumes_by_exercise_df)
+        # st.write(filtered_exercises_kpis)
+    with col2:
         st.subheader("Workout Details")
         detailed_exercises = filtered_exercises.select(
             [
@@ -117,10 +125,6 @@ try:
             #     {"metric_date": "workout_date"},
         )
         st.write(detailed_exercises)
-    with col2:
-        st.subheader("Total Volume By Exercise")
-        st.write(volumes_by_exercise_df)
-        # st.write(filtered_exercises_kpis)
 
     st.write("Volume and Time Charts")
 
@@ -138,4 +142,4 @@ try:
         render_altair_line_chart(time_df, "Time (mins)")
 
 except Exception as e:
-    st.error(f"Error computing macro KPIs: {e}")
+    st.error(f"Error computing exercise KPIs: {e}")

@@ -98,7 +98,8 @@ def render_altair_line_chart(df: pl.DataFrame, title: str):
         )
     )
 
-    label_color = "white" if streamlit_dark() else "black"
+    # label_color = "white" if streamlit_dark() else "black"
+    label_color = "white"
 
     text = (
         alt.Chart(df)
