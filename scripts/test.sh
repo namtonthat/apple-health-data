@@ -2,6 +2,9 @@
 
 set -e errexit
 
+echo "enable env for test group"
+uv sync --group test
+
 echo "run linting checks"
 uv run ruff check
 
