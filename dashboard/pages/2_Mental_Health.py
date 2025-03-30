@@ -65,7 +65,9 @@ try:
     )
 
     # Convert sleep_times to Melbourne timezone
-    sleep_times_local = convert_column_to_timezone(filtered_sleep_times, "sleep_times")
+    sleep_times_local = convert_column_to_timezone(
+        filtered_sleep_times, "sleep_times"
+    ).sort("sleep_times", descending=[False])
     sleep_start_df = filter_metrics(sleep_times_local, ["sleep_start"])
     sleep_end_df = filter_metrics(sleep_times_local, ["sleep_end"])
 
@@ -77,7 +79,27 @@ try:
         "avg_sleep_start": avg_sleep_start,
         "avg_sleep_end": avg_sleep_end,
     }
-    #
+
     render_kpi_section("sleep", filtered_sleep, kpi_config, overrides=sleep_overrides)
+
+    col1, col2 = st.columns(2)
+
+    # Sleep Time Details (unpivoted sleep_times)
+    sleep_time_details = (
+        sleep_times_local.select(pl.col(["metric_date", "sleep_times", "metric_name"]))
+        .with_columns(pl.col("sleep_times").dt.strftime("%I:%M %p"))
+        .pivot("metric_name", index="metric_date", values="sleep_times")
+        .rename(
+            {
+                "metric_date": "Date",
+                "sleep_start": "Sleep Start",
+                "sleep_end": "Sleep End",
+            }
+        )
+    )
+
+    with col1:
+        st.subheader("Detail")
+        st.write(sleep_time_details)
 except Exception as e:
     st.error(f"Error computing sleep KPIs: {e}")

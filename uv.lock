@@ -73,8 +73,10 @@ dependencies = [
     { name = "pre-commit" },
     { name = "pyarrow" },
     { name = "pydantic" },
+    { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "ruff" },
+    { name = "sqlfluff" },
     { name = "streamlit" },
 ]
 
@@ -114,8 +116,10 @@ requires-dist = [
     { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "pyarrow", specifier = ">=19.0.1" },
     { name = "pydantic", specifier = ">=2.10.6" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "ruff", specifier = ">=0.9.10" },
+    { name = "sqlfluff", specifier = ">=3.3.1" },
     { name = "streamlit", specifier = ">=1.43.2" },
 ]
 
