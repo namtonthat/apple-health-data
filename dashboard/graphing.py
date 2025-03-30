@@ -41,15 +41,16 @@ def filter_metrics(
 
 
 def render_macros_bar_chart(df: pl.DataFrame):
-    chart_data = df.to_pandas()
-
     base = (
-        alt.Chart(chart_data)
+        alt.Chart(df)
         .encode(
             x=alt.X(
                 "metric_name:N", axis=alt.Axis(title=None, labels=False, ticks=False)
             ),
-            y=alt.Y("quantity:Q", title="Grams"),
+            y=alt.Y(
+                "quantity:Q",
+                title="Grams",
+            ),
             color=alt.Color("metric_name:N", title="Macro"),
             tooltip=["metric_date:N", "metric_name:N", "quantity:Q"],
         )
@@ -75,3 +76,46 @@ def render_macros_bar_chart(df: pl.DataFrame):
         .properties(title="Daily Macro Breakdown")
     )
     st.altair_chart(chart, use_container_width=True)
+
+
+def streamlit_dark():
+    theme_base = st.get_option("theme.base")
+    return theme_base
+
+
+def render_altair_line_chart(df: pl.DataFrame, title: str):
+    """Generate a line chart of the data and limit the y values to their min/max."""
+    line = (
+        alt.Chart(df)
+        .mark_line()
+        .encode(
+            x=alt.X("metric_date:N", title="Date"),
+            y=alt.Y(
+                "quantity:Q",
+                title=title,
+                scale=alt.Scale(domain=[df["quantity"].min(), df["quantity"].max()]),
+            ),
+        )
+    )
+
+    # label_color = "white" if streamlit_dark() else "black"
+    label_color = "white"
+
+    text = (
+        alt.Chart(df)
+        .mark_text(
+            color=label_color,
+            fontSize=16,
+            align="left",
+            dx=3,
+            dy=-15,
+        )
+        .encode(
+            x=alt.X("metric_date:N", title="Date"),
+            y=alt.Y("quantity:Q"),
+            text=alt.Text("quantity:Q", format=",.1f"),
+        )
+    )
+
+    chart = line + text
+    return st.altair_chart(chart)

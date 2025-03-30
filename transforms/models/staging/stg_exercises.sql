@@ -7,10 +7,10 @@ casted_raw_data as (
     select
         id,
         title,
-        cast(start_time as datetime) as start_time,
-        cast(end_time as datetime) as end_time,
-        cast(updated_at as datetime) as updated_at,
-        cast(created_at as datetime) as created_at,
+        {{ convert_utc_to_melbourne('start_time') }} as start_time,
+        {{ convert_utc_to_melbourne('end_time') }} as end_time,
+        {{ convert_utc_to_melbourne('updated_at') }} as updated_at,
+        {{ convert_utc_to_melbourne('created_at') }} as created_at,
         cast(ctrl_load_date as datetime) as ctrl_load_date,
         exercises
     from raw_data
