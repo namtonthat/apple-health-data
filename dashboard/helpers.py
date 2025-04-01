@@ -132,8 +132,9 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
 ### Reflections
 
 
-def load_questions_from_yaml(path=Path("questions.yaml")):
-    with Path.open(path) as file:
+def load_questions_from_yaml():
+    yaml_path: Path = Path(__file__).parent / "questions.yaml"
+    with Path.open(yaml_path) as file:
         data = yaml.safe_load(file)
     return data["questions"]
 
