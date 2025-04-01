@@ -110,8 +110,16 @@ try:
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Total Volume By Exercise")
-        st.write(volumes_by_exercise_df)
-        # st.write(filtered_exercises_kpis)
+        volumes_by_exercise_df_output = volumes_by_exercise_df.rename(
+            {
+                "metric_date": "date",
+                "workout_name": "workout",
+                "exercise_name": "exercise",
+                "quantity": "volume",
+            }
+        )
+
+        st.write(volumes_by_exercise_df_output)
     with col2:
         st.subheader("Workout Details")
         detailed_exercises = filtered_exercises.select(
@@ -125,15 +133,36 @@ try:
                 "reps",
                 "rpe",
             ]
-            # ).rename(
-            #     {"metric_date": "workout_date"},
+        ).rename(
+            {
+                "metric_date": "date",
+                "exercise_name": "exercise",
+                "set_type": "set type",
+                "weight_kg": "weight (kg)",
+            },
         )
         st.write(detailed_exercises)
 
     st.write("Volume and Time Charts")
 
-    col1, col2 = st.columns(2)
-    with col1:
+    if not exercise_type:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.bar_chart(
+                volumes_by_exercise_df,
+                x="metric_date",
+                y="quantity",
+                x_label="Date",
+                y_label="Volume (kg)",
+                color="exercise_name",
+            )
+        with col2:
+            render_altair_line_chart(
+                time_df,
+                title="Time (mins)",
+                use_min_max_scale=False,
+            )
+    else:
         st.bar_chart(
             volumes_by_exercise_df,
             x="metric_date",
@@ -142,8 +171,6 @@ try:
             y_label="Volume (kg)",
             color="exercise_name",
         )
-    with col2:
-        render_altair_line_chart(time_df, "Time (mins)")
 
 except Exception as e:
     st.error(f"Error computing exercise KPIs: {e}")

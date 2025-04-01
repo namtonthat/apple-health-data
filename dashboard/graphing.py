@@ -83,8 +83,14 @@ def streamlit_dark():
     return theme_base
 
 
-def render_altair_line_chart(df: pl.DataFrame, title: str):
+def render_altair_line_chart(
+    df: pl.DataFrame,
+    title: str,
+    use_min_max_scale: bool = True,
+):
     """Generate a line chart of the data and limit the y values to their min/max."""
+
+    min_max_scale = alt.Scale(domain=[df["quantity"].min(), df["quantity"].max()])
     line = (
         alt.Chart(df)
         .mark_line()
@@ -93,7 +99,7 @@ def render_altair_line_chart(df: pl.DataFrame, title: str):
             y=alt.Y(
                 "quantity:Q",
                 title=title,
-                scale=alt.Scale(domain=[df["quantity"].min(), df["quantity"].max()]),
+                scale=min_max_scale if use_min_max_scale else alt.Scale(),
             ),
         )
     )
