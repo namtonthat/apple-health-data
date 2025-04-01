@@ -1,14 +1,14 @@
-questions:
-  - How are you?
-  - How was your week? Do anything fun?
-  - Did anything from your week impact your ability to get to sessions or bring your best to them?
-  - If relevant, how did you go with your plan this week?
-  - Was there anything that made it hard to stick to the plan on any days?
-  - Did you feel well fueled to train this week?
-  - How was your performance in training this week overall?
-  - Did any exercises go particularly well?
-  - Were there any exercises you felt like you underperformed in? If so, any ideas of why?
-  - How did your body feel coming into training sessions?
-  - Any injuries or niggles present this week? (Quantify if possible)
-  - State one thing you can improve on next week.
+week_overview:
+  - How are you? How was your week? Do anything fun? Did anything from your week impact your ability to get to sessions or bring your best to them?
+
+nutrition_overview:
+  - If relevant, how did you go with your plan this week? Was there anything that made it hard to stick to the plan on any days? Did you feel well fueled to train this week?
+
+training_overview:
+  - How was your performance in training this week overall? Did any exercises go particularly well? Were there any exercises you felt like you underperformed in? If so, any ideas of why?
+
+recovery_overview:
+  - How did your body feel coming into training sessions? Any injuries or niggles present this week? (Quantify if possible) State one thing you can improve on next week.
+
+weekly_task:
   - Reflect on what you stated last week and evaluate how you went with it.

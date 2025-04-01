@@ -135,8 +135,7 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
 def load_questions_from_yaml():
     yaml_path: Path = Path(__file__).parent / "questions.yaml"
     with Path.open(yaml_path) as file:
-        data = yaml.safe_load(file)
-    return data["questions"]
+        return yaml.safe_load(file)
 
 
 DB_NAME = "responses.duckdb"

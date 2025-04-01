@@ -17,26 +17,24 @@ from helpers import (
 today = datetime.today().date()
 start_date, end_date = sidebar_datetime_filter()
 
-st.title("Weekly Check-in Form")
+st.title("📝 Weekly Check-in")
 
 init_db()
 QUESTIONS = load_questions_from_yaml()
 
 with st.form("weekly_checkin"):
+    questions_by_section = load_questions_from_yaml()
     responses = {}
-    for q in QUESTIONS:
-        responses[q] = st.text_input(q)
+
+    for section, questions in questions_by_section.items():
+        # Make the section name prettier
+        section_title = section.replace("_", " ").title()
+        st.subheader(section_title)
+
+        for q in questions:
+            responses[q] = st.text_area(q, height=100)
 
     submitted = st.form_submit_button("Submit")
-
-if submitted:
-    now = datetime.now()
-
-    for q, r in responses.items():
-        insert_entry(now, "question", q)
-        insert_entry(now, "response", r)
-
-    st.success("Responses submitted!")
 
 st.header("📋 Past Responses")
 

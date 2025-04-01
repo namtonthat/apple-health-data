@@ -8,13 +8,13 @@ st.markdown("Choose a dashboard:")
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     if st.button("🏋️ Exercises"):
-        st.switch_page("pages/1_Exercises.py")
+        st.switch_page("pages/1_🏋️_Exercises.py")
 with col2:
     if st.button("😴 Mental Health"):
-        st.switch_page("pages/2_Mental_Health.py")
+        st.switch_page("pages/2_😴_Mental_Health.py")
 with col3:
     if st.button("🍽️ Nutrition"):
-        st.switch_page("pages/3_Nutrition.py")
+        st.switch_page("pages/3_🍽️_Nutrition.py")
 with col4:
-    if st.button("🤔 Reflection"):
-        st.switch_page("pages/4_Reflection.py")
+    if st.button("📝 Reflection"):
+        st.switch_page("pages/4_📝_Reflection.py")
