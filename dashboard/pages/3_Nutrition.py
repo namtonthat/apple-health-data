@@ -52,7 +52,7 @@ try:
             "calories_protein",
         ],
         rename_map={"total_fat": "fat"},
-    ).with_columns(pl.col("quantity").round(2))
+    ).with_columns(pl.col("quantity").round(0))
 
     macros_df = filter_metrics(
         df=macros_and_calories_df, metrics=["carbohydrates", "protein", "fat"]
