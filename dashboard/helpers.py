@@ -6,11 +6,14 @@ This module contains functions to read data from AWS S3 (in Parquet format) usin
 
 import logging
 from datetime import date, datetime, time, timedelta
+from pathlib import Path
 
 import conf
+import duckdb
 import polars as pl
 import pytz
 import streamlit as st
+import yaml
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -124,3 +127,42 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
 
     st.sidebar.caption(f"Showing data from `{start_date}` to `{end_date}`")
     return start_dt, end_dt
+
+
+### Reflections
+
+
+def load_questions_from_yaml(path=Path("questions.yaml")):
+    with Path.open(path) as file:
+        data = yaml.safe_load(file)
+    return data["questions"]
+
+
+DB_NAME = "responses.duckdb"
+
+
+def init_db():
+    conn = duckdb.connect(DB_NAME)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS form_entries (
+            date TIMESTAMP,
+            response_type VARCHAR,
+            content TEXT
+        )
+    """)
+    conn.close()
+
+
+def insert_entry(date, response_type, content):
+    conn = duckdb.connect(DB_NAME)
+    conn.execute(
+        "INSERT INTO form_entries VALUES (?, ?, ?)", (date, response_type, content)
+    )
+    conn.close()
+
+
+def get_all_entries():
+    conn = duckdb.connect(DB_NAME)
+    result = conn.execute("SELECT * FROM form_entries ORDER BY date DESC").fetchall()
+    conn.close()
+    return result
