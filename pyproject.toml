@@ -7,6 +7,7 @@ dependencies = [
   "authlib>=1.5.1",
   "aws-lambda-powertools>=3.8.0",
   "boto3>=1.37.9",
+  "duckdb>=1.2.1",
   "ics>=0.7.2",
   "pip>=25.0.1",
   "polars>=1.24.0",
