@@ -6,8 +6,6 @@ import altair as alt
 import polars as pl
 import streamlit as st
 
-MACROS_BAR_HEIGHT = 400
-
 
 def filter_metrics(
     df: pl.DataFrame,
@@ -41,20 +39,14 @@ def filter_metrics(
 
 
 def render_macros_bar_chart(df: pl.DataFrame):
-    base = (
-        alt.Chart(df)
-        .encode(
-            x=alt.X(
-                "metric_name:N", axis=alt.Axis(title=None, labels=False, ticks=False)
-            ),
-            y=alt.Y(
-                "quantity:Q",
-                title="Grams",
-            ),
-            color=alt.Color("metric_name:N", title="Macro"),
-            tooltip=["metric_date:N", "metric_name:N", "quantity:Q"],
-        )
-        .properties(height=MACROS_BAR_HEIGHT)
+    base = alt.Chart(df).encode(
+        x=alt.X("metric_name:N", axis=alt.Axis(title=None, labels=False, ticks=False)),
+        y=alt.Y(
+            "quantity:Q",
+            title="Grams",
+        ),
+        color=alt.Color("metric_name:N", title="Macro"),
+        tooltip=["metric_date:N", "metric_name:N", "quantity:Q"],
     )
 
     bars = base.mark_bar()
@@ -65,16 +57,12 @@ def render_macros_bar_chart(df: pl.DataFrame):
 
     layered = alt.layer(bars, labels)
 
-    chart = (
-        layered.facet(
-            column=alt.Column(
-                "metric_date:N",
-                title=None,
-            )
+    chart = layered.facet(
+        column=alt.Column(
+            "metric_date:N",
+            title=None,
         )
-        .resolve_scale(y="shared")
-        .properties(title="Daily Macro Breakdown")
-    )
+    ).resolve_scale(y="shared")
     st.altair_chart(chart, use_container_width=True)
 
 

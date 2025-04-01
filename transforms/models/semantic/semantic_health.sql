@@ -33,8 +33,44 @@ calories as (
     group by all
 ),
 
+detailed_calories as (
+    -- Carbohydrates to calories
+    select
+        metric_date,
+        'calories_carbohydrates' as metric_name,
+        quantity * 4 as quantity,
+        'kcal' as units
+    from {{ ref('raw_nutrition') }}
+    where metric_name = 'carbohydrates'
+
+    union all
+
+    -- Protein to calories
+    select
+        metric_date,
+        'calories_protein' as metric_name,
+        quantity * 4 as quantity,
+        'kcal' as units
+    from {{ ref('raw_nutrition') }}
+    where metric_name = 'protein'
+
+    union all
+
+    -- Fat to calories
+    select
+        metric_date,
+        'calories_fat' as metric_name,
+        quantity * 9 as quantity,
+        'kcal' as units
+    from {{ ref('raw_nutrition') }}
+    where metric_name = 'total_fat'
+),
+
 all_nutrition as (
     select * from calories
+    where quantity != 0
+    union all
+    select * from detailed_calories
     where quantity != 0
     union all
     select * from {{ ref('raw_nutrition') }}
