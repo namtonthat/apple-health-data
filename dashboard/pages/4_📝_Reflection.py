@@ -36,6 +36,12 @@ with st.form("weekly_checkin"):
 
     submitted = st.form_submit_button("Submit")
 
+if submitted:
+    now = datetime.now()
+    for q, r in responses.items():
+        insert_entry(now, "question", q)
+        insert_entry(now, "response", r)
+    st.success("Responses submitted!")
 st.header("📋 Past Responses")
 
 entries = get_all_entries()
