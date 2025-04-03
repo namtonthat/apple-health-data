@@ -62,7 +62,17 @@ jobs:
       - name: Install the latest version of `uv`
         uses: astral-sh/setup-uv@v5
 
+      - name: Filter changed files
+        id: file_filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            dbt:
+              - 'transforms/**'
+              - '**/*.sql'
+
       - name: Run dbt transforms
+        if: steps.file_filter.outputs.dbt == 'true'
         run: make dbt
 
   calendar:
