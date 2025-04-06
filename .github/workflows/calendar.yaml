@@ -72,7 +72,11 @@ jobs:
               - '**/*.sql'
 
       - name: Run dbt transforms
-        if: steps.file_filter.outputs.dbt == 'true'
+        if: >
+          (github.event_name == 'pull_request' &&
+           github.base_ref == 'main' &&
+           steps.file_filter.outputs.dbt == 'true') ||
+          github.event_name != 'pull_request'
         run: make dbt
 
   calendar:
