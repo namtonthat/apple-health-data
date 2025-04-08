@@ -6,8 +6,7 @@ with nutrition as (
         'carbohydrates',
         'fiber',
         'protein',
-        'total_fat',
-        'weight_body_mass'
+        'total_fat'
     )
 )
 

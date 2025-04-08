@@ -7,7 +7,7 @@ with sleep_metrics as (
             as in_bed,
         SUM(case when metric_name = 'deep_sleep' then quantity else 0 end)
             as deep_sleep
-    from {{ ref('semantic_sleep') }}
+    from {{ ref('semantic_health') }}
     group by metric_date
 ),
 

@@ -161,7 +161,6 @@ select
     units
 from total_time
 union all
-
 select
     asd.metric_date,
     asd.metric_name,

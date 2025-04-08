@@ -46,6 +46,7 @@ try:
             "carbohydrates",
             "protein",
             "total_fat",
+            "fiber",
             "calories",
             "calories_carbohydrates",
             "calories_fat",
@@ -103,11 +104,14 @@ with col2:
 st.header("Detailed Macros")
 detailed_macros_df = (
     macros_and_calories_df.filter(
-        pl.col("metric_name").is_in(["carbohydrates", "fat", "protein", "calories"])
+        pl.col("metric_name").is_in(
+            ["carbohydrates", "fat", "protein", "calories", "fiber"]
+        )
     )
     .pivot("metric_name", index="metric_date", values="quantity")
     .sort("metric_date", descending=False)
     .rename({"metric_date": "date"})
-)
+).select(["date", "calories", "protein", "carbohydrates", "fat", "fiber"])
+
 
 st.write(detailed_macros_df)
