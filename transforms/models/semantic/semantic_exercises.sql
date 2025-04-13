@@ -1,3 +1,9 @@
+{{ config(
+    materialized='incremental',
+    unique_key='id',
+    partition_by={'field': 'metric_date', 'data_type': 'date'}
+) }}
+
 select
     id,
     workout_name,
@@ -14,4 +20,7 @@ select
     rpe,
     round((weight_kg * reps) / 1.25) * 1.25 as volume
 from {{ ref('raw_exercises') }}
-order by metric_date asc
+
+{% if is_incremental() %}
+    where start_time >= current_date - interval '14 days'
+{% endif %}

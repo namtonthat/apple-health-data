@@ -36,5 +36,7 @@ models:
       +schema: raw
     semantic:
       +schema: semantic
+      materialized: table
+      full_refresh: true
     staging:
       +schema: staging

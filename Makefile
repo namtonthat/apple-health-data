@@ -17,7 +17,7 @@ dashboard: # make dashboard
 .PHONY: dbt
 dbt: # run dbt models
 	@echo "running dbt models"
-	@cd transforms && uv sync --group dbt && uv run dbt run
+	@cd transforms && uv sync --group dbt && uv run dbt run && uv sync
 
 .PHONY: infra
 infra: # deploy infra
