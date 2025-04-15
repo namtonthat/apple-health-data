@@ -92,7 +92,10 @@ try:
         .with_columns(
             # Duration as a pretty string like "7h 30m"
             (pl.col("Sleep End") - pl.col("Sleep Start"))
-            .map_elements(lambda x: f"{x.seconds // 3600}h {(x.seconds % 3600) // 60}m")
+            .map_elements(
+                lambda x: f"{x.seconds // 3600}h {(x.seconds % 3600) // 60}m",
+                return_dtype=pl.String,
+            )
             .alias("Sleep Duration")
         )
         .with_columns(
