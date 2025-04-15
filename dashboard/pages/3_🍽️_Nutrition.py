@@ -101,17 +101,25 @@ with col2:
     # === LINE GRAPH: DAILY CALORIES using st.line_chart ===
     render_macros_bar_chart(macros_df)
 
-st.header("Detailed Macros")
-detailed_macros_df = (
-    macros_and_calories_df.filter(
-        pl.col("metric_name").is_in(
-            ["carbohydrates", "fat", "protein", "calories", "fiber"]
+
+col1, col2 = st.columns([2, 1])
+with col1:
+    st.subheader("Macros")
+    detailed_macros_df = (
+        macros_and_calories_df.filter(
+            pl.col("metric_name").is_in(
+                ["carbohydrates", "fat", "protein", "calories", "fiber"]
+            )
         )
+        .pivot("metric_name", index="metric_date", values="quantity")
+        .sort("metric_date", descending=False)
+        .rename({"metric_date": "date"})
+    ).select(["date", "calories", "protein", "carbohydrates", "fat", "fiber"])
+    st.write(detailed_macros_df)
+
+with col2:
+    st.subheader("Weight")
+    detailed_weight_df = weight_df.select(["metric_date", "quantity"]).rename(
+        {"metric_date": "date", "quantity": "weight (kg)"}
     )
-    .pivot("metric_name", index="metric_date", values="quantity")
-    .sort("metric_date", descending=False)
-    .rename({"metric_date": "date"})
-).select(["date", "calories", "protein", "carbohydrates", "fat", "fiber"])
-
-
-st.write(detailed_macros_df)
+    st.write(detailed_weight_df)

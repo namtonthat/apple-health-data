@@ -11,7 +11,7 @@ from graphing import (
     filter_metrics,
 )
 from helpers import (
-    compute_avg_sleep_time_from_midnight,
+    compute_avg_sleep_time,
     convert_column_to_timezone,
     load_filtered_s3_data,
     sidebar_datetime_filter,
@@ -35,8 +35,7 @@ start_date, end_date = sidebar_datetime_filter()
 
 
 try:
-    filtered_activity = load_filtered_s3_data(conf.key_activity, start_date, end_date)
-    filtered_sleep = load_filtered_s3_data(conf.key_sleep, start_date, end_date)
+    filtered_health = load_filtered_s3_data(conf.key_health, start_date, end_date)
     filtered_sleep_times = load_filtered_s3_data(
         conf.key_sleep_times,
         start_date,
@@ -52,7 +51,7 @@ except Exception as e:
 # ---------------------- AVERAGE activity ----------------------
 st.header("Activity")
 try:
-    render_kpi_section("activity", filtered_activity, kpi_config)
+    render_kpi_section("activity", filtered_health, kpi_config)
 except Exception as e:
     st.error(f"Error computing macro KPIs: {e}")
 
@@ -60,10 +59,6 @@ except Exception as e:
 st.header("Sleep Stats")
 try:
     # ---------------------- SLEEP KPIs ----------------------
-    sleep_avg_df = filtered_sleep.group_by("metric_name").agg(
-        [pl.col("quantity").mean().alias("avg_quantity")]
-    )
-
     # Convert sleep_times to Melbourne timezone
     sleep_times_local = convert_column_to_timezone(
         filtered_sleep_times, "sleep_times"
@@ -72,22 +67,20 @@ try:
     sleep_end_df = filter_metrics(sleep_times_local, ["sleep_end"])
 
     # Compute averages
-    avg_sleep_start = compute_avg_sleep_time_from_midnight(sleep_start_df)
-    avg_sleep_end = compute_avg_sleep_time_from_midnight(sleep_end_df)
+    avg_sleep_start = compute_avg_sleep_time(sleep_start_df)
+    avg_sleep_end = compute_avg_sleep_time(sleep_end_df)
 
     sleep_overrides = {
         "avg_sleep_start": avg_sleep_start,
         "avg_sleep_end": avg_sleep_end,
     }
 
-    render_kpi_section("sleep", filtered_sleep, kpi_config, overrides=sleep_overrides)
+    render_kpi_section("sleep", filtered_health, kpi_config, overrides=sleep_overrides)
 
     col1, col2 = st.columns(2)
 
-    # Sleep Time Details (unpivoted sleep_times)
     sleep_time_details = (
         sleep_times_local.select(pl.col(["metric_date", "sleep_times", "metric_name"]))
-        .with_columns(pl.col("sleep_times").dt.strftime("%I:%M %p"))
         .pivot("metric_name", index="metric_date", values="sleep_times")
         .rename(
             {
@@ -95,6 +88,17 @@ try:
                 "sleep_start": "Sleep Start",
                 "sleep_end": "Sleep End",
             }
+        )
+        .with_columns(
+            # Duration as a pretty string like "7h 30m"
+            (pl.col("Sleep End") - pl.col("Sleep Start"))
+            .map_elements(lambda x: f"{x.seconds // 3600}h {(x.seconds % 3600) // 60}m")
+            .alias("Sleep Duration")
+        )
+        .with_columns(
+            # Format Sleep Start and Sleep End as strings for display
+            pl.col("Sleep Start").dt.strftime("%I:%M %p"),
+            pl.col("Sleep End").dt.strftime("%I:%M %p"),
         )
     )
 

@@ -94,6 +94,29 @@ def compute_avg_sleep_time_from_midnight(
     return midnight_today + avg_offset
 
 
+def compute_avg_sleep_time(df: pl.DataFrame, time_col: str = "sleep_times") -> datetime:
+    times = df[time_col].to_list()
+
+    SECONDS_IN_DAY = 24 * 60 * 60
+    anchor_hour = 19  # 7 PM
+
+    offsets = []
+    for dt in times:
+        seconds = dt.hour * 3600 + dt.minute * 60 + dt.second
+
+        # Shift times so sleep period stays together around midnight
+        shifted_seconds = (seconds - anchor_hour * 3600) % SECONDS_IN_DAY
+        offsets.append(shifted_seconds)
+
+    avg_shifted = sum(offsets) / len(offsets)
+
+    # Reverse the shift
+    avg_seconds = (avg_shifted + anchor_hour * 3600) % SECONDS_IN_DAY
+
+    midnight_today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    return midnight_today + timedelta(seconds=avg_seconds)
+
+
 def sidebar_datetime_filter() -> tuple[datetime, datetime]:
     """
     Render a shared sidebar date filter component and return start/end date.

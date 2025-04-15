@@ -80,7 +80,7 @@ def render_kpis(section: str, values: dict[str, Any], config: dict[str, Any]) ->
         elif val is not None:
             val_str = fmt.format(val)
         else:
-            val_str = "N/A"
+            val_str = "0"
 
         col.metric(kpi.label, val_str, delta)
 

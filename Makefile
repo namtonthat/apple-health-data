@@ -17,7 +17,7 @@ dashboard: # make dashboard
 .PHONY: dbt
 dbt: # run dbt models
 	@echo "running dbt models"
-	@cd transforms && uv sync --group dbt && uv run dbt run && uv sync
+	@cd transforms && uv sync --group dbt && uv run dbt run && uv sync --all-groups
 
 .PHONY: infra
 infra: # deploy infra
@@ -28,7 +28,7 @@ infra: # deploy infra
 hevy: # ingest hevy data
 	@echo "ingest hevy data"
 	@echo "running ingestion for hevy data"
-	@uv sync --group ingest && uv run ingest/exercise/hevy.py
+	@uv sync --group ingest && uv run ingest/exercise/hevy.py && uv sync --all-groups
 
 .PHONY: rebuild
 rebuild: # deploy rebuild
