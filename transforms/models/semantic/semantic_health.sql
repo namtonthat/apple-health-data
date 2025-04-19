@@ -1,19 +1,23 @@
-with activity as (
+-- Use CTEs to reuse subqueries
+with raw_metrics as (
+    select * from {{ ref('raw_latest_api_metrics') }}
+),
+
+raw_nutrition as (
+    select * from {{ ref('raw_nutrition') }}
+),
+
+activity as (
     select *
-    from {{ ref('raw_latest_api_metrics') }}
-    where metric_name in (
-        'step_count',
-        'mindful_minutes',
-        'apple_exercise_time'
-    )
+    from raw_metrics
+    where
+        metric_name in ('step_count', 'mindful_minutes', 'apple_exercise_time')
 ),
 
 weight as (
     select *
-    from {{ ref('raw_latest_api_metrics') }}
-    where metric_name in (
-        'weight_body_mass'
-    )
+    from raw_metrics
+    where metric_name = 'weight_body_mass'
 ),
 
 calories as (
@@ -29,41 +33,26 @@ calories as (
             end
         ) as quantity,
         'kcal' as units
-    from {{ ref('raw_nutrition') }}
-    group by all
+    from raw_nutrition
+    group by metric_date
 ),
 
 detailed_calories as (
-    -- Carbohydrates to calories
     select
         metric_date,
-        'calories_carbohydrates' as metric_name,
-        quantity * 4 as quantity,
+        case
+            when metric_name = 'carbohydrates' then 'calories_carbohydrates'
+            when metric_name = 'protein' then 'calories_protein'
+            when metric_name = 'total_fat' then 'calories_fat'
+        end as metric_name,
+        case
+            when metric_name = 'carbohydrates' then quantity * 4
+            when metric_name = 'protein' then quantity * 4
+            when metric_name = 'total_fat' then quantity * 9
+        end as quantity,
         'kcal' as units
-    from {{ ref('raw_nutrition') }}
-    where metric_name = 'carbohydrates'
-
-    union all
-
-    -- Protein to calories
-    select
-        metric_date,
-        'calories_protein' as metric_name,
-        quantity * 4 as quantity,
-        'kcal' as units
-    from {{ ref('raw_nutrition') }}
-    where metric_name = 'protein'
-
-    union all
-
-    -- Fat to calories
-    select
-        metric_date,
-        'calories_fat' as metric_name,
-        quantity * 9 as quantity,
-        'kcal' as units
-    from {{ ref('raw_nutrition') }}
-    where metric_name = 'total_fat'
+    from raw_nutrition
+    where metric_name in ('carbohydrates', 'protein', 'total_fat')
 ),
 
 all_nutrition as (
@@ -73,42 +62,22 @@ all_nutrition as (
     select * from detailed_calories
     where quantity != 0
     union all
-    select * from {{ ref('raw_nutrition') }}
-),
-
-in_bed as (
-    select
-        rs.metric_date,
-        'in_bed' as metric_name,
-        data_fields.inbed as quantity,
-        rs.units
-    from {{ ref('raw_sleep') }} as rs
-),
-
-asleep as (
-    select
-        rs.metric_date,
-        'asleep' as metric_name,
-        data_fields.asleep as quantity,
-        rs.units
-    from {{ ref('raw_sleep') }} as rs
-),
-
-deep as (
-    select
-        rs.metric_date,
-        'deep_sleep' as metric_name,
-        data_fields.deep as quantity,
-        rs.units
-    from {{ ref('raw_sleep') }} as rs
+    select * from raw_nutrition
 ),
 
 all_sleep_data as (
-    select * from in_bed
-    union all
-    select * from asleep
-    union all
-    select * from deep
+    select
+        rs.metric_date,
+        sleep_type.metric_name,
+        sleep_type.quantity,
+        rs.units
+    from {{ ref('raw_sleep') }} as rs
+    cross join lateral (
+        values
+        ('in_bed', data_fields.inbed),
+        ('asleep', data_fields.asleep),
+        ('deep_sleep', data_fields.deep)
+    ) as sleep_type (metric_name, quantity)
 ),
 
 volume_data as (
@@ -121,8 +90,8 @@ volume_data as (
         workout_duration_mins,
         sum(weight_kg * reps) as volume_kg
     from {{ ref('semantic_exercises') }}
-    group by all
-    order by start_time desc, index asc
+    group by
+        id, index, metric_date, start_time, exercise_name, workout_duration_mins
 ),
 
 total_workout_volume as (
@@ -133,59 +102,64 @@ total_workout_volume as (
         sum(volume_kg) as quantity,
         'kg' as units
     from volume_data
-    group by all
-    order by start_time desc
+    group by metric_date, start_time
 ),
 
 total_time as (
-    select distinct
+    select
         id,
         metric_date,
         'workout_time' as metric_name,
         workout_duration_mins as quantity,
         'mins' as units
     from volume_data
+),
+
+-- Final unified metrics output
+final_metrics as (
+    select
+        metric_date,
+        metric_name,
+        quantity,
+        units
+    from total_workout_volume
+    union all
+    select
+        metric_date,
+        metric_name,
+        quantity,
+        units
+    from total_time
+    union all
+    select
+        metric_date,
+        metric_name,
+        round(quantity, 1) as quantity,
+        units
+    from all_sleep_data
+    union all
+    select
+        metric_date,
+        metric_name,
+        round(quantity, 0) as quantity,
+        units
+    from activity
+    union all
+    select
+        metric_date,
+        metric_name,
+        cast(round(quantity, 1) as float) as quantity,
+        units
+    from all_nutrition
+    union all
+    select
+        metric_date,
+        metric_name,
+        round(quantity, 2) as quantity,
+        units
+    from weight
 )
 
-select
-    metric_date,
-    metric_name,
-    quantity,
-    units
-from total_workout_volume
-union all
-select
-    metric_date,
-    metric_name,
-    quantity,
-    units
-from total_time
-union all
-select
-    asd.metric_date,
-    asd.metric_name,
-    round(asd.quantity, 1) as quantity,
-    asd.units
-from all_sleep_data as asd
-union all
-select
-    metric_date,
-    metric_name,
-    round(quantity, 0) as quantity,
-    units
-from activity
-union all
-select
-    metric_date,
-    metric_name,
-    cast(round(quantity, 1) as float) as quantity,
-    units
-from all_nutrition
-union all
-select
-    metric_date,
-    metric_name,
-    round(quantity, 2) as quantity,
-    units
-from weight
+select *
+from final_metrics
 order by metric_date desc, metric_name asc

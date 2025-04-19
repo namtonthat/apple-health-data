@@ -34,9 +34,13 @@ models:
     +post-hook: "COPY {{ this }} TO 's3://{{ var('s3_bucket') }}/{{ this.schema }}/{{ this.identifier }}.parquet'"
     raw:
       +schema: raw
+      materialized: table
+      full_refresh: true
     semantic:
       +schema: semantic
       materialized: table
       full_refresh: true
     staging:
       +schema: staging
+      materialized: table
+      full_refresh: true

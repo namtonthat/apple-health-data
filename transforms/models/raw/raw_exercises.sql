@@ -3,6 +3,9 @@ with unnested_data as (
         se.*,
         unnest(se.exercises, recursive := true) -- noqa: AL03
     from {{ ref('stg_exercises') }} as se
+    {% if is_incremental() %}
+        where se.start_time >= current_date - interval '15' day
+    {% endif %}
 ),
 
 unnested_exercise_data as (
