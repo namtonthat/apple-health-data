@@ -7,6 +7,7 @@ on:
     branches:
       - main
   schedule:
+    - cron: "0 13 * * 1" # Runs every Tuesday at midnight AEST
     - cron: "0 13 * * 2" # Runs every Wednesday at midnight AEST
     - cron: "0 13 * * 5" # Runs every Saturday at midnight AEST
   workflow_dispatch:
