@@ -49,6 +49,10 @@ try:
         end_date,
     )
 
+    unfiltered_openpowerlifting = load_filtered_s3_data(
+        conf.key_openpowerlifting,
+    )
+
     # Load configuration
     kpi_config = load_kpi_config()
 
@@ -106,6 +110,7 @@ except Exception as e:
     st.error(f"Error generating base dataframes: {e}")
 
 try:
+    st.write(unfiltered_openpowerlifting)
     render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
     col1, col2 = st.columns(2)
     with col1:

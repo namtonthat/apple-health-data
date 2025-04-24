@@ -106,7 +106,9 @@ select
 from aggregated
 
 {% if is_incremental() %}
-    where metric_date > (select max(metric_date) from {{ this }}) - interval 14 days
+    where
+        metric_date > (select max(metric_date) from {{ this }}) - interval 14
+    days
 {% endif %}
 
 order by metric_date desc, metric_name asc

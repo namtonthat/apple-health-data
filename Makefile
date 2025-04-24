@@ -27,7 +27,8 @@ hevy: # ingest hevy data
 .PHONY: openpowerlifting
 openpowerlifting: # ingest exercise data
 	@echo "running ingestion for openpowerlifting data"
-	@uv sync --group ingest && uv run ingest/exercise/openpowerlifting.py && uv sync --all-groups
+	# @uv sync --group ingest && uv run ingest/exercise/openpowerlifting.py && uv sync --all-groups
+	@uv run ingest/exercise/openpowerlifting.py
 
 .PHONY: infra
 infra: # deploy infra

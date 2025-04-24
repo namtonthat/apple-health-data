@@ -28,6 +28,7 @@ ingest = [
   "asyncio>=3.4.3",
   "beautifulsoup4>=4.13.4",
   "httpx>=0.28.1",
+  "polars>=1.24.0",
   "python-dotenv>=1.0.1",
   "tenacity>=9.0.0",
 ]

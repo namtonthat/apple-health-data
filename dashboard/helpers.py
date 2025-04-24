@@ -6,36 +6,34 @@ This module contains functions to read data from AWS S3 (in Parquet format) usin
 
 import logging
 from datetime import date, datetime, time, timedelta
-from pathlib import Path
+from typing import Optional
 
 import conf
-import duckdb
 import polars as pl
 import pytz
 import streamlit as st
-import yaml
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def filter_data(df, start_date, end_date):
-    """Filter a Polars DataFrame by date and reformat the metric_date column."""
-    return df.filter(
-        (pl.col("metric_date") >= start_date) & (pl.col("metric_date") <= end_date)
-    ).with_columns(pl.col("metric_date").dt.strftime("%Y-%m-%d").alias("metric_date"))
-
-
 @st.cache_data
 def load_filtered_s3_data(
     s3_key: str,
-    start_date: date,
-    end_date: date,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
 ):
     s3_path = f"s3://{conf.s3_bucket}/{s3_key}"
-    unfiltered_df = pl.read_parquet(s3_path)
-    return filter_data(unfiltered_df, start_date, end_date)
+    df = pl.read_parquet(s3_path)
+    if start_date:
+        df = df.filter(pl.col("metric_date") >= start_date)
+    if end_date:
+        df = df.filter(pl.col("metric_date") <= end_date)
+
+    return df.with_columns(
+        pl.col("metric_date").dt.strftime("%Y-%m-%d").alias("metric_date")
+    )
 
 
 def convert_column_to_timezone(
@@ -150,42 +148,3 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
 
     st.sidebar.caption(f"Showing data from `{start_date}` to `{end_date}`")
     return start_dt, end_dt
-
-
-### Reflections
-
-
-def load_questions_from_yaml():
-    yaml_path: Path = Path(__file__).parent / "questions.yaml"
-    with Path.open(yaml_path) as file:
-        return yaml.safe_load(file)
-
-
-DB_NAME = "responses.duckdb"
-
-
-def init_db():
-    conn = duckdb.connect(DB_NAME)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS form_entries (
-            date TIMESTAMP,
-            response_type VARCHAR,
-            content TEXT
-        )
-    """)
-    conn.close()
-
-
-def insert_entry(date, response_type, content):
-    conn = duckdb.connect(DB_NAME)
-    conn.execute(
-        "INSERT INTO form_entries VALUES (?, ?, ?)", (date, response_type, content)
-    )
-    conn.close()
-
-
-def get_all_entries():
-    conn = duckdb.connect(DB_NAME)
-    result = conn.execute("SELECT * FROM form_entries ORDER BY date DESC").fetchall()
-    conn.close()
-    return result
