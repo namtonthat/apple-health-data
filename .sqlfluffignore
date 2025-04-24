@@ -1,3 +1,4 @@
 # DBT Macros
 transforms/macros/*.sql
+transforms/models/raw/raw_openpowerlifting.sql
 
