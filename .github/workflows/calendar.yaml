@@ -46,6 +46,7 @@ jobs:
         env:
           AWS_REGION: ${{ vars.AWS_REGION }}
           S3_BUCKET: ${{ vars.S3_BUCKET }}
+          OPENPOWERLIFTING_USERNAME: ${{ vars.OPENPOWERLIFTING_USERNAME }}
 
   dbt:
     runs-on: ubuntu-24.04-arm
