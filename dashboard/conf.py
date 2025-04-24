@@ -1,4 +1,6 @@
+# AWS
 aws_region = "ap-southeast-2"
+openpowerlifting_url = "https://www.openpowerlifting.org/u/namtonthat"
 s3_bucket = "api-health-data-ntonthat"
 calendar_name = "apple-health-calendar.ics"
 write_to_s3 = False
