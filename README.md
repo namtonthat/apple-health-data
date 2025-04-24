@@ -42,7 +42,7 @@ graph LR
 This project uses `uv` to manage environment and package dependencies
 
 1. Setup project dependencies using `make setup`
-2. Update `conf.py` to the location of the required `s3` buckets
+2. Create a `.env` (based off the [`.env.example`](.env.example)) to define the specific infra requirements
 3. Run `make infra` to deploy the terraform stack and collect the API endpoint to be used within the iOS app
 4. Trigger API export from `health-auto-export` using the API endpoint.
 

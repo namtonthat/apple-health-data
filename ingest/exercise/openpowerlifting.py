@@ -1,20 +1,26 @@
 """
 openpowerlifting.py
 
-Fetches personal best lifts from an OpenPowerlifting profile URL by scraping the HTML page.
+Fetches all competition lift entries from an OpenPowerlifting profile URL by scraping the HTML page
+and saves the results to a Parquet file.
 
 Usage:
     python openpowerlifting.py https://www.openpowerlifting.org/u/namtonthat
+
+Requires:
+    pip install requests beautifulsoup4 pandas pyarrow
 """
 
-import argparse
 import json
 import logging
+import os
 import sys
-from collections.abc import Iterator
 from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Iterator, Optional
 
 import requests
+import utils
 from bs4 import BeautifulSoup, Tag
 
 # Configure logging at module load
@@ -24,17 +30,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Environment variables
+OPENPOWERLIFTING_URL = os.getenv("OPENPOWERLIFTING_URL")
+
 
 @dataclass
-class BestLifts:
-    """Data class to hold personal best lift stats for a given equipment."""
+class CompetitionLift:
+    """Data class to hold a single competition lift record."""
 
-    equip: str
-    squat: float | None = None
-    bench: float | None = None
-    deadlift: float | None = None
-    total: float | None = None
-    dots: float | None = None
+    date: str
+    meet: str
+    equipment: str
+    bodyweight_kg: Optional[float]
+    weight_class_kg: Optional[float]
+    squat1_kg: Optional[float]
+    squat2_kg: Optional[float]
+    squat3_kg: Optional[float]
+    bench1_kg: Optional[float]
+    bench2_kg: Optional[float]
+    bench3_kg: Optional[float]
+    deadlift1_kg: Optional[float]
+    deadlift2_kg: Optional[float]
+    deadlift3_kg: Optional[float]
+    total_kg: Optional[float]
+    wilks: Optional[float]
 
 
 def get_page_content(url: str) -> str:
@@ -48,81 +67,90 @@ def get_page_content(url: str) -> str:
         sys.exit(1)
 
 
-def parse_value(text: str) -> float | None:
+def parse_value(text: str) -> Optional[float]:
     """Attempt to convert a string to float, return None on failure."""
+    txt = text.strip()
+    if not txt:
+        return None
     try:
-        return float(text)
+        return float(txt)
     except (ValueError, TypeError):
         return None
 
 
-def build_best_lifts(headers: list[str], rows: list[Tag]) -> Iterator[BestLifts]:
-    """Yield BestLifts objects from table headers and row tags."""
+def build_comp_lifts(headers: list[str], rows: list[Tag]) -> Iterator[CompetitionLift]:
+    """Yield CompetitionLift objects from table headers and row tags."""
+    # Map header titles to dataclass field names
+    key_map = [
+        h.lower()
+        .replace(" ", "_")
+        .replace("(kg)", "_kg")
+        .replace("(", "")
+        .replace(")", "")
+        for h in headers
+    ]
     for row in rows[1:]:
         cells = row.find_all(["td", "th"])
         values = [cell.text.strip() for cell in cells]
-        equip = values[0]
-        data = {key: None for key in headers}
-        for key, val in zip(headers[1:], values[1:]):
-            data[key] = parse_value(val)
-        yield BestLifts(
-            equip=equip,
-            squat=data.get("squat"),
-            bench=data.get("bench"),
-            deadlift=data.get("deadlift"),
-            total=data.get("total"),
-            dots=data.get("dots"),
+        data = dict(zip(key_map, values))
+        yield CompetitionLift(
+            date=data.get("date", ""),
+            meet=data.get("meet", ""),
+            equipment=data.get("equipment", ""),
+            bodyweight_kg=parse_value(data.get("bodyweight_kg", "")),
+            weight_class_kg=parse_value(data.get("weight_class_kg", "")),
+            squat1_kg=parse_value(data.get("squat1_kg", "")),
+            squat2_kg=parse_value(data.get("squat2_kg", "")),
+            squat3_kg=parse_value(data.get("squat3_kg", "")),
+            bench1_kg=parse_value(data.get("bench1_kg", "")),
+            bench2_kg=parse_value(data.get("bench2_kg", "")),
+            bench3_kg=parse_value(data.get("bench3_kg", "")),
+            deadlift1_kg=parse_value(data.get("deadlift1_kg", "")),
+            deadlift2_kg=parse_value(data.get("deadlift2_kg", "")),
+            deadlift3_kg=parse_value(data.get("deadlift3_kg", "")),
+            total_kg=parse_value(data.get("total_kg", "")),
+            wilks=parse_value(data.get("wilks", "")),
         )
 
 
-def parse_personal_bests(html: str) -> list[BestLifts]:
-    """Parse the 'Personal Bests' table from HTML and return BestLifts list."""
+def parse_competition_lifts(html: str) -> list[CompetitionLift]:
+    """Parse the 'Competition Results' table from HTML and return CompetitionLift list."""
     soup = BeautifulSoup(html, "html.parser")
     header = soup.find(
-        lambda tag: tag.name in {"h1", "h2", "h3"} and "Personal Bests" in tag.text
+        lambda tag: tag.name in {"h1", "h2", "h3"} and "Competition Results" in tag.text
     )
     if not header:
-        logger.error("Personal Bests section not found in HTML")
+        logger.error("Competition Results section not found in HTML")
         sys.exit(1)
 
     table = header.find_next("table")
     if not table:
-        logger.error("Personal Bests table not found under header")
+        logger.error("Competition Results table not found under header")
         sys.exit(1)
 
     rows = table.find_all("tr")
-    headers = [cell.text.strip().lower() for cell in rows[0].find_all(["th", "td"])]
+    headers = [cell.text.strip() for cell in rows[0].find_all(["th", "td"])]
 
-    lifts = list(build_best_lifts(headers, rows))
-    logger.info("Parsed %d personal best entries", len(lifts))
+    lifts = list(build_comp_lifts(headers, rows))
+    logger.info("Parsed %d competition lift entries", len(lifts))
     return lifts
 
 
-def openpowerlifting(url: str) -> list[BestLifts]:
+def fetch_competition_lifts(url: str) -> list[CompetitionLift]:
     """
-    High-level function to fetch and parse personal bests for a profile URL.
-
-    Returns:
-        List of BestLifts instances.
+    High-level function to fetch and parse all competition lifts for a profile URL.
     """
     html = get_page_content(url)
-    return parse_personal_bests(html)
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Fetch personal best lifts by scraping an OpenPowerlifting profile"
-    )
-    parser.add_argument(
-        "url",
-        help="Profile page URL, e.g. https://www.openpowerlifting.org/u/namtonthat",
-    )
-    args = parser.parse_args()
-
-    best_lifts = openpowerlifting(args.url)
-    # Serialize dataclasses to JSON and output
-    logger.info(json.dumps([asdict(lift) for lift in best_lifts], indent=2))
+    return parse_competition_lifts(html)
 
 
 if __name__ == "__main__":
-    main()
+    comp_lifts = fetch_competition_lifts(OPENPOWERLIFTING_URL)
+    output_data: list[dict] = [asdict(lift) for lift in comp_lifts]
+    s3_data = json.dumps(output_data, ensure_ascii=False, indent=2)
+    ctrl_load_date = datetime.now().isoformat()
+
+    s3_key_with_filename: str = (
+        f"{utils.S3_KEY_PREFIX}openpowerlifting/{ctrl_load_date}.json"
+    )
+    utils.upload_to_s3(s3_data, utils.S3_BUCKET, s3_key_with_filename)
