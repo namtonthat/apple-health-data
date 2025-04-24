@@ -2,13 +2,11 @@
 openpowerlifting.py
 
 Fetches all competition lift entries from an OpenPowerlifting profile URL by scraping the HTML page
-and saves the results to a Parquet file.
+and saves the results to an s3 bucket
 
 Usage:
     python openpowerlifting.py https://www.openpowerlifting.org/u/namtonthat
 
-Requires:
-    pip install requests beautifulsoup4 pandas pyarrow
 """
 
 import json
@@ -146,9 +144,17 @@ def fetch_competition_lifts(url: str) -> list[CompetitionLift]:
 
 if __name__ == "__main__":
     comp_lifts = fetch_competition_lifts(OPENPOWERLIFTING_URL)
-    output_data: list[dict] = [asdict(lift) for lift in comp_lifts]
-    s3_data = json.dumps(output_data, ensure_ascii=False, indent=2)
     ctrl_load_date = datetime.now().isoformat()
+    output_data: list[dict] = [
+        {
+            **asdict(lift),
+            "source": "openpowerlifting.org",
+            "ctrl_load_date": ctrl_load_date,
+        }
+        for lift in comp_lifts
+    ]
+    s3_data = json.dumps(output_data, ensure_ascii=False, indent=2)
+    # print(s3_data)
 
     s3_key_with_filename: str = (
         f"{utils.S3_KEY_PREFIX}openpowerlifting/{ctrl_load_date}.json"
