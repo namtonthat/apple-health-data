@@ -75,7 +75,8 @@ data "aws_iam_policy_document" "github_actions_policy" {
   statement {
     sid = "ECRAccess"
     actions = [
-      "ecr:*"
+      "ecr:*",
+      "ecr:GetAuthorizationToken",
     ]
     resources = [
       aws_ecr_repository.dbt_repo.arn,
