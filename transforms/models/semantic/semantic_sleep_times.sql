@@ -30,7 +30,9 @@ select
 from all_sleep_data as asd
 
 {% if is_incremental() %}
-    where asd.metric_date > (select max(metric_date) from {{ this }}) - interval '14 days'
+    where
+        asd.metric_date
+        > (select max(metric_date) from {{ this }}) - interval '14 days'
 {% endif %}
 
 order by asd.metric_date asc, asd.metric_name asc

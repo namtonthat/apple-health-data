@@ -94,6 +94,7 @@ dbt = [
 ingest = [
     { name = "asyncio" },
     { name = "httpx" },
+    { name = "polars" },
     { name = "python-dotenv" },
     { name = "tenacity" },
 ]
@@ -137,6 +138,7 @@ dbt = [
 ingest = [
     { name = "asyncio", specifier = ">=3.4.3" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "polars", specifier = ">=1.24.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "tenacity", specifier = ">=9.0.0" },
 ]

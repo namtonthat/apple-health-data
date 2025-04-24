@@ -18,8 +18,6 @@ from tenacity import (
 load_dotenv()
 
 HEVY_API_KEY: str = os.getenv("HEVY_API_KEY", "default_api_key")
-AWS_REGION = os.getenv("AWS_REGION")
-S3_BUCKET = os.getenv("S3_BUCKET")
 START_INGEST_DATE = os.getenv("START_INGEST_DATE")
 
 
@@ -93,8 +91,8 @@ async def fetch_workouts(
 
 
 async def main() -> None:
-    # logging.debug(AWS_REGION)
-    # logging.debug(S3_BUCKET)
+    # logging.debug(utils.AWS_REGION)
+    # logging.debug(utils.S3_BUCKET)
     # logging.debug(utils.S3_KEY_PREFIX)
 
     last_processed_date: str = utils.get_last_processed_date_from_s3()
@@ -120,8 +118,8 @@ async def main() -> None:
 
         # Convert the events list to JSON (as is) for uploading
         workout_data: str = json.dumps(workouts)
-        s3_key_with_filename: str = f"{utils.S3_KEY_PREFIX}{ctrl_load_date}.json"
-        utils.upload_to_s3(workout_data, S3_BUCKET, s3_key_with_filename)
+        s3_key_with_filename: str = f"{utils.S3_KEY_PREFIX}hevy/{ctrl_load_date}.json"
+        utils.upload_to_s3(workout_data, utils.S3_BUCKET, s3_key_with_filename)
         logger.info("Processed %s workouts.", len(events))
     else:
         logger.info("No new workouts found.")

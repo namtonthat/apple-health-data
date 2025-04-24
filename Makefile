@@ -19,16 +19,21 @@ dbt: # run dbt models
 	@echo "running dbt models"
 	@cd transforms && uv sync --group dbt && uv run dbt run && uv sync --all-groups
 
+.PHONY: hevy
+hevy: # ingest hevy data
+	@echo "running ingestion for hevy data"
+	@uv sync --group ingest && uv run ingest/exercise/hevy.py && uv sync --all-groups
+
+.PHONY: openpowerlifting
+openpowerlifting: # ingest exercise data
+	@echo "running ingestion for openpowerlifting data"
+	# @uv sync --group ingest && uv run ingest/exercise/openpowerlifting.py && uv sync --all-groups
+	@uv run ingest/exercise/openpowerlifting.py
+
 .PHONY: infra
 infra: # deploy infra
 	@echo "infra changes"
 	./scripts/infra.sh
-
-.PHONY: hevy
-hevy: # ingest hevy data
-	@echo "ingest hevy data"
-	@echo "running ingestion for hevy data"
-	@uv sync --group ingest && uv run ingest/exercise/hevy.py && uv sync --all-groups
 
 .PHONY: rebuild
 rebuild: # deploy rebuild
