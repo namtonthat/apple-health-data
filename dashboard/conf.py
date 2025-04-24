@@ -7,7 +7,7 @@ write_to_s3 = False
 
 # S3 paths
 key_exercises = "semantic/exercises.parquet"
-key_openpowerlifting = "semantic/openpowerlifting.parquet"
+key_openpowerlifting = "raw/openpowerlifting.parquet"
 key_health = "semantic/health.parquet"
 key_nutrition = "semantic/nutrition.parquet"
 key_sleep_times = "semantic/sleep_times.parquet"

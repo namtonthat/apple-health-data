@@ -7,6 +7,7 @@ from io import BytesIO
 import polars as pl
 import requests
 import utils
+from dotenv import load_dotenv
 
 # Configure logging
 logging.basicConfig(
@@ -15,6 +16,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+load_dotenv()
 API_URL_TEMPLATE = "https://www.openpowerlifting.org/api/liftercsv/{slug}"
 
 

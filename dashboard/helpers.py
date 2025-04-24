@@ -23,7 +23,7 @@ def load_filtered_s3_data(
     s3_key: str,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
-):
+) -> pl.DataFrame:
     s3_path = f"s3://{conf.s3_bucket}/{s3_key}"
     df = pl.read_parquet(s3_path)
     if start_date:

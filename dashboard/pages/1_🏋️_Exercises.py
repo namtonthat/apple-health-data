@@ -2,11 +2,13 @@
 Streamlit dashboard for apple-health-data
 """
 
+import os
 from datetime import datetime
 
 import conf
 import polars as pl
 import streamlit as st
+from dotenv import load_dotenv
 from graphing import render_altair_line_chart
 from helpers import (
     load_filtered_s3_data,
@@ -14,6 +16,7 @@ from helpers import (
 )
 from kpi import load_kpi_config, render_kpi_section
 
+load_dotenv()
 # Page configuration
 st.set_page_config(
     page_title="🏋️‍♂️Exercise",
@@ -30,6 +33,7 @@ WORKOUT_NAMES = [
     "PL - Bench",
     "PL - Accessories",
 ]
+OPENPOWERLIFTING_USERNAME = os.getenv("OPENPOWERLIFTING_USERNAME")
 
 
 # Sidebar date selection
@@ -47,10 +51,6 @@ try:
         conf.key_health,
         start_date,
         end_date,
-    )
-
-    unfiltered_openpowerlifting = load_filtered_s3_data(
-        conf.key_openpowerlifting,
     )
 
     # Load configuration
@@ -72,6 +72,12 @@ if exercise_type:
     filtered_exercises = filtered_exercises.filter(
         pl.col("workout_name").is_in(exercise_type)
     )
+
+
+def is_valid_df(df):
+    """Validate dataframe for rendering"""
+    return df is not None and df.shape[0] > 0
+
 
 try:
     volumes_by_exercise_df = (
@@ -109,9 +115,60 @@ try:
 except Exception as e:
     st.error(f"Error generating base dataframes: {e}")
 
+best_meet_records = None
 try:
-    st.write(unfiltered_openpowerlifting)
+    unfiltered_openpowerlifting = load_filtered_s3_data(
+        conf.key_openpowerlifting,
+    )
+    if is_valid_df(unfiltered_openpowerlifting):
+        best_meet = unfiltered_openpowerlifting.select(pl.col("Dots").max())
+        best_meet_records = (
+            unfiltered_openpowerlifting.filter(pl.col("Dots") == best_meet.item())
+            .select(
+                [
+                    "metric_date",
+                    "best3_squat_kg",
+                    "best3_bench_kg",
+                    "best3_deadlift_kg",
+                    "total_kg",
+                    "Dots",
+                ]
+            )
+            .rename(
+                {
+                    "metric_date": "Competition Date",
+                    "best3_squat_kg": "Squat (kg)",
+                    "best3_bench_kg": "Bench (kg)",
+                    "best3_deadlift_kg": "Deadlift (kg)",
+                    "Dots": "DOTS",
+                    "total_kg": "Total (kg)",
+                }
+            )
+        )
+
+except Exception as e:
+    st.error(f"Error collecting openpowerlifting data: {e}")
+
+
+if is_valid_df(best_meet_records):
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Exercise Metrics")
+        render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
+
+    with col2:
+        st.subheader("Best Competition Record")
+        st.write(
+            f"Sourced from [here](http://openpowerlifting.org/u/{OPENPOWERLIFTING_USERNAME})"
+        )
+        st.write(best_meet_records)
+
+else:
+    st.subheader("Exercise Metrics")
     render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
+
+
+try:
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Total Volume By Exercise")
