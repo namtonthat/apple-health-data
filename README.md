@@ -7,8 +7,11 @@ Built with
 ![Apple Health](./docs/images/apple-health-calendar.jpg)
 Overview of the health data as `calendar` events
 
-TODO: <INSERT DASHBOARD>
-Dashboard view of the apple health data
+### Dashboard
+
+A dashboard was also created with `streamlit` and hosted on [`namtonthat.streamlit.app`](https://namtonthat.streamlit.app)
+
+![Dashboard](./docs/images/apple-dashboard.png)
 
 ### 🚀 Github Actions
 
