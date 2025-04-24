@@ -1,25 +1,14 @@
 ## 📱 apple-health-data
 
-Built with
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org)
+Built with [![python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org)
 
-![Apple Health](./docs/images/apple-health-calendar.jpg)
-Overview of the health data as `calendar` events
-
-### Dashboard
-
-A dashboard was also created with `streamlit` and hosted on [`namtonthat.streamlit.app`](https://namtonthat.streamlit.app)
-
-![Dashboard](./docs/images/apple-dashboard.png)
-
-### 🚀 Github Actions
+#### 🚀 Github Actions
 
 [![calendar](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml)
-
 [![test](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml)
-
 [![infra](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml)
+
+## Purpose
 
 A serverless framework that automates the conversion of past daily statistics from Apple iOS into a calendar event.
 
@@ -32,13 +21,26 @@ graph LR
     E -->|calenadr/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 
-### 🎯 Project Goals
+## 🎯 Project Goals
 
 - Automate exports from iPhone (via [AutoExport](https://github.com/Lybron/health-auto-export))
 - Trigger workflow automatically when AutoExport uploads into S3 endpoint.
 - Create `read-only` data available in AWS S3 bucket.
 - Files are refreshed in S3 bucket that personal calendar is subscribed to.
 - Details about the process and entity relationship diagram are provided in the [README](https://github.com/namtonthat/apple-health-calendar/blob/main/docs/README.md)
+
+## Screenshots
+
+### 📅 Calendar
+
+![Apple Health](./docs/images/apple-health-calendar.jpg)
+Overview of the health data as `calendar` events
+
+### 📄 Dashboard
+
+A dashboard was also created with `streamlit` and hosted on [`namtonthat.streamlit.app`](https://namtonthat.streamlit.app)
+
+![Dashboard](./docs/images/apple-dashboard.png)
 
 ### 🆕 Getting Started
 
