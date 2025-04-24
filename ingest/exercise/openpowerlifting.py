@@ -154,7 +154,6 @@ if __name__ == "__main__":
         for lift in comp_lifts
     ]
     s3_data = json.dumps(output_data, ensure_ascii=False, indent=2)
-    logger.info(s3_data)
 
     s3_key_with_filename: str = (
         f"{utils.S3_KEY_PREFIX}openpowerlifting/{ctrl_load_date}.json"
