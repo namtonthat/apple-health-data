@@ -26,7 +26,6 @@ dashboard = ["duckdb>=1.2.1", "watchdog>=6.0.0"]
 dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
 ingest = [
   "asyncio>=3.4.3",
-  "beautifulsoup4>=4.13.4",
   "httpx>=0.28.1",
   "polars>=1.24.0",
   "python-dotenv>=1.0.1",
