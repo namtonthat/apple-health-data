@@ -71,17 +71,22 @@ data "aws_iam_policy_document" "github_actions_policy" {
       "${aws_s3_bucket.health_data_bucket.arn}/*",
     ]
   }
+  statement {
+    sid = "ECRLogin"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
 
   statement {
     sid = "ECRAccess"
     actions = [
       "ecr:*",
-      "ecr:GetAuthorizationToken",
     ]
     resources = [
       aws_ecr_repository.dbt_repo.arn,
       aws_ecr_repository.ingest_repo.arn,
-      aws_iam_user.github_actions.arn,
     ]
   }
   statement {
