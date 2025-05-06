@@ -2,6 +2,8 @@
 Helper functions for rendering graphs
 """
 
+from typing import Optional
+
 import altair as alt
 import polars as pl
 import streamlit as st
@@ -71,10 +73,34 @@ def streamlit_dark():
     return theme_base
 
 
+def render_goal_line(avg_value: float) -> alt.LayerChart:
+    """Render a horizontal goal line with a 'GOAL' label."""
+    # Dashed red line at y = avg_value
+    goal_line = (
+        alt.Chart()
+        .mark_rule(color="red", strokeDash=[4, 4])
+        .encode(y=alt.Y("y:Q"))
+        .transform_calculate(y=str(avg_value))
+    )
+
+    # Text label anchored to the line
+    goal_label = (
+        alt.Chart()
+        .mark_text(text="GOAL", align="left", dx=5, dy=-10, fontSize=12, color="red")
+        .encode(
+            x=alt.value(5),  # fixed x pos
+            y=alt.value(avg_value),
+        )
+    )
+
+    return goal_line + goal_label
+
+
 def render_altair_line_chart(
     df: pl.DataFrame,
     title: str,
     use_min_max_scale: bool = True,
+    avg_bar: Optional[float] = None,
 ):
     """Generate a line chart of the data and limit the y values to their min/max."""
 
@@ -112,4 +138,8 @@ def render_altair_line_chart(
     )
 
     chart = line + text
+
+    if avg_bar is not None:
+        chart += render_goal_line(avg_bar)
+
     return st.altair_chart(chart)

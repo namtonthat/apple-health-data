@@ -11,6 +11,7 @@ key_openpowerlifting = "raw/openpowerlifting.parquet"
 key_health = "semantic/health.parquet"
 key_nutrition = "semantic/nutrition.parquet"
 key_sleep_times = "semantic/sleep_times.parquet"
+key_sleep = "semantic/sleep.parquet"
 
 # Dashboard
 page_title = "Nam Tonthat's Health Data"

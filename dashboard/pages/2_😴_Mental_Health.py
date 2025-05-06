@@ -7,9 +7,7 @@ from datetime import datetime
 import conf
 import polars as pl
 import streamlit as st
-from graphing import (
-    filter_metrics,
-)
+from graphing import filter_metrics, render_altair_line_chart
 from helpers import (
     compute_avg_sleep_time,
     convert_column_to_timezone,
@@ -34,6 +32,16 @@ today = datetime.today().date()
 start_date, end_date = sidebar_datetime_filter()
 
 
+def format_hours_to_duration_str(
+    column_name: str, label: str = "Formatted Duration"
+) -> pl.Expr:
+    col = pl.col(column_name)
+    hours = col.floor().cast(pl.Int64).cast(pl.Utf8)
+    minutes = ((col - col.floor()) * 60).round(0).cast(pl.Int64).cast(pl.Utf8)
+
+    return (hours + "h " + minutes + "m").alias(label)
+
+
 try:
     filtered_health = load_filtered_s3_data(conf.key_health, start_date, end_date)
     filtered_sleep_times = load_filtered_s3_data(
@@ -41,6 +49,12 @@ try:
         start_date,
         end_date,
     )
+    filtered_sleep = load_filtered_s3_data(
+        conf.key_sleep,
+        start_date,
+        end_date,
+    )
+
     # Load configuration
     kpi_config = load_kpi_config()
 
@@ -78,6 +92,9 @@ try:
     render_kpi_section("sleep", filtered_health, kpi_config, overrides=sleep_overrides)
 
     col1, col2 = st.columns(2)
+    asleep = filtered_sleep.filter(pl.col("metric_name") == "asleep").with_columns(
+        format_hours_to_duration_str("quantity", label="Sleep Duration")
+    )
 
     sleep_time_details = (
         sleep_times_local.select(pl.col(["metric_date", "sleep_times", "metric_name"]))
@@ -85,28 +102,32 @@ try:
         .rename(
             {
                 "metric_date": "Date",
-                "sleep_start": "Sleep Start",
-                "sleep_end": "Sleep End",
+                "sleep_start": "Start",
+                "sleep_end": "End",
             }
         )
         .with_columns(
-            # Duration as a pretty string like "7h 30m"
-            (pl.col("Sleep End") - pl.col("Sleep Start"))
-            .map_elements(
-                lambda x: f"{x.seconds // 3600}h {(x.seconds % 3600) // 60}m",
-                return_dtype=pl.String,
-            )
-            .alias("Sleep Duration")
-        )
-        .with_columns(
             # Format Sleep Start and Sleep End as strings for display
-            pl.col("Sleep Start").dt.strftime("%I:%M %p"),
-            pl.col("Sleep End").dt.strftime("%I:%M %p"),
+            pl.col("Start").dt.strftime("%I:%M %p"),
+            pl.col("End").dt.strftime("%I:%M %p"),
         )
+    ).join(
+        asleep.select(["metric_date", "Sleep Duration"]).rename(
+            {"metric_date": "Date"}
+        ),
+        on="Date",
     )
 
     with col1:
         st.subheader("Detail")
         st.write(sleep_time_details)
+
+    with col2:
+        st.subheader("Sleep Over Time")
+        render_altair_line_chart(
+            asleep,
+            title="Sleep Hours (hrs)",
+            avg_bar=7,
+        )
 except Exception as e:
     st.error(f"Error computing sleep KPIs: {e}")
