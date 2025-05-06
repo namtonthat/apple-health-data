@@ -29,6 +29,9 @@ graph LR
 - Files are refreshed in S3 bucket that personal calendar is subscribed to.
 - Details about the process and entity relationship diagram are provided in the [README](https://github.com/namtonthat/apple-health-calendar/blob/main/docs/README.md)
 
+> [!important]
+> With the `sleep` data, it ignores intra sleep stats
+
 ## Screenshots
 
 ### 📅 Calendar

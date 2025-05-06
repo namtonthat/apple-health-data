@@ -269,7 +269,7 @@ if __name__ == "__main__":
     s3_health_paths = {
         "nutrition": "semantic/nutrition.parquet",
         "activity": "semantic/activity.parquet",
-        "sleep": "semantic/sleeps.parquet",
+        "sleep": "semantic/sleep.parquet",
     }
 
     generator = CalendarGenerator(EVENT_FILE_NAME, s3_bucket=S3_BUCKET)

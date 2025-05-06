@@ -15,7 +15,7 @@ sleep_ranked as (
         asm.*,
         row_number() over (
             partition by asm.metric_date
-            order by asm.load_time desc
+            order by asm.load_time asc
         ) as rn
     from all_sleep_metrics as asm
 )
