@@ -2,8 +2,7 @@
 with raw_data as (
     select _raw_data.*
     from read_json(
-        's3://{{ var("s3_bucket") }}/landing/health/*.json'
-    ) using parameters
+        's3://{{ var("s3_bucket") }}/landing/health/*.json',
         sample_size = 1000,
         maximum_depth = 10,
         ignore_errors = true
