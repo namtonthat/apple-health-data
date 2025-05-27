@@ -25,3 +25,6 @@ outputs/
 # streamlit
 */.streamlit/*
 
+# nvim
+**/.null-ls*.sql
+

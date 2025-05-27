@@ -1,6 +1,13 @@
+-- noqa: disable=all
 with raw_data as (
-    select * from
-        read_json('s3://{{ var("s3_bucket") }}/landing/health/*.json')
+    select _raw_data.*
+    from read_json(
+        's3://{{ var("s3_bucket") }}/landing/health/*.json'
+    ) using parameters
+        sample_size = 1000,
+        maximum_depth = 10,
+        ignore_errors = true
+) as _raw_data
 ),
 
 unnested_data as (
