@@ -64,7 +64,7 @@ def extract_datetimes_from_s3() -> list[datetime]:
     dates: list[datetime] = []
     for obj in response["Contents"]:
         key = obj.get("Key", "")
-        filename = Path.name(key)
+        filename = Path(key).name
         match = pattern.match(filename)
         if match:
             date_str = match.group(1)
@@ -127,3 +127,4 @@ def get_workout_fetch_config(last_processed_date: str) -> WorkoutFetchConfig:
             params={"page": 1, "pageSize": MAX_PAGE_SIZE},
             response_key="workouts",
         )
+
