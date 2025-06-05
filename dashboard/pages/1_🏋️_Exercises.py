@@ -11,6 +11,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from graphing import render_altair_line_chart
 from helpers import (
+    compute_one_rep_maxes,
     load_filtered_s3_data,
     sidebar_datetime_filter,
 )
@@ -79,6 +80,7 @@ def is_valid_df(df):
     return df is not None and df.shape[0] > 0
 
 
+one_rep_max_df = pl.DataFrame()
 try:
     volumes_by_exercise_df = (
         filtered_exercises.group_by(
@@ -155,6 +157,19 @@ if is_valid_df(best_meet_records):
     with col1:
         st.subheader("Exercise Metrics")
         render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
+
+        one_rep_max_df = compute_one_rep_maxes(filtered_exercises)
+        one_rep_max = {
+            row["exercise_name"].lower(): row["max_1rm"]
+            for row in one_rep_max_df.to_dicts()
+        }
+        kpi_overrides.update(
+            {
+                "deadlift_1rm": one_rep_max.get("deadlift"),
+                "squat_1rm": one_rep_max.get("squat"),
+                "bench_1rm": one_rep_max.get("bench"),
+            }
+        )
 
     with col2:
         st.subheader("Best Competition Record")

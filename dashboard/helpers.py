@@ -94,7 +94,9 @@ def compute_avg_sleep_time_from_midnight(
     return midnight_today + avg_offset
 
 
-def compute_avg_sleep_time(df: pl.DataFrame, time_col: str = "sleep_times") -> datetime | None:
+def compute_avg_sleep_time(
+    df: pl.DataFrame, time_col: str = "sleep_times"
+) -> datetime | None:
     times = df[time_col].to_list()
 
     if not times:
@@ -153,3 +155,38 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
 
     st.sidebar.caption(f"Showing data from `{start_date}` to `{end_date}`")
     return start_dt, end_dt
+
+
+def estimate_one_rep_max(weight: float, reps: int) -> float:
+    """Estimate a one-repetition max using the Epley formula."""
+
+    try:
+        w = float(weight)
+        r = float(reps)
+    except (TypeError, ValueError):
+        return float("nan")
+
+    return w * (1 + r / 30)
+
+
+def compute_one_rep_maxes(df: pl.DataFrame) -> pl.DataFrame:
+    """Return estimated 1RM for deadlift, squat and bench ordered by max."""
+
+    if df.is_empty():
+        return pl.DataFrame({"exercise_name": [], "max_1rm": []})
+
+    big_three_pattern = "deadlift|squat|bench"
+
+    df = df.filter(
+        pl.col("exercise_name").str.contains(big_three_pattern, case=False)
+    ).with_columns(
+        pl.struct(["weight_kg", "reps"])
+        .map_elements(lambda x: estimate_one_rep_max(x[0], x[1]))
+        .alias("est_1rm")
+    )
+
+    return (
+        df.group_by("exercise_name")
+        .agg(pl.col("est_1rm").max().alias("max_1rm"))
+        .sort("max_1rm", descending=True)
+    )
