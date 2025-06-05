@@ -12,4 +12,4 @@ echo "run sqlfluff"
 uv run sqlfluff lint --dialect duckdb --templater dbt transforms/models/
 
 echo "run pytest"
-PYTHONPATH=dashboard uv run pytest
+uv run pytest
