@@ -11,6 +11,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from graphing import render_altair_line_chart
 from helpers import (
+    compute_latest_one_rep_maxes,
     load_filtered_s3_data,
     sidebar_datetime_filter,
 )
@@ -79,6 +80,7 @@ def is_valid_df(df):
     return df is not None and df.shape[0] > 0
 
 
+one_rep_max_df = pl.DataFrame()
 try:
     volumes_by_exercise_df = (
         filtered_exercises.group_by(
@@ -152,19 +154,34 @@ except Exception as e:
 
 if is_valid_df(best_meet_records):
     col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Exercise Metrics")
-        render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
 
+    with col1:
+        st.subheader("🧮 Estimated One Rep Max")
+
+        st.write(
+            f"For the period between `{start_date.date()}` and `{end_date.date()}`"
+        )
+        average_weight = filtered_health.filter(
+            pl.col("metric_name") == "weight_body_mass"
+        )["quantity"].mean()
+
+        one_rep_max_df = compute_latest_one_rep_maxes(
+            df=filtered_exercises,
+            bodyweight_kg=average_weight,
+        )
+        st.write(one_rep_max_df)
     with col2:
-        st.subheader("Best Competition Record")
+        st.subheader("🏆 Best Competition Record")
         st.write(
             f"Sourced from [here](http://openpowerlifting.org/u/{OPENPOWERLIFTING_USERNAME})"
         )
         st.write(best_meet_records)
 
+    st.subheader("🛠️ Exercise Metrics")
+    render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
+
 else:
-    st.subheader("Exercise Metrics")
+    st.subheader("🛠️ Exercise Metrics")
     render_kpi_section("exercises", filtered_health, kpi_config, kpi_overrides)
 
 

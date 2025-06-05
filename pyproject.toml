@@ -37,6 +37,10 @@ test = [
   "dbt-duckdb>=1.9.2",
   "sqlfluff-templater-dbt>=3.3.1",
 ]
+
 [tool.ruff.lint]
 select = ["E", "F", "G", "I", "PT", "PTH", "RUF", "SIM", "T20"]
 ignore = ["E501"]
+
+[tool.pytest.ini_options]
+pythonpath = ["dashboard"]
