@@ -3,6 +3,7 @@ import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any
 
 import boto3
@@ -38,11 +39,12 @@ def upload_to_s3(data: str, bucket: str, key: str) -> None:
 
 def extract_datetimes_from_s3() -> list[datetime]:
     """
-    Lists JSON files in the S3 bucket under the configured prefix and extracts datetime objects
-    from file names that follow the pattern:
-        {S3_KEY_PREFIX}{datetime_string}.json
-    where datetime_string is the output of str(datetime.now()).
-    Returns a list of datetime objects found.
+    Lists JSON files in the S3 bucket under the configured prefix and extracts
+    ``datetime`` objects from file names. Keys may contain additional
+    subdirectories (e.g. ``landing/exercise/hevy/``), so only the timestamp
+    portion of the filename (``<timestamp>.json``) is parsed. The timestamp is
+    expected to be produced by ``datetime.now().isoformat()``.
+    Returns a list of parsed ``datetime`` objects.
     """
     s3 = boto3.client("s3", region_name=AWS_REGION)
     try:
@@ -55,12 +57,15 @@ def extract_datetimes_from_s3() -> list[datetime]:
         logger.info("No objects found in S3 under prefix %s.", S3_KEY_PREFIX)
         return []
 
-    # Pattern: capture everything between the prefix and '.json'
-    pattern = re.compile(rf"{re.escape(S3_KEY_PREFIX)}(.+)\.json")
+    # Pattern to match filenames ending with '.json' and capture the timestamp
+    # portion. Keys may include subdirectories (e.g. "landing/exercise/hevy/")
+    # so we only inspect the basename of each key.
+    pattern = re.compile(r"(.+)\.json$")
     dates: list[datetime] = []
     for obj in response["Contents"]:
         key = obj.get("Key", "")
-        match = pattern.match(key)
+        filename = Path.name(key)
+        match = pattern.match(filename)
         if match:
             date_str = match.group(1)
             try:
