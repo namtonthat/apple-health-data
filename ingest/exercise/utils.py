@@ -3,6 +3,7 @@ import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any
 
 import boto3
@@ -63,7 +64,7 @@ def extract_datetimes_from_s3() -> list[datetime]:
     dates: list[datetime] = []
     for obj in response["Contents"]:
         key = obj.get("Key", "")
-        filename = os.path.basename(key)
+        filename = Path.name(key)
         match = pattern.match(filename)
         if match:
             date_str = match.group(1)
@@ -126,4 +127,3 @@ def get_workout_fetch_config(last_processed_date: str) -> WorkoutFetchConfig:
             params={"page": 1, "pageSize": MAX_PAGE_SIZE},
             response_key="workouts",
         )
-
