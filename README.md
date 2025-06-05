@@ -4,9 +4,9 @@ Built with [![python](https://img.shields.io/badge/python-3670A0?style=for-the-b
 
 #### 🚀 Github Actions
 
-[![calendar](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml)
-[![test](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml)
-[![infra](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml)
+[![calendar](https://github.com/namtonthat/apple-health-data/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/calendar.yaml)
+[![test](https://github.com/namtonthat/apple-health-data/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/test.yaml)
+[![infra](https://github.com/namtonthat/apple-health-data/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/infra.yaml)
 
 ## Purpose
 
