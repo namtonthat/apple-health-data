@@ -206,18 +206,14 @@ def estimate_one_rep_maxes(df: pl.DataFrame) -> dict:
     df = df.with_columns([pl.Series("est_1rm", est_1rms)])
 
     df = df.with_columns(
-        [
-            pl.col("exercise_name")
-            .str.to_lowercase()
-            .replace(rename_map)
-            .alias("exercise_name")
-        ]
+        [pl.col("exercise_name").str.to_lowercase().replace(rename_map)]
     )
 
-    return {
-        row["exercise_name"]: row["est_1rm"]
-        for row in df.group_by("exercise_name").agg(pl.col("est_1rm").max()).to_dicts()
-    }
+    one_rep_max_per_exercise = (
+        df.group_by("exercise_name").agg(pl.col("est_1rm").max()).to_dicts()
+    )
+
+    return {row["exercise_name"]: row["est_1rm"] for row in one_rep_max_per_exercise}
 
 
 def format_result_row(one_rep_maxes: dict, bodyweight_kg: float, sex: str) -> dict:
