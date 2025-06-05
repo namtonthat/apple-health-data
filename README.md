@@ -4,9 +4,9 @@ Built with [![python](https://img.shields.io/badge/python-3670A0?style=for-the-b
 
 #### 🚀 Github Actions
 
-[![calendar](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/calendar.yaml)
-[![test](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/test.yaml)
-[![infra](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-calendar/actions/workflows/infra.yaml)
+[![calendar](https://github.com/namtonthat/apple-health-data/actions/workflows/calendar.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/calendar.yaml)
+[![test](https://github.com/namtonthat/apple-health-data/actions/workflows/test.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/test.yaml)
+[![infra](https://github.com/namtonthat/apple-health-data/actions/workflows/infra.yaml/badge.svg)](https://github.com/namtonthat/apple-health-data/actions/workflows/infra.yaml)
 
 ## Purpose
 
@@ -18,7 +18,7 @@ graph LR
     B[AWS REST API] --> C[fa:fa-aws AWS Lambda]
     C -->|ingest/lambda.py| D[saves to json]
     D -->|dbt-duckdb| E[transforms data and saves out to delta]
-    E -->|calenadr/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
+    E -->|calendar/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 
 ## 🎯 Project Goals
