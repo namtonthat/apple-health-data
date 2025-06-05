@@ -24,15 +24,6 @@ exercises:
     key: step_count
     goal: 10000
     format: "{:,.0f}"
-  - label: "Estimated Deadlift 1RM (kg)"
-    key: deadlift_1rm
-    format: "{:.1f}"
-  - label: "Estimated Squat 1RM (kg)"
-    key: squat_1rm
-    format: "{:.1f}"
-  - label: "Estimated Bench 1RM (kg)"
-    key: bench_1rm
-    format: "{:.1f}"
 
 nutrition:
   - label: "Weight (kg)"

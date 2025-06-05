@@ -12,6 +12,7 @@ import conf
 import polars as pl
 import pytz
 import streamlit as st
+from powerlifting_functions import calculate_dots, estimate_one_rep_max
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -157,36 +158,81 @@ def sidebar_datetime_filter() -> tuple[datetime, datetime]:
     return start_dt, end_dt
 
 
-def estimate_one_rep_max(weight: float, reps: int) -> float:
-    """Estimate a one-repetition max using the Epley formula."""
+def compute_latest_one_rep_maxes(
+    df: pl.DataFrame, bodyweight_kg: float, sex: str = "male"
+) -> pl.DataFrame:
+    """
+    Computes the latest powerlifting-style record from the input DataFrame,
+    including estimated 1RMs and DOTS score, returned as a single-row summary.
 
-    try:
-        w = float(weight)
-        r = float(reps)
-    except (TypeError, ValueError):
-        return float("nan")
+    Parameters:
+        df (pl.DataFrame): Input training log with at least ['date', 'exercise_name', 'weight_kg', 'reps'] columns.
+        bodyweight_kg (float): Athlete's bodyweight in kilograms.
+        sex (str): 'male' or 'female' for DOTS calculation.
 
-    return w * (1 + r / 30)
+    Returns:
+        pl.DataFrame: A one-row DataFrame with Competition Date, 1RMs, Total, and DOTS.
+    """
+    sbd_df = filter_for_sbd(df)
+    one_rep_maxes = estimate_one_rep_maxes(sbd_df)
+
+    result_dict = format_result_row(one_rep_maxes, bodyweight_kg, sex)
+    return pl.DataFrame([result_dict])
 
 
-def compute_one_rep_maxes(df: pl.DataFrame) -> pl.DataFrame:
-    """Return estimated 1RM for deadlift, squat and bench ordered by max."""
+def filter_for_sbd(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Filters the DataFrame to rows matching the required exercises
+    """
+    rename_map_keys = ["sumo deadlift", "squat (barbell)", "bench press (barbell)"]
+    return df.filter(
+        pl.col("exercise_name").str.contains_any(
+            rename_map_keys, ascii_case_insensitive=True
+        )
+    ).select(["exercise_name", "weight_kg", "reps"])
 
-    if df.is_empty():
-        return pl.DataFrame({"exercise_name": [], "max_1rm": []})
 
-    big_three_pattern = "deadlift|squat|bench"
+def estimate_one_rep_maxes(df: pl.DataFrame) -> dict:
+    """
+    Estimates 1RM for each lift and returns a dict: {lift: 1RM}.
+    """
+    rename_map = {
+        "sumo deadlift": "deadlift",
+        "squat (barbell)": "squat",
+        "bench press (barbell)": "bench",
+    }
 
-    df = df.filter(
-        pl.col("exercise_name").str.contains(big_three_pattern, case=False)
-    ).with_columns(
-        pl.struct(["weight_kg", "reps"])
-        .map_elements(lambda x: estimate_one_rep_max(x[0], x[1]))
-        .alias("est_1rm")
+    est_1rms = [estimate_one_rep_max(row[1], row[2]) for row in df.iter_rows()]
+    df = df.with_columns([pl.Series("est_1rm", est_1rms)])
+
+    df = df.with_columns(
+        [
+            pl.col("exercise_name")
+            .str.to_lowercase()
+            .replace(rename_map)
+            .alias("exercise_name")
+        ]
     )
 
-    return (
-        df.group_by("exercise_name")
-        .agg(pl.col("est_1rm").max().alias("max_1rm"))
-        .sort("max_1rm", descending=True)
-    )
+    return {
+        row["exercise_name"]: row["est_1rm"]
+        for row in df.group_by("exercise_name").agg(pl.col("est_1rm").max()).to_dicts()
+    }
+
+
+def format_result_row(one_rep_maxes: dict, bodyweight_kg: float, sex: str) -> dict:
+    """
+    Formats the final result row dict including DOTS score.
+    """
+    squat = one_rep_maxes.get("squat", 0)
+    bench = one_rep_maxes.get("bench", 0)
+    deadlift = one_rep_maxes.get("deadlift", 0)
+    total = squat + bench + deadlift
+
+    return {
+        "Squat (kg)": squat,
+        "Bench (kg)": bench,
+        "Deadlift (kg)": deadlift,
+        "Total (kg)": total,
+        "DOTS": calculate_dots(total, bodyweight_kg, sex),
+    }
