@@ -18,7 +18,7 @@ graph LR
     B[AWS REST API] --> C[fa:fa-aws AWS Lambda]
     C -->|ingest/lambda.py| D[saves to json]
     D -->|dbt-duckdb| E[transforms data and saves out to delta]
-    E -->|calenadr/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
+    E -->|calendar/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
 ```
 
 ## 🎯 Project Goals
