@@ -58,7 +58,7 @@ def convert_column_to_timezone(
 
 def compute_avg_sleep_time_from_midnight(
     df: pl.DataFrame, time_col: str = "sleep_times"
-) -> datetime:
+) -> datetime | None:
     """
     Computes the average sleep time as an offset from midnight,
     treating times before midnight as negative offsets.
@@ -72,6 +72,8 @@ def compute_avg_sleep_time_from_midnight(
     """
     # Extract times as list of Python datetime objects
     times = df[time_col].to_list()
+    if not times:
+        return None
 
     offsets = []
     for dt in times:
@@ -92,8 +94,11 @@ def compute_avg_sleep_time_from_midnight(
     return midnight_today + avg_offset
 
 
-def compute_avg_sleep_time(df: pl.DataFrame, time_col: str = "sleep_times") -> datetime:
+def compute_avg_sleep_time(df: pl.DataFrame, time_col: str = "sleep_times") -> datetime | None:
     times = df[time_col].to_list()
+
+    if not times:
+        return None
 
     SECONDS_IN_DAY = 24 * 60 * 60
     anchor_hour = 19  # 7 PM
