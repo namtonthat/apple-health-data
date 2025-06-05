@@ -12,7 +12,7 @@ calendar: # make calendar
 .PHONY: dashboard
 dashboard: # make dashboard
 	@echo "make dashboard"
-	@cd dashboard && uv run streamlit run 0_🏠_Home.py
+	@uv run streamlit run dashboard/0_🏠_Home.py
 
 .PHONY: dbt
 dbt: # run dbt models
