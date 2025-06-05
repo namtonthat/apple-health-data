@@ -1,5 +1,6 @@
-import polars as pl
 from datetime import datetime
+
+import polars as pl
 
 from dashboard.helpers import compute_avg_sleep_time
 
