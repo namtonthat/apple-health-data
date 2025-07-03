@@ -10,15 +10,22 @@ Built with [![python](https://img.shields.io/badge/python-3670A0?style=for-the-b
 
 ## Purpose
 
-A serverless framework that automates the conversion of past daily statistics from Apple iOS into a calendar event.
+A serverless data pipeline that processes Apple Health data into calendar events and dashboards, orchestrated by Dagster.
 
 ```mermaid
 graph LR
-    A[fa:fa-mobile iPhone / Apple Watch] -->|Auto Health Export|B
-    B[AWS REST API] --> C[fa:fa-aws AWS Lambda]
-    C -->|ingest/lambda.py| D[saves to json]
-    D -->|dbt-duckdb| E[transforms data and saves out to delta]
-    E -->|calendar/lambda.py| F[create `ics` file <br> apple-health-calendar.ics]
+    A[fa:fa-mobile iPhone / Apple Watch] -->|Auto Health Export| B[AWS REST API]
+    B --> C[fa:fa-aws Lambda: Ingest]
+    C -->|JSON| D[fa:fa-database S3 Raw Data]
+    
+    subgraph Dagster Pipeline
+        D --> E[fa:fa-cogs Ingestion Assets<br/>Hevy & OpenPowerlifting]
+        E --> F[fa:fa-transform dbt Assets<br/>Staging → Raw → Semantic]
+        F --> G[fa:fa-calendar Calendar Asset<br/>Generate ICS]
+    end
+    
+    G --> H[fa:fa-file S3: Calendar ICS]
+    F --> I[fa:fa-chart-line Streamlit Dashboard]
 ```
 
 ## 🎯 Project Goals
@@ -52,7 +59,13 @@ This project uses `uv` to manage environment and package dependencies
 1. Setup project dependencies using `make setup`
 2. Create a `.env` (based off the [`.env.example`](.env.example)) to define the specific infra requirements
 3. Run `make infra` to deploy the terraform stack and collect the API endpoint to be used within the iOS app
-4. Trigger API export from `health-auto-export` using the API endpoint.
+4. Trigger API export from `health-auto-export` using the API endpoint
+5. Deploy Dagster for orchestration:
+   ```bash
+   cd dagster && ./setup.sh
+   docker-compose up -d
+   ```
+6. Access Dagster UI at http://localhost:3000 to monitor pipeline runs
 
 <p align="center">
   <img src="./docs/images/auto-export-ios.jpeg" alt="Auto Export" width="300px">
