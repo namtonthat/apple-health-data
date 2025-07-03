@@ -6,7 +6,17 @@
       "Bash(uv pip install:*)",
       "Bash(uv venv:*)",
       "Bash(source:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(uv run ruff:*)",
+      "Bash(python:*)",
+      "Bash(for:*)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash([ -n \"$(tail -c 1 \"$file\")\" ])",
+      "Bash(then echo \"Missing newline: $file\")",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": []
   }

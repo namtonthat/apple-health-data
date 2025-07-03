@@ -39,6 +39,12 @@ test = [
   "dbt-duckdb>=1.9.2",
   "sqlfluff-templater-dbt>=3.3.1",
 ]
+dagster = [
+  "dagster==1.8.10",
+  "dagster-webserver==1.8.10",
+  "dagster-aws==0.24.10",
+  "dagster-dbt==0.24.10",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "G", "I", "PT", "PTH", "RUF", "SIM", "T20"]
