@@ -1,35 +1,25 @@
 """Apple Health Data Pipeline - Dagster Implementation."""
 
-from dagster import Definitions
+from pathlib import Path
 
-from .assets.calendar import calendar_assets
-from .assets.dbt import dbt_transform_assets
-from .assets.ingestion import ingestion_assets
-from .jobs import (
-    apple_health_pipeline_job,
-    calendar_job,
-    daily_pipeline_schedule,
-    ingestion_job,
-    transformation_job,
-)
-from .resources import get_resource_definitions
+from dagster_aws.s3 import S3Resource
+from dagster_dbt import DbtCliResource
 
-# Collect all assets
-all_assets = [
-    ingestion_assets,
-    dbt_transform_assets,
-    calendar_assets,
-]
+from dagster import Definitions, EnvVar
 
-# Define the Dagster repository
+from .assets.calendar import generate_calendar
+from .assets.dbt import apple_health_dbt_assets
+from .assets.ingestion import raw_data_sources
+from .schedules import schedules
+
+# Path to the dbt project
+DBT_PROJECT_DIR = Path(__file__).parent.parent.parent / "transforms"
+
 defs = Definitions(
-    assets=all_assets,
-    jobs=[
-        apple_health_pipeline_job,
-        ingestion_job,
-        transformation_job,
-        calendar_job,
-    ],
-    schedules=[daily_pipeline_schedule],
-    resources=get_resource_definitions(),
+    assets=[raw_data_sources, apple_health_dbt_assets, generate_calendar],
+    schedules=schedules,
+    resources={
+        "dbt": DbtCliResource(project_dir=DBT_PROJECT_DIR),
+        "s3": S3Resource(region_name=EnvVar("AWS_REGION")),
+    },
 )

@@ -26,11 +26,11 @@ from dagster import (
             metadata={"format": "ics", "location": "s3"},
         ),
     },
-    group_name="calendar",
     compute_kind="python",
-    # deps will be automatically inferred from dbt assets
+    can_subset=False,
+    deps=["semantic_health", "semantic_sleep"],
 )
-def calendar_assets(
+def generate_calendar(
     context: AssetExecutionContext, s3: S3Resource
 ) -> tuple[Output, Output]:
     """Generate calendar ICS file and upload to S3."""

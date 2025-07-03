@@ -42,7 +42,4 @@ select
     meetname as meet_name,
     sanctioned,
     ctrl_load_date
-from
-    read_csv(
-        's3://{{ var("s3_bucket") }}/landing/exercise/openpowerlifting/*.csv'
-    )
+from {{ source('s3_landing', 'openpowerlifting') }}

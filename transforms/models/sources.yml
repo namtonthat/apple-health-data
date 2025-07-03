@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: s3_landing
+    description: "Raw data ingested into S3 landing zone"
+    database: "{{ var('s3_bucket') }}"
+    schema: landing
+    meta:
+      dagster:
+        asset_namespace: []
+    tables:
+      - name: apple_health
+        description: "Apple Health metrics data from Auto Health Export app"
+        identifier: health/*.json
+        meta:
+          dagster:
+            asset_key: ["apple_health"]
+      - name: hevy
+        description: "Workout data from Hevy API"
+        identifier: exercise/hevy/*.json
+        meta:
+          dagster:
+            asset_key: ["hevy"]
+      - name: openpowerlifting
+        description: "Competition data from OpenPowerlifting"
+        identifier: exercise/openpowerlifting/*.csv
+        meta:
+          dagster:
+            asset_key: ["openpowerlifting"]

@@ -15,11 +15,11 @@ from dagster import (
 
 @multi_asset(
     outs={
-        "hevy_raw_data": AssetOut(
+        "hevy": AssetOut(
             description="Raw workout data from Hevy API",
             metadata={"format": "json", "destination": "s3"},
         ),
-        "openpowerlifting_raw_data": AssetOut(
+        "openpowerlifting": AssetOut(
             description="Competition data from OpenPowerlifting",
             metadata={"format": "csv", "destination": "s3"},
         ),
@@ -27,7 +27,7 @@ from dagster import (
     group_name="ingestion",
     compute_kind="python",
 )
-def ingestion_assets(context: AssetExecutionContext) -> tuple[Output, Output]:
+def raw_data_sources(context: AssetExecutionContext) -> tuple[Output, Output]:
     """Ingest data from Hevy and OpenPowerlifting sources."""
     project_root = Path(__file__).parent.parent.parent.parent
 
@@ -76,7 +76,7 @@ def ingestion_assets(context: AssetExecutionContext) -> tuple[Output, Output]:
     return (
         Output(
             value="hevy_data_ingested",
-            output_name="hevy_raw_data",
+            output_name="hevy",
             metadata={
                 "stdout": MetadataValue.text(hevy_result.stdout),
                 "records_processed": MetadataValue.text("See logs for details"),
@@ -84,7 +84,7 @@ def ingestion_assets(context: AssetExecutionContext) -> tuple[Output, Output]:
         ),
         Output(
             value="openpowerlifting_data_ingested",
-            output_name="openpowerlifting_raw_data",
+            output_name="openpowerlifting",
             metadata={
                 "stdout": MetadataValue.text(opl_result.stdout),
                 "records_processed": MetadataValue.text("See logs for details"),

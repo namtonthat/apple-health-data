@@ -40,6 +40,10 @@ models:
       +schema: semantic
       materialized: table
       full_refresh: true
+      semantic_nutrition:
+        materialized: view
+      semantic_activity:
+        materialized: view
     staging:
       +schema: staging
       materialized: table

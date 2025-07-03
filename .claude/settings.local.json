@@ -29,7 +29,10 @@
       "Bash(rm:*)",
       "WebFetch(domain:docs.dagster.io)",
       "Bash(git rm:*)",
-      "Bash(make:*)"
+      "Bash(make:*)",
+      "Bash(open http://localhost:3001)",
+      "Bash(dbt parse:*)",
+      "Bash(timeout 10 make dags)"
     ],
     "deny": []
   }
