@@ -26,6 +26,7 @@ from dagster import (
             metadata={"format": "ics", "location": "s3"},
         ),
     },
+    group_name="output",
     compute_kind="python",
     can_subset=False,
     deps=["semantic_health", "semantic_sleep"],
