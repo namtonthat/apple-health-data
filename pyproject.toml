@@ -7,7 +7,7 @@ dependencies = [
   "authlib>=1.5.1",
   "aws-lambda-powertools>=3.8.0",
   "boto3>=1.37.9",
-  "dagster>=1.5.6",
+  "dagster>=1.11.0",
   "duckdb>=1.2.1",
   "ics>=0.7.2",
   "pendulum>=3.0.0",
@@ -24,7 +24,7 @@ dependencies = [
 
 [dependency-groups]
 
-dashboard = ["duckdb>=1.2.1", "watchdog>=6.0.0"]
+dashboard = ["duckdb>=1.2.1"]
 dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
 ingest = [
   "asyncio>=3.4.3",
@@ -40,10 +40,10 @@ test = [
   "sqlfluff-templater-dbt>=3.3.1",
 ]
 dagster = [
-  "dagster==1.8.10",
-  "dagster-webserver==1.8.10",
-  "dagster-aws==0.24.10",
-  "dagster-dbt==0.24.10",
+  "dagster>=1.11.0",
+  "dagster-webserver>=1.11.0",
+  "dagster-aws>=0.24.10",
+  "dagster-dbt>=0.24.10",
 ]
 
 [tool.ruff.lint]
