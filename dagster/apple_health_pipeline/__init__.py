@@ -16,9 +16,9 @@ from .resources import get_resource_definitions
 
 # Collect all assets
 all_assets = [
-    *ingestion_assets,
-    *dbt_transform_assets,
-    *calendar_assets,
+    ingestion_assets,
+    dbt_transform_assets,
+    calendar_assets,
 ]
 
 # Define the Dagster repository

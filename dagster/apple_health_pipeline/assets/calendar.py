@@ -7,7 +7,6 @@ from dagster_aws.s3 import S3Resource
 
 from dagster import (
     AssetExecutionContext,
-    AssetKey,
     AssetOut,
     EnvVar,
     MetadataValue,
@@ -29,7 +28,7 @@ from dagster import (
     },
     group_name="calendar",
     compute_kind="python",
-    deps=[AssetKey("dbt_transform_assets")],  # Depends on dbt transformations
+    # deps will be automatically inferred from dbt assets
 )
 def calendar_assets(
     context: AssetExecutionContext, s3: S3Resource

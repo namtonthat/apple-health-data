@@ -51,7 +51,7 @@ ingestion_job = define_asset_job(
 transformation_job = define_asset_job(
     name="transformation_job",
     description="Run dbt transformations",
-    selection=AssetSelection.keys("dbt_transform_assets"),
+    selection=AssetSelection.all() - AssetSelection.groups("ingestion", "calendar"),
     tags={
         "pipeline": "apple-health",
         "stage": "transformation",

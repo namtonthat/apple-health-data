@@ -8,6 +8,10 @@ dependencies = [
   "aws-lambda-powertools>=3.8.0",
   "boto3>=1.37.9",
   "dagster>=1.11.0",
+  "dagster-aws>=0.27.0",
+  "dagster-dbt>=0.27.0",
+  "dagster-duckdb>=0.27.0",
+  "dagster-webserver>=1.11.0",
   "duckdb>=1.2.1",
   "ics>=0.7.2",
   "pendulum>=3.0.0",
@@ -38,12 +42,6 @@ test = [
   "sqlfluff>=3.3.1",
   "dbt-duckdb>=1.9.2",
   "sqlfluff-templater-dbt>=3.3.1",
-]
-dagster = [
-  "dagster>=1.11.0",
-  "dagster-webserver>=1.11.0",
-  "dagster-aws>=0.24.10",
-  "dagster-dbt>=0.24.10",
 ]
 
 [tool.ruff.lint]

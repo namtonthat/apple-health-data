@@ -92,6 +92,10 @@ dependencies = [
     { name = "aws-lambda-powertools" },
     { name = "boto3" },
     { name = "dagster" },
+    { name = "dagster-aws" },
+    { name = "dagster-dbt" },
+    { name = "dagster-duckdb" },
+    { name = "dagster-webserver" },
     { name = "duckdb" },
     { name = "ics" },
     { name = "pendulum" },
@@ -107,12 +111,6 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
-dagster = [
-    { name = "dagster" },
-    { name = "dagster-aws" },
-    { name = "dagster-dbt" },
-    { name = "dagster-webserver" },
-]
 dashboard = [
     { name = "duckdb" },
 ]
@@ -142,7 +140,11 @@ requires-dist = [
     { name = "authlib", specifier = ">=1.5.1" },
     { name = "aws-lambda-powertools", specifier = ">=3.8.0" },
     { name = "boto3", specifier = ">=1.37.9" },
-    { name = "dagster", specifier = ">=1.5.6" },
+    { name = "dagster", specifier = ">=1.11.0" },
+    { name = "dagster-aws", specifier = ">=0.27.0" },
+    { name = "dagster-dbt", specifier = ">=0.27.0" },
+    { name = "dagster-duckdb", specifier = ">=0.27.0" },
+    { name = "dagster-webserver", specifier = ">=1.11.0" },
     { name = "duckdb", specifier = ">=1.2.1" },
     { name = "ics", specifier = ">=0.7.2" },
     { name = "pendulum", specifier = ">=3.0.0" },
@@ -158,12 +160,6 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dagster = [
-    { name = "dagster", specifier = ">=1.8.10" },
-    { name = "dagster-aws", specifier = ">=0.24.10" },
-    { name = "dagster-dbt", specifier = ">=0.24.10" },
-    { name = "dagster-webserver", specifier = ">=1.8.10" },
-]
 dashboard = [{ name = "duckdb", specifier = ">=1.2.1" }]
 dbt = [
     { name = "boto3", specifier = ">=1.37.9" },
@@ -551,6 +547,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/99/b1/d1c40f75e3d1a041d92450505d844d9289d92155bf743662f5c0e1057ef1/dagster_dbt-0.27.0.tar.gz", hash = "sha256:cafb5253a3b0b25a12005f664422ca8f7859b249167ba50d46be6e51c41bc443", size = 89411 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/69/b4/b1cc19c69a6c95380291bb8e9fdc420e56b02da04ac7e2ee6883cd4d9bfa/dagster_dbt-0.27.0-py3-none-any.whl", hash = "sha256:0d0832d8b52ad597521479184bdf05b7632f793f98f195c9b8cd8289f28baa2e", size = 108353 },
+]
+
+[[package]]
+name = "dagster-duckdb"
+version = "0.27.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dagster" },
+    { name = "duckdb" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6e/f8/bca6b5aaee5895f927388e0cd4fa18a2c15f73b017472ce7c97ad61742c5/dagster_duckdb-0.27.0.tar.gz", hash = "sha256:aa142e9165fba9f6e6d5f94dc57a677d20793db61b9d765fb208867144410c8c", size = 9381 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/57/15f13c37b3869df748f37789086eb1e33fbfb35c435c3e98079a114e6d08/dagster_duckdb-0.27.0-py3-none-any.whl", hash = "sha256:def47801e833ac761fd14808911c55e1d0ec1b2e1f8d42cc83a0df08903f8a76", size = 10581 },
 ]
 
 [[package]]

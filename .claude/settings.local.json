@@ -16,7 +16,20 @@
       "Bash([ -n \"$(tail -c 1 \"$file\")\" ])",
       "Bash(then echo \"Missing newline: $file\")",
       "Bash(fi)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(find:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run dagster:*)",
+      "Bash(PYTHONPATH=/Users/namtonthat/github/apple-health-data/dagster uv run dagster dev -p 3001)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(uv run:*)",
+      "Bash(rm:*)",
+      "WebFetch(domain:docs.dagster.io)",
+      "Bash(git rm:*)",
+      "Bash(make:*)"
     ],
     "deny": []
   }
