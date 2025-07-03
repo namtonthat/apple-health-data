@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv add:*)",
+      "Bash(uv python:*)",
+      "Bash(uv pip install:*)",
+      "Bash(uv venv:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(uv run ruff:*)",
+      "Bash(python:*)",
+      "Bash(for:*)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash([ -n \"$(tail -c 1 \"$file\")\" ])",
+      "Bash(then echo \"Missing newline: $file\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(find:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run dagster:*)",
+      "Bash(PYTHONPATH=/Users/namtonthat/github/apple-health-data/dagster uv run dagster dev -p 3001)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(uv run:*)",
+      "Bash(rm:*)",
+      "WebFetch(domain:docs.dagster.io)",
+      "Bash(git rm:*)",
+      "Bash(make:*)",
+      "Bash(open http://localhost:3001)",
+      "Bash(dbt parse:*)",
+      "Bash(timeout 10 make dags)"
+    ],
+    "deny": []
+  }
+}

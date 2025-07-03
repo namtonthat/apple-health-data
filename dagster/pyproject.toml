@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apple-health-pipeline"
+version = "0.1.0"
+description = "Dagster pipeline for processing Apple Health data"
+requires-python = ">=3.12"
+
+[tool.setuptools.packages.find]
+include = ["apple_health_pipeline*"]

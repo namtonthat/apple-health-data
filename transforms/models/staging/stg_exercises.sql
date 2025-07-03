@@ -8,7 +8,7 @@ with raw_data as (
         {{ convert_utc_to_melbourne('created_at') }} as created_at,
         cast(ctrl_load_date as datetime) as ctrl_load_date,
         exercises
-    from read_json('s3://{{ var("s3_bucket") }}/landing/exercise/hevy/*.json')
+    from {{ source('s3_landing', 'hevy') }}
     {% if is_incremental() %}
         where ctrl_load_date >= current_date - interval '15' day
     {% endif %}

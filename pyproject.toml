@@ -1,14 +1,20 @@
 [project]
 name = "apple-health-calendar"
 version = "0.2.0"
-requires-python = ">=3.13.0"
+requires-python = ">=3.12.0"
 dependencies = [
   "altair>=5.5.0",
   "authlib>=1.5.1",
   "aws-lambda-powertools>=3.8.0",
   "boto3>=1.37.9",
+  "dagster>=1.11.0",
+  "dagster-aws>=0.27.0",
+  "dagster-dbt>=0.27.0",
+  "dagster-duckdb>=0.27.0",
+  "dagster-webserver>=1.11.0",
   "duckdb>=1.2.1",
   "ics>=0.7.2",
+  "pendulum>=3.0.0",
   "pip>=25.0.1",
   "polars>=1.24.0",
   "pre-commit>=4.1.0",
@@ -22,7 +28,7 @@ dependencies = [
 
 [dependency-groups]
 
-dashboard = ["duckdb>=1.2.1", "watchdog>=6.0.0"]
+dashboard = ["duckdb>=1.2.1"]
 dbt = ["boto3>=1.37.9", "dbt-core>=1.9.3", "dbt-duckdb>=1.9.2", "duckdb>=1.2.1"]
 ingest = [
   "asyncio>=3.4.3",

@@ -28,3 +28,5 @@ outputs/
 # nvim
 **/.null-ls*.sql
 
+# Dagster
+dagster/.tmp_dagster_home*

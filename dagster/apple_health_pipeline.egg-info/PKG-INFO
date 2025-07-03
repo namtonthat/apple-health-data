@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: apple-health-pipeline
+Version: 0.1.0
+Summary: Dagster pipeline for processing Apple Health data
+Requires-Python: >=3.12
