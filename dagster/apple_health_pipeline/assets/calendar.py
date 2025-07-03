@@ -7,6 +7,7 @@ from dagster_aws.s3 import S3Resource
 
 from dagster import (
     AssetExecutionContext,
+    AssetKey,
     AssetOut,
     EnvVar,
     MetadataValue,
@@ -26,10 +27,13 @@ from dagster import (
             metadata={"format": "ics", "location": "s3"},
         ),
     },
-    group_name="output",
+    group_name="calendar",
     compute_kind="python",
     can_subset=False,
-    deps=["semantic_health", "semantic_sleep"],
+    deps=[
+        AssetKey(["semantic", "semantic_health"]),
+        AssetKey(["semantic", "semantic_sleep"]),
+    ],
 )
 def generate_calendar(
     context: AssetExecutionContext, s3: S3Resource
