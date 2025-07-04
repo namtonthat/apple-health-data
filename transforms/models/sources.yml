@@ -11,19 +11,25 @@ sources:
     tables:
       - name: apple_health
         description: "Apple Health metrics data from Auto Health Export app"
-        identifier: health/*.json
+        external:
+          location: "s3://{{ var('s3_bucket') }}/health/"
+          file_format: "json"
         meta:
           dagster:
             asset_key: ["apple_health"]
       - name: hevy
         description: "Workout data from Hevy API"
-        identifier: exercise/hevy/*.json
+        external:
+          location: "s3://{{ var('s3_bucket') }}/exercise/hevy/"
+          file_format: "json"
         meta:
           dagster:
             asset_key: ["hevy"]
       - name: openpowerlifting
         description: "Competition data from OpenPowerlifting"
-        identifier: exercise/openpowerlifting/*.csv
+        external:
+          location: "s3://{{ var('s3_bucket') }}/exercise/openpowerlifting/"
+          file_format: "csv"
         meta:
           dagster:
             asset_key: ["openpowerlifting"]
