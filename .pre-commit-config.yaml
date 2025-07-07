@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.97.4
+    rev: v1.99.4
     hooks:
       - id: terraform_fmt
       # - id: terraform_validate
 
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 3.3.1
+    rev: 3.4.1
     hooks:
       - id: sqlfluff-lint
         # For dbt projects, this installs the dbt "extras".
@@ -21,10 +21,10 @@ repos:
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.11.2
+    rev: v0.12.2
     hooks:
       # Run the linter.
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
       # Run the formatter.
       - id: ruff-format
