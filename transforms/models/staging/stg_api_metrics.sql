@@ -1,7 +1,12 @@
 -- noqa: disable=all
 with raw_data as (
-    select _raw_data.*
-    from {{ source('s3_landing', 'apple_health') }} as _raw_data
+    select *
+    from read_json_auto(
+        's3://{{ var('s3_bucket') }}/landing/health/*.json',
+        union_by_name=true,
+        ignore_errors=true,
+        sample_size=-1
+    )
 ),
 
 unnested_data as (

@@ -32,7 +32,9 @@
       "Bash(make:*)",
       "Bash(open http://localhost:3001)",
       "Bash(dbt parse:*)",
-      "Bash(timeout 10 make dags)"
+      "Bash(timeout 10 make dags)",
+      "WebFetch(domain:docs.getdbt.com)",
+      "Bash(aws s3 ls:*)"
     ],
     "deny": []
   }
