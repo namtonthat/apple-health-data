@@ -1,0 +1,25 @@
+name: 'health_analytics'
+version: '1.0.0'
+config-version: 2
+
+profile: 'hevy_transforms'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+vars:
+  s3_bucket: "{{ env_var('S3_BUCKET_NAME') }}"
+
+models:
+  health_analytics:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts

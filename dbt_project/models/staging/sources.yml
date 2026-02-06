@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: hevy
+    description: Hevy workout tracking app data (cleansed)
+    meta:
+      owner: data-team
+      source_type: api
+      zone: raw
+    tables:
+      - name: workouts
+        description: Workout sessions from Hevy API
+        external:
+          location: "s3://{{ var('s3_bucket') }}/raw/hevy/workouts/*.parquet"
+          file_format: parquet
+
+      - name: exercises
+        description: Exercises within workouts
+        external:
+          location: "s3://{{ var('s3_bucket') }}/raw/hevy/workouts__exercises/*.parquet"
+          file_format: parquet
+
+      - name: sets
+        description: Individual sets within exercises
+        external:
+          location: "s3://{{ var('s3_bucket') }}/raw/hevy/workouts__exercises__sets/*.parquet"
+          file_format: parquet
+
+  - name: apple_health
+    description: Apple Health data (cleansed)
+    meta:
+      owner: data-team
+      source_type: s3_export
+      zone: raw
+    tables:
+      - name: health_metrics
+        description: Flattened health metrics from Apple Health JSON exports
+        external:
+          location: "s3://{{ var('s3_bucket') }}/raw/health/health_metrics/*.parquet"
+          file_format: parquet

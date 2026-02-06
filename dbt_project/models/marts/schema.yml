@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: fct_workout_sets
+    description: >
+      Fact table of individual workout sets with full context.
+      Grain: One row per set performed.
+    columns:
+      - name: set_id
+        description: Primary key
+      - name: workout_date
+        description: Date of workout
+      - name: exercise_name
+        description: Name of exercise performed
+      - name: set_number
+        description: Set number within the exercise
+      - name: set_type
+        description: Type (normal, warmup, dropset, failure)
+      - name: weight_kg
+        description: Weight lifted in kilograms
+      - name: reps
+        description: Number of repetitions
+      - name: volume_kg
+        description: Set volume (weight × reps)
+      - name: rpe
+        description: Rate of Perceived Exertion
+
+  - name: fct_daily_summary
+    description: >
+      Combined daily health and fitness summary.
+      Grain: One row per calendar day.
+    columns:
+      - name: date
+        description: Calendar date
+      - name: weight_kg
+        description: Body weight in kg
+      - name: resting_hr_bpm
+        description: Resting heart rate in BPM
+      - name: hrv_ms
+        description: Heart rate variability in milliseconds
+      - name: vo2_max
+        description: VO2 max estimate
+      - name: sleep_hours
+        description: Total sleep duration
+      - name: steps
+        description: Daily step count
+      - name: total_calories
+        description: Total calories burned (active + basal)
+      - name: workouts
+        description: Number of workouts performed
+      - name: total_volume_kg
+        description: Total workout volume in kg
+      - name: had_strength_workout
+        description: Boolean flag for workout days
+
+  - name: fct_exercise_progress
+    description: >
+      Exercise progression tracking with personal records.
+      Grain: One row per exercise per workout day.
+    columns:
+      - name: workout_date
+        description: Date of workout
+      - name: exercise_name
+        description: Name of exercise
+      - name: best_weight_kg
+        description: Heaviest weight used that session
+      - name: total_volume_kg
+        description: Total volume for exercise that session
+      - name: weight_pr_to_date
+        description: All-time weight PR up to this date
+      - name: is_weight_pr
+        description: True if this session set a weight PR
+      - name: session_number
+        description: Which session number for this exercise
+      - name: total_sessions
+        description: Total times exercise has been performed

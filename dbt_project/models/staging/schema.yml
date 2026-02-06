@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: stg_hevy__workouts
+    description: Staged workout sessions from Hevy app
+    columns:
+      - name: workout_id
+        description: Primary key (dlt generated)
+      - name: hevy_workout_id
+        description: Original Hevy workout ID
+      - name: workout_date
+        description: Date of the workout
+      - name: workout_name
+        description: User-defined workout name
+      - name: started_at
+        description: Workout start timestamp
+      - name: ended_at
+        description: Workout end timestamp
+      - name: duration_minutes
+        description: Workout duration in minutes
+      - name: day_name
+        description: Day of week (Monday, Tuesday, etc.)
+
+  - name: stg_hevy__exercises
+    description: Staged exercises within workouts
+    columns:
+      - name: exercise_id
+        description: Primary key (dlt generated)
+      - name: workout_id
+        description: Foreign key to workouts
+      - name: exercise_name
+        description: Name of the exercise
+      - name: exercise_order
+        description: Order of exercise in workout
+
+  - name: stg_hevy__sets
+    description: Staged individual sets within exercises
+    columns:
+      - name: set_id
+        description: Primary key (dlt generated)
+      - name: exercise_id
+        description: Foreign key to exercises
+      - name: set_number
+        description: Set number (1-indexed)
+      - name: set_type
+        description: Type of set (normal, warmup, dropset, failure)
+      - name: weight_kg
+        description: Weight lifted in kilograms
+      - name: reps
+        description: Number of repetitions
+      - name: rpe
+        description: Rate of Perceived Exertion (1-10 scale)
+
+  - name: stg_health__metrics
+    description: Staged Apple Health metrics (deduplicated)
+    columns:
+      - name: metric_id
+        description: Primary key (dlt generated)
+      - name: metric_date
+        description: Date of the measurement
+      - name: metric_name
+        description: Name of the health metric
+      - name: value
+        description: Measured value
+      - name: units
+        description: Unit of measurement
+      - name: data_source
+        description: Source device (Apple Watch, iPhone, etc.)
