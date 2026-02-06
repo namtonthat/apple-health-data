@@ -768,7 +768,7 @@ dependencies = [
     { name = "streamlit" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "pytest" },
     { name = "ruff" },
@@ -776,19 +776,22 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "altair", specifier = ">=6.0.0" },
-    { name = "dbt-core", specifier = ">=1.7.0" },
-    { name = "dbt-duckdb", specifier = ">=1.7.0" },
-    { name = "dlt", extras = ["filesystem", "parquet"], specifier = ">=1.0.0" },
-    { name = "polars", specifier = ">=1.0.0" },
-    { name = "pyarrow", specifier = ">=14.0.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
-    { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
-    { name = "s3fs", specifier = ">=2024.0.0" },
-    { name = "streamlit", specifier = ">=1.30.0" },
+    { name = "altair", specifier = "==6.0.0" },
+    { name = "dbt-core", specifier = "==1.11.2" },
+    { name = "dbt-duckdb", specifier = "==1.10.0" },
+    { name = "dlt", extras = ["filesystem", "parquet"], specifier = "==1.21.0" },
+    { name = "polars", specifier = "==1.38.0" },
+    { name = "pyarrow", specifier = "==23.0.0" },
+    { name = "python-dotenv", specifier = "==1.2.1" },
+    { name = "s3fs", specifier = "==2026.1.0" },
+    { name = "streamlit", specifier = "==1.54.0" },
 ]
-provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = "==9.0.2" },
+    { name = "ruff", specifier = "==0.15.0" },
+]
 
 [[package]]
 name = "humanize"
