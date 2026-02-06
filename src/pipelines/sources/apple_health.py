@@ -5,21 +5,12 @@ Reads JSON files from s3://{bucket}/landing/health/ and flattens
 the nested metrics into a normalized structure.
 """
 import json
-import os
-from datetime import datetime
 from typing import Iterator
 
 import dlt
 import s3fs
 
-
-def _get_s3_client() -> s3fs.S3FileSystem:
-    """Create S3 filesystem client."""
-    return s3fs.S3FileSystem(
-        key=os.environ["AWS_ACCESS_KEY_ID"],
-        secret=os.environ["AWS_SECRET_ACCESS_KEY"],
-        client_kwargs={"region_name": os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")},
-    )
+from pipelines.config import get_bucket, get_s3_client
 
 
 def _parse_health_date(date_str: str) -> str:
@@ -67,7 +58,7 @@ def apple_health_source(
         health_metrics: Flattened health metrics with date, name, value, units
     """
     if bucket is None:
-        bucket = os.environ["S3_BUCKET_NAME"]
+        bucket = get_bucket()
 
     return [
         health_metrics_resource(bucket, prefix, latest_only),
@@ -91,7 +82,7 @@ def health_metrics_resource(
     - source: Data source (e.g., Apple Watch, iPhone)
     - file_timestamp: Timestamp of the export file (for tracking)
     """
-    s3 = _get_s3_client()
+    s3 = get_s3_client()
     files = _list_health_files(s3, bucket, prefix)
 
     if not files:
@@ -153,5 +144,5 @@ def health_metrics_resource(
 def get_health_metrics(bucket: str | None = None, latest_only: bool = True) -> Iterator[dict]:
     """Get health metrics directly without dlt pipeline."""
     if bucket is None:
-        bucket = os.environ["S3_BUCKET_NAME"]
+        bucket = get_bucket()
     yield from health_metrics_resource(bucket, latest_only=latest_only)

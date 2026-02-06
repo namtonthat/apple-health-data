@@ -12,7 +12,6 @@ Structure:
   landing/hevy/workouts/*.parquet -> raw/hevy/workouts/*.parquet
   landing/health/health_metrics/*.parquet -> raw/health/health_metrics/*.parquet
 """
-import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -20,20 +19,12 @@ from pathlib import Path
 
 # Add src to path and load .env via package __init__
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-import pipelines  # noqa: F401 - loads .env on import
-
 import pyarrow as pa
 import pyarrow.parquet as pq
 import s3fs
 
-
-def get_s3_client() -> s3fs.S3FileSystem:
-    """Create S3 filesystem client."""
-    return s3fs.S3FileSystem(
-        key=os.environ["AWS_ACCESS_KEY_ID"],
-        secret=os.environ["AWS_SECRET_ACCESS_KEY"],
-        client_kwargs={"region_name": os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")},
-    )
+import pipelines  # noqa: F401 - loads .env on import
+from pipelines.config import get_bucket, get_s3_client
 
 
 def to_snake_case(name: str) -> str:
@@ -119,7 +110,7 @@ def run_pipeline(source_systems: list[str] | None = None):
     Args:
         source_systems: List of source systems to process (default: all)
     """
-    bucket = os.environ["S3_BUCKET_NAME"]
+    bucket = get_bucket()
     s3 = get_s3_client()
 
     # Default to all known source systems

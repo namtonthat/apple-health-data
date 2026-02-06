@@ -8,37 +8,22 @@ Creates subscribable calendar events with daily health summaries:
 Output: s3://{bucket}/exports/health_metrics.ics
 """
 
-import os
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from uuid import uuid5, NAMESPACE_DNS
+from uuid import NAMESPACE_DNS, uuid5
 
 # Add src to path and load .env via package __init__
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-import pipelines  # noqa: F401, PYR001 - loads .env on import
+import duckdb  # noqa: E402
 
-import duckdb
-import s3fs
-
-
-def get_s3_client() -> s3fs.S3FileSystem:
-    """Create S3 filesystem client with public-read ACL."""
-    return s3fs.S3FileSystem(
-        key=os.environ["AWS_ACCESS_KEY_ID"],
-        secret=os.environ["AWS_SECRET_ACCESS_KEY"],
-        client_kwargs={"region_name": os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")},
-        s3_additional_kwargs={"ACL": "public-read"},
-    )
-
-
-def get_duckdb_connection() -> duckdb.DuckDBPyConnection:
-    """Get DuckDB connection configured for S3 access."""
-    conn = duckdb.connect(":memory:")
-    conn.execute(f"SET s3_region = '{os.environ.get('AWS_DEFAULT_REGION', 'ap-southeast-2')}'")
-    conn.execute(f"SET s3_access_key_id = '{os.environ['AWS_ACCESS_KEY_ID']}'")
-    conn.execute(f"SET s3_secret_access_key = '{os.environ['AWS_SECRET_ACCESS_KEY']}'")
-    return conn
+import pipelines  # noqa: E402, F401 - loads .env on import
+from pipelines.config import (  # noqa: E402
+    get_bucket,
+    get_duckdb_connection,
+    get_region,
+    get_s3_client,
+)
 
 
 def format_ics_datetime(dt: date) -> str:
@@ -100,7 +85,7 @@ def create_ics_calendar(events: list[str], calendar_name: str = "Health Metrics"
 
 def load_daily_summary(conn: duckdb.DuckDBPyConnection) -> list[dict]:
     """Load all daily summary data from S3."""
-    bucket = os.environ["S3_BUCKET_NAME"]
+    bucket = get_bucket()
     s3_path = f"s3://{bucket}/transformed/fct_daily_summary"
 
     query = f"""
@@ -263,12 +248,12 @@ def run_pipeline() -> str:
     ics_content = create_ics_calendar(events, "Health Metrics")
 
     # Upload to S3 with public-read ACL
-    bucket = os.environ["S3_BUCKET_NAME"]
+    bucket = get_bucket()
     s3_key = "exports/health_metrics.ics"
     s3_path = f"{bucket}/{s3_key}"
-    region = os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")
+    region = get_region()
 
-    s3 = get_s3_client()
+    s3 = get_s3_client(s3_additional_kwargs={"ACL": "public-read"})
     with s3.open(s3_path, "w", content_type="text/calendar") as f:
         f.write(ics_content)
 
