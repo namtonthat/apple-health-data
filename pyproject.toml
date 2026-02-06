@@ -47,6 +47,9 @@ openpowerlifting_url = "https://www.openpowerlifting.org/u/namtonthat"
 
 [tool.dashboard.goals]
 sleep_hours = 7.0
+sleep_deep_hours = 1.5
+sleep_rem_hours = 1.5
+sleep_light_hours = 3.5
 protein_g = 170.0
 carbs_g = 300.0
 fat_g = 60.0
