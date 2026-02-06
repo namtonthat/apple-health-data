@@ -63,9 +63,8 @@ def metric_with_goal(
         st.metric(label, display_value)
 
 
-@st.cache_resource
 def get_connection():
-    """Get DuckDB connection configured for S3 access."""
+    """Get fresh DuckDB connection configured for S3 access."""
     conn = duckdb.connect(":memory:")
     region = "ap-southeast-2"
     access_key = os.environ.get("AWS_ACCESS_KEY_ID", "")
@@ -185,7 +184,7 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
             text=alt.Text("sleep_hours:Q", format=".1f")
         )
 
-        st.altair_chart(bars + text, use_container_width=True)
+        st.altair_chart(bars + text, width="stretch")
 else:
     st.info("No sleep data available for selected period")
 
@@ -279,7 +278,7 @@ if has_calories or has_macros:
                     text=alt.Text("total_macros:Q", format=".0f")
                 )
 
-                st.altair_chart(bars + text, use_container_width=True)
+                st.altair_chart(bars + text, width="stretch")
         else:
             st.info("No macro data available")
 
@@ -336,7 +335,7 @@ if has_calories or has_macros:
                     y=alt.datum(avg_weight_val)
                 )
 
-                st.altair_chart(chart + text + avg_line, use_container_width=True)
+                st.altair_chart(chart + text + avg_line, width="stretch")
         else:
             st.info("No weight data available")
 
@@ -371,7 +370,7 @@ if has_calories or has_macros:
                         "logged_calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
                     },
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                 )
             else:
                 st.info("No nutrition data for selected period")
@@ -396,7 +395,7 @@ if has_calories or has_macros:
                         "weight_kg": st.column_config.NumberColumn("Weight (kg)", format="%.1f", width="small"),
                     },
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                 )
             else:
                 st.info("No weight data for selected period")

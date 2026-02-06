@@ -27,7 +27,7 @@ USER_NAME = os.environ.get("USER_NAME", "there")
 st.title(f"👋 Welcome, {USER_NAME}!")
 
 st.markdown("""
-Your personal health and fitness dashboard, powered by Apple Health and Hevy data.
+Your personal health and fitness dashboard, powered by Apple Health, Hevy, and Strava.
 """)
 
 st.divider()
@@ -51,11 +51,11 @@ with col2:
     st.markdown("""
     ### 🏋️ Exercises
 
-    Monitor your workouts and strength progress.
+    Monitor your workouts and cardio activities.
 
-    - Workout logs with sets, reps, and volume
+    - Workout logs with sets, reps, and volume (Hevy)
     - Estimated 1RM for Big 3 lifts
-    - Exercise filtering and history
+    - Runs, rides, and swims (Strava)
     """)
     st.page_link("pages/2_Exercises.py", label="Go to Exercises →", icon="🏋️")
 
@@ -69,4 +69,5 @@ st.markdown("""
 | 🍎 Apple Health | Sleep, activity, vitals |
 | 📱 Nutrition App | Nutrition & macros (via Apple Health) |
 | 💪 Hevy | Workout logs |
+| 🏃 Strava | Runs, rides, swims |
 """)
