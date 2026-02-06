@@ -11,6 +11,7 @@ import os
 from datetime import date, timedelta
 from pathlib import Path
 
+import altair as alt
 import duckdb
 import polars as pl
 import streamlit as st
@@ -34,7 +35,7 @@ S3_TRANSFORMED_PREFIX = "transformed"
 BIG_3_EXERCISES = {
     "squat": "Squat (Barbell)",
     "bench": "Bench Press (Barbell)",
-    "deadlift": "Deadlift (Barbell)",
+    "deadlift": "Sumo Deadlift (Barbell)",
 }
 
 
@@ -53,19 +54,23 @@ def get_connection():
     """Get DuckDB connection configured for S3 access."""
     conn = duckdb.connect(":memory:")
 
+    # Get credentials from environment (bucket is in ap-southeast-2)
+    region = "ap-southeast-2"  # Hardcoded - bucket region
+    access_key = os.environ.get("AWS_ACCESS_KEY_ID", "")
+    secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+
     # Configure S3 credentials
-    conn.execute(f"""
-        SET s3_region = '{os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")}';
-        SET s3_access_key_id = '{os.environ.get("AWS_ACCESS_KEY_ID", "")}';
-        SET s3_secret_access_key = '{os.environ.get("AWS_SECRET_ACCESS_KEY", "")}';
-    """)
+    conn.execute(f"SET s3_region = '{region}'")
+    conn.execute(f"SET s3_access_key_id = '{access_key}'")
+    conn.execute(f"SET s3_secret_access_key = '{secret_key}'")
 
     return conn
 
 
 def get_s3_path(table_name: str) -> str:
     """Get S3 path for a transformed table."""
-    return f"s3://{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/{table_name}/*.parquet"
+    # dbt-duckdb writes single parquet files without extension
+    return f"s3://{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/{table_name}"
 
 
 def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
@@ -183,24 +188,48 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
         avg_light = sleep_data["sleep_light_hours"].mean()
         st.metric("Avg Light", f"{avg_light:.1f}h" if avg_light else "-")
 
-    # Sleep bar chart by date
+    # Sleep bar chart by date with labels
     if sleep_data.height > 0:
         sleep_chart_data = (
             sleep_data
-            .with_columns(pl.col("date").cast(pl.Date).alias("date"))
-            .select(["date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"])
-            .rename({
-                "sleep_deep_hours": "Deep",
-                "sleep_rem_hours": "REM",
-                "sleep_light_hours": "Light",
-            })
+            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
+            .select(["Date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours", "sleep_hours"])
             .to_pandas()
-            .set_index("date")
         )
-        st.bar_chart(
-            sleep_chart_data,
-            color=["#1f77b4", "#9467bd", "#ff7f0e"],
+
+        # Melt for stacked bar chart
+        sleep_melted = sleep_chart_data.melt(
+            id_vars=["Date", "sleep_hours"],
+            value_vars=["sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"],
+            var_name="Stage",
+            value_name="Hours"
         )
+        sleep_melted["Stage"] = sleep_melted["Stage"].map({
+            "sleep_deep_hours": "Deep",
+            "sleep_rem_hours": "REM",
+            "sleep_light_hours": "Light"
+        })
+
+        # Stacked bar chart
+        bars = alt.Chart(sleep_melted).mark_bar().encode(
+            x=alt.X("Date:N", sort=None, title="Date"),
+            y=alt.Y("Hours:Q", title="Hours"),
+            color=alt.Color("Stage:N", scale=alt.Scale(
+                domain=["Deep", "REM", "Light"],
+                range=["#1f77b4", "#9467bd", "#ff7f0e"]
+            )),
+            order=alt.Order("Stage:N", sort="descending")
+        )
+
+        # Total label on top of each bar
+        totals = sleep_chart_data[["Date", "sleep_hours"]].drop_duplicates()
+        text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
+            x=alt.X("Date:N", sort=None),
+            y=alt.Y("sleep_hours:Q"),
+            text=alt.Text("sleep_hours:Q", format=".1f")
+        )
+
+        st.altair_chart(bars + text, use_container_width=True)
 else:
     st.info("No sleep data available for selected period")
 
@@ -211,68 +240,135 @@ st.divider()
 # =============================================================================
 st.header("Calories & Macros")
 
-col1, col2 = st.columns(2)
+# Check if we have calorie/macro data
+has_calories = "total_calories" in df_daily.columns and df_daily["total_calories"].drop_nulls().len() > 0
+has_macros = "protein_g" in df_daily.columns and df_daily["protein_g"].drop_nulls().len() > 0
 
-with col1:
-    st.subheader("Calories Burned")
-    if "total_calories" in df_daily.columns and df_daily["total_calories"].drop_nulls().len() > 0:
-        cal_data = df_daily.filter(pl.col("total_calories").is_not_null())
+if has_calories or has_macros:
+    # Summary metrics row
+    col1, col2 = st.columns(2)
 
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            avg_active = cal_data["active_calories"].mean()
-            st.metric("Avg Active", f"{avg_active:,.0f}" if avg_active else "-")
-        with c2:
-            avg_basal = cal_data["basal_calories"].mean()
-            st.metric("Avg Basal", f"{avg_basal:,.0f}" if avg_basal else "-")
-        with c3:
-            avg_total = cal_data["total_calories"].mean()
-            st.metric("Avg Total", f"{avg_total:,.0f}" if avg_total else "-")
+    with col1:
+        st.subheader("Calories Burned")
+        if has_calories:
+            cal_data = df_daily.filter(pl.col("total_calories").is_not_null())
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                avg_active = cal_data["active_calories"].mean()
+                st.metric("Avg Active", f"{avg_active:,.0f}" if avg_active else "-")
+            with c2:
+                avg_basal = cal_data["basal_calories"].mean()
+                st.metric("Avg Basal", f"{avg_basal:,.0f}" if avg_basal else "-")
+            with c3:
+                avg_total = cal_data["total_calories"].mean()
+                st.metric("Avg Total", f"{avg_total:,.0f}" if avg_total else "-")
+        else:
+            st.info("No calorie data available")
 
-        if cal_data.height > 1:
-            cal_chart = (
-                cal_data
-                .with_columns(pl.col("date").cast(pl.Date).alias("date"))
-                .select(["date", "active_calories", "basal_calories"])
-                .to_pandas()
-                .set_index("date")
-            )
-            st.area_chart(cal_chart, color=["#EF553B", "#636EFA"])
-    else:
-        st.info("No calorie data available")
+    with col2:
+        st.subheader("Macros (Avg)")
+        if has_macros:
+            macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                avg_protein = macro_data["protein_g"].mean()
+                st.metric("Avg Protein", f"{avg_protein:.0f}g" if avg_protein else "-")
+            with c2:
+                avg_carbs = macro_data["carbs_g"].mean()
+                st.metric("Avg Carbs", f"{avg_carbs:.0f}g" if avg_carbs else "-")
+            with c3:
+                avg_fat = macro_data["fat_g"].mean()
+                st.metric("Avg Fat", f"{avg_fat:.0f}g" if avg_fat else "-")
+        else:
+            st.info("No macro data available")
 
-with col2:
-    st.subheader("Macros")
-    has_macros = (
-        "protein_g" in df_daily.columns
-        and df_daily["protein_g"].drop_nulls().len() > 0
-    )
-
+    # Macros bar chart with labels
     if has_macros:
+        st.subheader("Daily Macros (g)")
         macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
-
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            avg_protein = macro_data["protein_g"].mean()
-            st.metric("Avg Protein", f"{avg_protein:.0f}g" if avg_protein else "-")
-        with c2:
-            avg_carbs = macro_data["carbs_g"].mean()
-            st.metric("Avg Carbs", f"{avg_carbs:.0f}g" if avg_carbs else "-")
-        with c3:
-            avg_fat = macro_data["fat_g"].mean()
-            st.metric("Avg Fat", f"{avg_fat:.0f}g" if avg_fat else "-")
-
-        if macro_data.height > 1:
-            macro_chart = (
+        if macro_data.height > 0:
+            macro_chart_data = (
                 macro_data
-                .with_columns(pl.col("date").cast(pl.Date).alias("date"))
-                .select(["date", "protein_g", "carbs_g", "fat_g"])
+                .with_columns([
+                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                    (pl.col("protein_g") + pl.col("carbs_g") + pl.col("fat_g")).alias("total_macros")
+                ])
+                .select(["Date", "protein_g", "carbs_g", "fat_g", "total_macros"])
                 .to_pandas()
-                .set_index("date")
             )
-            st.bar_chart(macro_chart, color=["#00CC96", "#FFA15A", "#EF553B"])
+
+            # Melt for stacked bar chart
+            macro_melted = macro_chart_data.melt(
+                id_vars=["Date", "total_macros"],
+                value_vars=["protein_g", "carbs_g", "fat_g"],
+                var_name="Macro",
+                value_name="Grams"
+            )
+            macro_melted["Macro"] = macro_melted["Macro"].map({
+                "protein_g": "Protein",
+                "carbs_g": "Carbs",
+                "fat_g": "Fat"
+            })
+
+            # Stacked bar chart
+            bars = alt.Chart(macro_melted).mark_bar().encode(
+                x=alt.X("Date:N", sort=None, title="Date"),
+                y=alt.Y("Grams:Q", title="Grams"),
+                color=alt.Color("Macro:N", scale=alt.Scale(
+                    domain=["Protein", "Carbs", "Fat"],
+                    range=["#00CC96", "#FFA15A", "#EF553B"]
+                )),
+                order=alt.Order("Macro:N", sort="descending")
+            )
+
+            # Total label on top of each bar
+            totals = macro_chart_data[["Date", "total_macros"]].drop_duplicates()
+            text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
+                x=alt.X("Date:N", sort=None),
+                y=alt.Y("total_macros:Q"),
+                text=alt.Text("total_macros:Q", format=".0f")
+            )
+
+            st.altair_chart(bars + text, use_container_width=True)
+
+    # Daily nutrition table
+    st.subheader("Daily Nutrition Table")
+    nutrition_cols = ["date"]
+    if has_macros:
+        nutrition_cols.extend(["protein_g", "carbs_g", "fat_g"])
+    if has_calories:
+        nutrition_cols.append("total_calories")
+
+    # Filter to only rows with data
+    table_data = df_daily
+    if has_macros:
+        table_data = table_data.filter(pl.col("protein_g").is_not_null() | pl.col("total_calories").is_not_null())
+    elif has_calories:
+        table_data = table_data.filter(pl.col("total_calories").is_not_null())
+
+    if table_data.height > 0:
+        display_table = (
+            table_data
+            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
+            .select([c for c in nutrition_cols if c in table_data.columns])
+            .sort("date", descending=True)
+        )
+        st.dataframe(
+            display_table.to_pandas(),
+            column_config={
+                "date": st.column_config.TextColumn("Date", width="small"),
+                "protein_g": st.column_config.NumberColumn("Protein (g)", format="%.0f", width="small"),
+                "carbs_g": st.column_config.NumberColumn("Carbs (g)", format="%.0f", width="small"),
+                "fat_g": st.column_config.NumberColumn("Fat (g)", format="%.0f", width="small"),
+                "total_calories": st.column_config.NumberColumn("Total Calories", format="%.0f", width="small"),
+            },
+            hide_index=True,
+            use_container_width=True,
+        )
     else:
-        st.info("No macro data available - log food in an app that syncs to Apple Health")
+        st.info("No nutrition data for selected period")
+else:
+    st.info("No calorie or macro data available - log food in an app that syncs to Apple Health")
 
 st.divider()
 
