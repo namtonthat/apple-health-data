@@ -5,21 +5,15 @@ description = "Extract Hevy workout data to S3 and transform with dbt"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "dlt[filesystem,parquet]>=1.0.0",
-    "s3fs>=2024.0.0",
-    "pyarrow>=14.0.0",
-    "polars>=1.0.0",
-    "dbt-core>=1.7.0",
-    "dbt-duckdb>=1.7.0",
-    "python-dotenv>=1.0.0",
-    "streamlit>=1.30.0",
-    "altair>=6.0.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-    "ruff>=0.1.0",
+    "dlt[filesystem,parquet]==1.21.0",
+    "s3fs==2026.1.0",
+    "pyarrow==23.0.0",
+    "polars==1.38.0",
+    "dbt-core==1.11.2",
+    "dbt-duckdb==1.10.0",
+    "python-dotenv==1.2.1",
+    "streamlit==1.54.0",
+    "altair==6.0.0",
 ]
 
 [build-system]
@@ -35,3 +29,9 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
+
+[dependency-groups]
+dev = [
+    "pytest==9.0.2",
+    "ruff==0.15.0",
+]
