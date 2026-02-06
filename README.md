@@ -74,7 +74,7 @@ A personal health and fitness dashboard that aggregates data from Apple Health, 
 
 | Source | Data | Method |
 |--------|------|--------|
-| Apple Health | Sleep, Activity, Vitals | Manual export |
+| Apple Health | Sleep, Activity, Vitals | [Health Auto Export](https://www.healthyapps.dev/) to S3 |
 | Nutrition App* | Nutrition & Macros | Syncs to Apple Health |
 | Hevy | Workout logs | API |
 | OpenPowerlifting | Competition PRs | Web scrape |
