@@ -1,9 +1,6 @@
 """Exercises page."""
 
-import os
-import tomllib
 from datetime import date, timedelta
-from pathlib import Path
 
 import duckdb
 import polars as pl
@@ -11,37 +8,13 @@ import streamlit as st
 
 st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="wide")
 
-# Load secrets from .env for local development
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
-
-
-def get_secret(key: str, default: str = "") -> str:
-    """Get secret from st.secrets (Streamlit Cloud) or env vars (local)."""
-    try:
-        return st.secrets[key]
-    except (KeyError, FileNotFoundError):
-        return os.environ.get(key, default)
-
-
-def load_config() -> dict:
-    """Load non-sensitive config from pyproject.toml."""
-    pyproject_path = Path(__file__).parent.parent.parent.parent / "pyproject.toml"
-    with open(pyproject_path, "rb") as f:
-        pyproject = tomllib.load(f)
-    return pyproject.get("tool", {}).get("dashboard", {})
-
-
-# Load config
-CONFIG = load_config()
-
-# S3 configuration (from pyproject.toml)
-S3_BUCKET = CONFIG.get("s3_bucket_name", "")
-S3_TRANSFORMED_PREFIX = CONFIG.get("s3_transformed_prefix", "transformed")
-AWS_REGION = CONFIG.get("aws_region", "ap-southeast-2")
-
-# User settings
-OPENPOWERLIFTING_URL = CONFIG.get("openpowerlifting_url", "")
+from dashboard.config import (
+    AWS_REGION,
+    OPENPOWERLIFTING_URL,
+    S3_BUCKET,
+    S3_TRANSFORMED_PREFIX,
+    get_secret,
+)
 
 # Big 3 exercises - exact names for 1RM summary display
 BIG_3_EXERCISES = {

@@ -1,9 +1,6 @@
 """Recovery & Health page."""
 
-import os
-import tomllib
 from datetime import date, timedelta
-from pathlib import Path
 
 import altair as alt
 import duckdb
@@ -12,47 +9,7 @@ import streamlit as st
 
 st.set_page_config(page_title="😴 Recovery & Health", page_icon="😴", layout="wide")
 
-# Load secrets from .env for local development
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
-
-
-def get_secret(key: str, default: str = "") -> str:
-    """Get secret from st.secrets (Streamlit Cloud) or env vars (local)."""
-    try:
-        return st.secrets[key]
-    except (KeyError, FileNotFoundError):
-        return os.environ.get(key, default)
-
-
-def load_config() -> dict:
-    """Load non-sensitive config from pyproject.toml."""
-    pyproject_path = Path(__file__).parent.parent.parent.parent / "pyproject.toml"
-    with open(pyproject_path, "rb") as f:
-        pyproject = tomllib.load(f)
-    return pyproject.get("tool", {}).get("dashboard", {})
-
-
-# Load config
-CONFIG = load_config()
-
-# S3 configuration (from pyproject.toml)
-S3_BUCKET = CONFIG.get("s3_bucket_name", "")
-S3_TRANSFORMED_PREFIX = CONFIG.get("s3_transformed_prefix", "transformed")
-AWS_REGION = CONFIG.get("aws_region", "ap-southeast-2")
-
-# Goals from config (with defaults)
-goals_config = CONFIG.get("goals", {})
-GOALS = {
-    "sleep_hours": goals_config.get("sleep_hours", 7.0),
-    "sleep_deep_hours": goals_config.get("sleep_deep_hours", 1.5),
-    "sleep_rem_hours": goals_config.get("sleep_rem_hours", 1.5),
-    "sleep_light_hours": goals_config.get("sleep_light_hours", 3.5),
-    "protein_g": goals_config.get("protein_g", 170.0),
-    "carbs_g": goals_config.get("carbs_g", 300.0),
-    "fat_g": goals_config.get("fat_g", 60.0),
-    "steps": goals_config.get("steps", 10000),
-}
+from dashboard.config import AWS_REGION, GOALS, S3_BUCKET, S3_TRANSFORMED_PREFIX, get_secret
 
 
 def metric_with_goal(

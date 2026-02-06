@@ -4,9 +4,6 @@ Health & Fitness Dashboard - Home
 Main entry point for the Streamlit dashboard.
 """
 
-import os
-from pathlib import Path
-
 import streamlit as st
 
 # Page config
@@ -16,12 +13,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# Load environment
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent / ".env")
-
-# Get user name from environment
-USER_NAME = os.environ.get("USER_NAME", "there")
+from dashboard.config import USER_NAME
 
 # Main content - Home page
 st.title(f"👋 Welcome to {USER_NAME}'s Health & Fitness Dashboard")
