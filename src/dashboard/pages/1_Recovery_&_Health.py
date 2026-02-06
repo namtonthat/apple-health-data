@@ -105,9 +105,28 @@ def get_s3_path(table_name: str) -> str:
     return f"s3://{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/{table_name}"
 
 
-def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
+def load_recent_summary() -> pl.DataFrame:
+    """Load the full 90-day recent table (cached across reruns)."""
     conn = get_connection()
-    s3_path = get_s3_path("fct_daily_summary")
+    s3_path = get_s3_path("fct_daily_summary_recent")
+    query = f"""
+        SELECT *
+        FROM read_parquet('{s3_path}')
+        ORDER BY date
+    """
+    try:
+        return pl.from_arrow(conn.execute(query).fetch_arrow_table())
+    except Exception as e:
+        if "No files found" in str(e):
+            return pl.DataFrame()
+        raise
+
+
+def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
+    """Load daily summary from the recent (90-day) table with date range."""
+    conn = get_connection()
+    s3_path = get_s3_path("fct_daily_summary_recent")
     query = f"""
         SELECT *
         FROM read_parquet('{s3_path}')
@@ -125,9 +144,12 @@ def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
 # Sidebar - Date Filter
 st.sidebar.title("Filters")
 
+MAX_LOOKBACK = 90
+earliest_allowed = date.today() - timedelta(days=MAX_LOOKBACK)
+
 preset = st.sidebar.radio(
     "Date Range",
-    ["Last 7 days", "Last 30 days", "This month", "Custom"],
+    ["Last 7 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
     index=0,
 )
 
@@ -138,17 +160,31 @@ if preset == "Last 7 days":
 elif preset == "Last 30 days":
     start_date = today - timedelta(days=30)
     end_date = today
+elif preset == "Last 90 days":
+    start_date = today - timedelta(days=90)
+    end_date = today
 elif preset == "This month":
     start_date = today.replace(day=1)
     end_date = today
 else:
-    start_date = st.sidebar.date_input("Start date", today - timedelta(days=7))
+    start_date = st.sidebar.date_input(
+        "Start date", today - timedelta(days=7), min_value=earliest_allowed,
+    )
     end_date = st.sidebar.date_input("End date", today)
 
 st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
 
-# Load data
-df_daily = load_daily_summary(start_date, end_date)
+# Load data — use cached table for presets, fresh query for custom
+if preset != "Custom":
+    df_all = load_recent_summary()
+    if df_all.height > 0 and "date" in df_all.columns:
+        df_daily = df_all.filter(
+            (pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date))
+        )
+    else:
+        df_daily = df_all
+else:
+    df_daily = load_daily_summary(start_date, end_date)
 
 # =============================================================================
 # Sleep Section

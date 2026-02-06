@@ -53,6 +53,11 @@ models:
       - name: had_strength_workout
         description: Boolean flag for workout days
 
+  - name: fct_daily_summary_recent
+    description: >
+      Last 90 days of fct_daily_summary for fast dashboard reads.
+      Same schema as fct_daily_summary, truncated to 90 days.
+
   - name: fct_exercise_progress
     description: >
       Exercise progression tracking with personal records.
