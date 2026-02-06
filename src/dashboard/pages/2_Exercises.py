@@ -8,7 +8,7 @@ import duckdb
 import polars as pl
 import streamlit as st
 
-st.set_page_config(page_title="Exercises", page_icon="🏋️", layout="wide")
+st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="wide")
 
 # Load environment
 from dotenv import load_dotenv
@@ -81,6 +81,30 @@ def load_workout_sets(start_date: date, end_date: date) -> pl.DataFrame:
         raise
 
 
+def load_personal_bests() -> dict:
+    """Load competition personal bests from OpenPowerlifting data."""
+    conn = get_connection()
+    s3_path = get_s3_path("fct_personal_bests")
+    query = f"""
+        SELECT squat_pr_kg, bench_pr_kg, deadlift_pr_kg, total_pr_kg, last_competition
+        FROM read_parquet('{s3_path}')
+        LIMIT 1
+    """
+    try:
+        result = conn.execute(query).fetchone()
+        if result:
+            return {
+                "squat": result[0],
+                "bench": result[1],
+                "deadlift": result[2],
+                "total": result[3],
+                "last_competition": result[4],
+            }
+    except Exception:
+        pass
+    return {}
+
+
 # Sidebar - Date Filter
 st.sidebar.title("Filters")
 
@@ -108,6 +132,7 @@ st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
 
 # Load data
 df_exercises = load_workout_sets(start_date, end_date)
+competition_prs = load_personal_bests()
 
 # =============================================================================
 # Exercises Section
@@ -125,14 +150,15 @@ if df_exercises.height > 0:
         .alias("est_1rm")
     )
 
-    # Calculate Big 3 1RMs
+    # Calculate Big 3 1RMs with comparison to competition PRs
     big_3_results = []
     for lift_key, exercise_name in BIG_3_EXERCISES.items():
         lift_data = df_with_1rm.filter(pl.col("exercise_name") == exercise_name)
         if lift_data.height > 0:
             max_1rm = lift_data["est_1rm"].max()
             if max_1rm is not None:
-                big_3_results.append((lift_key.title(), max_1rm))
+                comp_pr = competition_prs.get(lift_key)
+                big_3_results.append((lift_key.title(), max_1rm, comp_pr))
 
     # Summary metrics + Big 3 on one row with separator
     # 4 summary metrics | 3 Big 3 lifts
@@ -155,16 +181,47 @@ if df_exercises.height > 0:
     with cols[4]:
         st.markdown("<div style='border-left: 2px solid #444; height: 80px; margin: 0 auto;'></div>", unsafe_allow_html=True)
 
-    # Big 3 lifts
+    # Big 3 lifts with competition PR comparison
     if len(big_3_results) >= 1:
         with cols[5]:
-            st.metric(f"{big_3_results[0][0]} 1RM", f"{big_3_results[0][1]:.1f} kg")
+            name, est_1rm, comp_pr = big_3_results[0]
+            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
+            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
     if len(big_3_results) >= 2:
         with cols[6]:
-            st.metric(f"{big_3_results[1][0]} 1RM", f"{big_3_results[1][1]:.1f} kg")
+            name, est_1rm, comp_pr = big_3_results[1]
+            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
+            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
     if len(big_3_results) >= 3:
         with cols[7]:
-            st.metric(f"{big_3_results[2][0]} 1RM", f"{big_3_results[2][1]:.1f} kg")
+            name, est_1rm, comp_pr = big_3_results[2]
+            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
+            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
+
+    # Time since last competition badge with OpenPowerlifting link
+    last_comp = competition_prs.get("last_competition")
+    if last_comp:
+        from datetime import datetime
+        if isinstance(last_comp, str):
+            last_comp_date = datetime.strptime(last_comp[:10], "%Y-%m-%d").date()
+        else:
+            last_comp_date = last_comp
+        days_since = (date.today() - last_comp_date).days
+        if days_since < 30:
+            time_str = f"{days_since} days"
+        elif days_since < 365:
+            months = days_since // 30
+            time_str = f"{months} month{'s' if months > 1 else ''}"
+        else:
+            years = days_since // 365
+            months = (days_since % 365) // 30
+            time_str = f"{years}y {months}m" if months else f"{years} year{'s' if years > 1 else ''}"
+
+        opl_url = os.environ.get("OPENPOWERLIFTING_URL", "")
+        if opl_url:
+            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')}) · [OpenPowerlifting Profile]({opl_url})")
+        else:
+            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')})")
 
     st.divider()
 

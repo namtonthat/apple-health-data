@@ -72,7 +72,7 @@ final as (
         round(n.fiber_g, 0) as fiber_g,
         round(n.water_ml, 0) as water_ml,
 
-        -- Calories: calculated (Apple Watch) vs logged (MacroFactor)
+        -- Calories: calculated (Apple Watch) vs logged (nutrition app)
         round(coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0), 0) as calculated_calories,
         round(n.dietary_calories, 0) as logged_calories,
         round(greatest(
