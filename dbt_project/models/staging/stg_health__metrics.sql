@@ -35,12 +35,15 @@ staged as (
 ),
 
 -- Deduplicate: keep one record per date/metric/source combination
+-- Prefer non-null values, then most recent export
 deduplicated as (
     select
         *,
         row_number() over (
             partition by metric_date, metric_name, data_source
-            order by export_timestamp desc
+            order by
+                case when value is not null then 0 else 1 end,
+                export_timestamp desc
         ) as row_num
     from staged
 )

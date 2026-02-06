@@ -28,7 +28,7 @@ final as (
         w.workout_id,
 
         -- Date/time dimensions
-        w.workout_date,
+        w.workout_date::date as workout_date,
         w.day_name,
         w.start_hour,
         w.started_at,
