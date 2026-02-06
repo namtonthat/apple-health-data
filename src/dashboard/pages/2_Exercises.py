@@ -389,7 +389,7 @@ if df_strava.height > 0:
 
     # Add icon column
     display_strava = display_strava.with_columns(
-        pl.col("activity_type").replace(ACTIVITY_ICONS, default="🏅").alias("icon")
+        pl.col("activity_type").replace_strict(ACTIVITY_ICONS, default="🏅").alias("icon")
     )
 
     # Format pace as MM:SS
