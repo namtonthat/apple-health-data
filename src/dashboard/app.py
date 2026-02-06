@@ -11,7 +11,6 @@ import os
 from datetime import date, timedelta
 from pathlib import Path
 
-import altair as alt
 import duckdb
 import polars as pl
 import streamlit as st
@@ -30,23 +29,6 @@ load_dotenv(Path(__file__).parent.parent.parent / ".env")
 # S3 configuration
 S3_BUCKET = os.environ.get("S3_BUCKET_NAME", "")
 S3_TRANSFORMED_PREFIX = "transformed"
-
-# Big 3 exercises - exact names for 1RM summary display
-BIG_3_EXERCISES = {
-    "squat": "Squat (Barbell)",
-    "bench": "Bench Press (Barbell)",
-    "deadlift": "Sumo Deadlift (Barbell)",
-}
-
-
-def calculate_1rm(weight: float, reps: int) -> float | None:
-    """Calculate estimated 1RM using Epley formula."""
-    if weight is None or reps is None or weight <= 0 or reps <= 0:
-        return None
-    if reps == 1:
-        return weight
-    # Epley formula: 1RM = weight × (1 + reps/30)
-    return round(weight * (1 + reps / 30), 1)
 
 
 @st.cache_resource
@@ -146,14 +128,23 @@ else:
 
 st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
 
-# Load data
+# Store dates in session state for pages to access
+st.session_state["start_date"] = start_date
+st.session_state["end_date"] = end_date
+
+# Main content - Home page
+st.title("Health & Fitness Dashboard")
+st.markdown("""
+Use the sidebar to navigate between pages:
+
+- **Recovery & Health** - Sleep tracking and nutrition data
+- **Exercises** - Workout logs and 1RM tracking
+""")
+
+# Quick summary
 df_daily = load_daily_summary(start_date, end_date)
 df_exercises = load_workout_sets(start_date, end_date)
 
-# Main content
-st.title("Health & Fitness Dashboard")
-
-# Check if data exists
 if df_daily.height == 0 and df_exercises.height == 0:
     st.error("""
     **No data found in S3 transformed/**
@@ -163,326 +154,17 @@ if df_daily.height == 0 and df_exercises.height == 0:
     ./scripts/run_pipeline.sh
     ```
     """)
-    st.stop()
-
-# =============================================================================
-# Sleep Section
-# =============================================================================
-st.header("Sleep")
-
-if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().len() > 0:
-    sleep_data = df_daily.filter(pl.col("sleep_hours").is_not_null())
-
-    # Metric cards
-    col1, col2, col3, col4 = st.columns(4)
+else:
+    col1, col2, col3 = st.columns(3)
     with col1:
-        avg_sleep = sleep_data["sleep_hours"].mean()
-        st.metric("Avg Sleep", f"{avg_sleep:.1f}h" if avg_sleep else "-")
+        if "sleep_hours" in df_daily.columns:
+            avg_sleep = df_daily["sleep_hours"].drop_nulls().mean()
+            st.metric("Avg Sleep", f"{avg_sleep:.1f}h" if avg_sleep else "-")
     with col2:
-        avg_deep = sleep_data["sleep_deep_hours"].mean()
-        st.metric("Avg Deep", f"{avg_deep:.1f}h" if avg_deep else "-")
+        if "protein_g" in df_daily.columns:
+            avg_protein = df_daily["protein_g"].drop_nulls().mean()
+            st.metric("Avg Protein", f"{avg_protein:.0f}g" if avg_protein else "-")
     with col3:
-        avg_rem = sleep_data["sleep_rem_hours"].mean()
-        st.metric("Avg REM", f"{avg_rem:.1f}h" if avg_rem else "-")
-    with col4:
-        avg_light = sleep_data["sleep_light_hours"].mean()
-        st.metric("Avg Light", f"{avg_light:.1f}h" if avg_light else "-")
-
-    # Sleep bar chart by date with labels
-    if sleep_data.height > 0:
-        sleep_chart_data = (
-            sleep_data
-            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
-            .select(["Date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours", "sleep_hours"])
-            .to_pandas()
-        )
-
-        # Melt for stacked bar chart
-        sleep_melted = sleep_chart_data.melt(
-            id_vars=["Date", "sleep_hours"],
-            value_vars=["sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"],
-            var_name="Stage",
-            value_name="Hours"
-        )
-        sleep_melted["Stage"] = sleep_melted["Stage"].map({
-            "sleep_deep_hours": "Deep",
-            "sleep_rem_hours": "REM",
-            "sleep_light_hours": "Light"
-        })
-
-        # Stacked bar chart
-        bars = alt.Chart(sleep_melted).mark_bar().encode(
-            x=alt.X("Date:N", sort=None, title="Date"),
-            y=alt.Y("Hours:Q", title="Hours"),
-            color=alt.Color("Stage:N", scale=alt.Scale(
-                domain=["Deep", "REM", "Light"],
-                range=["#1f77b4", "#9467bd", "#ff7f0e"]
-            )),
-            order=alt.Order("Stage:N", sort="descending")
-        )
-
-        # Total label on top of each bar
-        totals = sleep_chart_data[["Date", "sleep_hours"]].drop_duplicates()
-        text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
-            x=alt.X("Date:N", sort=None),
-            y=alt.Y("sleep_hours:Q"),
-            text=alt.Text("sleep_hours:Q", format=".1f")
-        )
-
-        st.altair_chart(bars + text, use_container_width=True)
-else:
-    st.info("No sleep data available for selected period")
-
-st.divider()
-
-# =============================================================================
-# Calories & Macros Section
-# =============================================================================
-st.header("Calories & Macros")
-
-# Check if we have calorie/macro data
-has_calories = "total_calories" in df_daily.columns and df_daily["total_calories"].drop_nulls().len() > 0
-has_macros = "protein_g" in df_daily.columns and df_daily["protein_g"].drop_nulls().len() > 0
-
-if has_calories or has_macros:
-    # Summary metrics row
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.subheader("Calories Burned")
-        if has_calories:
-            cal_data = df_daily.filter(pl.col("total_calories").is_not_null())
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                avg_active = cal_data["active_calories"].mean()
-                st.metric("Avg Active", f"{avg_active:,.0f}" if avg_active else "-")
-            with c2:
-                avg_basal = cal_data["basal_calories"].mean()
-                st.metric("Avg Basal", f"{avg_basal:,.0f}" if avg_basal else "-")
-            with c3:
-                avg_total = cal_data["total_calories"].mean()
-                st.metric("Avg Total", f"{avg_total:,.0f}" if avg_total else "-")
-        else:
-            st.info("No calorie data available")
-
-    with col2:
-        st.subheader("Macros (Avg)")
-        if has_macros:
-            macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                avg_protein = macro_data["protein_g"].mean()
-                st.metric("Avg Protein", f"{avg_protein:.0f}g" if avg_protein else "-")
-            with c2:
-                avg_carbs = macro_data["carbs_g"].mean()
-                st.metric("Avg Carbs", f"{avg_carbs:.0f}g" if avg_carbs else "-")
-            with c3:
-                avg_fat = macro_data["fat_g"].mean()
-                st.metric("Avg Fat", f"{avg_fat:.0f}g" if avg_fat else "-")
-        else:
-            st.info("No macro data available")
-
-    # Macros bar chart with labels
-    if has_macros:
-        st.subheader("Daily Macros (g)")
-        macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
-        if macro_data.height > 0:
-            macro_chart_data = (
-                macro_data
-                .with_columns([
-                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                    (pl.col("protein_g") + pl.col("carbs_g") + pl.col("fat_g")).alias("total_macros")
-                ])
-                .select(["Date", "protein_g", "carbs_g", "fat_g", "total_macros"])
-                .to_pandas()
-            )
-
-            # Melt for stacked bar chart
-            macro_melted = macro_chart_data.melt(
-                id_vars=["Date", "total_macros"],
-                value_vars=["protein_g", "carbs_g", "fat_g"],
-                var_name="Macro",
-                value_name="Grams"
-            )
-            macro_melted["Macro"] = macro_melted["Macro"].map({
-                "protein_g": "Protein",
-                "carbs_g": "Carbs",
-                "fat_g": "Fat"
-            })
-
-            # Stacked bar chart
-            bars = alt.Chart(macro_melted).mark_bar().encode(
-                x=alt.X("Date:N", sort=None, title="Date"),
-                y=alt.Y("Grams:Q", title="Grams"),
-                color=alt.Color("Macro:N", scale=alt.Scale(
-                    domain=["Protein", "Carbs", "Fat"],
-                    range=["#00CC96", "#FFA15A", "#EF553B"]
-                )),
-                order=alt.Order("Macro:N", sort="descending")
-            )
-
-            # Total label on top of each bar
-            totals = macro_chart_data[["Date", "total_macros"]].drop_duplicates()
-            text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
-                x=alt.X("Date:N", sort=None),
-                y=alt.Y("total_macros:Q"),
-                text=alt.Text("total_macros:Q", format=".0f")
-            )
-
-            st.altair_chart(bars + text, use_container_width=True)
-
-    # Daily nutrition table
-    st.subheader("Daily Nutrition Table")
-    nutrition_cols = ["date"]
-    if has_macros:
-        nutrition_cols.extend(["protein_g", "carbs_g", "fat_g"])
-    if has_calories:
-        nutrition_cols.append("total_calories")
-
-    # Filter to only rows with data
-    table_data = df_daily
-    if has_macros:
-        table_data = table_data.filter(pl.col("protein_g").is_not_null() | pl.col("total_calories").is_not_null())
-    elif has_calories:
-        table_data = table_data.filter(pl.col("total_calories").is_not_null())
-
-    if table_data.height > 0:
-        display_table = (
-            table_data
-            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
-            .select([c for c in nutrition_cols if c in table_data.columns])
-            .sort("date", descending=True)
-        )
-        st.dataframe(
-            display_table.to_pandas(),
-            column_config={
-                "date": st.column_config.TextColumn("Date", width="small"),
-                "protein_g": st.column_config.NumberColumn("Protein (g)", format="%.0f", width="small"),
-                "carbs_g": st.column_config.NumberColumn("Carbs (g)", format="%.0f", width="small"),
-                "fat_g": st.column_config.NumberColumn("Fat (g)", format="%.0f", width="small"),
-                "total_calories": st.column_config.NumberColumn("Total Calories", format="%.0f", width="small"),
-            },
-            hide_index=True,
-            use_container_width=True,
-        )
-    else:
-        st.info("No nutrition data for selected period")
-else:
-    st.info("No calorie or macro data available - log food in an app that syncs to Apple Health")
-
-st.divider()
-
-# =============================================================================
-# Exercises Section
-# =============================================================================
-st.header("Exercises")
-
-if df_exercises.height > 0:
-    # Summary metrics
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        n_workouts = df_exercises["workout_date"].n_unique()
-        st.metric("Workouts", n_workouts)
-    with col2:
-        n_exercises = df_exercises["exercise_name"].n_unique()
-        st.metric("Unique Exercises", n_exercises)
-    with col3:
-        total_sets = df_exercises.height
-        st.metric("Total Sets", total_sets)
-    with col4:
-        total_volume = df_exercises["volume_kg"].sum()
-        st.metric("Total Volume", f"{total_volume:,.0f} kg" if total_volume else "0 kg")
-
-    # Filters
-    col1, col2 = st.columns(2)
-    with col1:
-        workouts = ["All"] + sorted(df_exercises["workout_name"].drop_nulls().unique().to_list())
-        selected_workout = st.selectbox("Filter by workout", workouts)
-    with col2:
-        exercises = ["All"] + sorted(df_exercises["exercise_name"].unique().to_list())
-        selected_exercise = st.selectbox("Filter by exercise", exercises)
-
-    # Apply filters
-    display_df = df_exercises
-    if selected_workout != "All":
-        display_df = display_df.filter(pl.col("workout_name") == selected_workout)
-    if selected_exercise != "All":
-        display_df = display_df.filter(pl.col("exercise_name") == selected_exercise)
-
-    # Add 1RM column for ALL exercises
-    display_df = display_df.with_columns(
-        pl.struct(["weight_kg", "reps"])
-        .map_elements(
-            lambda row: calculate_1rm(row["weight_kg"], row["reps"]),
-            return_dtype=pl.Float64,
-        )
-        .alias("est_1rm")
-    )
-
-    # Create color mapping for workouts (font colors for seamless look)
-    unique_workouts = display_df["workout_name"].drop_nulls().unique().to_list()
-    workout_colors = [
-        "#E63946", "#2A9D8F", "#E76F51", "#457B9D", "#8338EC",
-        "#06D6A0", "#F72585", "#4361EE", "#FB8500", "#7209B7",
-    ]
-
-    # Convert to pandas for display with styling
-    display_pd = display_df.to_pandas()
-
-    # Style function for workout column - font color only
-    def color_workout(val):
-        if val is None or val not in unique_workouts:
-            return ""
-        idx = unique_workouts.index(val) % len(workout_colors)
-        return f"color: {workout_colors[idx]}; font-weight: 600;"
-
-    # Apply styling
-    styled_df = display_pd.style.map(color_workout, subset=["workout_name"])
-
-    # Display table
-    st.dataframe(
-        styled_df,
-        column_config={
-            "workout_date": st.column_config.DateColumn("Date", width="small"),
-            "workout_name": st.column_config.TextColumn("Workout", width="medium"),
-            "exercise_name": st.column_config.TextColumn("Exercise", width="medium"),
-            "set_number": st.column_config.NumberColumn("Set", width="small"),
-            "weight_kg": st.column_config.NumberColumn("Weight (kg)", format="%.1f", width="small"),
-            "reps": st.column_config.NumberColumn("Reps", width="small"),
-            "est_1rm": st.column_config.NumberColumn(
-                "Est 1RM",
-                format="%.1f kg",
-                width="small",
-                help="Estimated 1 Rep Max (Epley formula)",
-            ),
-            "volume_kg": st.column_config.NumberColumn("Volume", format="%.0f", width="small"),
-            "rpe": st.column_config.NumberColumn("RPE", format="%.1f", width="small"),
-            "set_type": st.column_config.TextColumn("Type", width="small"),
-        },
-        column_order=["workout_date", "workout_name", "exercise_name", "set_number",
-                      "weight_kg", "reps", "est_1rm", "volume_kg", "rpe", "set_type"],
-        hide_index=True,
-        use_container_width=True,
-    )
-
-    # Show 1RM summary for Big 3 (only if exact exercise names exist)
-    big_3_results = []
-    for lift_key, exercise_name in BIG_3_EXERCISES.items():
-        lift_data = display_df.filter(pl.col("exercise_name") == exercise_name)
-        if lift_data.height > 0:
-            max_1rm = lift_data["est_1rm"].max()
-            if max_1rm is not None:
-                big_3_results.append((exercise_name, max_1rm))
-
-    if big_3_results:
-        st.subheader("Estimated 1RM - Big 3 Lifts")
-        cols = st.columns(len(big_3_results))
-        for i, (exercise_name, max_1rm) in enumerate(big_3_results):
-            with cols[i]:
-                st.metric(
-                    exercise_name,
-                    f"{max_1rm:.1f} kg",
-                    help=f"Best estimated 1RM in selected period"
-                )
-else:
-    st.info("No workout data available for selected period")
+        if df_exercises.height > 0:
+            n_workouts = df_exercises["workout_date"].n_unique()
+            st.metric("Workouts", n_workouts)
