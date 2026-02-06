@@ -38,3 +38,16 @@ sources:
         external:
           location: "s3://{{ var('s3_bucket') }}/raw/health/health_metrics/*.parquet"
           file_format: parquet
+
+  - name: strava
+    description: Strava activity data
+    meta:
+      owner: data-team
+      source_type: api
+      zone: raw
+    tables:
+      - name: activities
+        description: Activities from Strava API (runs, rides, swims, etc.)
+        external:
+          location: "s3://{{ var('s3_bucket') }}/raw/strava/activities/*.parquet"
+          file_format: parquet

@@ -124,12 +124,13 @@ def run_pipeline(source_systems: list[str] | None = None):
 
     # Default to all known source systems
     if source_systems is None:
-        source_systems = ["hevy", "health"]
+        source_systems = ["hevy", "health", "strava"]
 
     # Table mappings per source system
     tables = {
         "hevy": ["workouts", "workouts__exercises", "workouts__exercises__sets"],
         "health": ["health_metrics"],
+        "strava": ["activities"],
     }
 
     print("=" * 60)

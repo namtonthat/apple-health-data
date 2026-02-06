@@ -23,11 +23,12 @@ import s3fs
 
 
 def get_s3_client() -> s3fs.S3FileSystem:
-    """Create S3 filesystem client."""
+    """Create S3 filesystem client with public-read ACL."""
     return s3fs.S3FileSystem(
         key=os.environ["AWS_ACCESS_KEY_ID"],
         secret=os.environ["AWS_SECRET_ACCESS_KEY"],
         client_kwargs={"region_name": os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")},
+        s3_additional_kwargs={"ACL": "public-read"},
     )
 
 
@@ -236,16 +237,20 @@ def run_pipeline() -> str:
     # Create calendar
     ics_content = create_ics_calendar(events, "Health Metrics")
 
-    # Upload to S3
+    # Upload to S3 with public-read ACL
     bucket = os.environ["S3_BUCKET_NAME"]
-    s3_path = f"{bucket}/exports/health_metrics.ics"
+    s3_key = "exports/health_metrics.ics"
+    s3_path = f"{bucket}/{s3_key}"
+    region = os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")
 
     s3 = get_s3_client()
-    with s3.open(s3_path, "w") as f:
+    with s3.open(s3_path, "w", content_type="text/calendar") as f:
         f.write(ics_content)
 
     full_path = f"s3://{s3_path}"
+    public_url = f"https://{bucket}.s3.{region}.amazonaws.com/{s3_key}"
     print(f"\nUploaded to: {full_path}")
+    print(f"Public URL: {public_url}")
 
     # Print sample output
     print("\n" + "=" * 60)
@@ -261,12 +266,9 @@ def run_pipeline() -> str:
     print("Calendar Subscription")
     print("=" * 60)
     print(f"""
-To subscribe to this calendar:
+Subscribe to this calendar in any calendar app:
 
-1. Make the S3 object public or use a presigned URL
-2. In your calendar app, add a subscription with the URL:
-
-   https://{bucket}.s3.ap-southeast-2.amazonaws.com/exports/health_metrics.ics
+   {public_url}
 
    Or if using CloudFront/custom domain:
    https://your-domain.com/exports/health_metrics.ics
