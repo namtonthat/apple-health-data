@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import duckdb
+import polars as pl
 import streamlit as st
 
 # Page config
@@ -21,6 +22,23 @@ st.set_page_config(
 # Database connection
 DB_PATH = Path(__file__).parent.parent.parent / "dbt_project" / "hevy.duckdb"
 
+# Big 3 exercises - exact names for 1RM summary display
+BIG_3_EXERCISES = {
+    "squat": "Squat (Barbell)",
+    "bench": "Bench Press (Barbell)",
+    "deadlift": "Deadlift (Barbell)",
+}
+
+
+def calculate_1rm(weight: float, reps: int) -> float | None:
+    """Calculate estimated 1RM using Epley formula."""
+    if weight is None or reps is None or weight <= 0 or reps <= 0:
+        return None
+    if reps == 1:
+        return weight
+    # Epley formula: 1RM = weight × (1 + reps/30)
+    return round(weight * (1 + reps / 30), 1)
+
 
 @st.cache_resource
 def get_connection():
@@ -28,7 +46,7 @@ def get_connection():
     return duckdb.connect(str(DB_PATH), read_only=True)
 
 
-def load_daily_summary(start_date: date, end_date: date):
+def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
     """Load daily summary data for date range."""
     conn = get_connection()
     query = """
@@ -37,15 +55,16 @@ def load_daily_summary(start_date: date, end_date: date):
         WHERE date BETWEEN ? AND ?
         ORDER BY date
     """
-    return conn.execute(query, [start_date, end_date]).fetchdf()
+    return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
 
 
-def load_workout_sets(start_date: date, end_date: date):
+def load_workout_sets(start_date: date, end_date: date) -> pl.DataFrame:
     """Load workout sets for date range."""
     conn = get_connection()
     query = """
         SELECT
             workout_date,
+            workout_name,
             exercise_name,
             set_number,
             weight_kg,
@@ -55,9 +74,9 @@ def load_workout_sets(start_date: date, end_date: date):
             set_type
         FROM main_marts.fct_workout_sets
         WHERE workout_date BETWEEN ? AND ?
-        ORDER BY workout_date DESC, exercise_name, set_number
+        ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number
     """
-    return conn.execute(query, [start_date, end_date]).fetchdf()
+    return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
 
 
 # Sidebar - Date Filter
@@ -93,11 +112,13 @@ df_exercises = load_workout_sets(start_date, end_date)
 # Main content
 st.title("Health & Fitness Dashboard")
 
+# =============================================================================
 # Sleep Section
+# =============================================================================
 st.header("Sleep")
 
-if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].notna().any():
-    sleep_data = df_daily[df_daily["sleep_hours"].notna()]
+if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().len() > 0:
+    sleep_data = df_daily.filter(pl.col("sleep_hours").is_not_null())
 
     # Metric cards
     col1, col2, col3, col4 = st.columns(4)
@@ -114,28 +135,40 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].notna().any():
         avg_light = sleep_data["sleep_light_hours"].mean()
         st.metric("Avg Light", f"{avg_light:.1f}h" if avg_light else "-")
 
-    # Sleep trend chart
-    if len(sleep_data) > 1:
-        st.line_chart(
-            sleep_data.set_index("date")[
-                ["sleep_hours", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"]
-            ],
-            color=["#636EFA", "#00CC96", "#AB63FA", "#FFA15A"],
+    # Sleep bar chart by date
+    if sleep_data.height > 0:
+        sleep_chart_data = (
+            sleep_data
+            .with_columns(pl.col("date").cast(pl.Date).alias("date"))
+            .select(["date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"])
+            .rename({
+                "sleep_deep_hours": "Deep",
+                "sleep_rem_hours": "REM",
+                "sleep_light_hours": "Light",
+            })
+            .to_pandas()
+            .set_index("date")
+        )
+        st.bar_chart(
+            sleep_chart_data,
+            color=["#1f77b4", "#9467bd", "#ff7f0e"],
         )
 else:
     st.info("No sleep data available for selected period")
 
 st.divider()
 
+# =============================================================================
 # Calories & Macros Section
+# =============================================================================
 st.header("Calories & Macros")
 
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Calories Burned")
-    if "total_calories" in df_daily.columns and df_daily["total_calories"].notna().any():
-        cal_data = df_daily[df_daily["total_calories"].notna()]
+    if "total_calories" in df_daily.columns and df_daily["total_calories"].drop_nulls().len() > 0:
+        cal_data = df_daily.filter(pl.col("total_calories").is_not_null())
 
         c1, c2, c3 = st.columns(3)
         with c1:
@@ -148,11 +181,15 @@ with col1:
             avg_total = cal_data["total_calories"].mean()
             st.metric("Avg Total", f"{avg_total:,.0f}" if avg_total else "-")
 
-        if len(cal_data) > 1:
-            st.area_chart(
-                cal_data.set_index("date")[["active_calories", "basal_calories"]],
-                color=["#EF553B", "#636EFA"],
+        if cal_data.height > 1:
+            cal_chart = (
+                cal_data
+                .with_columns(pl.col("date").cast(pl.Date).alias("date"))
+                .select(["date", "active_calories", "basal_calories"])
+                .to_pandas()
+                .set_index("date")
             )
+            st.area_chart(cal_chart, color=["#EF553B", "#636EFA"])
     else:
         st.info("No calorie data available")
 
@@ -160,11 +197,11 @@ with col2:
     st.subheader("Macros")
     has_macros = (
         "protein_g" in df_daily.columns
-        and df_daily["protein_g"].notna().any()
+        and df_daily["protein_g"].drop_nulls().len() > 0
     )
 
     if has_macros:
-        macro_data = df_daily[df_daily["protein_g"].notna()]
+        macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
 
         c1, c2, c3 = st.columns(3)
         with c1:
@@ -177,59 +214,131 @@ with col2:
             avg_fat = macro_data["fat_g"].mean()
             st.metric("Avg Fat", f"{avg_fat:.0f}g" if avg_fat else "-")
 
-        if len(macro_data) > 1:
-            st.bar_chart(
-                macro_data.set_index("date")[["protein_g", "carbs_g", "fat_g"]],
-                color=["#00CC96", "#FFA15A", "#EF553B"],
+        if macro_data.height > 1:
+            macro_chart = (
+                macro_data
+                .with_columns(pl.col("date").cast(pl.Date).alias("date"))
+                .select(["date", "protein_g", "carbs_g", "fat_g"])
+                .to_pandas()
+                .set_index("date")
             )
+            st.bar_chart(macro_chart, color=["#00CC96", "#FFA15A", "#EF553B"])
     else:
         st.info("No macro data available - log food in an app that syncs to Apple Health")
 
 st.divider()
 
+# =============================================================================
 # Exercises Section
+# =============================================================================
 st.header("Exercises")
 
-if not df_exercises.empty:
+if df_exercises.height > 0:
     # Summary metrics
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        n_workouts = df_exercises["workout_date"].nunique()
+        n_workouts = df_exercises["workout_date"].n_unique()
         st.metric("Workouts", n_workouts)
     with col2:
-        n_exercises = df_exercises["exercise_name"].nunique()
+        n_exercises = df_exercises["exercise_name"].n_unique()
         st.metric("Unique Exercises", n_exercises)
     with col3:
-        total_sets = len(df_exercises)
+        total_sets = df_exercises.height
         st.metric("Total Sets", total_sets)
     with col4:
         total_volume = df_exercises["volume_kg"].sum()
-        st.metric("Total Volume", f"{total_volume:,.0f} kg")
+        st.metric("Total Volume", f"{total_volume:,.0f} kg" if total_volume else "0 kg")
 
-    # Exercise filter
-    exercises = ["All"] + sorted(df_exercises["exercise_name"].unique().tolist())
-    selected_exercise = st.selectbox("Filter by exercise", exercises)
+    # Filters
+    col1, col2 = st.columns(2)
+    with col1:
+        workouts = ["All"] + sorted(df_exercises["workout_name"].drop_nulls().unique().to_list())
+        selected_workout = st.selectbox("Filter by workout", workouts)
+    with col2:
+        exercises = ["All"] + sorted(df_exercises["exercise_name"].unique().to_list())
+        selected_exercise = st.selectbox("Filter by exercise", exercises)
 
+    # Apply filters
+    display_df = df_exercises
+    if selected_workout != "All":
+        display_df = display_df.filter(pl.col("workout_name") == selected_workout)
     if selected_exercise != "All":
-        display_df = df_exercises[df_exercises["exercise_name"] == selected_exercise]
-    else:
-        display_df = df_exercises
+        display_df = display_df.filter(pl.col("exercise_name") == selected_exercise)
+
+    # Add 1RM column for ALL exercises
+    display_df = display_df.with_columns(
+        pl.struct(["weight_kg", "reps"])
+        .map_elements(
+            lambda row: calculate_1rm(row["weight_kg"], row["reps"]),
+            return_dtype=pl.Float64,
+        )
+        .alias("est_1rm")
+    )
+
+    # Create color mapping for workouts (font colors for seamless look)
+    unique_workouts = display_df["workout_name"].drop_nulls().unique().to_list()
+    workout_colors = [
+        "#E63946", "#2A9D8F", "#E76F51", "#457B9D", "#8338EC",
+        "#06D6A0", "#F72585", "#4361EE", "#FB8500", "#7209B7",
+    ]
+
+    # Convert to pandas for display with styling
+    display_pd = display_df.to_pandas()
+
+    # Style function for workout column - font color only
+    def color_workout(val):
+        if val is None or val not in unique_workouts:
+            return ""
+        idx = unique_workouts.index(val) % len(workout_colors)
+        return f"color: {workout_colors[idx]}; font-weight: 600;"
+
+    # Apply styling
+    styled_df = display_pd.style.map(color_workout, subset=["workout_name"])
 
     # Display table
     st.dataframe(
-        display_df,
+        styled_df,
         column_config={
-            "workout_date": st.column_config.DateColumn("Date"),
-            "exercise_name": "Exercise",
-            "set_number": "Set",
-            "weight_kg": st.column_config.NumberColumn("Weight (kg)", format="%.1f"),
-            "reps": "Reps",
-            "volume_kg": st.column_config.NumberColumn("Volume (kg)", format="%.0f"),
-            "rpe": st.column_config.NumberColumn("RPE", format="%.1f"),
-            "set_type": "Type",
+            "workout_date": st.column_config.DateColumn("Date", width="small"),
+            "workout_name": st.column_config.TextColumn("Workout", width="medium"),
+            "exercise_name": st.column_config.TextColumn("Exercise", width="medium"),
+            "set_number": st.column_config.NumberColumn("Set", width="small"),
+            "weight_kg": st.column_config.NumberColumn("Weight (kg)", format="%.1f", width="small"),
+            "reps": st.column_config.NumberColumn("Reps", width="small"),
+            "est_1rm": st.column_config.NumberColumn(
+                "Est 1RM",
+                format="%.1f kg",
+                width="small",
+                help="Estimated 1 Rep Max (Epley formula)",
+            ),
+            "volume_kg": st.column_config.NumberColumn("Volume", format="%.0f", width="small"),
+            "rpe": st.column_config.NumberColumn("RPE", format="%.1f", width="small"),
+            "set_type": st.column_config.TextColumn("Type", width="small"),
         },
+        column_order=["workout_date", "workout_name", "exercise_name", "set_number",
+                      "weight_kg", "reps", "est_1rm", "volume_kg", "rpe", "set_type"],
         hide_index=True,
         use_container_width=True,
     )
+
+    # Show 1RM summary for Big 3 (only if exact exercise names exist)
+    big_3_results = []
+    for lift_key, exercise_name in BIG_3_EXERCISES.items():
+        lift_data = display_df.filter(pl.col("exercise_name") == exercise_name)
+        if lift_data.height > 0:
+            max_1rm = lift_data["est_1rm"].max()
+            if max_1rm is not None:
+                big_3_results.append((exercise_name, max_1rm))
+
+    if big_3_results:
+        st.subheader("Estimated 1RM - Big 3 Lifts")
+        cols = st.columns(len(big_3_results))
+        for i, (exercise_name, max_1rm) in enumerate(big_3_results):
+            with cols[i]:
+                st.metric(
+                    exercise_name,
+                    f"{max_1rm:.1f} kg",
+                    help=f"Best estimated 1RM in selected period"
+                )
 else:
     st.info("No workout data available for selected period")

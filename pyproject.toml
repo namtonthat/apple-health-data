@@ -8,6 +8,7 @@ dependencies = [
     "dlt[filesystem,parquet]>=1.0.0",
     "s3fs>=2024.0.0",
     "pyarrow>=14.0.0",
+    "polars>=1.0.0",
     "dbt-core>=1.7.0",
     "dbt-duckdb>=1.7.0",
     "python-dotenv>=1.0.0",
