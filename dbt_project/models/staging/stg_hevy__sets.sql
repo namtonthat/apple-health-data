@@ -4,16 +4,16 @@
 -- Path: s3://{bucket}/raw/hevy/workouts__exercises__sets/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts__exercises__sets/*.parquet')
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts__exercises__sets/*.parquet', union_by_name=true)
 ),
 
 staged as (
     select
-        -- Primary key
-        _dlt_id as set_id,
+        -- Primary key (handle both old and new column names)
+        coalesce(_dlt_id, dlt_id) as set_id,
 
         -- Foreign key
-        _dlt_parent_id as exercise_id,
+        coalesce(_dlt_parent_id, dlt_parent_id) as exercise_id,
 
         -- Set details
         index + 1 as set_number,  -- 1-indexed for readability
@@ -31,10 +31,8 @@ staged as (
         -- Other
         custom_metric,
 
-        -- Cleanse metadata
-        _load_timestamp,
-        _source_file,
-        _source_system
+        -- dlt metadata
+        _dlt_list_idx as list_index
 
     from source
 )

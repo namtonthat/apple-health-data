@@ -1,4 +1,9 @@
-{{ config(materialized='table') }}
+{{
+  config(
+    materialized='external',
+    location='s3://{{ var("s3_bucket") }}/transformed/fct_daily_summary'
+  )
+}}
 
 -- Combined daily summary: Health vitals, activity, nutrition, and workouts
 -- Grain: One row per calendar day

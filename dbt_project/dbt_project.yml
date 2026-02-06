@@ -14,12 +14,18 @@ vars:
 
 models:
   health_analytics:
+    # Staging: Views that read from S3 raw/
     staging:
       +materialized: view
       +schema: staging
+
+    # Intermediate: Views for business logic
     intermediate:
       +materialized: view
       +schema: intermediate
+
+    # Marts: External tables written to S3 transformed/
     marts:
-      +materialized: table
-      +schema: marts
+      +materialized: external
+      +location: "transformed/{{ name }}"
+      +format: parquet
