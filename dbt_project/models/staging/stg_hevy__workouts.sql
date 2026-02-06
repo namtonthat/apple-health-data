@@ -4,13 +4,13 @@
 -- Path: s3://{bucket}/raw/hevy/workouts/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts/*.parquet')
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts/*.parquet', union_by_name=true)
 ),
 
 staged as (
     select
-        -- Primary key
-        _dlt_id as workout_id,
+        -- Primary key (handle both old and new column names)
+        coalesce(_dlt_id, dlt_id) as workout_id,
 
         -- Natural key
         id as hevy_workout_id,
@@ -31,10 +31,8 @@ staged as (
         coalesce(title, 'Untitled Workout') as workout_name,
         description,
 
-        -- Cleanse metadata
-        _load_timestamp,
-        _source_file,
-        _source_system
+        -- dlt metadata
+        _dlt_load_id as load_id
 
     from source
 )

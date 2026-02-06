@@ -1,4 +1,9 @@
-{{ config(materialized='table') }}
+{{
+  config(
+    materialized='external',
+    location='s3://{{ var("s3_bucket") }}/transformed/fct_workout_sets'
+  )
+}}
 
 -- Fact table: Individual workout sets with full context
 -- Grain: One row per set

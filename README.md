@@ -6,22 +6,47 @@ Extract health and workout data, transform with dbt, and visualize with Streamli
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              DATA FLOW                                      │
+│                              S3 DATA FLOW                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Sources              Landing Zone           Raw Zone          Transformed  │
 │  ───────              ────────────           ────────          ───────────  │
 │                                                                             │
-│  Hevy API      ──►    landing/hevy/     ──►  raw/hevy/    ──►  dbt models  │
-│                       (parquet)              (snake_case)      (staging,    │
-│                                                                marts)       │
-│  Apple Health  ──►    landing/health/   ──►  raw/health/                   │
+│  Hevy API      ──►    landing/hevy/     ──►  raw/hevy/    ──►  transformed/ │
+│                       (parquet)              (snake_case)      (dbt marts)  │
+│                                                                             │
+│  Apple Health  ──►    landing/health/   ──►  raw/health/                    │
 │  (JSON export)        (parquet)              (snake_case)                   │
 │                                                                             │
 │                                                                ▼            │
 │                                                           Streamlit         │
 │                                                           Dashboard         │
 └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+## S3 Structure
+
+```
+s3://{bucket}/
+├── landing/           # Raw extracted data (from dlt pipelines)
+│   ├── hevy/
+│   │   ├── workouts/*.parquet
+│   │   ├── workouts__exercises/*.parquet
+│   │   └── workouts__exercises__sets/*.parquet
+│   └── health/
+│       ├── *.json                    # Raw Apple Health exports
+│       └── health_metrics/*.parquet  # Parsed metrics
+│
+├── raw/               # Cleansed data (snake_case + metadata)
+│   ├── hevy/
+│   │   └── .../*.parquet
+│   └── health/
+│       └── health_metrics/*.parquet
+│
+└── transformed/       # dbt marts (final analytics tables)
+    ├── fct_daily_summary/*.parquet
+    ├── fct_workout_sets/*.parquet
+    └── fct_exercise_progress/*.parquet
 ```
 
 ## Setup
@@ -53,10 +78,10 @@ uv run python src/pipelines/pipelines/apple_health_to_s3.py
 # 2. Cleanse: landing -> raw
 uv run python src/pipelines/pipelines/cleanse_to_raw.py
 
-# 3. Transform with dbt
+# 3. Transform with dbt (writes to S3 transformed/)
 cd dbt_project && uv run dbt run
 
-# 4. View dashboard
+# 4. View dashboard (reads from S3 transformed/)
 uv run streamlit run src/dashboard/app.py
 ```
 
@@ -66,13 +91,12 @@ uv run streamlit run src/dashboard/app.py
 |-------|----------|-------------|
 | **Landing** | `s3://{bucket}/landing/` | Raw extracted data (parquet from dlt) |
 | **Raw** | `s3://{bucket}/raw/` | Cleansed data with snake_case columns and metadata |
-| **Staging** | dbt views | Type casting, renaming, deduplication |
-| **Intermediate** | dbt views | Business logic aggregations |
-| **Marts** | dbt tables | Final analytics tables |
+| **Transformed** | `s3://{bucket}/transformed/` | dbt marts as parquet files |
 
 ## Dashboard
 
-The Streamlit dashboard shows:
+The Streamlit dashboard reads directly from S3 and shows:
 - Sleep statistics and trends
 - Calories burned and macros
 - Exercise history with filtering
+- Estimated 1RM for all lifts

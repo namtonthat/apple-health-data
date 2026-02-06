@@ -4,13 +4,13 @@
 -- Path: s3://{bucket}/raw/health/health_metrics/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/health/health_metrics/*.parquet')
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/health/health_metrics/*.parquet', union_by_name=true)
 ),
 
 staged as (
     select
-        -- Primary key
-        _dlt_id as metric_id,
+        -- Primary key (handle both old and new column names)
+        coalesce(_dlt_id, dlt_id) as metric_id,
 
         -- Dimensions
         metric_date::date as metric_date,
@@ -27,11 +27,9 @@ staged as (
         core as sleep_core_hours,
         awake as sleep_awake_hours,
 
-        -- Cleanse metadata
+        -- Metadata
         file_timestamp as export_timestamp,
-        _load_timestamp,
-        _source_file,
-        _source_system
+        _dlt_load_id as load_id
 
     from source
 ),
@@ -59,8 +57,6 @@ select
     sleep_core_hours,
     sleep_awake_hours,
     export_timestamp,
-    _load_timestamp,
-    _source_file,
-    _source_system
+    load_id
 from deduplicated
 where row_num = 1

@@ -1,4 +1,9 @@
-{{ config(materialized='table') }}
+{{
+  config(
+    materialized='external',
+    location='s3://{{ var("s3_bucket") }}/transformed/fct_exercise_progress'
+  )
+}}
 
 -- Track progression on each exercise over time
 -- Shows personal records and trends
