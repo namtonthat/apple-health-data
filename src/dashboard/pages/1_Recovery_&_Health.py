@@ -9,7 +9,7 @@ import duckdb
 import polars as pl
 import streamlit as st
 
-st.set_page_config(page_title="Recovery & Health", page_icon="😴", layout="wide")
+st.set_page_config(page_title="😴 Recovery & Health", page_icon="😴", layout="wide")
 
 # Load environment
 from dotenv import load_dotenv
@@ -136,13 +136,13 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
     # Metric cards with goals
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        metric_with_goal("Avg Sleep", sleep_data["sleep_hours"].mean(), GOALS["sleep_hours"], "h")
+        metric_with_goal("Sleep", sleep_data["sleep_hours"].mean(), GOALS["sleep_hours"], "h")
     with col2:
-        metric_with_goal("Avg Deep", sleep_data["sleep_deep_hours"].mean(), unit="h")
+        metric_with_goal("Deep", sleep_data["sleep_deep_hours"].mean(), unit="h")
     with col3:
-        metric_with_goal("Avg REM", sleep_data["sleep_rem_hours"].mean(), unit="h")
+        metric_with_goal("REM", sleep_data["sleep_rem_hours"].mean(), unit="h")
     with col4:
-        metric_with_goal("Avg Light", sleep_data["sleep_light_hours"].mean(), unit="h")
+        metric_with_goal("Light", sleep_data["sleep_light_hours"].mean(), unit="h")
 
     # Sleep bar chart by date with labels
     if sleep_data.height > 0:
@@ -230,57 +230,12 @@ if has_calories or has_macros:
         else:
             st.info("No macro data available")
 
-    # Weight and Macros charts side by side
+    # Macros and Weight charts side by side (Macros left, Weight right)
     has_weight = "weight_kg" in df_daily.columns and df_daily["weight_kg"].drop_nulls().len() > 0
 
     chart_col1, divider_col, chart_col2 = st.columns([1, 0.05, 1])
 
     with chart_col1:
-        st.subheader("Weight Trend")
-        if has_weight:
-            weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
-
-            # Weight metrics
-            w1, w2, w3 = st.columns(3)
-            with w1:
-                latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
-                metric_with_goal("Current", latest_weight, unit=" kg", fmt=".1f")
-            with w2:
-                avg_weight = weight_data["weight_kg"].mean()
-                metric_with_goal("Average", avg_weight, unit=" kg", fmt=".1f")
-            with w3:
-                min_weight = weight_data["weight_kg"].min()
-                max_weight = weight_data["weight_kg"].max()
-                st.metric("Range", f"{min_weight:.1f} - {max_weight:.1f} kg")
-
-            # Weight chart
-            if weight_data.height > 1:
-                weight_chart_data = (
-                    weight_data
-                    .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
-                    .select(["Date", "weight_kg"])
-                    .to_pandas()
-                )
-
-                chart = alt.Chart(weight_chart_data).mark_line(point=True).encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
-                )
-
-                text = alt.Chart(weight_chart_data).mark_text(dy=-10, fontSize=11).encode(
-                    x=alt.X("Date:N", sort=None),
-                    y=alt.Y("weight_kg:Q"),
-                    text=alt.Text("weight_kg:Q", format=".1f")
-                )
-
-                st.altair_chart(chart + text, use_container_width=True)
-        else:
-            st.info("No weight data available")
-
-    with divider_col:
-        st.markdown("<div style='border-left: 2px solid #444; height: 400px; margin: 0 auto;'></div>", unsafe_allow_html=True)
-
-    with chart_col2:
         st.subheader("Daily Macros (g)")
         if has_macros:
             macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
@@ -328,6 +283,63 @@ if has_calories or has_macros:
         else:
             st.info("No macro data available")
 
+    with divider_col:
+        st.markdown("<div style='border-left: 2px solid #444; height: 400px; margin: 0 auto;'></div>", unsafe_allow_html=True)
+
+    with chart_col2:
+        st.subheader("Weight Trend")
+        if has_weight:
+            weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
+
+            # Weight metrics
+            w1, w2, w3 = st.columns(3)
+            with w1:
+                latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
+                metric_with_goal("Current", latest_weight, unit=" kg", fmt=".1f")
+            with w2:
+                avg_weight = weight_data["weight_kg"].mean()
+                metric_with_goal("Average", avg_weight, unit=" kg", fmt=".1f")
+            with w3:
+                min_weight = weight_data["weight_kg"].min()
+                max_weight = weight_data["weight_kg"].max()
+                st.metric("Range", f"{min_weight:.1f} - {max_weight:.1f} kg")
+
+            # Weight chart with average line
+            if weight_data.height > 1:
+                weight_chart_data = (
+                    weight_data
+                    .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
+                    .select(["Date", "weight_kg"])
+                    .to_pandas()
+                )
+
+                # Main line chart
+                chart = alt.Chart(weight_chart_data).mark_line(point=True).encode(
+                    x=alt.X("Date:N", sort=None, title="Date"),
+                    y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
+                )
+
+                # Data point labels
+                text = alt.Chart(weight_chart_data).mark_text(dy=-10, fontSize=11).encode(
+                    x=alt.X("Date:N", sort=None),
+                    y=alt.Y("weight_kg:Q"),
+                    text=alt.Text("weight_kg:Q", format=".1f")
+                )
+
+                # Average line
+                avg_weight_val = round(weight_chart_data["weight_kg"].mean(), 2)
+                avg_line = alt.Chart(weight_chart_data).mark_rule(
+                    color="#ff6b6b",
+                    strokeDash=[5, 5],
+                    strokeWidth=2
+                ).encode(
+                    y=alt.datum(avg_weight_val)
+                )
+
+                st.altair_chart(chart + text + avg_line, use_container_width=True)
+        else:
+            st.info("No weight data available")
+
     st.divider()
 
     # Detailed Breakdown - two tables side by side
@@ -337,39 +349,34 @@ if has_calories or has_macros:
 
     with table_col1:
         st.markdown("**Daily Nutrition**")
-        nutrition_cols = ["date"]
+        # Only show nutrition data when macros are logged (not Apple Watch calories)
         if has_macros:
-            nutrition_cols.extend(["protein_g", "carbs_g", "fat_g"])
-        if has_calories:
-            nutrition_cols.append("total_calories")
+            nutrition_cols = ["date", "protein_g", "carbs_g", "fat_g", "logged_calories"]
+            table_data = df_daily.filter(pl.col("protein_g").is_not_null())
 
-        table_data = df_daily
-        if has_macros:
-            table_data = table_data.filter(pl.col("protein_g").is_not_null() | pl.col("total_calories").is_not_null())
-        elif has_calories:
-            table_data = table_data.filter(pl.col("total_calories").is_not_null())
-
-        if table_data.height > 0:
-            display_table = (
-                table_data
-                .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
-                .select([c for c in nutrition_cols if c in table_data.columns])
-                .sort("date", descending=True)
-            )
-            st.dataframe(
-                display_table.to_pandas(),
-                column_config={
-                    "date": st.column_config.TextColumn("Date", width="small"),
-                    "protein_g": st.column_config.NumberColumn("Protein (g)", format="%.0f", width="small"),
-                    "carbs_g": st.column_config.NumberColumn("Carbs (g)", format="%.0f", width="small"),
-                    "fat_g": st.column_config.NumberColumn("Fat (g)", format="%.0f", width="small"),
-                    "total_calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
-                },
-                hide_index=True,
-                use_container_width=True,
-            )
+            if table_data.height > 0:
+                display_table = (
+                    table_data
+                    .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
+                    .select([c for c in nutrition_cols if c in table_data.columns])
+                    .sort("date", descending=True)
+                )
+                st.dataframe(
+                    display_table.to_pandas(),
+                    column_config={
+                        "date": st.column_config.TextColumn("Date", width="small"),
+                        "protein_g": st.column_config.NumberColumn("Protein (g)", format="%.0f", width="small"),
+                        "carbs_g": st.column_config.NumberColumn("Carbs (g)", format="%.0f", width="small"),
+                        "fat_g": st.column_config.NumberColumn("Fat (g)", format="%.0f", width="small"),
+                        "logged_calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
+                    },
+                    hide_index=True,
+                    use_container_width=True,
+                )
+            else:
+                st.info("No nutrition data for selected period")
         else:
-            st.info("No nutrition data for selected period")
+            st.info("No nutrition data available")
 
     with table_col2:
         st.markdown("**Daily Weight**")
@@ -397,3 +404,7 @@ if has_calories or has_macros:
             st.info("No weight data available")
 else:
     st.info("No calorie or macro data available - log food in an app that syncs to Apple Health")
+
+# Footer
+st.divider()
+st.caption("*All metric values shown are averages for the selected date range.*")

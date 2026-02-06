@@ -11,7 +11,7 @@ import streamlit as st
 
 # Page config
 st.set_page_config(
-    page_title="Home",
+    page_title="🏠 Home",
     page_icon="🏠",
     layout="wide",
 )
@@ -67,6 +67,6 @@ st.markdown("""
 | Source | Data |
 |--------|------|
 | 🍎 Apple Health | Sleep, activity, vitals |
-| 📱 MacroFactor | Nutrition & macros |
+| 📱 Nutrition App | Nutrition & macros (via Apple Health) |
 | 💪 Hevy | Workout logs |
 """)

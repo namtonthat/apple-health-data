@@ -1,0 +1,58 @@
+name: Refresh Health Data
+
+on:
+  schedule:
+    # Run every second day at midnight Melbourne time (AEDT UTC+11)
+    # Midnight Melbourne = 13:00 UTC previous day
+    - cron: '0 13 */2 * *'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+  HEVY_AUTH_TOKEN: ${{ secrets.HEVY_AUTH_TOKEN }}
+  OPENPOWERLIFTING_URL: ${{ secrets.OPENPOWERLIFTING_URL }}
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Hevy pipeline
+        run: uv run python -m src.pipelines.hevy
+        continue-on-error: true
+
+      - name: Run Health pipeline
+        run: uv run python -m src.pipelines.health
+        continue-on-error: true
+
+      - name: Run OpenPowerlifting pipeline
+        run: uv run python -m src.pipelines.openpowerlifting
+        continue-on-error: true
+
+      - name: Run dbt transformations
+        run: |
+          cd dbt_project
+          uv run dbt run
+
+      - name: Summary
+        run: |
+          echo "## Data Refresh Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Melbourne Time:** $(TZ='Australia/Melbourne' date '+%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_STEP_SUMMARY
