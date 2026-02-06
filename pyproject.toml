@@ -32,6 +32,25 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
 
+# =============================================================================
+# Dashboard Configuration (non-sensitive values)
+# =============================================================================
+[tool.dashboard]
+# S3 bucket and prefix for transformed data
+s3_bucket_name = "api-health-data-ntonthat"
+s3_transformed_prefix = "transformed"
+aws_region = "ap-southeast-2"
+
+# User info
+user_name = "Nam Tonthat"
+openpowerlifting_url = "https://www.openpowerlifting.org/u/namtonthat"
+
+[tool.dashboard.goals]
+sleep_hours = 7.0
+protein_g = 170.0
+carbs_g = 300.0
+fat_g = 60.0
+
 [dependency-groups]
 dev = [
     "pytest==9.0.2",

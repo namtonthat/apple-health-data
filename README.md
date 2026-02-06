@@ -1,13 +1,13 @@
 # Apple Health Data Dashboard
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.54-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
-[![dbt](https://img.shields.io/badge/dbt-1.9-FF694B?logo=dbt&logoColor=white)](https://getdbt.com)
-[![DuckDB](https://img.shields.io/badge/DuckDB-1.3-FFF000?logo=duckdb&logoColor=black)](https://duckdb.org)
+[![dbt](https://img.shields.io/badge/dbt-1.11-FF694B?logo=dbt&logoColor=white)](https://getdbt.com)
+[![DuckDB](https://img.shields.io/badge/DuckDB-1.10-FFF000?logo=duckdb&logoColor=black)](https://duckdb.org)
 [![dlt](https://img.shields.io/badge/dlt-1.21-4A154B)](https://dlthub.com)
 [![AWS S3](https://img.shields.io/badge/AWS_S3-Parquet-FF9900?logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
-[![Polars](https://img.shields.io/badge/Polars-1.30-CD792C)](https://pola.rs)
-[![Altair](https://img.shields.io/badge/Altair-5.5-1F77B4)](https://altair-viz.github.io)
+[![Polars](https://img.shields.io/badge/Polars-1.38-CD792C)](https://pola.rs)
+[![Altair](https://img.shields.io/badge/Altair-6.0-1F77B4)](https://altair-viz.github.io)
 
 A personal health and fitness dashboard powered by Apple Health, Hevy, Strava, and OpenPowerlifting.
 
@@ -39,6 +39,52 @@ cd apple-health-data
 uv run streamlit run src/dashboard/Home.py
 ```
 
+## Configuration
+
+Configuration is split between sensitive secrets and non-sensitive settings:
+
+### Non-sensitive config (`pyproject.toml`)
+
+Checked into git under `[tool.dashboard]`:
+
+```toml
+[tool.dashboard]
+s3_bucket_name = "your-bucket-name"
+s3_transformed_prefix = "transformed"
+aws_region = "ap-southeast-2"
+user_name = "Your Name"
+openpowerlifting_url = "https://www.openpowerlifting.org/u/yourname"
+
+[tool.dashboard.goals]
+sleep_hours = 7.0
+protein_g = 170.0
+carbs_g = 300.0
+fat_g = 60.0
+```
+
+### Secrets (`.env` / Streamlit Cloud)
+
+For local development, create a `.env` file:
+
+```bash
+# Required
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+
+# Optional (for additional features)
+HEVY_API_KEY=your-hevy-key
+STRAVA_CLIENT_ID=your-client-id
+STRAVA_CLIENT_SECRET=your-client-secret
+STRAVA_REFRESH_TOKEN=your-refresh-token
+```
+
+For Streamlit Cloud deployment, generate and copy secrets:
+
+```bash
+python scripts/generate_streamlit_secrets.py
+# Then copy .streamlit/secrets.toml contents to Streamlit Cloud settings
+```
+
 ## Data Sources
 
 | Source | Data | Method |
@@ -59,12 +105,52 @@ https://{bucket}.s3.{region}.amazonaws.com/exports/health_metrics.ics
 
 Daily events show: `😴 7.5h sleep (1.2h deep) | 🍽️ 2000kcal (165P, 200C, 60F) | ⚖️ 75.5kg`
 
-## Automation
+## Deployment
 
-GitHub Actions runs every 2 days (`.github/workflows/refresh-data.yml`).
+### Streamlit Cloud
 
-Required secrets:
-- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`
-- `HEVY_AUTH_TOKEN`
-- `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN`
-- `OPENPOWERLIFTING_URL`
+Deploy the dashboard to Streamlit Cloud:
+
+1. Fork/push this repo to GitHub
+2. Go to [share.streamlit.io](https://share.streamlit.io) and connect your repo
+3. Set the main file path to `src/dashboard/Home.py`
+4. Add secrets (Settings → Secrets) - generate with `python scripts/generate_streamlit_secrets.py`
+
+See [Streamlit Cloud documentation](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app) for detailed instructions.
+
+### CI/CD
+
+GitHub Actions automatically refreshes data daily via `.github/workflows/refresh-data.yml`.
+
+#### Required GitHub Secrets
+
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `AWS_ACCESS_KEY_ID` | Yes | AWS credentials for S3 access |
+| `AWS_SECRET_ACCESS_KEY` | Yes | AWS credentials for S3 access |
+| `HEVY_API_KEY` | No | For workout data from Hevy |
+| `STRAVA_CLIENT_ID` | No | For Strava activities |
+| `STRAVA_CLIENT_SECRET` | No | For Strava activities |
+| `STRAVA_REFRESH_TOKEN` | No | For Strava activities |
+
+Non-sensitive values (bucket name, goals, URLs) are read from `pyproject.toml`.
+
+#### Manual Trigger
+
+You can manually trigger a data refresh from the Actions tab in GitHub.
+
+## Project Structure
+
+```
+apple-health-data/
+├── src/
+│   ├── dashboard/          # Streamlit app
+│   │   ├── Home.py
+│   │   └── pages/
+│   └── pipelines/          # Data pipelines (dlt)
+├── dbt_project/            # dbt transformations
+├── scripts/                # Setup and utility scripts
+├── .github/workflows/      # CI/CD
+├── pyproject.toml          # Dependencies + dashboard config
+└── .env                    # Secrets (not committed)
+```

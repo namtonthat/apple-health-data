@@ -2,20 +2,10 @@ name: Refresh Health Data
 
 on:
   schedule:
-    # Run every second day at midnight Melbourne time (AEDT UTC+11)
+    # Run daily at midnight Melbourne time (AEDT UTC+11)
     # Midnight Melbourne = 13:00 UTC previous day
-    - cron: '0 13 */2 * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:  # Allow manual trigger
-
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-  HEVY_AUTH_TOKEN: ${{ secrets.HEVY_AUTH_TOKEN }}
-  STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-  STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-  STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-  OPENPOWERLIFTING_URL: ${{ secrets.OPENPOWERLIFTING_URL }}
 
 jobs:
   refresh-data:
@@ -28,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install uv
         uses: astral-sh/setup-uv@v4
@@ -36,28 +26,76 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Load config from pyproject.toml
+        id: config
+        run: |
+          # Extract non-sensitive config from pyproject.toml
+          S3_BUCKET=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['s3_bucket_name'])")
+          AWS_REGION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['aws_region'])")
+          OPL_URL=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard'].get('openpowerlifting_url', ''))")
+
+          echo "S3_BUCKET_NAME=$S3_BUCKET" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=$AWS_REGION" >> $GITHUB_ENV
+          echo "OPENPOWERLIFTING_URL=$OPL_URL" >> $GITHUB_ENV
+
+          echo "Loaded config:"
+          echo "  S3_BUCKET_NAME=$S3_BUCKET"
+          echo "  AWS_DEFAULT_REGION=$AWS_REGION"
+          echo "  OPENPOWERLIFTING_URL=$OPL_URL"
+
+      - name: Set secrets as environment variables
+        run: echo "Secrets loaded"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Run Hevy pipeline
+        if: ${{ secrets.HEVY_API_KEY != '' }}
         run: uv run python src/pipelines/pipelines/hevy_to_s3.py
         continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
 
       - name: Run Strava pipeline
+        if: ${{ secrets.STRAVA_CLIENT_ID != '' }}
         run: uv run python src/pipelines/pipelines/strava_to_s3.py
         continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
 
       - name: Run OpenPowerlifting pipeline
+        if: ${{ env.OPENPOWERLIFTING_URL != '' }}
         run: uv run python src/pipelines/openpowerlifting.py
         continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Run cleanse pipeline
         run: uv run python src/pipelines/pipelines/cleanse_to_raw.py
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Run dbt transformations
         run: |
           cd dbt_project
           uv run dbt run
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Export ICS calendar
         run: uv run python src/pipelines/pipelines/export_to_ics.py
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Summary
         run: |
@@ -65,3 +103,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "- **Melbourne Time:** $(TZ='Australia/Melbourne' date '+%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_STEP_SUMMARY
+          echo "- **S3 Bucket:** $S3_BUCKET_NAME" >> $GITHUB_STEP_SUMMARY
