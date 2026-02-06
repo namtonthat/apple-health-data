@@ -35,7 +35,7 @@ A personal health and fitness dashboard that aggregates data from Apple Health, 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │  Apple Health   │     │  Nutrition App  │     │      Hevy       │
-│    (Export)     │     │  (via Apple)    │     │      (API)      │
+│ (Auto Export)   │     │  (via Apple)    │     │      (API)      │
 └────────┬────────┘     └────────┬────────┘     └────────┬────────┘
          │                       │                       │
          └───────────────────────┼───────────────────────┘

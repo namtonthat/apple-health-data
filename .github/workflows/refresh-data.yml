@@ -50,6 +50,9 @@ jobs:
           cd dbt_project
           uv run dbt run
 
+      - name: Export ICS calendar
+        run: uv run python src/pipelines/pipelines/export_to_ics.py
+
       - name: Summary
         run: |
           echo "## Data Refresh Complete" >> $GITHUB_STEP_SUMMARY
