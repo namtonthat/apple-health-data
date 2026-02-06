@@ -4,18 +4,15 @@ OpenPowerlifting Pipeline
 Fetches competition results from OpenPowerlifting and saves to S3.
 """
 
-import json
 import os
 import re
 from datetime import datetime
-from pathlib import Path
 
 import dlt
 import requests
 from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).parent.parent.parent / ".env")
+from pipelines.config import get_bucket
 
 OPENPOWERLIFTING_URL = os.environ.get("OPENPOWERLIFTING_URL", "")
 
@@ -128,7 +125,7 @@ def get_competitions():
 
 def run_pipeline():
     """Run the OpenPowerlifting pipeline."""
-    bucket = os.environ.get("S3_BUCKET_NAME", "")
+    bucket = get_bucket()
 
     pipeline = dlt.pipeline(
         pipeline_name="openpowerlifting",
