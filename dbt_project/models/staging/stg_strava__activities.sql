@@ -1,11 +1,10 @@
-{{
-    config(
-        materialized='view'
-    )
-}}
+{{ config(materialized='view') }}
+
+-- Source: Strava activities from raw zone
+-- Path: s3://{bucket}/raw/strava/activities/*.parquet
 
 with source as (
-    select * from {{ source('strava', 'activities') }}
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/strava/activities/*.parquet', union_by_name=true)
 ),
 
 staged as (
@@ -49,19 +48,6 @@ staged as (
         cast(average_heartrate as decimal(5,1)) as avg_heartrate,
         cast(max_heartrate as integer) as max_heartrate,
 
-        -- Power (cycling/running power meters)
-        cast(average_watts as decimal(6,1)) as avg_watts,
-        cast(max_watts as integer) as max_watts,
-        cast(weighted_average_watts as decimal(6,1)) as normalized_power,
-        cast(kilojoules as decimal(8,1)) as kilojoules,
-
-        -- Cadence
-        cast(average_cadence as decimal(5,1)) as avg_cadence,
-
-        -- Effort & calories
-        cast(suffer_score as integer) as suffer_score,
-        cast(calories as decimal(8,1)) as calories,
-
         -- Flags
         cast(trainer as boolean) as is_trainer,
         cast(commute as boolean) as is_commute,
@@ -72,13 +58,6 @@ staged as (
         cast(heartrate_opt_out as boolean) as heartrate_opt_out,
         cast(display_hide_heartrate_option as boolean) as hide_heartrate,
 
-        -- Gear
-        gear_id,
-
-        -- Location
-        start_latlng,
-        end_latlng,
-
         -- Achievements
         cast(achievement_count as integer) as achievement_count,
         cast(kudos_count as integer) as kudos_count,
@@ -88,7 +67,7 @@ staged as (
         cast(pr_count as integer) as pr_count,
 
         -- Metadata
-        _extracted_at as extracted_at,
+        extracted_at,
         _load_timestamp as load_timestamp,
         _source_file as source_file
 
