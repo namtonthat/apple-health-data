@@ -3,7 +3,7 @@ name = "hevy-pipeline"
 version = "0.1.0"
 description = "Extract Hevy workout data to S3 and transform with dbt"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = "==3.13.4"
 dependencies = [
     "dlt[filesystem,parquet]==1.21.0",
     "s3fs==2026.1.0",

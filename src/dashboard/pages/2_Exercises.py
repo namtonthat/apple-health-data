@@ -36,9 +36,8 @@ def calculate_1rm(weight: float, reps: int) -> float | None:
     return round(weight * (1 + reps / 30), 1)
 
 
-@st.cache_resource
 def get_connection():
-    """Get DuckDB connection configured for S3 access."""
+    """Get fresh DuckDB connection configured for S3 access."""
     conn = duckdb.connect(":memory:")
     region = "ap-southeast-2"
     access_key = os.environ.get("AWS_ACCESS_KEY_ID", "")
@@ -315,7 +314,7 @@ if df_exercises.height > 0:
         column_order=["workout_date", "workout_name", "exercise_name", "set_number",
                       "weight_kg", "reps", "est_1rm", "volume_kg", "rpe", "set_type"],
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
 else:
     st.info("No workout data available for selected period")
@@ -404,7 +403,7 @@ if df_strava.height > 0:
                       "moving_time_minutes", "distance_km", "pace_formatted",
                       "elevation_gain_m", "avg_heartrate", "max_heartrate", "pr_count"],
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
 else:
     st.info("No Strava activities available for selected period. Add STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, and STRAVA_REFRESH_TOKEN to .env to enable.")
