@@ -279,13 +279,19 @@ if df_exercises.height > 0:
     st.divider()
 
     # Filters
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         workouts = ["All"] + sorted(df_exercises["workout_name"].drop_nulls().unique().to_list())
         selected_workout = st.selectbox("Filter by workout", workouts)
     with col2:
         exercises = ["All"] + sorted(df_exercises["exercise_name"].unique().to_list())
         selected_exercise = st.selectbox("Filter by exercise", exercises)
+    with col3:
+        all_set_types = sorted(df_exercises["set_type"].drop_nulls().unique().to_list())
+        default_types = [t for t in all_set_types if t.lower() != "warmup"]
+        selected_set_types = st.multiselect(
+            "Set types", all_set_types, default=default_types,
+        )
 
     # Apply filters
     display_df = df_with_1rm
@@ -293,6 +299,8 @@ if df_exercises.height > 0:
         display_df = display_df.filter(pl.col("workout_name") == selected_workout)
     if selected_exercise != "All":
         display_df = display_df.filter(pl.col("exercise_name") == selected_exercise)
+    if selected_set_types:
+        display_df = display_df.filter(pl.col("set_type").is_in(selected_set_types))
 
     # Create color mapping for workouts (font colors for seamless look)
     unique_workouts = display_df["workout_name"].drop_nulls().unique().to_list()
@@ -300,6 +308,11 @@ if df_exercises.height > 0:
         "#E63946", "#2A9D8F", "#E76F51", "#457B9D", "#8338EC",
         "#06D6A0", "#F72585", "#4361EE", "#FB8500", "#7209B7",
     ]
+
+    # Format workout_date as YYYY-MM-DD string to strip time
+    display_df = display_df.with_columns(
+        pl.col("workout_date").cast(pl.Date).dt.strftime("%Y-%m-%d")
+    )
 
     # Convert to pandas for display with styling
     display_pd = display_df.to_pandas()
@@ -318,7 +331,7 @@ if df_exercises.height > 0:
     st.dataframe(
         styled_df,
         column_config={
-            "workout_date": st.column_config.DateColumn("Date", width="small"),
+            "workout_date": st.column_config.TextColumn("Date", width="small"),
             "workout_name": st.column_config.TextColumn("Workout", width="medium"),
             "exercise_name": st.column_config.TextColumn("Exercise", width="medium"),
             "set_number": st.column_config.NumberColumn("Set", width="small"),
@@ -400,11 +413,12 @@ if df_strava.height > 0:
         secs = int((pace_decimal - mins) * 60)
         return f"{mins}:{secs:02d}"
 
-    display_strava = display_strava.with_columns(
+    display_strava = display_strava.with_columns([
+        pl.col("activity_date").cast(pl.Date),
         pl.col("avg_pace_min_per_km")
         .map_elements(format_pace, return_dtype=pl.Utf8)
-        .alias("pace_formatted")
-    )
+        .alias("pace_formatted"),
+    ])
 
     # Display table
     st.dataframe(
