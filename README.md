@@ -9,7 +9,7 @@
 [![Polars](https://img.shields.io/badge/Polars-1.30-CD792C)](https://pola.rs)
 [![Altair](https://img.shields.io/badge/Altair-5.5-1F77B4)](https://altair-viz.github.io)
 
-A personal health and fitness dashboard powered by Apple Health, Hevy, and OpenPowerlifting.
+A personal health and fitness dashboard powered by Apple Health, Hevy, Strava, and OpenPowerlifting.
 
 ## Screenshots
 
@@ -23,6 +23,7 @@ A personal health and fitness dashboard powered by Apple Health, Hevy, and OpenP
 - 🍽️ **Nutrition** - Macros and calories from any app that syncs to Apple Health
 - ⚖️ **Weight** - Daily trends with averages
 - 🏋️ **Workouts** - Exercise logs, volume, and estimated 1RM from Hevy
+- 🏃 **Cardio** - Runs, rides, and swims from Strava
 - 🏆 **Powerlifting PRs** - Competition history from OpenPowerlifting
 - 📅 **Calendar Export** - Subscribe to daily health summaries via ICS
 
@@ -33,6 +34,7 @@ git clone https://github.com/namtonthat/apple-health-data.git
 cd apple-health-data
 ./scripts/setup.sh      # Install dependencies & create .env
 # Edit .env with your credentials
+./scripts/strava-auth.sh  # Authorize Strava (optional)
 ./scripts/run-pipelines.sh
 uv run streamlit run src/dashboard/Home.py
 ```
@@ -44,7 +46,7 @@ uv run streamlit run src/dashboard/Home.py
 | Apple Health | Sleep, Activity, Vitals | [Health Auto Export](https://www.healthyapps.dev/) to S3 |
 | Nutrition App | Macros & Calories | Syncs to Apple Health |
 | Hevy | Workout logs | API |
-| Strava | Runs, Rides, Swims | API |
+| Strava | Runs, Rides, Swims | API ([create app](https://www.strava.com/settings/api)) |
 | OpenPowerlifting | Competition PRs | Web scrape |
 
 ## Calendar Subscription
@@ -61,4 +63,8 @@ Daily events show: `😴 7.5h sleep (1.2h deep) | 🍽️ 2000kcal (165P, 200C, 
 
 GitHub Actions runs every 2 days (`.github/workflows/refresh-data.yml`).
 
-Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`, `HEVY_AUTH_TOKEN`, `OPENPOWERLIFTING_URL`
+Required secrets:
+- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`
+- `HEVY_AUTH_TOKEN`
+- `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN`
+- `OPENPOWERLIFTING_URL`

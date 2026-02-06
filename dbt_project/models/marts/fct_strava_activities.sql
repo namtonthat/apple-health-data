@@ -41,18 +41,6 @@ final as (
         avg_heartrate,
         max_heartrate,
 
-        -- Power
-        avg_watts,
-        normalized_power,
-        kilojoules,
-
-        -- Cadence
-        avg_cadence,
-
-        -- Effort
-        suffer_score,
-        calories,
-
         -- Flags
         is_trainer,
         is_commute,

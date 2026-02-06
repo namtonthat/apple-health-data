@@ -122,8 +122,6 @@ def load_strava_activities(start_date: date, end_date: date) -> pl.DataFrame:
             avg_pace_min_per_km,
             avg_heartrate,
             max_heartrate,
-            calories,
-            suffer_score,
             pr_count
         FROM read_parquet('{s3_path}')
         WHERE activity_date BETWEEN ? AND ?
@@ -342,7 +340,7 @@ if df_strava.height > 0:
     }
 
     # Summary metrics
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         n_activities = df_strava.height
@@ -358,9 +356,6 @@ if df_strava.height > 0:
     with col4:
         total_elevation = df_strava["elevation_gain_m"].sum()
         st.metric("Elevation", f"{total_elevation:,.0f} m" if total_elevation else "0 m")
-    with col5:
-        total_calories = df_strava["calories"].sum()
-        st.metric("Calories", f"{total_calories:,.0f}" if total_calories else "0")
 
     # Filter by activity type
     activity_types = ["All"] + sorted(df_strava["activity_type"].drop_nulls().unique().to_list())
@@ -403,13 +398,11 @@ if df_strava.height > 0:
             "elevation_gain_m": st.column_config.NumberColumn("Elevation (m)", format="%.0f", width="small"),
             "avg_heartrate": st.column_config.NumberColumn("Avg HR", format="%.0f", width="small"),
             "max_heartrate": st.column_config.NumberColumn("Max HR", format="%.0f", width="small"),
-            "calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
-            "suffer_score": st.column_config.NumberColumn("Effort", width="small"),
             "pr_count": st.column_config.NumberColumn("PRs", width="small"),
         },
         column_order=["icon", "activity_date", "activity_name", "activity_type",
                       "moving_time_minutes", "distance_km", "pace_formatted",
-                      "elevation_gain_m", "avg_heartrate", "calories", "suffer_score", "pr_count"],
+                      "elevation_gain_m", "avg_heartrate", "max_heartrate", "pr_count"],
         hide_index=True,
         use_container_width=True,
     )
