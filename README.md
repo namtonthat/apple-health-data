@@ -9,65 +9,32 @@
 [![Polars](https://img.shields.io/badge/Polars-1.30-CD792C)](https://pola.rs)
 [![Altair](https://img.shields.io/badge/Altair-5.5-1F77B4)](https://altair-viz.github.io)
 
-A personal health and fitness dashboard that aggregates data from Apple Health, Hevy, and OpenPowerlifting into a unified Streamlit interface.
+A personal health and fitness dashboard powered by Apple Health, Hevy, and OpenPowerlifting.
 
 ## Screenshots
 
-### Home
-![Home](docs/screenshots/home.png)
-
-### Recovery & Health
-![Recovery & Health](docs/screenshots/recovery-health.png)
-
-### Exercises
-![Exercises](docs/screenshots/exercises.png)
+| Home | Recovery & Health | Exercises |
+|------|-------------------|-----------|
+| ![Home](docs/screenshots/home.png) | ![Recovery](docs/screenshots/recovery-health.png) | ![Exercises](docs/screenshots/exercises.png) |
 
 ## Features
 
-- **Sleep Tracking** - Duration and stages (Deep, REM, Light) with goal tracking
-- **Nutrition** - Macros (Protein, Carbs, Fat) and calories from any app that syncs to Apple Health
-- **Weight Trends** - Daily weight with average line
-- **Workouts** - Exercise logs, volume, and estimated 1RM
-- **Powerlifting PRs** - Competition history from OpenPowerlifting with comparison to current training
+- 😴 **Sleep** - Duration and stages with goal tracking
+- 🍽️ **Nutrition** - Macros and calories from any app that syncs to Apple Health
+- ⚖️ **Weight** - Daily trends with averages
+- 🏋️ **Workouts** - Exercise logs, volume, and estimated 1RM from Hevy
+- 🏆 **Powerlifting PRs** - Competition history from OpenPowerlifting
+- 📅 **Calendar Export** - Subscribe to daily health summaries via ICS
 
-## Architecture
+## Quick Start
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Apple Health   │     │  Nutrition App  │     │      Hevy       │
-│ (Auto Export)   │     │  (via Apple)    │     │      (API)      │
-└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                                 ▼
-                    ┌────────────────────────┐
-                    │    dlt Pipelines       │
-                    │  (Extract & Load)      │
-                    └───────────┬────────────┘
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │      S3 Bucket         │
-                    │  (landing/ & raw/)     │
-                    └───────────┬────────────┘
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │    dbt Models          │
-                    │ (staging/intermediate/ │
-                    │       marts/)          │
-                    └───────────┬────────────┘
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │   S3 (transformed/)    │
-                    └───────────┬────────────┘
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │  Streamlit Dashboard   │
-                    └────────────────────────┘
+```bash
+git clone https://github.com/namtonthat/apple-health-data.git
+cd apple-health-data
+./scripts/setup.sh      # Install dependencies & create .env
+# Edit .env with your credentials
+./scripts/run-pipelines.sh
+uv run streamlit run src/dashboard/Home.py
 ```
 
 ## Data Sources
@@ -75,104 +42,23 @@ A personal health and fitness dashboard that aggregates data from Apple Health, 
 | Source | Data | Method |
 |--------|------|--------|
 | Apple Health | Sleep, Activity, Vitals | [Health Auto Export](https://www.healthyapps.dev/) to S3 |
-| Nutrition App* | Nutrition & Macros | Syncs to Apple Health |
+| Nutrition App | Macros & Calories | Syncs to Apple Health |
 | Hevy | Workout logs | API |
+| Strava | Runs, Rides, Swims | API |
 | OpenPowerlifting | Competition PRs | Web scrape |
 
-*Any app that logs nutrition data and syncs to Apple Health (e.g., MacroFactor, MyFitnessPal, Cronometer, Lose It!)
+## Calendar Subscription
 
-## Setup
-
-### Prerequisites
-
-- Python 3.11+
-- [uv](https://github.com/astral-sh/uv) package manager
-- AWS account with S3 bucket
-
-### Installation
-
-```bash
-git clone https://github.com/namtonthat/apple-health-data.git
-cd apple-health-data
-uv sync
-cp .env.example .env
-```
-
-### Configuration
-
-Edit `.env` with your credentials:
-
-```bash
-# AWS
-AWS_ACCESS_KEY_ID=your_key
-AWS_SECRET_ACCESS_KEY=your_secret
-S3_BUCKET_NAME=your_bucket
-
-# Hevy API
-HEVY_AUTH_TOKEN=your_token
-
-# OpenPowerlifting
-OPENPOWERLIFTING_URL=https://www.openpowerlifting.org/u/yourname
-
-# User
-USER_NAME="Your Name"
-
-# Goals
-GOAL_SLEEP_HOURS=7.0
-GOAL_PROTEIN_G=170.0
-GOAL_CARBS_G=300.0
-GOAL_FAT_G=60.0
-```
-
-## Usage
-
-### Run Pipelines
-
-```bash
-# Extract data
-uv run python -m src.pipelines.hevy
-uv run python -m src.pipelines.health
-uv run python -m src.pipelines.openpowerlifting
-
-# Transform with dbt
-cd dbt_project && uv run dbt run
-```
-
-### Run Dashboard
-
-```bash
-uv run streamlit run src/dashboard/Home.py
-```
-
-## Automated Refresh
-
-A GitHub Actions workflow runs every second day at midnight Melbourne time:
-
-`.github/workflows/refresh-data.yml`
-
-Required GitHub secrets:
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `S3_BUCKET_NAME`
-- `HEVY_AUTH_TOKEN`
-- `OPENPOWERLIFTING_URL`
-
-## Project Structure
+The pipeline exports an ICS file you can subscribe to in any calendar app:
 
 ```
-apple-health-data/
-├── .github/workflows/     # GitHub Actions
-├── dbt_project/           # dbt models
-│   └── models/
-│       ├── staging/       # Source cleaning
-│       ├── intermediate/  # Business logic
-│       └── marts/         # Final tables
-├── src/
-│   ├── dashboard/         # Streamlit app
-│   │   ├── Home.py
-│   │   └── pages/
-│   └── pipelines/         # dlt extract pipelines
-├── docs/screenshots/      # Dashboard screenshots
-└── pyproject.toml
+https://{bucket}.s3.{region}.amazonaws.com/exports/health_metrics.ics
 ```
 
+Daily events show: `😴 7.5h sleep (1.2h deep) | 🍽️ 2000kcal (165P, 200C, 60F) | ⚖️ 75.5kg`
+
+## Automation
+
+GitHub Actions runs every 2 days (`.github/workflows/refresh-data.yml`).
+
+Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET_NAME`, `HEVY_AUTH_TOKEN`, `OPENPOWERLIFTING_URL`

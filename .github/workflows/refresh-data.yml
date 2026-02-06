@@ -12,6 +12,9 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   HEVY_AUTH_TOKEN: ${{ secrets.HEVY_AUTH_TOKEN }}
+  STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+  STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+  STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
   OPENPOWERLIFTING_URL: ${{ secrets.OPENPOWERLIFTING_URL }}
 
 jobs:
@@ -34,16 +37,19 @@ jobs:
         run: uv sync
 
       - name: Run Hevy pipeline
-        run: uv run python -m src.pipelines.hevy
+        run: uv run python src/pipelines/pipelines/hevy_to_s3.py
         continue-on-error: true
 
-      - name: Run Health pipeline
-        run: uv run python -m src.pipelines.health
+      - name: Run Strava pipeline
+        run: uv run python src/pipelines/pipelines/strava_to_s3.py
         continue-on-error: true
 
       - name: Run OpenPowerlifting pipeline
-        run: uv run python -m src.pipelines.openpowerlifting
+        run: uv run python src/pipelines/openpowerlifting.py
         continue-on-error: true
+
+      - name: Run cleanse pipeline
+        run: uv run python src/pipelines/pipelines/cleanse_to_raw.py
 
       - name: Run dbt transformations
         run: |

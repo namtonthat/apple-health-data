@@ -105,6 +105,38 @@ def load_personal_bests() -> dict:
     return {}
 
 
+def load_strava_activities(start_date: date, end_date: date) -> pl.DataFrame:
+    """Load Strava activities for the date range."""
+    conn = get_connection()
+    s3_path = get_s3_path("fct_strava_activities")
+    query = f"""
+        SELECT
+            activity_date,
+            activity_name,
+            activity_type,
+            sport_type,
+            moving_time_minutes,
+            distance_km,
+            elevation_gain_m,
+            avg_speed_kmh,
+            avg_pace_min_per_km,
+            avg_heartrate,
+            max_heartrate,
+            calories,
+            suffer_score,
+            pr_count
+        FROM read_parquet('{s3_path}')
+        WHERE activity_date BETWEEN ? AND ?
+        ORDER BY activity_date DESC
+    """
+    try:
+        return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
+    except Exception as e:
+        if "No files found" in str(e):
+            return pl.DataFrame()
+        raise
+
+
 # Sidebar - Date Filter
 st.sidebar.title("Filters")
 
@@ -133,6 +165,7 @@ st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
 # Load data
 df_exercises = load_workout_sets(start_date, end_date)
 competition_prs = load_personal_bests()
+df_strava = load_strava_activities(start_date, end_date)
 
 # =============================================================================
 # Exercises Section
@@ -288,3 +321,97 @@ if df_exercises.height > 0:
     )
 else:
     st.info("No workout data available for selected period")
+
+# =============================================================================
+# Strava Activities Section
+# =============================================================================
+st.divider()
+st.header("🏃 Strava Activities")
+
+if df_strava.height > 0:
+    # Activity type icons
+    ACTIVITY_ICONS = {
+        "Run": "🏃",
+        "Ride": "🚴",
+        "Swim": "🏊",
+        "Walk": "🚶",
+        "Hike": "🥾",
+        "Workout": "💪",
+        "WeightTraining": "🏋️",
+        "Yoga": "🧘",
+    }
+
+    # Summary metrics
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col1:
+        n_activities = df_strava.height
+        st.metric("Activities", n_activities)
+    with col2:
+        total_distance = df_strava["distance_km"].sum()
+        st.metric("Distance", f"{total_distance:.1f} km" if total_distance else "0 km")
+    with col3:
+        total_time = df_strava["moving_time_minutes"].sum()
+        hours = int(total_time // 60) if total_time else 0
+        mins = int(total_time % 60) if total_time else 0
+        st.metric("Time", f"{hours}h {mins}m")
+    with col4:
+        total_elevation = df_strava["elevation_gain_m"].sum()
+        st.metric("Elevation", f"{total_elevation:,.0f} m" if total_elevation else "0 m")
+    with col5:
+        total_calories = df_strava["calories"].sum()
+        st.metric("Calories", f"{total_calories:,.0f}" if total_calories else "0")
+
+    # Filter by activity type
+    activity_types = ["All"] + sorted(df_strava["activity_type"].drop_nulls().unique().to_list())
+    selected_type = st.selectbox("Filter by activity type", activity_types)
+
+    display_strava = df_strava
+    if selected_type != "All":
+        display_strava = display_strava.filter(pl.col("activity_type") == selected_type)
+
+    # Add icon column
+    display_strava = display_strava.with_columns(
+        pl.col("activity_type").replace(ACTIVITY_ICONS, default="🏅").alias("icon")
+    )
+
+    # Format pace as MM:SS
+    def format_pace(pace_decimal):
+        if pace_decimal is None or pace_decimal <= 0:
+            return "-"
+        mins = int(pace_decimal)
+        secs = int((pace_decimal - mins) * 60)
+        return f"{mins}:{secs:02d}"
+
+    display_strava = display_strava.with_columns(
+        pl.col("avg_pace_min_per_km")
+        .map_elements(format_pace, return_dtype=pl.Utf8)
+        .alias("pace_formatted")
+    )
+
+    # Display table
+    st.dataframe(
+        display_strava.to_pandas(),
+        column_config={
+            "icon": st.column_config.TextColumn("", width="small"),
+            "activity_date": st.column_config.DateColumn("Date", width="small"),
+            "activity_name": st.column_config.TextColumn("Activity", width="medium"),
+            "activity_type": st.column_config.TextColumn("Type", width="small"),
+            "moving_time_minutes": st.column_config.NumberColumn("Time (min)", format="%.0f", width="small"),
+            "distance_km": st.column_config.NumberColumn("Distance (km)", format="%.2f", width="small"),
+            "pace_formatted": st.column_config.TextColumn("Pace (/km)", width="small"),
+            "elevation_gain_m": st.column_config.NumberColumn("Elevation (m)", format="%.0f", width="small"),
+            "avg_heartrate": st.column_config.NumberColumn("Avg HR", format="%.0f", width="small"),
+            "max_heartrate": st.column_config.NumberColumn("Max HR", format="%.0f", width="small"),
+            "calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
+            "suffer_score": st.column_config.NumberColumn("Effort", width="small"),
+            "pr_count": st.column_config.NumberColumn("PRs", width="small"),
+        },
+        column_order=["icon", "activity_date", "activity_name", "activity_type",
+                      "moving_time_minutes", "distance_km", "pace_formatted",
+                      "elevation_gain_m", "avg_heartrate", "calories", "suffer_score", "pr_count"],
+        hide_index=True,
+        use_container_width=True,
+    )
+else:
+    st.info("No Strava activities available for selected period. Add STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, and STRAVA_REFRESH_TOKEN to .env to enable.")
