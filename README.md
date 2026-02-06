@@ -103,7 +103,13 @@ The pipeline exports an ICS file you can subscribe to in any calendar app:
 https://{bucket}.s3.{region}.amazonaws.com/exports/health_metrics.ics
 ```
 
-Daily events show: `😴 7.5h sleep (1.2h deep) | 🍽️ 2000kcal (165P, 200C, 60F) | ⚖️ 75.5kg`
+Daily events show:
+
+```
+😴 7.5h sleep (1.2h deep, 1.8h REM)
+🍽️ 2000kcal (165P, 200C, 60F)
+⚖️ 75.5kg · 🚶 8,432 steps
+```
 
 ## Deployment
 
