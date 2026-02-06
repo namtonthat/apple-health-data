@@ -168,18 +168,19 @@ preset = st.sidebar.radio(
 )
 
 today = date.today()
+yesterday = today - timedelta(days=1)
 if preset == "Last 7 days":
     start_date = today - timedelta(days=7)
-    end_date = today
+    end_date = yesterday
 elif preset == "Last 30 days":
     start_date = today - timedelta(days=30)
-    end_date = today
+    end_date = yesterday
 elif preset == "This month":
     start_date = today.replace(day=1)
-    end_date = today
+    end_date = yesterday
 else:
     start_date = st.sidebar.date_input("Start date", today - timedelta(days=7))
-    end_date = st.sidebar.date_input("End date", today)
+    end_date = st.sidebar.date_input("End date", yesterday)
 
 st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
 
