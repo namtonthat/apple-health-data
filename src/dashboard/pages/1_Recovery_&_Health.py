@@ -45,6 +45,9 @@ AWS_REGION = CONFIG.get("aws_region", "ap-southeast-2")
 goals_config = CONFIG.get("goals", {})
 GOALS = {
     "sleep_hours": goals_config.get("sleep_hours", 7.0),
+    "sleep_deep_hours": goals_config.get("sleep_deep_hours", 1.5),
+    "sleep_rem_hours": goals_config.get("sleep_rem_hours", 1.5),
+    "sleep_light_hours": goals_config.get("sleep_light_hours", 3.5),
     "protein_g": goals_config.get("protein_g", 170.0),
     "carbs_g": goals_config.get("carbs_g", 300.0),
     "fat_g": goals_config.get("fat_g", 60.0),
@@ -156,15 +159,19 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
     sleep_data = df_daily.filter(pl.col("sleep_hours").is_not_null())
 
     # Metric cards with goals
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         metric_with_goal("Sleep", sleep_data["sleep_hours"].mean(), GOALS["sleep_hours"], "h")
     with col2:
-        metric_with_goal("Deep", sleep_data["sleep_deep_hours"].mean(), unit="h")
+        metric_with_goal("Deep", sleep_data["sleep_deep_hours"].mean(), GOALS["sleep_deep_hours"], "h")
     with col3:
-        metric_with_goal("REM", sleep_data["sleep_rem_hours"].mean(), unit="h")
+        metric_with_goal("REM", sleep_data["sleep_rem_hours"].mean(), GOALS["sleep_rem_hours"], "h")
     with col4:
-        metric_with_goal("Light", sleep_data["sleep_light_hours"].mean(), unit="h")
+        metric_with_goal("Light", sleep_data["sleep_light_hours"].mean(), GOALS["sleep_light_hours"], "h")
+    with col5:
+        days_hit = sleep_data.filter(pl.col("sleep_hours") >= GOALS["sleep_hours"]).height
+        total_days = sleep_data.height
+        st.metric("Days at Goal", f"{days_hit} / {total_days}")
 
     # Sleep bar chart by date with labels
     if sleep_data.height > 0:
