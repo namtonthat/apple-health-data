@@ -115,7 +115,8 @@ def load_daily_summary(conn: duckdb.DuckDBPyConnection) -> list[dict]:
             fat_g,
             logged_calories,
             calculated_calories,
-            weight_kg
+            weight_kg,
+            steps
         FROM read_parquet('{s3_path}')
         ORDER BY date DESC
     """
@@ -123,7 +124,7 @@ def load_daily_summary(conn: duckdb.DuckDBPyConnection) -> list[dict]:
     result = conn.execute(query).fetchall()
     columns = ["date", "sleep_hours", "sleep_deep_hours", "sleep_rem_hours",
                "sleep_light_hours", "protein_g", "carbs_g", "fat_g",
-               "logged_calories", "calculated_calories", "weight_kg"]
+               "logged_calories", "calculated_calories", "weight_kg", "steps"]
 
     return [dict(zip(columns, row)) for row in result]
 
@@ -168,6 +169,26 @@ def format_weight_summary(row: dict) -> str | None:
     return f"⚖️ {weight:.1f}kg"
 
 
+def format_steps_summary(row: dict) -> str | None:
+    """Format step count for calendar event."""
+    steps = row.get("steps")
+    if steps is None:
+        return None
+    return f"🚶 {int(steps):,} steps"
+
+
+def format_title(row: dict) -> str | None:
+    """Format compact calendar title: sleep, weight, protein."""
+    parts = []
+    if row.get("sleep_hours") is not None:
+        parts.append(f"😴 {row['sleep_hours']:.1f}h")
+    if row.get("weight_kg") is not None:
+        parts.append(f"⚖️ {row['weight_kg']:.1f}kg")
+    if row.get("protein_g") is not None:
+        parts.append(f"🍗 {int(row['protein_g'])}P")
+    return " · ".join(parts) if parts else None
+
+
 def run_pipeline() -> str:
     """
     Generate ICS calendar file with health metrics (full export).
@@ -197,15 +218,12 @@ def run_pipeline() -> str:
 
         # Combine all metrics into a single daily event
         summaries = []
-        description_parts = []
 
         # Sleep
         sleep_summary = format_sleep_summary(row)
         if sleep_summary:
             summaries.append(sleep_summary)
             sleep_count += 1
-            if row.get("sleep_light_hours"):
-                description_parts.append(f"Light sleep: {row['sleep_light_hours']:.1f}h")
 
         # Nutrition
         nutrition_summary = format_nutrition_summary(row)
@@ -213,26 +231,33 @@ def run_pipeline() -> str:
             summaries.append(nutrition_summary)
             nutrition_count += 1
 
-        # Weight
+        # Weight + Steps (combined on one line)
+        body_parts = []
         weight_summary = format_weight_summary(row)
         if weight_summary:
-            summaries.append(weight_summary)
+            body_parts.append(weight_summary)
             weight_count += 1
+        steps_summary = format_steps_summary(row)
+        if steps_summary:
+            body_parts.append(steps_summary)
+        if body_parts:
+            summaries.append(" · ".join(body_parts))
 
         # Create event if we have any data
         if summaries:
+            title = format_title(row) or summaries[0]
             event = create_ics_event(
                 uid=generate_uid(event_date, "daily-health"),
                 dtstart=event_date,
-                summary=" | ".join(summaries),
-                description="\n".join(description_parts) if description_parts else "",
+                summary=title,
+                description="\n".join(summaries),
             )
             events.append(event)
 
     print(f"Generated {len(events)} calendar events")
-    print(f"  - Sleep entries: {sleep_count}")
-    print(f"  - Nutrition entries: {nutrition_count}")
-    print(f"  - Weight entries: {weight_count}")
+    print(f"  - Sleep: {sleep_count}")
+    print(f"  - Nutrition: {nutrition_count}")
+    print(f"  - Weight: {weight_count}")
 
     # Create calendar
     ics_content = create_ics_calendar(events, "Health Metrics")
@@ -274,9 +299,11 @@ Subscribe to this calendar in any calendar app:
    https://your-domain.com/exports/health_metrics.ics
 
 Example event format:
-┌────────────────────────────────────────────────────────────┐
-│ 😴 7.5h sleep (1.2h deep, 1.8h REM) | 🍽️ 2000kcal (165P, 200C, 60F) | ⚖️ 75.5kg │
-└────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────┐
+│ 😴 7.5h sleep (1.2h deep, 1.8h REM)   │
+│ 🍽️ 2000kcal (165P, 200C, 60F)         │
+│ ⚖️ 75.5kg · 🚶 8,432 steps             │
+└────────────────────────────────────────┘
 """)
 
     return full_path
