@@ -24,10 +24,10 @@ load_dotenv(Path(__file__).parent.parent.parent / ".env")
 USER_NAME = os.environ.get("USER_NAME", "there")
 
 # Main content - Home page
-st.title(f"👋 Welcome, {USER_NAME}!")
+st.title(f"👋 Welcome to {USER_NAME}'s Health & Fitness Dashboard")
 
 st.markdown("""
-Your personal health and fitness dashboard, powered by Apple Health, Hevy, and Strava.
+A personal dashboard powered by Apple Health, Hevy, and Strava.
 """)
 
 st.divider()
