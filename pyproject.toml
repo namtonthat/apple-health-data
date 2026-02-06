@@ -50,6 +50,7 @@ sleep_hours = 7.0
 protein_g = 170.0
 carbs_g = 300.0
 fat_g = 60.0
+steps = 10000
 
 [dependency-groups]
 dev = [
