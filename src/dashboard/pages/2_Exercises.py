@@ -1,6 +1,7 @@
 """Exercises page."""
 
 import os
+import tomllib
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -10,13 +11,37 @@ import streamlit as st
 
 st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="wide")
 
-# Load environment
+# Load secrets from .env for local development
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
 
-# S3 configuration
-S3_BUCKET = os.environ.get("S3_BUCKET_NAME", "")
-S3_TRANSFORMED_PREFIX = "transformed"
+
+def get_secret(key: str, default: str = "") -> str:
+    """Get secret from st.secrets (Streamlit Cloud) or env vars (local)."""
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError):
+        return os.environ.get(key, default)
+
+
+def load_config() -> dict:
+    """Load non-sensitive config from pyproject.toml."""
+    pyproject_path = Path(__file__).parent.parent.parent.parent / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        pyproject = tomllib.load(f)
+    return pyproject.get("tool", {}).get("dashboard", {})
+
+
+# Load config
+CONFIG = load_config()
+
+# S3 configuration (from pyproject.toml)
+S3_BUCKET = CONFIG.get("s3_bucket_name", "")
+S3_TRANSFORMED_PREFIX = CONFIG.get("s3_transformed_prefix", "transformed")
+AWS_REGION = CONFIG.get("aws_region", "ap-southeast-2")
+
+# User settings
+OPENPOWERLIFTING_URL = CONFIG.get("openpowerlifting_url", "")
 
 # Big 3 exercises - exact names for 1RM summary display
 BIG_3_EXERCISES = {
@@ -39,10 +64,9 @@ def calculate_1rm(weight: float, reps: int) -> float | None:
 def get_connection():
     """Get fresh DuckDB connection configured for S3 access."""
     conn = duckdb.connect(":memory:")
-    region = "ap-southeast-2"
-    access_key = os.environ.get("AWS_ACCESS_KEY_ID", "")
-    secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
-    conn.execute(f"SET s3_region = '{region}'")
+    access_key = get_secret("AWS_ACCESS_KEY_ID")
+    secret_key = get_secret("AWS_SECRET_ACCESS_KEY")
+    conn.execute(f"SET s3_region = '{AWS_REGION}'")
     conn.execute(f"SET s3_access_key_id = '{access_key}'")
     conn.execute(f"SET s3_secret_access_key = '{secret_key}'")
     return conn
@@ -247,9 +271,8 @@ if df_exercises.height > 0:
             months = (days_since % 365) // 30
             time_str = f"{years}y {months}m" if months else f"{years} year{'s' if years > 1 else ''}"
 
-        opl_url = os.environ.get("OPENPOWERLIFTING_URL", "")
-        if opl_url:
-            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')}) · [OpenPowerlifting Profile]({opl_url})")
+        if OPENPOWERLIFTING_URL:
+            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')}) · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})")
         else:
             st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')})")
 
