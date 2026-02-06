@@ -61,7 +61,6 @@ final as (
         round(a.distance_km, 2) as distance_km,
         round(a.active_calories, 0) as active_calories,
         round(a.basal_calories, 0) as basal_calories,
-        round(coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0), 0) as total_calories,
         a.exercise_minutes,
         a.stand_hours,
         a.daylight_minutes,
@@ -71,8 +70,15 @@ final as (
         round(n.carbs_g, 0) as carbs_g,
         round(n.fat_g, 0) as fat_g,
         round(n.fiber_g, 0) as fiber_g,
-        round(n.dietary_calories, 0) as dietary_calories,
         round(n.water_ml, 0) as water_ml,
+
+        -- Calories: calculated (Apple Watch) vs logged (MacroFactor)
+        round(coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0), 0) as calculated_calories,
+        round(n.dietary_calories, 0) as logged_calories,
+        round(greatest(
+            coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0),
+            coalesce(n.dietary_calories, 0)
+        ), 0) as total_calories,
 
         -- Workout summary
         coalesce(w.workouts, 0) as workouts,
