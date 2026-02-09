@@ -167,7 +167,7 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
         total_days = sleep_data.height
         st.metric("Days at Goal", f"{days_hit} / {total_days}")
 
-    # Sleep bar chart by date with labels
+    # Sleep charts — stages (grouped) and total side by side
     if sleep_data.height > 0:
         sleep_chart_data = (
             sleep_data
@@ -176,39 +176,59 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
             .to_pandas()
         )
 
-        # Melt for stacked bar chart
-        sleep_melted = sleep_chart_data.melt(
-            id_vars=["Date", "sleep_hours"],
-            value_vars=["sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"],
-            var_name="Stage",
-            value_name="Hours"
-        )
-        sleep_melted["Stage"] = sleep_melted["Stage"].map({
-            "sleep_deep_hours": "Deep",
-            "sleep_rem_hours": "REM",
-            "sleep_light_hours": "Light"
-        })
+        chart_left, chart_right = st.columns(2)
 
-        # Stacked bar chart
-        bars = alt.Chart(sleep_melted).mark_bar().encode(
-            x=alt.X("Date:N", sort=None, title="Date"),
-            y=alt.Y("Hours:Q", title="Hours"),
-            color=alt.Color("Stage:N", scale=alt.Scale(
-                domain=["Deep", "REM", "Light"],
-                range=["#1f77b4", "#9467bd", "#ff7f0e"]
-            )),
-            order=alt.Order("Stage:N", sort="descending")
-        )
+        with chart_left:
+            st.subheader("Sleep Stages")
+            # Melt for grouped bar chart
+            sleep_melted = sleep_chart_data.melt(
+                id_vars=["Date"],
+                value_vars=["sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours"],
+                var_name="Stage",
+                value_name="Hours",
+            )
+            sleep_melted["Stage"] = sleep_melted["Stage"].map({
+                "sleep_deep_hours": "Deep",
+                "sleep_rem_hours": "REM",
+                "sleep_light_hours": "Light",
+            })
 
-        # Total label on top of each bar
-        totals = sleep_chart_data[["Date", "sleep_hours"]].drop_duplicates()
-        text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
-            x=alt.X("Date:N", sort=None),
-            y=alt.Y("sleep_hours:Q"),
-            text=alt.Text("sleep_hours:Q", format=".1f")
-        )
+            # Grouped (side-by-side) bar chart
+            bars = alt.Chart(sleep_melted).mark_bar().encode(
+                x=alt.X("Date:N", sort=None, title="Date"),
+                y=alt.Y("Hours:Q", title="Hours"),
+                color=alt.Color("Stage:N", scale=alt.Scale(
+                    domain=["Deep", "REM", "Light"],
+                    range=["#1f77b4", "#9467bd", "#ff7f0e"],
+                )),
+                xOffset="Stage:N",
+            )
 
-        st.altair_chart(bars + text, width="stretch")
+            st.altair_chart(bars, use_container_width=True)
+
+        with chart_right:
+            st.subheader("Total Sleep")
+            # Bar chart with goal line
+            total_bars = alt.Chart(sleep_chart_data).mark_bar(color="#636EFA").encode(
+                x=alt.X("Date:N", sort=None, title="Date"),
+                y=alt.Y("sleep_hours:Q", title="Hours"),
+            )
+
+            # Goal line
+            goal_line = alt.Chart(sleep_chart_data).mark_rule(
+                color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2,
+            ).encode(y=alt.datum(GOALS["sleep_hours"]))
+
+            # Labels
+            text = alt.Chart(sleep_chart_data).mark_text(
+                dy=-10, fontSize=12, fontWeight="bold",
+            ).encode(
+                x=alt.X("Date:N", sort=None),
+                y=alt.Y("sleep_hours:Q"),
+                text=alt.Text("sleep_hours:Q", format=".1f"),
+            )
+
+            st.altair_chart(total_bars + goal_line + text, use_container_width=True)
 else:
     st.info("No sleep data available for selected period")
 

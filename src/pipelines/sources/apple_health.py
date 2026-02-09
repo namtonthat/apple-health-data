@@ -120,7 +120,8 @@ def health_metrics_resource(
                     continue
 
                 metric_date = _parse_health_date(raw_date)
-                value = point.get("qty")
+                raw_value = point.get("qty")
+                value = float(raw_value) if raw_value is not None else None
                 source = point.get("source", "Unknown")
 
                 # Handle sleep data which has additional fields

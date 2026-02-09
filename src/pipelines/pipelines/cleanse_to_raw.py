@@ -142,6 +142,15 @@ def cleanse_health_monthly(
     new_names = [to_snake_case(col) for col in combined.column_names]
     combined = combined.rename_columns(new_names)
 
+    # Merge dlt variant column (value_v_double) into value, then drop it
+    if "value_v_double" in combined.column_names:
+        value_col = combined.column("value")
+        variant_col = combined.column("value_v_double")
+        merged = pc.if_else(pc.is_null(value_col), variant_col, pc.cast(value_col, pa.float64()))
+        col_idx = combined.schema.get_field_index("value")
+        combined = combined.set_column(col_idx, "value", merged)
+        combined = combined.drop("value_v_double")
+
     # Extract month (YYYY-MM) from metric_date column
     metric_dates = combined.column("metric_date").to_pylist()
     months = [d[:7] if d and len(d) >= 7 else "unknown" for d in metric_dates]
