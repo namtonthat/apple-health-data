@@ -32,9 +32,17 @@ staged as (
         description,
 
         -- dlt metadata
-        _dlt_load_id as load_id
+        _dlt_load_id as load_id,
+
+        -- Deduplicate: dlt appends full dumps each extraction,
+        -- keep one record per Hevy workout (most recently updated)
+        row_number() over (
+            partition by id
+            order by updated_at desc, _dlt_load_id desc
+        ) as row_num
 
     from source
 )
 
 select * from staged
+where row_num = 1

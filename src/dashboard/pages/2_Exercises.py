@@ -1,6 +1,6 @@
 """Exercises page."""
 
-from datetime import date, datetime
+from datetime import datetime
 
 import polars as pl
 import streamlit as st
@@ -8,7 +8,7 @@ import streamlit as st
 st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="wide")
 
 from dashboard.components import date_filter_sidebar, vertical_divider
-from dashboard.config import OPENPOWERLIFTING_URL
+from dashboard.config import OPENPOWERLIFTING_URL, today_local
 from dashboard.data import get_connection, get_s3_path, load_parquet
 
 # Big 3 exercises - exact names for 1RM summary display
@@ -151,7 +151,7 @@ if df_exercises.height > 0:
             last_comp_date = datetime.strptime(last_comp[:10], "%Y-%m-%d").date()
         else:
             last_comp_date = last_comp
-        days_since = (date.today() - last_comp_date).days
+        days_since = (today_local() - last_comp_date).days
         if days_since < 30:
             time_str = f"{days_since} days"
         elif days_since < 365:

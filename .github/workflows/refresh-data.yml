@@ -52,15 +52,11 @@ jobs:
 
       - name: Ingest sources
         run: |
-          SOURCES=""
+          SOURCES="apple-health"
           [ -n "$HEVY_API_KEY" ] && SOURCES="$SOURCES hevy"
           [ -n "$STRAVA_CLIENT_ID" ] && SOURCES="$SOURCES strava"
           [ -n "$OPENPOWERLIFTING_URL" ] && SOURCES="$SOURCES openpowerlifting"
-          if [ -n "$SOURCES" ]; then
-            uv run python run.py ingest $SOURCES
-          else
-            echo "No ingest sources configured, skipping"
-          fi
+          uv run python run.py ingest $SOURCES
         continue-on-error: true
 
       - name: Cleanse

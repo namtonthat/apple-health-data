@@ -6,6 +6,8 @@ from datetime import date, timedelta
 
 import streamlit as st
 
+from dashboard.config import today_local
+
 
 def metric_with_goal(
     label: str,
@@ -71,7 +73,7 @@ def date_filter_sidebar(
 
     preset = st.sidebar.radio("Date Range", presets, index=0)
 
-    today = date.today()
+    today = today_local()
     yesterday = today - timedelta(days=1)
 
     preset_days = {

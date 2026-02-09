@@ -1,7 +1,9 @@
 """Shared dashboard configuration loaded from pyproject.toml."""
 import os
 import tomllib
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
@@ -43,6 +45,14 @@ try:
     LAST_UPDATED = _last_updated_path.read_text().strip()
 except FileNotFoundError:
     LAST_UPDATED = "Unknown"
+
+
+TIMEZONE = ZoneInfo(CONFIG.get("timezone", "Australia/Melbourne"))
+
+
+def today_local() -> date:
+    """Return today's date in the configured timezone."""
+    return datetime.now(TIMEZONE).date()
 
 
 def get_secret(key: str, default: str = "") -> str:

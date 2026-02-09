@@ -1,6 +1,6 @@
 """Recovery & Health page."""
 
-from datetime import date, timedelta
+from datetime import timedelta
 
 import altair as alt
 import polars as pl
@@ -9,14 +9,14 @@ import streamlit as st
 st.set_page_config(page_title="😴 Recovery & Health", page_icon="😴", layout="wide")
 
 from dashboard.components import date_filter_sidebar, metric_with_goal
-from dashboard.config import GOALS
+from dashboard.config import GOALS, today_local
 from dashboard.data import load_parquet
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
 def load_daily_summary() -> pl.DataFrame:
-    """Load full daily summary table (cached across reruns)."""
-    return load_parquet("fct_daily_summary")
+    """Load recent daily summary table (last 90 days, cached across reruns)."""
+    return load_parquet("fct_daily_summary_recent")
 
 
 # Sidebar - Date Filter
@@ -231,7 +231,7 @@ if has_macros or has_weight:
         index=0, format_func=lambda d: f"Last {d} days",
         key="macros_weight_period",
     )
-    section_cutoff = date.today() - timedelta(days=section_days)
+    section_cutoff = today_local() - timedelta(days=section_days)
     section_data = df_all.filter(pl.col("date") >= pl.lit(section_cutoff)) if df_all.height > 0 else df_daily
     macro_data = section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()
 
@@ -360,7 +360,7 @@ if has_macros or has_weight:
         # Only show nutrition data when macros are logged (not Apple Watch calories)
         if has_macros:
             nutrition_cols = ["date", "protein_g", "carbs_g", "fat_g", "logged_calories"]
-            table_data = df_daily.filter(pl.col("protein_g").is_not_null())
+            table_data = section_data.filter(pl.col("protein_g").is_not_null())
 
             if table_data.height > 0:
                 display_table = (
@@ -390,7 +390,7 @@ if has_macros or has_weight:
         st.markdown("**Daily Weight**")
         if has_weight:
             weight_table = (
-                df_daily
+                section_data
                 .filter(pl.col("weight_kg").is_not_null())
                 .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
                 .select(["date", "weight_kg"])
