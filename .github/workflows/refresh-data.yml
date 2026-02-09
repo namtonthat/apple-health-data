@@ -50,31 +50,27 @@ jobs:
           echo "  AWS_DEFAULT_REGION=$AWS_REGION"
           echo "  OPENPOWERLIFTING_URL=$OPL_URL"
 
-      - name: Run Hevy pipeline
-        if: env.HEVY_API_KEY != ''
-        run: uv run python src/pipelines/pipelines/hevy_to_s3.py
-        continue-on-error: true
-
-      - name: Run Strava pipeline
-        if: env.STRAVA_CLIENT_ID != ''
-        run: uv run python src/pipelines/pipelines/strava_to_s3.py
-        continue-on-error: true
-
-      - name: Run OpenPowerlifting pipeline
-        if: env.OPENPOWERLIFTING_URL != ''
-        run: uv run python src/pipelines/openpowerlifting.py
-        continue-on-error: true
-
-      - name: Run cleanse pipeline
-        run: uv run python src/pipelines/pipelines/cleanse_to_raw.py
-
-      - name: Run dbt transformations
+      - name: Ingest sources
         run: |
-          cd dbt_project
-          uv run dbt run
+          SOURCES=""
+          [ -n "$HEVY_API_KEY" ] && SOURCES="$SOURCES hevy"
+          [ -n "$STRAVA_CLIENT_ID" ] && SOURCES="$SOURCES strava"
+          [ -n "$OPENPOWERLIFTING_URL" ] && SOURCES="$SOURCES openpowerlifting"
+          if [ -n "$SOURCES" ]; then
+            uv run python run.py ingest $SOURCES
+          else
+            echo "No ingest sources configured, skipping"
+          fi
+        continue-on-error: true
 
-      - name: Export ICS calendar
-        run: uv run python src/pipelines/pipelines/export_to_ics.py
+      - name: Cleanse
+        run: uv run python run.py cleanse
+
+      - name: Transform
+        run: uv run python run.py transform
+
+      - name: Export
+        run: uv run python run.py export
 
       - name: Summary
         run: |

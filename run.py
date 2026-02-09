@@ -29,12 +29,14 @@ ENV_FILE = ROOT / ".env"
 
 
 def load_env() -> None:
-    """Source .env into os.environ (skips comments and blank lines)."""
+    """Source .env into os.environ (skips comments and blank lines).
+
+    No-op when .env is missing (e.g. CI where env vars are set externally).
+    """
     import os
 
     if not ENV_FILE.exists():
-        print("Error: .env file not found. Copy .env.example to .env and fill in values.")
-        sys.exit(1)
+        return
 
     for line in ENV_FILE.read_text().splitlines():
         line = line.strip()
