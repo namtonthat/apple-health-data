@@ -319,22 +319,34 @@ if has_calories or has_macros:
         if has_weight:
             weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
 
-            # Weight metrics — current (with 60d chip), average, range
+            # Weight metrics — current vs earliest, average vs 30d avg, range
+            all_wt = df_all.filter(pl.col("weight_kg").is_not_null()) if (df_all.height > 0 and "weight_kg" in df_all.columns) else weight_data
+            latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
+
+            # Earliest weight for "Current" comparison
+            earliest_weight = None
+            days_span = 0
+            if all_wt.height > 1:
+                earliest_date = all_wt["date"].min()
+                latest_date = all_wt["date"].max()
+                days_span = int((latest_date - earliest_date).total_seconds() / 86400)
+                earliest_weight = all_wt.sort("date")["weight_kg"].head(1).item()
+
+            # 30-day average for "Average" comparison
+            ref_avg_30d = None
+            ref_date_30d = date.today() - timedelta(days=30)
+            older_data = all_wt.filter(pl.col("date") <= pl.lit(ref_date_30d))
+            if older_data.height > 0:
+                ref_avg_30d = older_data["weight_kg"].mean()
+
+            span_label = f"{days_span}d ago" if days_span > 0 else "start"
+
             w1, w2, w3 = st.columns(3)
             with w1:
-                latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
-                # 60-day reference from full 90-day cached data
-                ref_weight = None
-                if df_all.height > 0 and "weight_kg" in df_all.columns:
-                    all_wt = df_all.filter(pl.col("weight_kg").is_not_null())
-                    ref_date = date.today() - timedelta(days=60)
-                    ref_row = all_wt.filter(pl.col("date") <= pl.lit(ref_date)).sort("date", descending=True).head(1)
-                    if ref_row.height > 0:
-                        ref_weight = ref_row["weight_kg"].item()
-                metric_with_goal("Current", latest_weight, ref_weight, " kg", ".1f", inverse=True, ref_label="60d ago")
+                metric_with_goal("Current", latest_weight, earliest_weight, " kg", ".1f", inverse=True, ref_label=span_label)
             with w2:
                 avg_weight = weight_data["weight_kg"].mean()
-                metric_with_goal("Average", avg_weight, unit=" kg", fmt=".1f")
+                metric_with_goal("Average", avg_weight, ref_avg_30d, " kg", ".1f", inverse=True, ref_label="30d avg")
             with w3:
                 min_weight = weight_data["weight_kg"].min()
                 max_weight = weight_data["weight_kg"].max()
