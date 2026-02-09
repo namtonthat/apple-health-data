@@ -10,6 +10,13 @@ on:
 jobs:
   refresh-data:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
+      STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+      STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+      STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -43,59 +50,31 @@ jobs:
           echo "  AWS_DEFAULT_REGION=$AWS_REGION"
           echo "  OPENPOWERLIFTING_URL=$OPL_URL"
 
-      - name: Set secrets as environment variables
-        run: echo "Secrets loaded"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Run Hevy pipeline
-        if: ${{ secrets.HEVY_API_KEY != '' }}
+        if: env.HEVY_API_KEY != ''
         run: uv run python src/pipelines/pipelines/hevy_to_s3.py
         continue-on-error: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
 
       - name: Run Strava pipeline
-        if: ${{ secrets.STRAVA_CLIENT_ID != '' }}
+        if: env.STRAVA_CLIENT_ID != ''
         run: uv run python src/pipelines/pipelines/strava_to_s3.py
         continue-on-error: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
 
       - name: Run OpenPowerlifting pipeline
-        if: ${{ env.OPENPOWERLIFTING_URL != '' }}
+        if: env.OPENPOWERLIFTING_URL != ''
         run: uv run python src/pipelines/openpowerlifting.py
         continue-on-error: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Run cleanse pipeline
         run: uv run python src/pipelines/pipelines/cleanse_to_raw.py
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Run dbt transformations
         run: |
           cd dbt_project
           uv run dbt run
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Export ICS calendar
         run: uv run python src/pipelines/pipelines/export_to_ics.py
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Summary
         run: |
