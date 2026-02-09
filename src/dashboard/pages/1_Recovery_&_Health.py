@@ -104,6 +104,10 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
 
         with chart_right:
             st.subheader("Total Sleep")
+            st.caption(
+                ":red-background[< 6h]  :orange-background[6 - 7h]  :green-background[7+ hours]"
+                "  ---  :red[--- 6 hours]  :green[--- 7 hours]"
+            )
             # Bar chart — 3 tiers: <6 red, 6-7 orange, 7+ green
             sleep_goal = GOALS["sleep_hours"]
             total_bars = alt.Chart(sleep_chart_data).mark_bar().encode(
@@ -143,10 +147,6 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
             st.altair_chart(
                 total_bars + warn_line + goal_line + text,
                 width="stretch",
-            )
-            st.caption(
-                ":red-background[< 6h]  :orange-background[6 - 7h]  :green-background[7+ hours]"
-                "  ---  :red[--- 6h warning]  :green[--- 7h goal]"
             )
 else:
     st.info("No sleep data available for selected period")
@@ -319,34 +319,17 @@ if has_calories or has_macros:
         if has_weight:
             weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
 
-            # Weight metrics — current vs earliest, average vs 30d avg, range
+            # Weight metrics — current & average vs overall avg, range
             all_wt = df_all.filter(pl.col("weight_kg").is_not_null()) if (df_all.height > 0 and "weight_kg" in df_all.columns) else weight_data
-            latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
-
-            # Earliest weight for "Current" comparison
-            earliest_weight = None
-            days_span = 0
-            if all_wt.height > 1:
-                earliest_date = all_wt["date"].min()
-                latest_date = all_wt["date"].max()
-                days_span = int((latest_date - earliest_date).total_seconds() / 86400)
-                earliest_weight = all_wt.sort("date")["weight_kg"].head(1).item()
-
-            # 30-day average for "Average" comparison
-            ref_avg_30d = None
-            ref_date_30d = date.today() - timedelta(days=30)
-            older_data = all_wt.filter(pl.col("date") <= pl.lit(ref_date_30d))
-            if older_data.height > 0:
-                ref_avg_30d = older_data["weight_kg"].mean()
-
-            span_label = f"{days_span}d ago" if days_span > 0 else "start"
+            latest_weight = float(weight_data.sort("date", descending=True)["weight_kg"].head(1).item())
+            overall_avg = float(all_wt["weight_kg"].mean()) if all_wt.height > 0 else None
 
             w1, w2, w3 = st.columns(3)
             with w1:
-                metric_with_goal("Current", latest_weight, earliest_weight, " kg", ".1f", inverse=True, ref_label=span_label)
+                metric_with_goal("Current", latest_weight, overall_avg, " kg", ".1f", inverse=True, ref_label="avg")
             with w2:
-                avg_weight = weight_data["weight_kg"].mean()
-                metric_with_goal("Average", avg_weight, ref_avg_30d, " kg", ".1f", inverse=True, ref_label="30d avg")
+                avg_weight = float(weight_data["weight_kg"].mean())
+                metric_with_goal("Average", avg_weight, overall_avg, " kg", ".1f", inverse=True, ref_label="overall avg")
             with w3:
                 min_weight = weight_data["weight_kg"].min()
                 max_weight = weight_data["weight_kg"].max()
