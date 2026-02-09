@@ -104,3 +104,14 @@ jobs:
           echo "- **Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "- **Melbourne Time:** $(TZ='Australia/Melbourne' date '+%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_STEP_SUMMARY
           echo "- **S3 Bucket:** $S3_BUCKET_NAME" >> $GITHUB_STEP_SUMMARY
+
+      - name: Update last_updated timestamp
+        run: TZ='Australia/Melbourne' date '+%Y-%m-%d' > last_updated.txt
+
+      - name: Commit and push last_updated
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_updated.txt
+          git diff --staged --quiet || git commit -m "chore: update last_updated timestamp"
+          git push

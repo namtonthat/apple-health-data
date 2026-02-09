@@ -9,8 +9,8 @@ with source as (
 
 staged as (
     select
-        -- Primary key (handle both old and new column names)
-        coalesce(_dlt_id, dlt_id) as metric_id,
+        -- Primary key
+        dlt_id as metric_id,
 
         -- Dimensions
         metric_date::date as metric_date,
@@ -29,7 +29,7 @@ staged as (
 
         -- Metadata
         file_timestamp as export_timestamp,
-        _dlt_load_id as load_id
+        dlt_load_id as load_id
 
     from source
 ),

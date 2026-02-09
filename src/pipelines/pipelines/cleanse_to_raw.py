@@ -10,7 +10,7 @@ Cleansing steps:
 
 Structure:
   landing/hevy/workouts/*.parquet -> raw/hevy/workouts/*.parquet
-  landing/health/health_metrics/*.parquet -> raw/health/health_metrics/*.parquet
+  landing/health/health_metrics/*.parquet -> raw/health/health_metrics/YYYY-MM.parquet (monthly)
 """
 import re
 import sys
@@ -20,6 +20,7 @@ from pathlib import Path
 # Add src to path and load .env via package __init__
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import pyarrow as pa
+import pyarrow.compute as pc
 import pyarrow.parquet as pq
 import s3fs
 
@@ -103,6 +104,126 @@ def cleanse_table(
     return total_rows
 
 
+def cleanse_health_monthly(
+    s3: s3fs.S3FileSystem,
+    bucket: str,
+    months_to_reprocess: int = 2,
+) -> int:
+    """
+    Cleanse health metrics from landing to raw, organized by metric_date month.
+
+    Reads ALL landing parquet files, concatenates them, partitions by
+    metric_date month (YYYY-MM), and writes one parquet file per month
+    to raw. Only rewrites files for the most recent N months on incremental
+    runs; first run writes all months.
+
+    Returns number of rows processed.
+    """
+    landing_path = f"{bucket}/landing/health/health_metrics"
+    raw_path = f"{bucket}/raw/health/health_metrics"
+
+    # List all parquet files in landing
+    try:
+        files = s3.glob(f"{landing_path}/*.parquet")
+    except Exception:
+        files = []
+
+    if not files:
+        print(f"  No files found in {landing_path}")
+        return 0
+
+    print(f"  Reading {len(files)} landing files...")
+
+    # Read and concatenate all landing files
+    tables = []
+    for file_path in files:
+        with s3.open(file_path, "rb") as f:
+            table = pq.read_table(f)
+        tables.append(table)
+
+    combined = pa.concat_tables(tables, promote_options="default")
+
+    # Rename columns to snake_case
+    new_names = [to_snake_case(col) for col in combined.column_names]
+    combined = combined.rename_columns(new_names)
+
+    # Extract month (YYYY-MM) from metric_date column
+    metric_dates = combined.column("metric_date").to_pylist()
+    months = [d[:7] if d and len(d) >= 7 else "unknown" for d in metric_dates]
+    combined = combined.append_column("_month", pa.array(months, type=pa.string()))
+
+    # Determine which months to write
+    unique_months = sorted(set(m for m in months if m != "unknown"))
+    if not unique_months:
+        print("  No valid metric_date values found")
+        return 0
+
+    # First run detection: if no monthly files exist in raw, write all months
+    existing_monthly = []
+    try:
+        existing_raw = s3.glob(f"{raw_path}/*.parquet")
+        existing_monthly = [f for f in existing_raw if re.match(r".*\d{4}-\d{2}\.parquet$", f)]
+    except Exception:
+        pass
+
+    if not existing_monthly:
+        months_to_write = unique_months
+        print(f"  First run detected - writing all {len(months_to_write)} months")
+    else:
+        months_to_write = unique_months[-months_to_reprocess:]
+        print(f"  Incremental run - reprocessing months: {months_to_write}")
+
+    print(f"  Total months: {len(unique_months)} ({unique_months[0]} to {unique_months[-1]})")
+
+    load_timestamp = datetime.now(timezone.utc).isoformat()
+    total_rows = 0
+
+    for month in months_to_write:
+        # Filter to this month
+        mask = pc.equal(combined.column("_month"), month)
+        month_table = combined.filter(mask)
+
+        # Drop the temporary _month column
+        col_idx = month_table.schema.get_field_index("_month")
+        month_table = month_table.remove_column(col_idx)
+
+        # Add metadata columns
+        n_rows = month_table.num_rows
+        month_table = month_table.append_column(
+            "_load_timestamp",
+            pa.array([load_timestamp] * n_rows, type=pa.string()),
+        )
+        month_table = month_table.append_column(
+            "_source_file",
+            pa.array([f"{month}.parquet"] * n_rows, type=pa.string()),
+        )
+        month_table = month_table.append_column(
+            "_source_system",
+            pa.array(["health"] * n_rows, type=pa.string()),
+        )
+
+        # Write to raw as YYYY-MM.parquet
+        output_path = f"{raw_path}/{month}.parquet"
+        with s3.open(output_path, "wb") as f:
+            pq.write_table(month_table, f)
+
+        total_rows += n_rows
+        print(f"  {month}.parquet: {n_rows:,} rows -> {output_path}")
+
+    # Clean up old-format files (non YYYY-MM.parquet) from raw
+    try:
+        all_raw_files = s3.glob(f"{raw_path}/*.parquet")
+        for f in all_raw_files:
+            filename = f.split("/")[-1]
+            if not re.match(r"^\d{4}-\d{2}\.parquet$", filename):
+                print(f"  Removing old-format file: {filename}")
+                s3.rm(f)
+    except Exception:
+        pass
+
+    return total_rows
+
+
 def run_pipeline(source_systems: list[str] | None = None):
     """
     Run the cleanse pipeline for specified source systems.
@@ -140,10 +261,17 @@ def run_pipeline(source_systems: list[str] | None = None):
             print(f"  Unknown source system: {source}")
             continue
 
-        for table_name in tables[source]:
-            print(f"\n  Processing: {table_name}")
-            rows = cleanse_table(s3, bucket, source, table_name)
+        if source == "health":
+            # Health uses monthly partitioned output
+            print("\n  Processing: health_metrics (monthly partitioned)")
+            rows = cleanse_health_monthly(s3, bucket)
             total_rows += rows
+        else:
+            # All other sources use standard 1:1 file copy
+            for table_name in tables[source]:
+                print(f"\n  Processing: {table_name}")
+                rows = cleanse_table(s3, bucket, source, table_name)
+                total_rows += rows
 
     print("\n" + "=" * 60)
     print(f"Complete! Total rows processed: {total_rows:,}")

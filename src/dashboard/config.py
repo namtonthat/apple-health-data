@@ -37,6 +37,14 @@ GOALS = {
 }
 
 
+# Last updated timestamp (written by GitHub Actions workflow)
+_last_updated_path = Path(__file__).parent.parent.parent / "last_updated.txt"
+try:
+    LAST_UPDATED = _last_updated_path.read_text().strip()
+except FileNotFoundError:
+    LAST_UPDATED = "Unknown"
+
+
 def get_secret(key: str, default: str = "") -> str:
     """Get secret from Streamlit Cloud secrets or env vars (local)."""
     try:
