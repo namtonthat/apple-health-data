@@ -1,20 +1,15 @@
 """Exercises page."""
 
-from datetime import date, timedelta
+from datetime import date, datetime
 
-import duckdb
 import polars as pl
 import streamlit as st
 
 st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="wide")
 
-from dashboard.config import (
-    AWS_REGION,
-    OPENPOWERLIFTING_URL,
-    S3_BUCKET,
-    S3_TRANSFORMED_PREFIX,
-    get_secret,
-)
+from dashboard.components import date_filter_sidebar, vertical_divider
+from dashboard.config import OPENPOWERLIFTING_URL
+from dashboard.data import get_connection, get_s3_path, load_parquet
 
 # Big 3 exercises - exact names for 1RM summary display
 BIG_3_EXERCISES = {
@@ -41,49 +36,6 @@ def pr_delta(estimated: float, comp_pr: float | None) -> str | None:
     return f"{estimated - comp_pr:+.1f} kg vs {comp_pr:.1f} PR"
 
 
-def get_connection():
-    """Get fresh DuckDB connection configured for S3 access."""
-    conn = duckdb.connect(":memory:")
-    access_key = get_secret("AWS_ACCESS_KEY_ID")
-    secret_key = get_secret("AWS_SECRET_ACCESS_KEY")
-    conn.execute(f"SET s3_region = '{AWS_REGION}'")
-    conn.execute(f"SET s3_access_key_id = '{access_key}'")
-    conn.execute(f"SET s3_secret_access_key = '{secret_key}'")
-    return conn
-
-
-def get_s3_path(table_name: str) -> str:
-    return f"s3://{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/{table_name}"
-
-
-def load_workout_sets(start_date: date, end_date: date) -> pl.DataFrame:
-    conn = get_connection()
-    s3_path = get_s3_path("fct_workout_sets")
-    query = f"""
-        SELECT
-            workout_date,
-            workout_name,
-            exercise_name,
-            set_number,
-            weight_kg,
-            reps,
-            volume_kg,
-            rpe,
-            set_type,
-            started_at,
-            exercise_order
-        FROM read_parquet('{s3_path}')
-        WHERE workout_date BETWEEN ? AND ?
-        ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number
-    """
-    try:
-        return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
-    except Exception as e:
-        if "No files found" in str(e):
-            return pl.DataFrame()
-        raise
-
-
 def load_personal_bests() -> dict:
     """Load competition personal bests from OpenPowerlifting data."""
     conn = get_connection()
@@ -108,66 +60,30 @@ def load_personal_bests() -> dict:
     return {}
 
 
-def load_strava_activities(start_date: date, end_date: date) -> pl.DataFrame:
-    """Load Strava activities for the date range."""
-    conn = get_connection()
-    s3_path = get_s3_path("fct_strava_activities")
-    query = f"""
-        SELECT
-            activity_date,
-            activity_name,
-            activity_type,
-            sport_type,
-            moving_time_minutes,
-            distance_km,
-            elevation_gain_m,
-            avg_speed_kmh,
-            avg_pace_min_per_km,
-            avg_heartrate,
-            max_heartrate,
-            pr_count
-        FROM read_parquet('{s3_path}')
-        WHERE activity_date BETWEEN ? AND ?
-        ORDER BY activity_date DESC
-    """
-    try:
-        return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
-    except Exception as e:
-        if "No files found" in str(e):
-            return pl.DataFrame()
-        raise
-
-
 # Sidebar - Date Filter
-st.sidebar.title("Filters")
-
-preset = st.sidebar.radio(
-    "Date Range",
-    ["Last 7 days", "Last 30 days", "This month", "Custom"],
-    index=0,
-)
-
-today = date.today()
-yesterday = today - timedelta(days=1)
-if preset == "Last 7 days":
-    start_date = today - timedelta(days=7)
-    end_date = yesterday
-elif preset == "Last 30 days":
-    start_date = today - timedelta(days=30)
-    end_date = yesterday
-elif preset == "This month":
-    start_date = today.replace(day=1)
-    end_date = yesterday
-else:
-    start_date = st.sidebar.date_input("Start date", today - timedelta(days=7))
-    end_date = st.sidebar.date_input("End date", yesterday)
-
-st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
+start_date, end_date = date_filter_sidebar()
 
 # Load data
-df_exercises = load_workout_sets(start_date, end_date)
+df_exercises = load_parquet(
+    "fct_workout_sets",
+    """SELECT workout_date, workout_name, exercise_name, set_number,
+              weight_kg, reps, volume_kg, rpe, set_type, started_at, exercise_order
+       FROM read_parquet('{path}')
+       WHERE workout_date BETWEEN ? AND ?
+       ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number""",
+    [start_date, end_date],
+)
 competition_prs = load_personal_bests()
-df_strava = load_strava_activities(start_date, end_date)
+df_strava = load_parquet(
+    "fct_strava_activities",
+    """SELECT activity_date, activity_name, activity_type, sport_type,
+              moving_time_minutes, distance_km, elevation_gain_m, avg_speed_kmh,
+              avg_pace_min_per_km, avg_heartrate, max_heartrate, pr_count
+       FROM read_parquet('{path}')
+       WHERE activity_date BETWEEN ? AND ?
+       ORDER BY activity_date DESC""",
+    [start_date, end_date],
+)
 
 # =============================================================================
 # Exercises Section
@@ -214,7 +130,7 @@ if df_exercises.height > 0:
 
     # Separator
     with cols[4]:
-        st.markdown("<div style='border-left: 2px solid #444; height: 80px; margin: 0 auto;'></div>", unsafe_allow_html=True)
+        vertical_divider(80)
 
     # Big 3 lifts with competition PR comparison
     for i, (name, est_1rm, comp_pr) in enumerate(big_3_results):
@@ -231,7 +147,6 @@ if df_exercises.height > 0:
     # Time since last competition badge with OpenPowerlifting link
     last_comp = competition_prs.get("last_competition")
     if last_comp:
-        from datetime import datetime
         if isinstance(last_comp, str):
             last_comp_date = datetime.strptime(last_comp[:10], "%Y-%m-%d").date()
         else:

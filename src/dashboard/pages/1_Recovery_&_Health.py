@@ -3,146 +3,36 @@
 from datetime import date, timedelta
 
 import altair as alt
-import duckdb
 import polars as pl
 import streamlit as st
 
 st.set_page_config(page_title="😴 Recovery & Health", page_icon="😴", layout="wide")
 
-from dashboard.config import AWS_REGION, GOALS, S3_BUCKET, S3_TRANSFORMED_PREFIX, get_secret
-
-
-def metric_with_goal(
-    label: str,
-    value: float | None,
-    goal: float | None = None,
-    unit: str = "",
-    fmt: str = ".1f",
-    inverse: bool = False,
-) -> None:
-    """Display a metric with optional goal delta.
-
-    Args:
-        label: Metric label
-        value: Current value
-        goal: Target goal (if None, no delta shown)
-        unit: Unit suffix (e.g., "h", "g")
-        fmt: Format string for numbers
-        inverse: If True, lower is better (delta color inverted)
-    """
-    if value is None:
-        st.metric(label, "-")
-        return
-
-    display_value = f"{value:{fmt}}{unit}"
-
-    if goal is not None:
-        delta = value - goal
-        delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal"
-        # For sleep/protein/carbs: higher is better (delta_color normal)
-        # For fat: could go either way, keeping normal for now
-        delta_color = "inverse" if inverse else "normal"
-        st.metric(label, display_value, delta=delta_str, delta_color=delta_color)
-    else:
-        st.metric(label, display_value)
-
-
-def get_connection():
-    """Get fresh DuckDB connection configured for S3 access."""
-    conn = duckdb.connect(":memory:")
-    access_key = get_secret("AWS_ACCESS_KEY_ID")
-    secret_key = get_secret("AWS_SECRET_ACCESS_KEY")
-    conn.execute(f"SET s3_region = '{AWS_REGION}'")
-    conn.execute(f"SET s3_access_key_id = '{access_key}'")
-    conn.execute(f"SET s3_secret_access_key = '{secret_key}'")
-    return conn
-
-
-def get_s3_path(table_name: str) -> str:
-    return f"s3://{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/{table_name}"
+from dashboard.components import date_filter_sidebar, metric_with_goal, vertical_divider
+from dashboard.config import GOALS
+from dashboard.data import load_parquet
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
 def load_recent_summary() -> pl.DataFrame:
     """Load the full 90-day recent table (cached across reruns)."""
-    conn = get_connection()
-    s3_path = get_s3_path("fct_daily_summary_recent")
-    query = f"""
-        SELECT *
-        FROM read_parquet('{s3_path}')
-        ORDER BY date
-    """
-    try:
-        return pl.from_arrow(conn.execute(query).fetch_arrow_table())
-    except Exception as e:
-        if "No files found" in str(e):
-            return pl.DataFrame()
-        raise
-
-
-def load_daily_summary(start_date: date, end_date: date) -> pl.DataFrame:
-    """Load daily summary from the recent (90-day) table with date range."""
-    conn = get_connection()
-    s3_path = get_s3_path("fct_daily_summary_recent")
-    query = f"""
-        SELECT *
-        FROM read_parquet('{s3_path}')
-        WHERE date BETWEEN ? AND ?
-        ORDER BY date
-    """
-    try:
-        return pl.from_arrow(conn.execute(query, [start_date, end_date]).fetch_arrow_table())
-    except Exception as e:
-        if "No files found" in str(e):
-            return pl.DataFrame()
-        raise
+    return load_parquet("fct_daily_summary_recent")
 
 
 # Sidebar - Date Filter
-st.sidebar.title("Filters")
-
-MAX_LOOKBACK = 90
-earliest_allowed = date.today() - timedelta(days=MAX_LOOKBACK)
-
-preset = st.sidebar.radio(
-    "Date Range",
-    ["Last 7 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
-    index=0,
+start_date, end_date = date_filter_sidebar(
+    presets=["Last 7 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
+    max_lookback=90,
 )
 
-today = date.today()
-yesterday = today - timedelta(days=1)
-if preset == "Last 7 days":
-    start_date = today - timedelta(days=7)
-    end_date = yesterday
-elif preset == "Last 30 days":
-    start_date = today - timedelta(days=30)
-    end_date = yesterday
-elif preset == "Last 90 days":
-    start_date = today - timedelta(days=90)
-    end_date = yesterday
-elif preset == "This month":
-    start_date = today.replace(day=1)
-    end_date = yesterday
-else:
-    start_date = st.sidebar.date_input(
-        "Start date", today - timedelta(days=7), min_value=earliest_allowed,
-    )
-    end_date = st.sidebar.date_input("End date", yesterday)
-
-st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
-
 # Load data — use cached table for presets, fresh query for custom
-if preset != "Custom":
-    df_all = load_recent_summary()
-    if df_all.height > 0 and "date" in df_all.columns:
-        df_daily = df_all.filter(
-            (pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date))
-        )
-    else:
-        df_daily = df_all
+df_all = load_recent_summary()
+if df_all.height > 0 and "date" in df_all.columns:
+    df_daily = df_all.filter(
+        (pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date))
+    )
 else:
-    df_daily = load_daily_summary(start_date, end_date)
+    df_daily = df_all
 
 # =============================================================================
 # Sleep Section
@@ -254,6 +144,10 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
                 total_bars + warn_line + goal_line + text,
                 width="stretch",
             )
+            st.caption(
+                ":red-background[< 6h]  :orange-background[6 - 7h]  :green-background[7+ hours]"
+                "  ---  :red[--- 6h warning]  :green[--- 7h goal]"
+            )
 else:
     st.info("No sleep data available for selected period")
 
@@ -331,9 +225,9 @@ has_calories = "total_calories" in df_daily.columns and df_daily["total_calories
 has_macros = "protein_g" in df_daily.columns and df_daily["protein_g"].drop_nulls().len() > 0
 
 if has_calories or has_macros:
-    col1, col2 = st.columns(2)
+    cal_col, divider_col, macro_col = st.columns([1, 0.05, 1])
 
-    with col1:
+    with cal_col:
         st.subheader("Calories")
         if has_calories:
             cal_data = df_daily.filter(pl.col("total_calories").is_not_null())
@@ -347,7 +241,10 @@ if has_calories or has_macros:
         else:
             st.info("No calorie data available")
 
-    with col2:
+    with divider_col:
+        vertical_divider(120)
+
+    with macro_col:
         st.subheader("Macros")
         if has_macros:
             macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
@@ -415,18 +312,26 @@ if has_calories or has_macros:
             st.info("No macro data available")
 
     with divider_col:
-        st.markdown("<div style='border-left: 2px solid #444; height: 400px; margin: 0 auto;'></div>", unsafe_allow_html=True)
+        vertical_divider(400)
 
     with chart_col2:
         st.subheader("Weight Trend")
         if has_weight:
             weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
 
-            # Weight metrics
+            # Weight metrics — current (with 60d chip), average, range
             w1, w2, w3 = st.columns(3)
             with w1:
                 latest_weight = weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
-                metric_with_goal("Current", latest_weight, unit=" kg", fmt=".1f")
+                # 60-day reference from full 90-day cached data
+                ref_weight = None
+                if df_all.height > 0 and "weight_kg" in df_all.columns:
+                    all_wt = df_all.filter(pl.col("weight_kg").is_not_null())
+                    ref_date = date.today() - timedelta(days=60)
+                    ref_row = all_wt.filter(pl.col("date") <= pl.lit(ref_date)).sort("date", descending=True).head(1)
+                    if ref_row.height > 0:
+                        ref_weight = ref_row["weight_kg"].item()
+                metric_with_goal("Current", latest_weight, ref_weight, " kg", ".1f", inverse=True, ref_label="60d ago")
             with w2:
                 avg_weight = weight_data["weight_kg"].mean()
                 metric_with_goal("Average", avg_weight, unit=" kg", fmt=".1f")
