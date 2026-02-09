@@ -1,4 +1,5 @@
 """Shared configuration and factory functions for all pipelines."""
+
 import os
 from datetime import date
 

@@ -92,7 +92,7 @@ final as (
         w.total_duration_minutes as workout_duration_minutes,
 
         -- Derived flags
-        case when w.workout_date is not null then true else false end as had_strength_workout,
+        coalesce(w.workout_date is not null, false) as had_strength_workout,
         w.day_name
 
     from all_dates d

@@ -9,6 +9,7 @@ Structure:
   s3://{bucket}/landing/hevy/workouts__exercises/{date}.parquet
   s3://{bucket}/landing/hevy/workouts__exercises__sets/{date}.parquet
 """
+
 from pipelines.config import run_s3_pipeline
 from pipelines.sources.hevy import hevy_source
 

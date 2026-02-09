@@ -47,8 +47,7 @@ def metric_with_goal(
 def vertical_divider(height: int = 100) -> None:
     """Render a vertical divider line."""
     st.markdown(
-        f"<div style='border-left: 2px solid #444; height: {height}px;"
-        " margin: 0 auto;'></div>",
+        f"<div style='border-left: 2px solid #444; height: {height}px; margin: 0 auto;'></div>",
         unsafe_allow_html=True,
     )
 
@@ -94,7 +93,9 @@ def date_filter_sidebar(
         if max_lookback:
             kwargs["min_value"] = today - timedelta(days=max_lookback)
         start_date = st.sidebar.date_input(
-            "Start date", today - timedelta(days=7), **kwargs,
+            "Start date",
+            today - timedelta(days=7),
+            **kwargs,
         )
         end_date = st.sidebar.date_input("End date", yesterday)
 

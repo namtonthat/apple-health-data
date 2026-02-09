@@ -1,0 +1,18 @@
+[sqlfluff]
+templater = jinja
+dialect = duckdb
+max_line_length = 120
+# LT05: line length (handled by max_line_length)
+# ST06: select wildcard last (common in staging models)
+# AM04: query produces ambiguous results (common with star + window)
+# AL01: implicit/explicit table aliasing (prefer concise `table t` style)
+# AL09: self-aliasing columns (used for clarity in staging renames)
+# CP02: identifier capitalisation (source columns have mixed case)
+# RF04: keywords as identifiers (`date` column is ubiquitous in dbt)
+exclude_rules = LT05, ST06, AM04, AL01, AL09, CP02, RF04
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = true
+
+[sqlfluff:templater:jinja:context]
+s3_bucket = api-health-data-ntonthat

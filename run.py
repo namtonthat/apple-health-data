@@ -57,10 +57,10 @@ def run_ingest(sources: list[str], date: str | None) -> None:
     """Extract data from APIs to S3 landing zone."""
     load_env()
 
+    from pipelines.openpowerlifting import run_pipeline as run_opl
     from pipelines.pipelines.apple_health_to_s3 import run_pipeline as run_apple_health
     from pipelines.pipelines.hevy_to_s3 import run_pipeline as run_hevy
     from pipelines.pipelines.strava_to_s3 import run_pipeline as run_strava
-    from pipelines.openpowerlifting import run_pipeline as run_opl
 
     runners = {
         "hevy": ("Hevy", lambda: run_hevy(extraction_date=date)),
@@ -74,9 +74,9 @@ def run_ingest(sources: list[str], date: str | None) -> None:
             print(f"Unknown source: {source} (choose from {INGEST_SOURCES})")
             continue
         label, fn = runners[source]
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Ingesting: {label}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         try:
             fn()
         except Exception as exc:
@@ -98,9 +98,9 @@ def run_transform() -> None:
     """Run dbt transformations."""
     load_env()
     dbt_dir = ROOT / "dbt_project"
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Running dbt transformations")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     result = subprocess.run(
         ["uv", "run", "dbt", "run", "--profiles-dir", str(dbt_dir)],
         cwd=str(dbt_dir),
@@ -144,9 +144,9 @@ def run_all(date: str | None) -> None:
         fn()
 
     elapsed = time.time() - t0
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"All stages complete in {elapsed:.0f}s")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +175,9 @@ examples:
     # ingest
     p_ingest = sub.add_parser("ingest", help="Extract data from APIs to S3 landing zone")
     p_ingest.add_argument(
-        "sources", nargs="*", default=INGEST_SOURCES,
+        "sources",
+        nargs="*",
+        default=INGEST_SOURCES,
         help=f"Sources to ingest (default: all). Choices: {', '.join(INGEST_SOURCES)}",
     )
     p_ingest.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
@@ -183,7 +185,9 @@ examples:
     # cleanse
     p_cleanse = sub.add_parser("cleanse", help="Cleanse landing -> raw zone")
     p_cleanse.add_argument(
-        "sources", nargs="*", default=None,
+        "sources",
+        nargs="*",
+        default=None,
         help="Sources to cleanse (default: all). Choices: hevy, apple-health, strava",
     )
 

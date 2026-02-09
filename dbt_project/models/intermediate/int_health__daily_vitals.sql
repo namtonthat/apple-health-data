@@ -25,8 +25,9 @@ pivoted as (
         max(case when metric_name = 'sleep_analysis' then sleep_deep_hours end) as sleep_deep_hours,
         max(case when metric_name = 'sleep_analysis' then sleep_core_hours end) as sleep_core_hours,
         max(case when metric_name = 'sleep_analysis' then sleep_awake_hours end) as sleep_awake_hours,
-        max(case when metric_name = 'sleep_analysis'
-            then coalesce(sleep_rem_hours, 0) + coalesce(sleep_deep_hours, 0) + coalesce(sleep_core_hours, 0)
+        max(case
+            when metric_name = 'sleep_analysis'
+                then coalesce(sleep_rem_hours, 0) + coalesce(sleep_deep_hours, 0) + coalesce(sleep_core_hours, 0)
         end) as sleep_total_hours,
 
         -- Respiratory

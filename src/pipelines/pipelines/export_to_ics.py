@@ -102,9 +102,20 @@ def load_daily_summary(conn: duckdb.DuckDBPyConnection) -> list[dict]:
     """
 
     result = conn.execute(query).fetchall()
-    columns = ["date", "sleep_hours", "sleep_deep_hours", "sleep_rem_hours",
-               "sleep_light_hours", "protein_g", "carbs_g", "fat_g",
-               "logged_calories", "calculated_calories", "weight_kg", "steps"]
+    columns = [
+        "date",
+        "sleep_hours",
+        "sleep_deep_hours",
+        "sleep_rem_hours",
+        "sleep_light_hours",
+        "protein_g",
+        "carbs_g",
+        "fat_g",
+        "logged_calories",
+        "calculated_calories",
+        "weight_kg",
+        "steps",
+    ]
 
     return [dict(zip(columns, row)) for row in result]
 
@@ -117,7 +128,6 @@ def format_sleep_summary(row: dict) -> str | None:
 
     deep = row.get("sleep_deep_hours") or 0
     rem = row.get("sleep_rem_hours") or 0
-    light = row.get("sleep_light_hours") or 0
 
     # Format: "7.5h sleep (1.2h deep)"
     return f"😴 {sleep_hours:.1f}h sleep ({deep:.1f}h deep, {rem:.1f}h REM)"

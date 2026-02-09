@@ -12,7 +12,6 @@ from typing import Iterator
 import dlt
 import requests
 
-
 STRAVA_API_BASE = "https://www.strava.com/api/v3"
 
 

@@ -4,7 +4,7 @@
 -- Path: s3://{bucket}/raw/strava/activities/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/strava/activities/*.parquet', union_by_name=true)
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/strava/activities/*.parquet', union_by_name = true)
 ),
 
 staged as (
@@ -41,11 +41,10 @@ staged as (
         round(max_speed * 3.6, 2) as max_speed_kmh,
         case
             when average_speed > 0 then round(1000.0 / average_speed / 60.0, 2)
-            else null
         end as avg_pace_min_per_km,
 
         -- Heart rate
-        cast(average_heartrate as decimal(5,1)) as avg_heartrate,
+        cast(average_heartrate as decimal(5, 1)) as avg_heartrate,
         cast(max_heartrate as integer) as max_heartrate,
 
         -- Flags

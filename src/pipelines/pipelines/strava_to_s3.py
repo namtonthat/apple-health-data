@@ -6,6 +6,7 @@ Extracts activity data from Strava API to landing zone.
 Structure:
   s3://{bucket}/landing/strava/activities/{date}.parquet
 """
+
 from pipelines.config import run_s3_pipeline
 from pipelines.sources.strava import strava_source
 

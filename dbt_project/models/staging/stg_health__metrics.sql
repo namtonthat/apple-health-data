@@ -4,7 +4,7 @@
 -- Path: s3://{bucket}/raw/health/health_metrics/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/health/health_metrics/*.parquet', union_by_name=true)
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/health/health_metrics/*.parquet', union_by_name = true)
 ),
 
 staged as (

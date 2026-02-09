@@ -12,6 +12,7 @@ Confirmed API details:
 - Pagination: page & pageSize query params
 - Response: {"page": 1, "page_count": N, "workouts": [...]}
 """
+
 import os
 from typing import Iterator
 

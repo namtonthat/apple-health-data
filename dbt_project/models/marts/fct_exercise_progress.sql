@@ -61,19 +61,28 @@ final as (
         -- PR tracking
         weight_pr_to_date,
         volume_pr_to_date,
-        case when best_weight_kg = weight_pr_to_date then true else false end as is_weight_pr,
-        case when best_set_volume_kg = volume_pr_to_date then true else false end as is_volume_pr,
+        coalesce(best_weight_kg = weight_pr_to_date, false) as is_weight_pr,
+        coalesce(best_set_volume_kg = volume_pr_to_date, false) as is_volume_pr,
 
         -- Session comparison
-        lag(best_weight_kg) over (partition by exercise_name order by workout_date) as prev_session_weight,
-        lag(total_volume_kg) over (partition by exercise_name order by workout_date) as prev_session_volume,
+        lag(best_weight_kg) over (
+            partition by exercise_name
+            order by workout_date
+        ) as prev_session_weight,
+        lag(total_volume_kg) over (
+            partition by exercise_name
+            order by workout_date
+        ) as prev_session_volume,
 
         -- Exercise frequency
-        row_number() over (partition by exercise_name order by workout_date) as session_number,
+        row_number() over (
+            partition by exercise_name
+            order by workout_date
+        ) as session_number,
         count(*) over (partition by exercise_name) as total_sessions
 
     from with_prs
 )
 
 select * from final
-order by exercise_name, workout_date desc
+order by exercise_name asc, workout_date desc

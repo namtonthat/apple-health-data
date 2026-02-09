@@ -1,0 +1,2 @@
+# False positive: placeholder "YOUR_API_KEY" in API documentation
+c9db1cec32ac7b9f3e3363b38d1000aae0cbf915:IMPLEMENTATION_PLAN.md:curl-auth-header:910

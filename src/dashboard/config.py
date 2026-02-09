@@ -1,4 +1,5 @@
 """Shared dashboard configuration loaded from pyproject.toml."""
+
 import os
 import tomllib
 from datetime import date, datetime
@@ -59,6 +60,7 @@ def get_secret(key: str, default: str = "") -> str:
     """Get secret from Streamlit Cloud secrets or env vars (local)."""
     try:
         import streamlit as st
+
         return st.secrets[key]
     except (KeyError, FileNotFoundError):
         return os.environ.get(key, default)

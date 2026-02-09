@@ -160,12 +160,15 @@ if df_exercises.height > 0:
         else:
             years = days_since // 365
             months = (days_since % 365) // 30
-            time_str = f"{years}y {months}m" if months else f"{years} year{'s' if years > 1 else ''}"
+            time_str = (
+                f"{years}y {months}m" if months else f"{years} year{'s' if years > 1 else ''}"
+            )
 
+        comp_date_str = last_comp_date.strftime("%b %d, %Y")
+        comp_text = f"⏱️ **{time_str}** since last competition ({comp_date_str})"
         if OPENPOWERLIFTING_URL:
-            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')}) · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})")
-        else:
-            st.caption(f"⏱️ **{time_str}** since last competition ({last_comp_date.strftime('%b %d, %Y')})")
+            comp_text += f" · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})"
+        st.caption(comp_text)
 
     st.divider()
 
@@ -181,7 +184,9 @@ if df_exercises.height > 0:
         all_set_types = sorted(df_exercises["set_type"].drop_nulls().unique().to_list())
         default_types = [t for t in all_set_types if t.lower() != "warmup"]
         selected_set_types = st.multiselect(
-            "Set types", all_set_types, default=default_types,
+            "Set types",
+            all_set_types,
+            default=default_types,
         )
 
     # Apply filters
@@ -196,8 +201,16 @@ if df_exercises.height > 0:
     # Create color mapping for workouts (font colors for seamless look)
     unique_workouts = display_df["workout_name"].drop_nulls().unique().to_list()
     workout_colors = [
-        "#E63946", "#2A9D8F", "#E76F51", "#457B9D", "#8338EC",
-        "#06D6A0", "#F72585", "#4361EE", "#FB8500", "#7209B7",
+        "#E63946",
+        "#2A9D8F",
+        "#E76F51",
+        "#457B9D",
+        "#8338EC",
+        "#06D6A0",
+        "#F72585",
+        "#4361EE",
+        "#FB8500",
+        "#7209B7",
     ]
 
     # Format workout_date as YYYY-MM-DD string to strip time
@@ -238,8 +251,18 @@ if df_exercises.height > 0:
             "rpe": st.column_config.NumberColumn("RPE", format="%.1f", width="small"),
             "set_type": st.column_config.TextColumn("Type", width="small"),
         },
-        column_order=["workout_date", "workout_name", "exercise_name", "set_number",
-                      "weight_kg", "reps", "est_1rm", "volume_kg", "rpe", "set_type"],
+        column_order=[
+            "workout_date",
+            "workout_name",
+            "exercise_name",
+            "set_number",
+            "weight_kg",
+            "reps",
+            "est_1rm",
+            "volume_kg",
+            "rpe",
+            "set_type",
+        ],
         hide_index=True,
         width="stretch",
     )
@@ -304,12 +327,14 @@ if df_strava.height > 0:
         secs = int((pace_decimal - mins) * 60)
         return f"{mins}:{secs:02d}"
 
-    display_strava = display_strava.with_columns([
-        pl.col("activity_date").cast(pl.Date),
-        pl.col("avg_pace_min_per_km")
-        .map_elements(format_pace, return_dtype=pl.Utf8)
-        .alias("pace_formatted"),
-    ])
+    display_strava = display_strava.with_columns(
+        [
+            pl.col("activity_date").cast(pl.Date),
+            pl.col("avg_pace_min_per_km")
+            .map_elements(format_pace, return_dtype=pl.Utf8)
+            .alias("pace_formatted"),
+        ]
+    )
 
     # Display table
     st.dataframe(
@@ -319,17 +344,33 @@ if df_strava.height > 0:
             "activity_date": st.column_config.DateColumn("Date", width="small"),
             "activity_name": st.column_config.TextColumn("Activity", width="medium"),
             "activity_type": st.column_config.TextColumn("Type", width="small"),
-            "moving_time_minutes": st.column_config.NumberColumn("Time (min)", format="%.0f", width="small"),
-            "distance_km": st.column_config.NumberColumn("Distance (km)", format="%.2f", width="small"),
+            "moving_time_minutes": st.column_config.NumberColumn(
+                "Time (min)", format="%.0f", width="small"
+            ),
+            "distance_km": st.column_config.NumberColumn(
+                "Distance (km)", format="%.2f", width="small"
+            ),
             "pace_formatted": st.column_config.TextColumn("Pace (/km)", width="small"),
-            "elevation_gain_m": st.column_config.NumberColumn("Elevation (m)", format="%.0f", width="small"),
+            "elevation_gain_m": st.column_config.NumberColumn(
+                "Elevation (m)", format="%.0f", width="small"
+            ),
             "avg_heartrate": st.column_config.NumberColumn("Avg HR", format="%.0f", width="small"),
             "max_heartrate": st.column_config.NumberColumn("Max HR", format="%.0f", width="small"),
             "pr_count": st.column_config.NumberColumn("PRs", width="small"),
         },
-        column_order=["icon", "activity_date", "activity_name", "activity_type",
-                      "moving_time_minutes", "distance_km", "pace_formatted",
-                      "elevation_gain_m", "avg_heartrate", "max_heartrate", "pr_count"],
+        column_order=[
+            "icon",
+            "activity_date",
+            "activity_name",
+            "activity_type",
+            "moving_time_minutes",
+            "distance_km",
+            "pace_formatted",
+            "elevation_gain_m",
+            "avg_heartrate",
+            "max_heartrate",
+            "pr_count",
+        ],
         hide_index=True,
         width="stretch",
     )

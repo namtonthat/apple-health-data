@@ -9,6 +9,7 @@ Structure:
   Input:  s3://{bucket}/landing/health/*.json
   Output: s3://{bucket}/landing/health/health_metrics/{date}.parquet
 """
+
 from pipelines.config import run_s3_pipeline
 from pipelines.sources.apple_health import apple_health_source
 

@@ -12,6 +12,7 @@ Structure:
   landing/hevy/workouts/*.parquet -> raw/hevy/workouts/*.parquet
   landing/health/health_metrics/*.parquet -> raw/health/health_metrics/YYYY-MM.parquet (monthly)
 """
+
 import re
 from datetime import datetime, timezone
 

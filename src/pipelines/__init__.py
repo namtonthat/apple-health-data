@@ -1,4 +1,5 @@
 """Health data pipelines - Extract data from various sources to S3 and transform with dbt."""
+
 from pathlib import Path
 
 from dotenv import load_dotenv

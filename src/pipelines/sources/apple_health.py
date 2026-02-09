@@ -4,6 +4,7 @@ dlt source for Apple Health data from S3 landing zone.
 Reads JSON files from s3://{bucket}/landing/health/ and flattens
 the nested metrics into a normalized structure.
 """
+
 import json
 from typing import Iterator
 
@@ -20,7 +21,9 @@ def _parse_health_date(date_str: str) -> str:
     return date_str.split(" ")[0]
 
 
-def _list_health_files(s3: s3fs.S3FileSystem, bucket: str, prefix: str = "landing/health") -> list[str]:
+def _list_health_files(
+    s3: s3fs.S3FileSystem, bucket: str, prefix: str = "landing/health"
+) -> list[str]:
     """List all health JSON files in S3."""
     path = f"{bucket}/{prefix}"
     files = s3.glob(f"{path}/*.json")
@@ -65,7 +68,11 @@ def apple_health_source(
     ]
 
 
-@dlt.resource(name="health_metrics", write_disposition="merge", primary_key=["metric_date", "metric_name", "source"])
+@dlt.resource(
+    name="health_metrics",
+    write_disposition="merge",
+    primary_key=["metric_date", "metric_name", "source"],
+)
 def health_metrics_resource(
     bucket: str,
     prefix: str = "landing/health",

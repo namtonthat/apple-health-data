@@ -65,4 +65,4 @@ final as (
 )
 
 select * from final
-order by workout_date desc, started_at desc, exercise_order, set_number
+order by workout_date desc, started_at desc, exercise_order asc, set_number asc

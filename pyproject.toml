@@ -32,6 +32,11 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
 
+[tool.ruff.lint.per-file-ignores]
+# Streamlit pages require st.set_page_config() before other imports
+"src/dashboard/pages/*.py" = ["E402"]
+"src/dashboard/Home.py" = ["E402"]
+
 # =============================================================================
 # Dashboard Configuration (non-sensitive values)
 # =============================================================================
@@ -59,4 +64,7 @@ steps = 10000
 dev = [
     "pytest==9.0.2",
     "ruff==0.15.0",
+    "sqlfluff==3.3.1",
+    "sqlfluff-templater-dbt==3.3.1",
+    "pre-commit>=4.0",
 ]

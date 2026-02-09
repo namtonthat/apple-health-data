@@ -47,11 +47,15 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
     with col1:
         metric_with_goal("Sleep", sleep_data["sleep_hours"].mean(), GOALS["sleep_hours"], "h")
     with col2:
-        metric_with_goal("Deep", sleep_data["sleep_deep_hours"].mean(), GOALS["sleep_deep_hours"], "h")
+        metric_with_goal(
+            "Deep", sleep_data["sleep_deep_hours"].mean(), GOALS["sleep_deep_hours"], "h"
+        )
     with col3:
         metric_with_goal("REM", sleep_data["sleep_rem_hours"].mean(), GOALS["sleep_rem_hours"], "h")
     with col4:
-        metric_with_goal("Light", sleep_data["sleep_light_hours"].mean(), GOALS["sleep_light_hours"], "h")
+        metric_with_goal(
+            "Light", sleep_data["sleep_light_hours"].mean(), GOALS["sleep_light_hours"], "h"
+        )
     with col5:
         days_hit = sleep_data.filter(pl.col("sleep_hours") >= GOALS["sleep_hours"]).height
         total_days = sleep_data.height
@@ -60,9 +64,12 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
     # Sleep charts — stages (grouped) and total side by side
     if sleep_data.height > 0:
         sleep_chart_data = (
-            sleep_data
-            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
-            .select(["Date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours", "sleep_hours"])
+            sleep_data.with_columns(
+                pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
+            )
+            .select(
+                ["Date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours", "sleep_hours"]
+            )
             .to_pandas()
             .rename(columns={"sleep_hours": "Hours asleep"})
         )
@@ -78,20 +85,25 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
                 var_name="Stage",
                 value_name="Hours",
             )
-            sleep_melted["Stage"] = sleep_melted["Stage"].map({
-                "sleep_deep_hours": "Deep",
-                "sleep_rem_hours": "REM",
-                "sleep_light_hours": "Light",
-            })
+            sleep_melted["Stage"] = sleep_melted["Stage"].map(
+                {
+                    "sleep_deep_hours": "Deep",
+                    "sleep_rem_hours": "REM",
+                    "sleep_light_hours": "Light",
+                }
+            )
 
             # Grouped (side-by-side) bar chart with labels
             base = alt.Chart(sleep_melted).encode(
                 x=alt.X("Date:N", sort=None, title="Date"),
                 y=alt.Y("Hours:Q", title="Hours"),
-                color=alt.Color("Stage:N", scale=alt.Scale(
-                    domain=["Deep", "REM", "Light"],
-                    range=["#1f77b4", "#9467bd", "#ff7f0e"],
-                )),
+                color=alt.Color(
+                    "Stage:N",
+                    scale=alt.Scale(
+                        domain=["Deep", "REM", "Light"],
+                        range=["#1f77b4", "#9467bd", "#ff7f0e"],
+                    ),
+                ),
                 xOffset="Stage:N",
             )
 
@@ -110,38 +122,61 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
             )
             # Bar chart — 3 tiers: <6 red, 6-7 orange, 7+ green
             sleep_goal = GOALS["sleep_hours"]
-            total_bars = alt.Chart(sleep_chart_data).mark_bar().encode(
-                x=alt.X("Date:N", sort=None, title="Date"),
-                y=alt.Y("Hours asleep:Q", title=None),
-                color=alt.Color(
-                    "Hours asleep:Q",
-                    scale=alt.Scale(
-                        domain=[6, sleep_goal],
-                        range=["#EF553B", "#FFA15A", "#00CC96"],
-                        type="threshold",
+            total_bars = (
+                alt.Chart(sleep_chart_data)
+                .mark_bar()
+                .encode(
+                    x=alt.X("Date:N", sort=None, title="Date"),
+                    y=alt.Y("Hours asleep:Q", title=None),
+                    color=alt.Color(
+                        "Hours asleep:Q",
+                        scale=alt.Scale(
+                            domain=[6, sleep_goal],
+                            range=["#EF553B", "#FFA15A", "#00CC96"],
+                            type="threshold",
+                        ),
+                        legend=None,
                     ),
-                    legend=None,
-                ),
-                tooltip=alt.value(None),
+                    tooltip=alt.value(None),
+                )
             )
 
             # 6h warning line (red)
-            warn_line = alt.Chart(sleep_chart_data).mark_rule(
-                color="#EF553B", strokeDash=[5, 5], strokeWidth=2,
-            ).encode(y=alt.datum(6))
+            warn_line = (
+                alt.Chart(sleep_chart_data)
+                .mark_rule(
+                    color="#EF553B",
+                    strokeDash=[5, 5],
+                    strokeWidth=2,
+                )
+                .encode(y=alt.datum(6))
+            )
 
             # 7h goal line (green)
-            goal_line = alt.Chart(sleep_chart_data).mark_rule(
-                color="#00CC96", strokeDash=[5, 5], strokeWidth=2,
-            ).encode(y=alt.datum(sleep_goal))
+            goal_line = (
+                alt.Chart(sleep_chart_data)
+                .mark_rule(
+                    color="#00CC96",
+                    strokeDash=[5, 5],
+                    strokeWidth=2,
+                )
+                .encode(y=alt.datum(sleep_goal))
+            )
 
             # Labels
-            text = alt.Chart(sleep_chart_data).mark_text(
-                dy=-10, fontSize=12, fontWeight="bold", color="white",
-            ).encode(
-                x=alt.X("Date:N", sort=None),
-                y=alt.Y("Hours asleep:Q"),
-                text=alt.Text("Hours asleep:Q", format=".1f"),
+            text = (
+                alt.Chart(sleep_chart_data)
+                .mark_text(
+                    dy=-10,
+                    fontSize=12,
+                    fontWeight="bold",
+                    color="white",
+                )
+                .encode(
+                    x=alt.X("Date:N", sort=None),
+                    y=alt.Y("Hours asleep:Q"),
+                    text=alt.Text("Hours asleep:Q", format=".1f"),
+                )
             )
 
             st.altair_chart(
@@ -177,37 +212,46 @@ if has_steps:
     # Steps bar chart
     if steps_data.height > 0:
         steps_chart_data = (
-            steps_data
-            .with_columns([
-                pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
-            ])
+            steps_data.with_columns(
+                [
+                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                    pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
+                ]
+            )
             .select(["Date", "steps"])
             .to_pandas()
         )
 
-        bars = alt.Chart(steps_chart_data).mark_bar().encode(
-            x=alt.X("Date:N", sort=None, title="Date"),
-            y=alt.Y("steps:Q", title="Steps"),
-            color=alt.condition(
-                alt.datum.steps >= GOALS["steps"],
-                alt.value("#00CC96"),
-                alt.value("#636EFA"),
-            ),
+        bars = (
+            alt.Chart(steps_chart_data)
+            .mark_bar()
+            .encode(
+                x=alt.X("Date:N", sort=None, title="Date"),
+                y=alt.Y("steps:Q", title="Steps"),
+                color=alt.condition(
+                    alt.datum.steps >= GOALS["steps"],
+                    alt.value("#00CC96"),
+                    alt.value("#636EFA"),
+                ),
+            )
         )
 
         # Goal line
-        goal_line = alt.Chart(steps_chart_data).mark_rule(
-            color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2
-        ).encode(y=alt.datum(GOALS["steps"]))
+        goal_line = (
+            alt.Chart(steps_chart_data)
+            .mark_rule(color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2)
+            .encode(y=alt.datum(GOALS["steps"]))
+        )
 
         # Labels on top of bars
-        text = alt.Chart(steps_chart_data).mark_text(
-            dy=-10, fontSize=11, fontWeight="bold"
-        ).encode(
-            x=alt.X("Date:N", sort=None),
-            y=alt.Y("steps:Q"),
-            text=alt.Text("steps:Q", format=",.0f"),
+        text = (
+            alt.Chart(steps_chart_data)
+            .mark_text(dy=-10, fontSize=11, fontWeight="bold")
+            .encode(
+                x=alt.X("Date:N", sort=None),
+                y=alt.Y("steps:Q"),
+                text=alt.Text("steps:Q", format=",.0f"),
+            )
         )
 
         st.altair_chart(bars + goal_line + text, width="stretch")
@@ -227,13 +271,19 @@ has_weight = "weight_kg" in df_all.columns and df_all["weight_kg"].drop_nulls().
 if has_macros or has_weight:
     # Single period selector for this section (independent of sidebar)
     section_days = st.selectbox(
-        "Period", [7, 14, 30, 60, 90],
-        index=0, format_func=lambda d: f"Last {d} days",
+        "Period",
+        [7, 14, 30, 60, 90],
+        index=0,
+        format_func=lambda d: f"Last {d} days",
         key="macros_weight_period",
     )
     section_cutoff = today_local() - timedelta(days=section_days)
-    section_data = df_all.filter(pl.col("date") >= pl.lit(section_cutoff)) if df_all.height > 0 else df_daily
-    macro_data = section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()
+    section_data = (
+        df_all.filter(pl.col("date") >= pl.lit(section_cutoff)) if df_all.height > 0 else df_daily
+    )
+    macro_data = (
+        section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()
+    )
 
     # Metrics row: Protein, Carbs, Fat, Calories (from macros)
     if has_macros and macro_data.height > 0:
@@ -259,11 +309,14 @@ if has_macros or has_weight:
         st.subheader("Daily Macros (g)")
         if has_macros and macro_data.height > 0:
             macro_chart_data = (
-                macro_data
-                .with_columns([
-                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                    (pl.col("protein_g") + pl.col("carbs_g") + pl.col("fat_g")).alias("total_macros"),
-                ])
+                macro_data.with_columns(
+                    [
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                        (pl.col("protein_g") + pl.col("carbs_g") + pl.col("fat_g")).alias(
+                            "total_macros"
+                        ),
+                    ]
+                )
                 .select(["Date", "protein_g", "carbs_g", "fat_g", "total_macros"])
                 .to_pandas()
             )
@@ -274,27 +327,40 @@ if has_macros or has_weight:
                 var_name="Macro",
                 value_name="Grams",
             )
-            macro_melted["Macro"] = macro_melted["Macro"].map({
-                "protein_g": "Protein",
-                "carbs_g": "Carbs",
-                "fat_g": "Fat",
-            })
+            macro_melted["Macro"] = macro_melted["Macro"].map(
+                {
+                    "protein_g": "Protein",
+                    "carbs_g": "Carbs",
+                    "fat_g": "Fat",
+                }
+            )
 
-            bars = alt.Chart(macro_melted).mark_bar().encode(
-                x=alt.X("Date:N", sort=None, title="Date"),
-                y=alt.Y("Grams:Q", title="Grams"),
-                color=alt.Color("Macro:N", scale=alt.Scale(
-                    domain=["Protein", "Carbs", "Fat"],
-                    range=["#00CC96", "#FFA15A", "#EF553B"],
-                )),
-                order=alt.Order("Macro:N", sort="descending"),
+            bars = (
+                alt.Chart(macro_melted)
+                .mark_bar()
+                .encode(
+                    x=alt.X("Date:N", sort=None, title="Date"),
+                    y=alt.Y("Grams:Q", title="Grams"),
+                    color=alt.Color(
+                        "Macro:N",
+                        scale=alt.Scale(
+                            domain=["Protein", "Carbs", "Fat"],
+                            range=["#00CC96", "#FFA15A", "#EF553B"],
+                        ),
+                    ),
+                    order=alt.Order("Macro:N", sort="descending"),
+                )
             )
 
             totals = macro_chart_data[["Date", "total_macros"]].drop_duplicates()
-            text = alt.Chart(totals).mark_text(dy=-10, fontSize=12, fontWeight="bold").encode(
-                x=alt.X("Date:N", sort=None),
-                y=alt.Y("total_macros:Q"),
-                text=alt.Text("total_macros:Q", format=".0f"),
+            text = (
+                alt.Chart(totals)
+                .mark_text(dy=-10, fontSize=12, fontWeight="bold")
+                .encode(
+                    x=alt.X("Date:N", sort=None),
+                    y=alt.Y("total_macros:Q"),
+                    text=alt.Text("total_macros:Q", format=".0f"),
+                )
             )
 
             st.altair_chart(bars + text, width="stretch")
@@ -307,7 +373,9 @@ if has_macros or has_weight:
         if has_weight:
             weight_data = section_data.filter(pl.col("weight_kg").is_not_null())
             if weight_data.height > 0:
-                latest_weight = float(weight_data.sort("date", descending=True)["weight_kg"].head(1).item())
+                latest_weight = float(
+                    weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
+                )
                 avg_weight = float(weight_data["weight_kg"].mean())
                 min_weight = float(weight_data["weight_kg"].min())
                 max_weight = float(weight_data["weight_kg"].max())
@@ -321,26 +389,41 @@ if has_macros or has_weight:
                     st.metric("Range", f"{min_weight:.1f} - {max_weight:.1f} kg")
 
                 weight_chart_data = (
-                    weight_data
-                    .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
+                    weight_data.with_columns(
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
+                    )
                     .select(["Date", "weight_kg"])
                     .to_pandas()
                 )
 
-                line = alt.Chart(weight_chart_data).mark_line(point=True).encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
+                line = (
+                    alt.Chart(weight_chart_data)
+                    .mark_line(point=True)
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
+                    )
                 )
 
-                text = alt.Chart(weight_chart_data).mark_text(dy=-10, fontSize=11).encode(
-                    x=alt.X("Date:N", sort=None),
-                    y=alt.Y("weight_kg:Q"),
-                    text=alt.Text("weight_kg:Q", format=".1f"),
+                text = (
+                    alt.Chart(weight_chart_data)
+                    .mark_text(dy=-10, fontSize=11)
+                    .encode(
+                        x=alt.X("Date:N", sort=None),
+                        y=alt.Y("weight_kg:Q"),
+                        text=alt.Text("weight_kg:Q", format=".1f"),
+                    )
                 )
 
-                avg_line = alt.Chart(weight_chart_data).mark_rule(
-                    color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2,
-                ).encode(y=alt.datum(round(avg_weight, 2)))
+                avg_line = (
+                    alt.Chart(weight_chart_data)
+                    .mark_rule(
+                        color="#ff6b6b",
+                        strokeDash=[5, 5],
+                        strokeWidth=2,
+                    )
+                    .encode(y=alt.datum(round(avg_weight, 2)))
+                )
 
                 st.altair_chart(line + text + avg_line, width="stretch")
             else:
@@ -364,8 +447,9 @@ if has_macros or has_weight:
 
             if table_data.height > 0:
                 display_table = (
-                    table_data
-                    .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
+                    table_data.with_columns(
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date")
+                    )
                     .select([c for c in nutrition_cols if c in table_data.columns])
                     .sort("date", descending=True)
                 )
@@ -373,10 +457,18 @@ if has_macros or has_weight:
                     display_table.to_pandas(),
                     column_config={
                         "date": st.column_config.TextColumn("Date", width="small"),
-                        "protein_g": st.column_config.NumberColumn("Protein (g)", format="%.0f", width="small"),
-                        "carbs_g": st.column_config.NumberColumn("Carbs (g)", format="%.0f", width="small"),
-                        "fat_g": st.column_config.NumberColumn("Fat (g)", format="%.0f", width="small"),
-                        "logged_calories": st.column_config.NumberColumn("Calories", format="%.0f", width="small"),
+                        "protein_g": st.column_config.NumberColumn(
+                            "Protein (g)", format="%.0f", width="small"
+                        ),
+                        "carbs_g": st.column_config.NumberColumn(
+                            "Carbs (g)", format="%.0f", width="small"
+                        ),
+                        "fat_g": st.column_config.NumberColumn(
+                            "Fat (g)", format="%.0f", width="small"
+                        ),
+                        "logged_calories": st.column_config.NumberColumn(
+                            "Calories", format="%.0f", width="small"
+                        ),
                     },
                     hide_index=True,
                     width="stretch",
@@ -390,8 +482,7 @@ if has_macros or has_weight:
         st.markdown("**Daily Weight**")
         if has_weight:
             weight_table = (
-                section_data
-                .filter(pl.col("weight_kg").is_not_null())
+                section_data.filter(pl.col("weight_kg").is_not_null())
                 .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
                 .select(["date", "weight_kg"])
                 .sort("date", descending=True)
@@ -401,7 +492,9 @@ if has_macros or has_weight:
                     weight_table.to_pandas(),
                     column_config={
                         "date": st.column_config.TextColumn("Date", width="small"),
-                        "weight_kg": st.column_config.NumberColumn("Weight (kg)", format="%.1f", width="small"),
+                        "weight_kg": st.column_config.NumberColumn(
+                            "Weight (kg)", format="%.1f", width="small"
+                        ),
                     },
                     hide_index=True,
                     width="stretch",
