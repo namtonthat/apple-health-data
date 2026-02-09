@@ -105,8 +105,8 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
         with chart_right:
             st.subheader("Total Sleep")
             st.caption(
-                ":red-background[< 6h]  :orange-background[6 - 7h]  :green-background[7+ hours]"
-                "  ---  :red[--- 6 hours]  :green[--- 7 hours]"
+                ":red-background[< 6h]  :orange-background[6 - 7h]  :green-background[7+ hours]  \n"
+                ":red[--- 6 hours]  :green[--- 7 hours]"
             )
             # Bar chart — 3 tiers: <6 red, 6-7 orange, 7+ green
             sleep_goal = GOALS["sleep_hours"]
@@ -319,17 +319,26 @@ if has_calories or has_macros:
         if has_weight:
             weight_data = df_daily.filter(pl.col("weight_kg").is_not_null())
 
-            # Weight metrics — current & average vs overall avg, range
+            # Weight metrics — current & average vs Nd avg, range
             all_wt = df_all.filter(pl.col("weight_kg").is_not_null()) if (df_all.height > 0 and "weight_kg" in df_all.columns) else weight_data
             latest_weight = float(weight_data.sort("date", descending=True)["weight_kg"].head(1).item())
-            overall_avg = float(all_wt["weight_kg"].mean()) if all_wt.height > 0 else None
+
+            compare_days = st.selectbox(
+                "Compare against", [7, 14, 30, 60, 90],
+                index=2, format_func=lambda d: f"Last {d} days",
+                key="weight_compare",
+            )
+            compare_date = date.today() - timedelta(days=compare_days)
+            compare_data = all_wt.filter(pl.col("date") >= pl.lit(compare_date))
+            ref_avg = float(compare_data["weight_kg"].mean()) if compare_data.height > 0 else None
+            ref_label = f"{compare_days}d avg"
 
             w1, w2, w3 = st.columns(3)
             with w1:
-                metric_with_goal("Current", latest_weight, overall_avg, " kg", ".1f", inverse=True, ref_label="avg")
+                metric_with_goal("Current", latest_weight, ref_avg, " kg", ".1f", inverse=True, ref_label=ref_label)
             with w2:
                 avg_weight = float(weight_data["weight_kg"].mean())
-                metric_with_goal("Average", avg_weight, overall_avg, " kg", ".1f", inverse=True, ref_label="overall avg")
+                metric_with_goal("Average", avg_weight, ref_avg, " kg", ".1f", inverse=True, ref_label=ref_label)
             with w3:
                 min_weight = weight_data["weight_kg"].min()
                 max_weight = weight_data["weight_kg"].max()
