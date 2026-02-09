@@ -8,17 +8,12 @@ Creates subscribable calendar events with daily health summaries:
 Output: s3://{bucket}/exports/health_metrics.ics
 """
 
-import sys
 from datetime import date, datetime, timedelta, timezone
-from pathlib import Path
 from uuid import NAMESPACE_DNS, uuid5
 
-# Add src to path and load .env via package __init__
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-import duckdb  # noqa: E402
+import duckdb
 
-import pipelines  # noqa: E402, F401 - loads .env on import
-from pipelines.config import (  # noqa: E402
+from pipelines.config import (
     get_bucket,
     get_duckdb_connection,
     get_region,

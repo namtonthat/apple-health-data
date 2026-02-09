@@ -6,11 +6,6 @@ Extracts activity data from Strava API to landing zone.
 Structure:
   s3://{bucket}/landing/strava/activities/{date}.parquet
 """
-import sys
-from pathlib import Path
-
-# Add src to path for imports - this also loads .env via package __init__
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from pipelines.config import run_s3_pipeline
 from pipelines.sources.strava import strava_source
 
