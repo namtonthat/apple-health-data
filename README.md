@@ -32,12 +32,42 @@ A personal health and fitness dashboard powered by Apple Health, Hevy, Strava, a
 ```bash
 git clone https://github.com/namtonthat/apple-health-data.git
 cd apple-health-data
-./scripts/setup.sh      # Install dependencies & create .env
+./scripts/setup.sh                # Install dependencies & create .env
 # Edit .env with your credentials
-./scripts/strava-auth.sh  # Authorize Strava (optional)
-./scripts/run-pipelines.sh
-uv run streamlit run src/dashboard/Home.py
+./scripts/strava-auth.sh          # Authorize Strava (optional)
+uv run python run.py all          # Run full pipeline
+uv run python run.py dashboard    # Start dashboard
 ```
+
+## CLI Usage
+
+All pipeline stages can be run via `run.py`, which loads `.env` automatically:
+
+```bash
+# Ingest — extract data from APIs to S3 landing zone
+uv run python run.py ingest                          # All sources
+uv run python run.py ingest hevy strava              # Specific sources only
+uv run python run.py ingest --date 2026-01-15        # Custom extraction date
+
+# Cleanse — landing -> raw zone
+uv run python run.py cleanse                         # All sources
+uv run python run.py cleanse hevy                    # Specific source only
+
+# Transform — run dbt models
+uv run python run.py transform
+
+# Export — ICS calendar to S3
+uv run python run.py export
+
+# Full pipeline — all stages end-to-end
+uv run python run.py all
+uv run python run.py all --date 2026-01-15
+
+# Dashboard — start Streamlit
+uv run python run.py dashboard
+```
+
+Available ingest sources: `hevy`, `strava`, `apple-health`, `openpowerlifting`
 
 ## Configuration
 
@@ -149,6 +179,7 @@ You can manually trigger a data refresh from the Actions tab in GitHub.
 
 ```
 apple-health-data/
+├── run.py                  # CLI runner (see CLI Usage)
 ├── src/
 │   ├── dashboard/          # Streamlit app
 │   │   ├── Home.py

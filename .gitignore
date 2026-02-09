@@ -18,6 +18,7 @@ venv/
 dbt_project/target/
 dbt_project/logs/
 dbt_project/dbt_packages/
+*.log
 
 # DuckDB
 *.duckdb
@@ -30,3 +31,4 @@ dbt_project/dbt_packages/
 
 # OS
 .DS_Store
+
