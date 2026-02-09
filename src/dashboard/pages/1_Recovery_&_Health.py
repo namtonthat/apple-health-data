@@ -174,6 +174,7 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
             .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
             .select(["Date", "sleep_deep_hours", "sleep_rem_hours", "sleep_light_hours", "sleep_hours"])
             .to_pandas()
+            .rename(columns={"sleep_hours": "Hours asleep"})
         )
 
         chart_left, chart_right = st.columns(2)
@@ -193,8 +194,8 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
                 "sleep_light_hours": "Light",
             })
 
-            # Grouped (side-by-side) bar chart
-            bars = alt.Chart(sleep_melted).mark_bar().encode(
+            # Grouped (side-by-side) bar chart with labels
+            base = alt.Chart(sleep_melted).encode(
                 x=alt.X("Date:N", sort=None, title="Date"),
                 y=alt.Y("Hours:Q", title="Hours"),
                 color=alt.Color("Stage:N", scale=alt.Scale(
@@ -204,31 +205,55 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
                 xOffset="Stage:N",
             )
 
-            st.altair_chart(bars, use_container_width=True)
+            bars = base.mark_bar()
+            text = base.mark_text(dy=-8, fontSize=10).encode(
+                text=alt.Text("Hours:Q", format=".1f"),
+            )
+
+            st.altair_chart(bars + text, width="stretch")
 
         with chart_right:
             st.subheader("Total Sleep")
-            # Bar chart with goal line
-            total_bars = alt.Chart(sleep_chart_data).mark_bar(color="#636EFA").encode(
+            # Bar chart — 3 tiers: <6 red, 6-7 orange, 7+ green
+            sleep_goal = GOALS["sleep_hours"]
+            total_bars = alt.Chart(sleep_chart_data).mark_bar().encode(
                 x=alt.X("Date:N", sort=None, title="Date"),
-                y=alt.Y("sleep_hours:Q", title="Hours"),
+                y=alt.Y("Hours asleep:Q", title=None),
+                color=alt.Color(
+                    "Hours asleep:Q",
+                    scale=alt.Scale(
+                        domain=[6, sleep_goal],
+                        range=["#EF553B", "#FFA15A", "#00CC96"],
+                        type="threshold",
+                    ),
+                    legend=None,
+                ),
+                tooltip=alt.value(None),
             )
 
-            # Goal line
+            # 6h warning line (red)
+            warn_line = alt.Chart(sleep_chart_data).mark_rule(
+                color="#EF553B", strokeDash=[5, 5], strokeWidth=2,
+            ).encode(y=alt.datum(6))
+
+            # 7h goal line (green)
             goal_line = alt.Chart(sleep_chart_data).mark_rule(
-                color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2,
-            ).encode(y=alt.datum(GOALS["sleep_hours"]))
+                color="#00CC96", strokeDash=[5, 5], strokeWidth=2,
+            ).encode(y=alt.datum(sleep_goal))
 
             # Labels
             text = alt.Chart(sleep_chart_data).mark_text(
-                dy=-10, fontSize=12, fontWeight="bold",
+                dy=-10, fontSize=12, fontWeight="bold", color="white",
             ).encode(
                 x=alt.X("Date:N", sort=None),
-                y=alt.Y("sleep_hours:Q"),
-                text=alt.Text("sleep_hours:Q", format=".1f"),
+                y=alt.Y("Hours asleep:Q"),
+                text=alt.Text("Hours asleep:Q", format=".1f"),
             )
 
-            st.altair_chart(total_bars + goal_line + text, use_container_width=True)
+            st.altair_chart(
+                total_bars + warn_line + goal_line + text,
+                width="stretch",
+            )
 else:
     st.info("No sleep data available for selected period")
 
@@ -259,7 +284,10 @@ if has_steps:
     if steps_data.height > 0:
         steps_chart_data = (
             steps_data
-            .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"))
+            .with_columns([
+                pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
+            ])
             .select(["Date", "steps"])
             .to_pandas()
         )
@@ -320,7 +348,7 @@ if has_calories or has_macros:
             st.info("No calorie data available")
 
     with col2:
-        st.subheader("Macros (Avg)")
+        st.subheader("Macros")
         if has_macros:
             macro_data = df_daily.filter(pl.col("protein_g").is_not_null())
             c1, c2, c3 = st.columns(3)

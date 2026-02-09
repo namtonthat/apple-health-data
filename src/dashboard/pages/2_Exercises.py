@@ -34,6 +34,13 @@ def calculate_1rm(weight: float, reps: int) -> float | None:
     return round(weight * (1 + reps / 30), 1)
 
 
+def pr_delta(estimated: float, comp_pr: float | None) -> str | None:
+    """Format delta string comparing estimated 1RM to competition PR."""
+    if comp_pr is None:
+        return None
+    return f"{estimated - comp_pr:+.1f} kg vs {comp_pr:.1f} PR"
+
+
 def get_connection():
     """Get fresh DuckDB connection configured for S3 access."""
     conn = duckdb.connect(":memory:")
@@ -189,8 +196,8 @@ if df_exercises.height > 0:
                 big_3_results.append((lift_key.title(), max_1rm, comp_pr))
 
     # Summary metrics + Big 3 on one row with separator
-    # 4 summary metrics | 3 Big 3 lifts
-    cols = st.columns([1, 1, 1, 1, 0.1, 1, 1, 1])
+    # 4 summary metrics | 3 Big 3 lifts + total
+    cols = st.columns([1, 1, 1, 1, 0.1, 1, 1, 1, 1])
 
     with cols[0]:
         n_workouts = df_exercises["workout_date"].n_unique()
@@ -210,21 +217,16 @@ if df_exercises.height > 0:
         st.markdown("<div style='border-left: 2px solid #444; height: 80px; margin: 0 auto;'></div>", unsafe_allow_html=True)
 
     # Big 3 lifts with competition PR comparison
-    if len(big_3_results) >= 1:
-        with cols[5]:
-            name, est_1rm, comp_pr = big_3_results[0]
-            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
-            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
-    if len(big_3_results) >= 2:
-        with cols[6]:
-            name, est_1rm, comp_pr = big_3_results[1]
-            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
-            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
-    if len(big_3_results) >= 3:
-        with cols[7]:
-            name, est_1rm, comp_pr = big_3_results[2]
-            delta = f"{est_1rm - comp_pr:+.1f} kg vs {comp_pr:.1f} PR" if comp_pr else None
-            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=delta)
+    for i, (name, est_1rm, comp_pr) in enumerate(big_3_results):
+        with cols[5 + i]:
+            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=pr_delta(est_1rm, comp_pr))
+
+    # Total estimated 1RM (sum of Big 3)
+    if len(big_3_results) == 3:
+        with cols[8]:
+            est_total = sum(r[1] for r in big_3_results)
+            comp_total = competition_prs.get("total")
+            st.metric("Total 1RM", f"{est_total:.1f} kg", delta=pr_delta(est_total, comp_total))
 
     # Time since last competition badge with OpenPowerlifting link
     last_comp = competition_prs.get("last_competition")
@@ -417,4 +419,4 @@ if df_strava.height > 0:
         width="stretch",
     )
 else:
-    st.info("No Strava activities available for selected period. Add STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, and STRAVA_REFRESH_TOKEN to .env to enable.")
+    st.info("No Strava activities found for the selected period.")
