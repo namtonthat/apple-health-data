@@ -1,10 +1,10 @@
 {{ config(materialized='view') }}
 
--- Source: Strava activities from dlt landing zone
--- Path: s3://{bucket}/landing/strava/activities/*.parquet
+-- Source: Strava activities from dlt landing zone (Delta table)
+-- Path: s3://{bucket}/landing/strava/activities/
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/strava/activities/*.parquet', union_by_name = true)
+    select * from delta_scan('s3://{{ var("s3_bucket") }}/landing/strava/activities')
 ),
 
 staged as (

@@ -1,10 +1,10 @@
 {{ config(materialized='view') }}
 
--- Source: Apple Health metrics from dlt landing zone
--- Path: s3://{bucket}/landing/health/health_metrics/*.parquet
+-- Source: Apple Health metrics from dlt landing zone (Delta table)
+-- Path: s3://{bucket}/landing/health/health_metrics/
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/health/health_metrics/*.parquet', union_by_name = true)
+    select * from delta_scan('s3://{{ var("s3_bucket") }}/landing/health/health_metrics')
 ),
 
 staged as (
@@ -18,8 +18,8 @@ staged as (
         units,
         source as data_source,
 
-        -- Main value (handle dlt variant column)
-        coalesce(value, value__v_double) as value,
+        -- Main value
+        value,
 
         -- Sleep breakdown (only for sleep_analysis metric)
         rem as sleep_rem_hours,

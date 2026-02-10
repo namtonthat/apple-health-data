@@ -35,19 +35,22 @@ def get_s3_client(**s3_kwargs) -> s3fs.S3FileSystem:
 
 
 def get_duckdb_connection() -> duckdb.DuckDBPyConnection:
-    """Get DuckDB connection configured for S3 access."""
+    """Get DuckDB connection configured for S3 and Delta access."""
     conn = duckdb.connect(":memory:")
-    conn.execute(f"SET s3_region = '{get_region()}'")
-    conn.execute(f"SET s3_access_key_id = '{os.environ['AWS_ACCESS_KEY_ID']}'")
-    conn.execute(f"SET s3_secret_access_key = '{os.environ['AWS_SECRET_ACCESS_KEY']}'")
+    conn.execute("INSTALL delta; LOAD delta;")
+    conn.execute(f"""
+        CREATE SECRET (
+            TYPE s3,
+            KEY_ID '{os.environ["AWS_ACCESS_KEY_ID"]}',
+            SECRET '{os.environ["AWS_SECRET_ACCESS_KEY"]}',
+            REGION '{get_region()}'
+        )
+    """)
     return conn
 
 
-def get_s3_destination(extraction_date: str):
-    """Configure S3 filesystem destination for landing zone.
-
-    Files land as: landing/{dataset}/{table_name}/{date}.{file_id}.parquet
-    """
+def get_s3_destination():
+    """Configure S3 filesystem destination for landing zone (Delta tables)."""
     return filesystem(
         bucket_url=f"s3://{get_bucket()}/landing",
         credentials={
@@ -55,7 +58,6 @@ def get_s3_destination(extraction_date: str):
             "aws_secret_access_key": os.environ["AWS_SECRET_ACCESS_KEY"],
             "region_name": get_region(),
         },
-        layout="{table_name}/" + extraction_date + ".{file_id}.{ext}",
     )
 
 
@@ -76,15 +78,12 @@ def run_s3_pipeline(name: str, dataset: str, source, extraction_date: str | None
 
     pipeline = dlt.pipeline(
         pipeline_name=name,
-        destination=get_s3_destination(extraction_date),
+        destination=get_s3_destination(),
         dataset_name=dataset,
         pipelines_dir=os.environ.get("DLT_PIPELINE_DIR", ".dlt_pipelines"),
     )
 
-    load_info = pipeline.run(
-        source,
-        loader_file_format="parquet",
-    )
+    load_info = pipeline.run(source, table_format="delta")
 
     label = name.replace("_to_landing", "").replace("_", " ").title()
     print("=" * 60)
@@ -95,9 +94,9 @@ def run_s3_pipeline(name: str, dataset: str, source, extraction_date: str | None
     print(f"\nLoad info: {load_info}")
 
     if load_info.load_packages:
-        print("\nTables loaded:")
+        print("\nDelta tables loaded:")
         for table in load_info.load_packages[0].schema.tables:
             if not table.startswith("_dlt"):
-                print(f"  - {table}/{extraction_date}.parquet")
+                print(f"  - {table}/ (Delta)")
 
     return load_info

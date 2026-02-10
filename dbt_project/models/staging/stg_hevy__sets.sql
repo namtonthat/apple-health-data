@@ -1,10 +1,10 @@
 {{ config(materialized='view') }}
 
--- Source: Hevy sets data from dlt landing zone
--- Path: s3://{bucket}/landing/hevy/workouts__exercises__sets/*.parquet
+-- Source: Hevy sets data from dlt landing zone (Delta table)
+-- Path: s3://{bucket}/landing/hevy/workouts__exercises__sets/
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/hevy/workouts__exercises__sets/*.parquet', union_by_name = true)
+    select * from delta_scan('s3://{{ var("s3_bucket") }}/landing/hevy/workouts__exercises__sets')
 ),
 
 staged as (
@@ -22,7 +22,7 @@ staged as (
         -- Performance metrics (handle variant types from dlt)
         coalesce(weight_kg__v_double, weight_kg::double) as weight_kg,
         reps,
-        coalesce(rpe__v_double, rpe::double) as rpe,
+        rpe,
 
         -- Cardio/endurance metrics
         distance_meters,

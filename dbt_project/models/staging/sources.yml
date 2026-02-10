@@ -11,20 +11,20 @@ sources:
       - name: workouts
         description: Workout sessions from Hevy API
         external:
-          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts/*.parquet"
-          file_format: parquet
+          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts"
+          file_format: delta
 
       - name: exercises
         description: Exercises within workouts
         external:
-          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises/*.parquet"
-          file_format: parquet
+          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises"
+          file_format: delta
 
       - name: sets
         description: Individual sets within exercises
         external:
-          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises__sets/*.parquet"
-          file_format: parquet
+          location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises__sets"
+          file_format: delta
 
   - name: apple_health
     description: Apple Health metrics from dlt landing zone
@@ -36,8 +36,8 @@ sources:
       - name: health_metrics
         description: Flattened health metrics from Apple Health JSON exports
         external:
-          location: "s3://{{ var('s3_bucket') }}/landing/health/health_metrics/*.parquet"
-          file_format: parquet
+          location: "s3://{{ var('s3_bucket') }}/landing/health/health_metrics"
+          file_format: delta
 
   - name: strava
     description: Strava activity data from dlt landing zone
@@ -49,5 +49,5 @@ sources:
       - name: activities
         description: Activities from Strava API (runs, rides, swims, etc.)
         external:
-          location: "s3://{{ var('s3_bucket') }}/landing/strava/activities/*.parquet"
-          file_format: parquet
+          location: "s3://{{ var('s3_bucket') }}/landing/strava/activities"
+          file_format: delta

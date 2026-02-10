@@ -1,10 +1,10 @@
 {{ config(materialized='view') }}
 
--- Source: Hevy workout data from dlt landing zone
--- Path: s3://{bucket}/landing/hevy/workouts/*.parquet
+-- Source: Hevy workout data from dlt landing zone (Delta table)
+-- Path: s3://{bucket}/landing/hevy/workouts/
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/hevy/workouts/*.parquet', union_by_name = true)
+    select * from delta_scan('s3://{{ var("s3_bucket") }}/landing/hevy/workouts')
 ),
 
 staged as (
