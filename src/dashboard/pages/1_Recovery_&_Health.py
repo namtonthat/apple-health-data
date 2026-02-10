@@ -210,6 +210,10 @@ if has_steps:
         st.metric("Days at Goal", f"{days_hit} / {total_days}")
 
     # Steps bar chart
+    st.caption(
+        f":green-background[At goal]  :blue-background[Below goal]  "
+        f":red[--- {GOALS['steps']:,.0f} steps goal]"
+    )
     if steps_data.height > 0:
         steps_chart_data = (
             steps_data.with_columns(
