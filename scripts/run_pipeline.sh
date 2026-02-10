@@ -14,24 +14,20 @@ else
 fi
 
 echo ""
-echo "[1/5] Extracting Hevy data to landing zone..."
+echo "[1/4] Extracting Hevy data to landing zone..."
 uv run python src/pipelines/pipelines/hevy_to_s3.py
 
 echo ""
-echo "[2/5] Extracting Apple Health data to landing zone..."
+echo "[2/4] Extracting Apple Health data to landing zone..."
 uv run python src/pipelines/pipelines/apple_health_to_s3.py
 
 echo ""
-echo "[3/5] Cleansing data: landing -> raw..."
-uv run python src/pipelines/pipelines/cleanse_to_raw.py
-
-echo ""
-echo "[4/5] Running dbt transformations..."
+echo "[3/4] Running dbt transformations..."
 cd dbt_project
 uv run dbt run
 
 echo ""
-echo "[5/5] Pipeline Complete!"
+echo "[4/4] Pipeline Complete!"
 echo "========================================"
 echo ""
 echo "To view the dashboard:"

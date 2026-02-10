@@ -1,16 +1,16 @@
 {{ config(materialized='view') }}
 
--- Source: Cleansed Apple Health metrics from raw zone
--- Path: s3://{bucket}/raw/health/health_metrics/*.parquet
+-- Source: Apple Health metrics from dlt landing zone
+-- Path: s3://{bucket}/landing/health/health_metrics/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/health/health_metrics/*.parquet', union_by_name = true)
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/health/health_metrics/*.parquet', union_by_name = true)
 ),
 
 staged as (
     select
         -- Primary key
-        dlt_id as metric_id,
+        _dlt_id as metric_id,
 
         -- Dimensions
         metric_date::date as metric_date,
@@ -18,8 +18,8 @@ staged as (
         units,
         source as data_source,
 
-        -- Main value
-        value,
+        -- Main value (handle dlt variant column)
+        coalesce(value, value__v_double) as value,
 
         -- Sleep breakdown (only for sleep_analysis metric)
         rem as sleep_rem_hours,
@@ -29,7 +29,7 @@ staged as (
 
         -- Metadata
         file_timestamp as export_timestamp,
-        dlt_load_id as load_id
+        _dlt_load_id as load_id
 
     from source
 ),

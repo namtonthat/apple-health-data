@@ -3,7 +3,7 @@ Pipeline: Apple Health JSON (S3 landing) -> S3 Landing Zone (landing/health/)
 
 Reads Apple Health JSON exports from landing zone, parses them,
 and writes structured parquet files back to landing zone.
-Data is then cleansed by the cleanse pipeline before being used by dbt.
+dbt staging models read directly from landing and handle dedup/typing.
 
 Structure:
   Input:  s3://{bucket}/landing/health/*.json

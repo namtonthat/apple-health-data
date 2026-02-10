@@ -2,7 +2,7 @@
 Pipeline: Hevy API -> S3 Landing Zone (landing/hevy/)
 
 Extracts raw workout data from Hevy API to landing zone.
-Data is then cleansed by the cleanse pipeline before being used by dbt.
+dbt staging models read directly from landing and handle dedup/typing.
 
 Structure:
   s3://{bucket}/landing/hevy/workouts/{date}.parquet

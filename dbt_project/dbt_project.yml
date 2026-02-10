@@ -14,7 +14,7 @@ vars:
 
 models:
   health_analytics:
-    # Staging: Views that read from S3 raw/
+    # Staging: Views that read from S3 landing/
     staging:
       +materialized: view
       +schema: staging

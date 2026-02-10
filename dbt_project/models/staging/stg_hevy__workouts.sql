@@ -1,16 +1,16 @@
 {{ config(materialized='view') }}
 
--- Source: Cleansed Hevy workout data from raw zone
--- Path: s3://{bucket}/raw/hevy/workouts/*.parquet
+-- Source: Hevy workout data from dlt landing zone
+-- Path: s3://{bucket}/landing/hevy/workouts/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts/*.parquet', union_by_name = true)
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/hevy/workouts/*.parquet', union_by_name = true)
 ),
 
 staged as (
     select
-        -- Primary key (handle both old and new column names)
-        coalesce(_dlt_id, dlt_id) as workout_id,
+        -- Primary key
+        _dlt_id as workout_id,
 
         -- Natural key
         id as hevy_workout_id,

@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: int_health__daily_activity
+    description: >
+      Daily activity metrics pivoted from Apple Health.
+      Grain: One row per calendar day.
+    columns:
+      - name: metric_date
+        description: Calendar date
+      - name: steps
+        description: Daily step count
+      - name: active_calories
+        description: Active energy burned in kcal
+      - name: basal_calories
+        description: Basal energy burned in kcal (converted from kJ)
+      - name: exercise_minutes
+        description: Apple Watch exercise ring minutes
+      - name: distance_km
+        description: Walking + running distance in km
+      - name: daylight_minutes
+        description: Time spent in daylight
+
+  - name: int_health__daily_vitals
+    description: >
+      Daily vital signs pivoted from Apple Health.
+      Grain: One row per calendar day.
+    columns:
+      - name: metric_date
+        description: Calendar date
+      - name: weight_kg
+        description: Body weight in kg
+      - name: resting_hr_bpm
+        description: Resting heart rate in BPM
+      - name: hrv_ms
+        description: Heart rate variability in milliseconds
+      - name: vo2_max
+        description: VO2 max estimate
+      - name: sleep_total_hours
+        description: Total sleep (REM + deep + core)
+      - name: sleep_rem_hours
+        description: REM sleep hours
+      - name: sleep_deep_hours
+        description: Deep sleep hours
+      - name: respiratory_rate
+        description: Respiratory rate
+
+  - name: int_health__daily_nutrition
+    description: >
+      Daily nutrition metrics pivoted from Apple Health.
+      Grain: One row per calendar day.
+    columns:
+      - name: metric_date
+        description: Calendar date
+      - name: dietary_calories
+        description: Dietary energy intake in kcal (converted from kJ)
+      - name: protein_g
+        description: Protein intake in grams
+      - name: carbs_g
+        description: Carbohydrate intake in grams
+      - name: fat_g
+        description: Total fat intake in grams
+      - name: fiber_g
+        description: Fiber intake in grams
+      - name: water_ml
+        description: Water intake in milliliters
+
+  - name: int_hevy__daily_workouts
+    description: >
+      Daily workout aggregates from Hevy.
+      Grain: One row per calendar day with workout activity.
+    columns:
+      - name: workout_date
+        description: Date of workout(s)
+      - name: day_name
+        description: Day of week
+      - name: workouts
+        description: Number of workouts performed
+      - name: total_duration_minutes
+        description: Total workout time in minutes
+      - name: unique_exercises
+        description: Count of distinct exercises
+      - name: total_sets
+        description: Total sets performed
+      - name: working_sets
+        description: Number of working (non-warmup) sets
+      - name: total_volume_kg
+        description: Total volume (weight x reps) in kg
+      - name: max_weight_kg
+        description: Heaviest weight lifted
+      - name: avg_rpe
+        description: Average RPE across sets

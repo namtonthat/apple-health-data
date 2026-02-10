@@ -22,10 +22,6 @@ echo "📥 Extracting from OpenPowerlifting..."
 uv run python src/pipelines/openpowerlifting.py
 
 echo ""
-echo "🧹 Cleansing to raw zone..."
-uv run python src/pipelines/pipelines/cleanse_to_raw.py
-
-echo ""
 echo "🔧 Running dbt transformations..."
 cd dbt_project && uv run dbt run && cd ..
 

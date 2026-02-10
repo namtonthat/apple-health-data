@@ -59,9 +59,6 @@ jobs:
           uv run python run.py ingest $SOURCES
         continue-on-error: true
 
-      - name: Cleanse
-        run: uv run python run.py cleanse
-
       - name: Transform
         run: uv run python run.py transform
 

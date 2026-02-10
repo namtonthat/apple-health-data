@@ -49,10 +49,6 @@ uv run python run.py ingest                          # All sources
 uv run python run.py ingest hevy strava              # Specific sources only
 uv run python run.py ingest --date 2026-01-15        # Custom extraction date
 
-# Cleanse — landing -> raw zone
-uv run python run.py cleanse                         # All sources
-uv run python run.py cleanse hevy                    # Specific source only
-
 # Transform — run dbt models
 uv run python run.py transform
 

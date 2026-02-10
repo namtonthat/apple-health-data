@@ -7,7 +7,6 @@ Loads .env and runs individual stages or the full pipeline.
 Usage:
     uv run python run.py ingest                  # All sources
     uv run python run.py ingest hevy strava      # Specific sources
-    uv run python run.py cleanse                  # Landing -> Raw
     uv run python run.py transform               # dbt run
     uv run python run.py export                   # ICS calendar
     uv run python run.py all                      # Full pipeline
@@ -83,17 +82,6 @@ def run_ingest(sources: list[str], date: str | None) -> None:
             print(f"Warning: {label} failed — {exc}")
 
 
-def run_cleanse(sources: list[str] | None) -> None:
-    """Cleanse landing -> raw zone."""
-    load_env()
-    from pipelines.pipelines.cleanse_to_raw import run_pipeline
-
-    # Map CLI names to internal source system names
-    name_map = {"apple-health": "health"}
-    mapped = [name_map.get(s, s) for s in sources] if sources else None
-    run_pipeline(source_systems=mapped)
-
-
 def run_transform() -> None:
     """Run dbt transformations."""
     load_env()
@@ -133,10 +121,9 @@ def run_all(date: str | None) -> None:
     print("=" * 60)
 
     stages = [
-        ("1/4 Ingest", lambda: run_ingest(INGEST_SOURCES, date)),
-        ("2/4 Cleanse", lambda: run_cleanse(None)),
-        ("3/4 Transform", run_transform),
-        ("4/4 Export", run_export),
+        ("1/3 Ingest", lambda: run_ingest(INGEST_SOURCES, date)),
+        ("2/3 Transform", run_transform),
+        ("3/3 Export", run_export),
     ]
 
     for label, fn in stages:
@@ -160,8 +147,6 @@ def main() -> None:
 examples:
   %(prog)s ingest                     Run all ingestion sources
   %(prog)s ingest hevy strava         Ingest only Hevy and Strava
-  %(prog)s cleanse                    Cleanse landing -> raw
-  %(prog)s cleanse hevy               Cleanse only Hevy
   %(prog)s transform                  Run dbt models
   %(prog)s export                     Export ICS calendar
   %(prog)s all                        Full pipeline end-to-end
@@ -181,15 +166,6 @@ examples:
         help=f"Sources to ingest (default: all). Choices: {', '.join(INGEST_SOURCES)}",
     )
     p_ingest.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
-
-    # cleanse
-    p_cleanse = sub.add_parser("cleanse", help="Cleanse landing -> raw zone")
-    p_cleanse.add_argument(
-        "sources",
-        nargs="*",
-        default=None,
-        help="Sources to cleanse (default: all). Choices: hevy, apple-health, strava",
-    )
 
     # transform
     sub.add_parser("transform", help="Run dbt transformations")
@@ -214,8 +190,6 @@ examples:
     match args.stage:
         case "ingest":
             run_ingest(args.sources, args.date)
-        case "cleanse":
-            run_cleanse(args.sources or None)
         case "transform":
             run_transform()
         case "export":

@@ -1,19 +1,19 @@
 {{ config(materialized='view') }}
 
--- Source: Cleansed Hevy sets data from raw zone
--- Path: s3://{bucket}/raw/hevy/workouts__exercises__sets/*.parquet
+-- Source: Hevy sets data from dlt landing zone
+-- Path: s3://{bucket}/landing/hevy/workouts__exercises__sets/*.parquet
 
 with source as (
-    select * from read_parquet('s3://{{ var("s3_bucket") }}/raw/hevy/workouts__exercises__sets/*.parquet', union_by_name = true)
+    select * from read_parquet('s3://{{ var("s3_bucket") }}/landing/hevy/workouts__exercises__sets/*.parquet', union_by_name = true)
 ),
 
 staged as (
     select
-        -- Primary key (handle both old and new column names)
-        coalesce(_dlt_id, dlt_id) as set_id,
+        -- Primary key
+        _dlt_id as set_id,
 
         -- Foreign key
-        coalesce(_dlt_parent_id, dlt_parent_id) as exercise_id,
+        _dlt_parent_id as exercise_id,
 
         -- Set details
         index + 1 as set_number,  -- 1-indexed for readability
