@@ -11,6 +11,7 @@ macro-paths: ["macros"]
 
 vars:
   s3_bucket: "{{ env_var('S3_BUCKET_NAME') }}"
+  timezone: "Australia/Melbourne"
   squat_exercise_name: "Squat (Barbell)"
   bench_exercise_name: "Bench Press (Barbell)"
   deadlift_exercise_name: "Sumo Deadlift"

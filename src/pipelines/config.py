@@ -1,7 +1,8 @@
 """Shared configuration and factory functions for all pipelines."""
 
 import os
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import dlt
 import duckdb
@@ -71,7 +72,7 @@ def run_s3_pipeline(name: str, dataset: str, source, extraction_date: str | None
         extraction_date: Date string (YYYY-MM-DD), defaults to today
     """
     if extraction_date is None:
-        extraction_date = date.today().isoformat()
+        extraction_date = datetime.now(ZoneInfo("Australia/Melbourne")).date().isoformat()
 
     bucket = get_bucket()
     destination_path = f"s3://{bucket}/landing/{dataset}"

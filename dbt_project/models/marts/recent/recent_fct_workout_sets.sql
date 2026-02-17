@@ -10,5 +10,5 @@
 
 select *
 from {{ ref('fct_workout_sets') }}
-where workout_date >= current_date - interval '365 days'
+where workout_date >= (now() at time zone '{{ var("timezone") }}')::date - interval '365 days'
 order by workout_date desc, started_at desc, exercise_order asc, set_number asc

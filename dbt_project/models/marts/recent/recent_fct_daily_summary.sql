@@ -10,5 +10,5 @@
 
 select *
 from {{ ref('fct_daily_summary') }}
-where date >= current_date - interval '90 days'
+where date >= (now() at time zone '{{ var("timezone") }}')::date - interval '90 days'
 order by date desc

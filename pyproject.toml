@@ -45,6 +45,7 @@ select = ["E", "F", "I", "W"]
 s3_bucket_name = "api-health-data-ntonthat"
 s3_transformed_prefix = "transformed"
 aws_region = "ap-southeast-2"
+timezone = "Australia/Melbourne"
 
 # User info
 user_name = "Nam Tonthat"

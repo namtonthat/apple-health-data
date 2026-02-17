@@ -10,5 +10,5 @@
 
 select *
 from {{ ref('fct_strava_activities') }}
-where activity_date >= current_date - interval '365 days'
+where activity_date >= (now() at time zone '{{ var("timezone") }}')::date - interval '365 days'
 order by activity_date desc, started_at_local desc
