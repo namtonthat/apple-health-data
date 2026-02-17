@@ -16,3 +16,6 @@ apply_dbt_builtins = true
 
 [sqlfluff:templater:jinja:context]
 s3_bucket = api-health-data-ntonthat
+squat_exercise_name = Squat (Barbell)
+bench_exercise_name = Bench Press (Barbell)
+deadlift_exercise_name = Sumo Deadlift

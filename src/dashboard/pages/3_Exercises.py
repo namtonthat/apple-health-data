@@ -2,6 +2,7 @@
 
 from datetime import datetime
 
+import altair as alt
 import polars as pl
 import streamlit as st
 
@@ -65,7 +66,7 @@ start_date, end_date = date_filter_sidebar()
 
 # Load data
 df_exercises = load_parquet(
-    "fct_workout_sets",
+    "fct_workout_sets_recent",
     """SELECT workout_date, workout_name, exercise_name, set_number,
               weight_kg, reps, volume_kg, rpe, set_type, started_at, exercise_order
        FROM read_parquet('{path}')
@@ -75,7 +76,7 @@ df_exercises = load_parquet(
 )
 competition_prs = load_personal_bests()
 df_strava = load_parquet(
-    "fct_strava_activities",
+    "fct_strava_activities_recent",
     """SELECT activity_date, activity_name, activity_type, sport_type,
               moving_time_minutes, distance_km, elevation_gain_m, avg_speed_kmh,
               avg_pace_min_per_km, avg_heartrate, max_heartrate, pr_count
@@ -84,6 +85,7 @@ df_strava = load_parquet(
        ORDER BY activity_date DESC""",
     [start_date, end_date],
 )
+df_e1rm = load_parquet("fct_e1rm_rolling_total")
 
 # =============================================================================
 # Exercises Section
@@ -169,6 +171,58 @@ if df_exercises.height > 0:
         if OPENPOWERLIFTING_URL:
             comp_text += f" · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})"
         st.caption(comp_text)
+
+    # Rolling e1RM Total chart
+    if df_e1rm.height > 0:
+        st.divider()
+        st.subheader("Rolling Estimated 1RM Total")
+
+        e1rm_chart_data = (
+            df_e1rm.with_columns(pl.col("workout_date").cast(pl.Date).alias("Date"))
+            .select(["Date", "squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"])
+            .to_pandas()
+            .melt(
+                id_vars=["Date"],
+                value_vars=["squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"],
+                var_name="Lift",
+                value_name="e1RM (kg)",
+            )
+        )
+        e1rm_chart_data["Lift"] = e1rm_chart_data["Lift"].map(
+            {
+                "squat_e1rm": "Squat",
+                "bench_e1rm": "Bench",
+                "deadlift_e1rm": "Deadlift",
+                "estimated_total": "Total",
+            }
+        )
+
+        individual = (
+            alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] != "Total"])
+            .mark_line(strokeDash=[4, 4], strokeWidth=1.5)
+            .encode(
+                x=alt.X("Date:T", title="Date"),
+                y=alt.Y("e1RM (kg):Q", title="e1RM (kg)"),
+                color=alt.Color(
+                    "Lift:N",
+                    scale=alt.Scale(
+                        domain=["Squat", "Bench", "Deadlift"],
+                        range=["#00CC96", "#636EFA", "#EF553B"],
+                    ),
+                ),
+            )
+        )
+
+        total = (
+            alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] == "Total"])
+            .mark_line(strokeWidth=3, color="white")
+            .encode(
+                x=alt.X("Date:T"),
+                y=alt.Y("e1RM (kg):Q"),
+            )
+        )
+
+        st.altair_chart(individual + total, width="stretch")
 
     st.divider()
 

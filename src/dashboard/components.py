@@ -77,6 +77,7 @@ def date_filter_sidebar(
 
     preset_days = {
         "Last 7 days": 7,
+        "Last 14 days": 14,
         "Last 30 days": 30,
         "Last 90 days": 90,
     }

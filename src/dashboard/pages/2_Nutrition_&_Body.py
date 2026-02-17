@@ -1,16 +1,20 @@
 """Nutrition & Body page — Macros, Calories, and Weight."""
 
-from datetime import timedelta
-
 import altair as alt
 import polars as pl
 import streamlit as st
 
 st.set_page_config(page_title="🍽️ Nutrition & Body", page_icon="🍽️", layout="wide")
 
-from dashboard.components import metric_with_goal  # noqa: E402
-from dashboard.config import GOALS, today_local  # noqa: E402
+from dashboard.components import date_filter_sidebar, metric_with_goal  # noqa: E402
+from dashboard.config import GOALS  # noqa: E402
 from dashboard.data import load_daily_summary  # noqa: E402
+
+# Sidebar - Date Filter
+start_date, end_date = date_filter_sidebar(
+    presets=["Last 7 days", "Last 14 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
+    max_lookback=90,
+)
 
 df_all = load_daily_summary()
 
@@ -23,17 +27,10 @@ has_macros = "protein_g" in df_all.columns and df_all["protein_g"].drop_nulls().
 has_weight = "weight_kg" in df_all.columns and df_all["weight_kg"].drop_nulls().len() > 0
 
 if has_macros or has_weight:
-    # Period selector for this page
-    section_days = st.selectbox(
-        "Period",
-        [7, 14, 30, 60, 90],
-        index=0,
-        format_func=lambda d: f"Last {d} days",
-        key="macros_weight_period",
-    )
-    section_cutoff = today_local() - timedelta(days=section_days)
     section_data = (
-        df_all.filter(pl.col("date") >= pl.lit(section_cutoff)) if df_all.height > 0 else df_all
+        df_all.filter((pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date)))
+        if df_all.height > 0
+        else df_all
     )
     macro_data = (
         section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()

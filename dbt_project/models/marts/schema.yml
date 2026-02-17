@@ -58,6 +58,34 @@ models:
       Last 90 days of fct_daily_summary for fast dashboard reads.
       Same schema as fct_daily_summary, truncated to 90 days.
 
+  - name: fct_workout_sets_recent
+    description: >
+      Last 365 days of fct_workout_sets for fast dashboard reads.
+      Same schema as fct_workout_sets, truncated to 1 year.
+
+  - name: fct_strava_activities_recent
+    description: >
+      Last 365 days of fct_strava_activities for fast dashboard reads.
+      Same schema as fct_strava_activities, truncated to 1 year.
+
+  - name: fct_e1rm_rolling_total
+    description: >
+      Rolling estimated 1RM total for Big 3 lifts (Squat, Bench, Deadlift).
+      Uses Epley formula to estimate 1RM per set, tracks running max per lift,
+      and sums for estimated powerlifting total.
+      Grain: One row per Big 3 workout date.
+    columns:
+      - name: workout_date
+        description: Date of workout
+      - name: squat_e1rm
+        description: Running max estimated 1RM for squat
+      - name: bench_e1rm
+        description: Running max estimated 1RM for bench press
+      - name: deadlift_e1rm
+        description: Running max estimated 1RM for deadlift
+      - name: estimated_total
+        description: Sum of squat + bench + deadlift e1RMs
+
   - name: fct_exercise_progress
     description: >
       Exercise progression tracking with personal records.
