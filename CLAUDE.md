@@ -31,11 +31,14 @@ uv run ruff format .                           # Python format
 uv run sqlfluff lint dbt_project/models/       # SQL lint (DuckDB dialect)
 
 # Testing
-uv run pytest
+uv run pytest                                  # All tests
+uv run pytest -k test_name                     # Single test by name
+uv run pytest tests/path/to/test_file.py       # Single test file
 
 # dbt (run from dbt_project/)
 uv run dbt run --profiles-dir .
 uv run dbt test --profiles-dir .
+uv run dbt run --profiles-dir . --select model_name   # Single model
 ```
 
 ## Architecture
@@ -48,24 +51,27 @@ Sources (APIs/files) → Landing (S3 Delta tables) → Transformed (dbt/DuckDB �
 
 ### Key Modules
 
-- **`run.py`** — CLI entry point; dispatches to pipeline stages, loads `.env` automatically
-- **`src/pipelines/config.py`** — Shared utilities: S3 client, DuckDB connection (with `CREATE SECRET` for Delta), dlt destination (`table_format="delta"`)
-- **`src/pipelines/sources/`** — Data source extractors (dlt sources for Hevy/Strava, JSON parser for Apple Health)
-- **`src/pipelines/pipelines/`** — Pipeline runners: `*_to_s3.py` (ingest to Delta tables), `export_to_ics.py`
+- **`run.py`** — CLI entry point; dispatches to pipeline stages, loads `.env` automatically. Adds `src/` to `sys.path` for pipeline imports.
+- **`src/pipelines/config.py`** — Shared utilities: `get_s3_client()`, `get_duckdb_connection()` (with `CREATE SECRET` for Delta), `get_s3_destination()`, and `run_s3_pipeline()` which all pipeline runners call.
+- **`src/pipelines/sources/`** — dlt source decorators: `apple_health_source()` (JSON parser), `hevy_source()` (REST API), `strava_source()` (OAuth2 REST API)
+- **`src/pipelines/pipelines/`** — Thin wrappers: each calls `source() → run_s3_pipeline(name, dataset, source, date)`
 - **`src/pipelines/openpowerlifting.py`** — Web scraper (BeautifulSoup)
-- **`src/dashboard/`** — Streamlit app with `Home.py` as entry point
+- **`src/dashboard/data.py`** — Data loading: S3 parquet → DuckDB query → Arrow → Polars DataFrame. Central function is `load_daily_summary()` (1-hour TTL cache), used by all dashboard pages.
 - **`src/dashboard/config.py`** — Loads non-sensitive config from `pyproject.toml [tool.dashboard]` and secrets from `.env` or `st.secrets`
-- **`src/dashboard/data.py`** — Shared data loading via DuckDB + Polars from S3 parquet (includes cached `load_daily_summary()`)
 - **`src/dashboard/components.py`** — Reusable UI components (`metric_with_goal`, `date_filter_sidebar`)
-- **`dbt_project/models/`** — staging (`delta_scan()`) → intermediate → marts (external parquet)
 
-### Dashboard Pages
+### dbt Model Layers
 
-- **Home** — Overview with navigation cards
-- **1_Recovery** — Sleep stages/totals + Meditation (bar charts with goals)
-- **2_Activity** — Steps (bar chart with goal)
-- **3_Nutrition_&_Body** — Macros/Calories + Weight trend + detailed tables
-- **4_Exercises** — Hevy workout data + OpenPowerlifting comparisons
+Three-layer architecture in `dbt_project/models/`:
+
+- **Staging** (views) — `stg_*` models read from S3 Delta tables via `delta_scan()`, deduplicate, and rename columns
+- **Intermediate** (views) — `int_*` models pivot metrics into one-row-per-day format (daily_vitals, daily_activity, daily_nutrition, daily_workouts)
+- **Marts** (external parquet) — `fct_*` models materialize to S3 `transformed/` prefix. Key table: `fct_daily_summary` joins all intermediate models via full-outer date spine. Also: `fct_workout_sets`, `fct_exercise_progress`, `fct_personal_bests`, `fct_strava_activities`.
+
+### DuckDB Auth: Two Patterns
+
+- **Pipelines/dbt** (`src/pipelines/config.py`, `dbt_project/profiles.yml`): Use `CREATE SECRET` — required because `delta_scan()` uses DeltaKernel FFI which does NOT read DuckDB's `SET s3_*` variables.
+- **Dashboard** (`src/dashboard/data.py`): Uses `SET s3_*` variables — reads parquet (not Delta), so this works fine.
 
 ### Configuration Split
 
@@ -74,18 +80,14 @@ Sources (APIs/files) → Landing (S3 Delta tables) → Transformed (dbt/DuckDB �
 
 ### Streamlit Quirk
 
-Dashboard pages (`src/dashboard/pages/*.py` and `Home.py`) must call `st.set_page_config()` before other imports, so E402 (module-level import not at top) is suppressed for those files.
-
-### DuckDB + Delta Quirk
-
-`delta_scan()` uses DeltaKernel FFI which does NOT read DuckDB's `SET s3_*` variables. Auth must use `CREATE SECRET` (in dbt: `secrets:` block in `profiles.yml`, not `settings:`).
+Dashboard pages (`src/dashboard/pages/*.py` and `Home.py`) must call `st.set_page_config()` before other imports, so E402 (module-level import not at top) is suppressed for those files in `pyproject.toml`.
 
 ## Code Style
 
 - **Python**: ruff (line-length 100, target py311, rules: E/F/I/W)
-- **SQL**: sqlfluff (DuckDB dialect, jinja templater, line-length 120)
+- **SQL**: sqlfluff (DuckDB dialect, jinja templater, line-length 120). Excluded rules: ST06, AM04, AL01, AL09, CP02, RF04 (see `.sqlfluff` for rationale)
 - **Commits**: conventional commits (`feat:`, `fix:`, `chore:`)
-- **Pre-commit hooks**: ruff (lint + format), sqlfluff-lint, gitleaks
+- **Pre-commit hooks**: ruff-check (--fix), ruff-format, sqlfluff-lint (dbt_project/models/ only), gitleaks
 
 ## Tech Stack
 
@@ -95,4 +97,4 @@ Dashboard pages (`src/dashboard/pages/*.py` and `Home.py`) must call `st.set_pag
 - **Transform**: dbt-core + dbt-duckdb (profile: `health_analytics`)
 - **DataFrames**: Polars
 - **Dashboard**: Streamlit + Altair
-- **CI**: GitHub Actions (daily at 13:00 UTC)
+- **CI**: GitHub Actions (daily at 13:00 UTC, midnight Melbourne time)
