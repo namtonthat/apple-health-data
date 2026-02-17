@@ -159,7 +159,7 @@ def date_filter_sidebar(
             today - timedelta(days=7),
             **kwargs,
         )
-        end_date = st.sidebar.date_input("End date", yesterday)
+        end_date = st.sidebar.date_input("End date", yesterday, max_value=yesterday)
 
     st.sidebar.markdown(f"**Showing:** {start_date} to {end_date}")
     return start_date, end_date

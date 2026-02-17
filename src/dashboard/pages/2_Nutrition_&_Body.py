@@ -36,6 +36,19 @@ if has_macros or has_weight:
         section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()
     )
 
+    # Show data availability for the period
+    if has_macros and macro_data.height > 0:
+        latest_macro_date = macro_data.sort("date", descending=True)["date"].head(1).item()
+        days_in_range = section_data.height
+        days_with_macros = macro_data.height
+        if days_with_macros < days_in_range:
+            st.caption(
+                f"*Nutrition logged for {days_with_macros} of {days_in_range} days "
+                f"(latest: {latest_macro_date})*"
+            )
+    elif has_macros:
+        st.info("No nutrition data logged for the selected period.")
+
     # Metrics row: Protein, Carbs, Fat, Calories (from macros)
     if has_macros and macro_data.height > 0:
         avg_protein = float(macro_data["protein_g"].mean())
