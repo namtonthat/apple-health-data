@@ -1,7 +1,7 @@
 {{
   config(
     materialized='external',
-    location='s3://{{ var("s3_bucket") }}/transformed/fct_strava_activities_recent'
+    location='s3://{{ var("s3_bucket") }}/transformed/recent/fct_strava_activities'
   )
 }}
 

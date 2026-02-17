@@ -64,19 +64,21 @@ def load_personal_bests() -> dict:
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar()
 
-# Load data
-df_exercises = load_parquet(
-    "fct_workout_sets_recent",
+# Load data — full dataset for Big 3 1RM metrics, date-filtered for the table
+df_exercises_all = load_parquet(
+    "recent/fct_workout_sets",
     """SELECT workout_date, workout_name, exercise_name, set_number,
               weight_kg, reps, volume_kg, rpe, set_type, started_at, exercise_order
        FROM read_parquet('{path}')
-       WHERE workout_date BETWEEN ? AND ?
        ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number""",
-    [start_date, end_date],
+)
+df_exercises = df_exercises_all.filter(
+    (pl.col("workout_date").cast(pl.Date) >= pl.lit(start_date))
+    & (pl.col("workout_date").cast(pl.Date) <= pl.lit(end_date))
 )
 competition_prs = load_personal_bests()
 df_strava = load_parquet(
-    "fct_strava_activities_recent",
+    "recent/fct_strava_activities",
     """SELECT activity_date, activity_name, activity_type, sport_type,
               moving_time_minutes, distance_km, elevation_gain_m, avg_speed_kmh,
               avg_pace_min_per_km, avg_heartrate, max_heartrate, pr_count
@@ -93,7 +95,7 @@ df_e1rm = load_parquet("fct_e1rm_rolling_total")
 st.header("Exercises")
 
 if df_exercises.height > 0:
-    # Add 1RM column for ALL exercises
+    # Add 1RM column for date-filtered exercises (used in table)
     df_with_1rm = df_exercises.with_columns(
         pl.struct(["weight_kg", "reps"])
         .map_elements(
@@ -103,10 +105,18 @@ if df_exercises.height > 0:
         .alias("est_1rm")
     )
 
-    # Calculate Big 3 1RMs with comparison to competition PRs
+    # Calculate Big 3 1RMs from ALL data (not date-filtered) for all-time best
+    df_all_with_1rm = df_exercises_all.with_columns(
+        pl.struct(["weight_kg", "reps"])
+        .map_elements(
+            lambda row: calculate_1rm(row["weight_kg"], row["reps"]),
+            return_dtype=pl.Float64,
+        )
+        .alias("est_1rm")
+    )
     big_3_results = []
     for lift_key, exercise_name in BIG_3_EXERCISES.items():
-        lift_data = df_with_1rm.filter(pl.col("exercise_name") == exercise_name)
+        lift_data = df_all_with_1rm.filter(pl.col("exercise_name") == exercise_name)
         if lift_data.height > 0:
             max_1rm = lift_data["est_1rm"].max()
             if max_1rm is not None:

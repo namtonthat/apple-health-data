@@ -53,19 +53,25 @@ models:
       - name: had_strength_workout
         description: Boolean flag for workout days
 
-  - name: fct_daily_summary_recent
+  - name: fct_daily_summary
     description: >
       Last 90 days of fct_daily_summary for fast dashboard reads.
       Same schema as fct_daily_summary, truncated to 90 days.
+    config:
+      group: recent
 
-  - name: fct_workout_sets_recent
+  - name: fct_workout_sets
     description: >
       Last 365 days of fct_workout_sets for fast dashboard reads.
       Same schema as fct_workout_sets, truncated to 1 year.
+    config:
+      group: recent
 
-  - name: fct_strava_activities_recent
+  - name: fct_strava_activities
     description: >
       Last 365 days of fct_strava_activities for fast dashboard reads.
+    config:
+      group: recent
       Same schema as fct_strava_activities, truncated to 1 year.
 
   - name: fct_e1rm_rolling_total

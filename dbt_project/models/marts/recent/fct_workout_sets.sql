@@ -1,7 +1,7 @@
 {{
   config(
     materialized='external',
-    location='s3://{{ var("s3_bucket") }}/transformed/fct_workout_sets_recent'
+    location='s3://{{ var("s3_bucket") }}/transformed/recent/fct_workout_sets'
   )
 }}
 
