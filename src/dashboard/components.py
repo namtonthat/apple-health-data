@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 from datetime import date, timedelta
 
 import streamlit as st
@@ -45,21 +44,22 @@ def metric_with_goal(
         st.metric(label, display_value)
 
 
-def goal_status_color(value: float, goal: float, tolerance: float = 0.10) -> str:
+def goal_status_color(value: float, goal: float) -> str:
     """Return hex color based on proximity to goal.
 
-    Green: at goal. Yellow: within ±tolerance. Red: outside tolerance.
+    Green: 0–10% off. Orange: 10–20% off. Red: >20% off.
     Bounds are floored/ceiled for clean integer thresholds.
     """
-    lower = math.floor(goal * (1 - tolerance))
-    upper = math.ceil(goal * (1 + tolerance))
+    if goal == 0:
+        return "#00CC96"
 
-    if round(value) == round(goal):
-        return "#00CC96"  # green — at goal
-    elif lower <= value <= upper:
-        return "#FFA500"  # amber — within tolerance
+    pct_off = abs(value - goal) / goal
+    if pct_off <= 0.10:
+        return "#00CC96"  # green — within 10%
+    elif pct_off <= 0.20:
+        return "#FFA500"  # orange — 10–20% off
     else:
-        return "#EF553B"  # red — outside tolerance
+        return "#EF553B"  # red — more than 20% off
 
 
 def metric_with_goal_color(
@@ -68,9 +68,8 @@ def metric_with_goal_color(
     goal: float | None = None,
     unit: str = "",
     fmt: str = ".0f",
-    tolerance: float = 0.10,
 ) -> None:
-    """Display a metric with tri-color goal status (green/amber/red).
+    """Display a metric with tri-color goal status (green/orange/red).
 
     Args:
         label: Metric label.
@@ -78,7 +77,6 @@ def metric_with_goal_color(
         goal: Target value.
         unit: Unit suffix (e.g., "g", "kcal").
         fmt: Format string for numbers.
-        tolerance: Fraction (0–1) for the yellow band around the goal.
     """
     if value is None:
         st.metric(label, "-")
@@ -91,7 +89,7 @@ def metric_with_goal_color(
         return
 
     delta = value - goal
-    color = goal_status_color(value, goal, tolerance)
+    color = goal_status_color(value, goal)
     delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal"
 
     st.markdown(
