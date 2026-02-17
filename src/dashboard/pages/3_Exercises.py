@@ -1,6 +1,6 @@
 """Exercises page."""
 
-from datetime import datetime
+from datetime import date, datetime
 
 import altair as alt
 import polars as pl
@@ -118,10 +118,20 @@ if df_exercises.height > 0:
     for lift_key, exercise_name in BIG_3_EXERCISES.items():
         lift_data = df_all_with_1rm.filter(pl.col("exercise_name") == exercise_name)
         if lift_data.height > 0:
-            max_1rm = lift_data["est_1rm"].max()
+            best_row = lift_data.sort("est_1rm", descending=True).row(0, named=True)
+            max_1rm = best_row["est_1rm"]
             if max_1rm is not None:
                 comp_pr = competition_prs.get(lift_key)
-                big_3_results.append((lift_key.title(), max_1rm, comp_pr))
+                big_3_results.append(
+                    {
+                        "name": lift_key.title(),
+                        "e1rm": max_1rm,
+                        "comp_pr": comp_pr,
+                        "weight": best_row["weight_kg"],
+                        "reps": best_row["reps"],
+                        "date": best_row["workout_date"],
+                    }
+                )
 
     # Summary metrics + Big 3 on one row with separator
     # 4 summary metrics | 3 Big 3 lifts + total
@@ -145,14 +155,18 @@ if df_exercises.height > 0:
         vertical_divider(80)
 
     # Big 3 lifts with competition PR comparison
-    for i, (name, est_1rm, comp_pr) in enumerate(big_3_results):
+    for i, r in enumerate(big_3_results):
         with cols[5 + i]:
-            st.metric(f"{name} 1RM", f"{est_1rm:.1f} kg", delta=pr_delta(est_1rm, comp_pr))
+            st.metric(
+                f"{r['name']} 1RM",
+                f"{r['e1rm']:.1f} kg",
+                delta=pr_delta(r["e1rm"], r["comp_pr"]),
+            )
 
     # Total estimated 1RM (sum of Big 3)
     if len(big_3_results) == 3:
         with cols[8]:
-            est_total = sum(r[1] for r in big_3_results)
+            est_total = sum(r["e1rm"] for r in big_3_results)
             comp_total = competition_prs.get("total")
             st.metric("Total 1RM", f"{est_total:.1f} kg", delta=pr_delta(est_total, comp_total))
 
@@ -181,6 +195,51 @@ if df_exercises.height > 0:
         if OPENPOWERLIFTING_URL:
             comp_text += f" · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})"
         st.caption(comp_text)
+
+    # Big 3 PR details table
+    if big_3_results:
+        today = today_local()
+        pr_rows = []
+        for r in big_3_results:
+            pr_date = r["date"]
+            if isinstance(pr_date, str):
+                pr_date = datetime.strptime(pr_date[:10], "%Y-%m-%d").date()
+            elif isinstance(pr_date, datetime):
+                pr_date = pr_date.date()
+            elif not isinstance(pr_date, date):
+                pr_date = pr_date
+            days_ago = (today - pr_date).days
+            if days_ago < 30:
+                since_str = f"{days_ago}d ago"
+            elif days_ago < 365:
+                since_str = f"{days_ago // 30}mo ago"
+            else:
+                since_str = f"{days_ago // 365}y {(days_ago % 365) // 30}mo ago"
+            reps = int(r["reps"])
+            pr_rows.append(
+                {
+                    "Lift": r["name"],
+                    "Est 1RM (kg)": r["e1rm"],
+                    "Lifted": f"{r['weight']:.1f} kg x {reps}",
+                    "PR Date": pr_date.strftime("%Y-%m-%d"),
+                    "Time Since PR": since_str,
+                }
+            )
+        df_pr_table = pl.DataFrame(pr_rows)
+        st.dataframe(
+            df_pr_table.to_pandas(),
+            column_config={
+                "Lift": st.column_config.TextColumn("Lift", width="small"),
+                "Est 1RM (kg)": st.column_config.NumberColumn(
+                    "Est 1RM (kg)", format="%.1f", width="small"
+                ),
+                "Lifted": st.column_config.TextColumn("Lifted", width="small"),
+                "PR Date": st.column_config.TextColumn("PR Date", width="small"),
+                "Time Since PR": st.column_config.TextColumn("Time Since PR", width="small"),
+            },
+            hide_index=True,
+            use_container_width=False,
+        )
 
     # Rolling e1RM Total chart
     if df_e1rm.height > 0:
