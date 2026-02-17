@@ -1,6 +1,6 @@
 """Exercises page."""
 
-from datetime import date, datetime
+from datetime import datetime
 
 import altair as alt
 import polars as pl
@@ -196,102 +196,104 @@ if df_exercises.height > 0:
             comp_text += f" · [OpenPowerlifting Profile]({OPENPOWERLIFTING_URL})"
         st.caption(comp_text)
 
-    # Big 3 PR details table
-    if big_3_results:
-        today = today_local()
-        pr_rows = []
-        for r in big_3_results:
-            pr_date = r["date"]
-            if isinstance(pr_date, str):
-                pr_date = datetime.strptime(pr_date[:10], "%Y-%m-%d").date()
-            elif isinstance(pr_date, datetime):
-                pr_date = pr_date.date()
-            elif not isinstance(pr_date, date):
-                pr_date = pr_date
-            days_ago = (today - pr_date).days
-            if days_ago < 30:
-                since_str = f"{days_ago}d ago"
-            elif days_ago < 365:
-                since_str = f"{days_ago // 30}mo ago"
-            else:
-                since_str = f"{days_ago // 365}y {(days_ago % 365) // 30}mo ago"
-            reps = int(r["reps"])
-            pr_rows.append(
-                {
-                    "Lift": r["name"],
-                    "Est 1RM (kg)": r["e1rm"],
-                    "Lifted": f"{r['weight']:.1f} kg x {reps}",
-                    "PR Date": pr_date.strftime("%Y-%m-%d"),
-                    "Time Since PR": since_str,
-                }
-            )
-        df_pr_table = pl.DataFrame(pr_rows)
-        st.dataframe(
-            df_pr_table.to_pandas(),
-            column_config={
-                "Lift": st.column_config.TextColumn("Lift", width="small"),
-                "Est 1RM (kg)": st.column_config.NumberColumn(
-                    "Est 1RM (kg)", format="%.1f", width="small"
-                ),
-                "Lifted": st.column_config.TextColumn("Lifted", width="small"),
-                "PR Date": st.column_config.TextColumn("PR Date", width="small"),
-                "Time Since PR": st.column_config.TextColumn("Time Since PR", width="small"),
-            },
-            hide_index=True,
-            use_container_width=False,
-        )
-
-    # Rolling e1RM Total chart
+    # Rolling e1RM section — PR table (left) + chart (right)
     if df_e1rm.height > 0:
         st.divider()
         st.subheader("Rolling Estimated 1RM Total")
 
-        e1rm_chart_data = (
-            df_e1rm.with_columns(pl.col("workout_date").cast(pl.Date).alias("Date"))
-            .select(["Date", "squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"])
-            .to_pandas()
-            .melt(
-                id_vars=["Date"],
-                value_vars=["squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"],
-                var_name="Lift",
-                value_name="e1RM (kg)",
-            )
-        )
-        e1rm_chart_data["Lift"] = e1rm_chart_data["Lift"].map(
-            {
-                "squat_e1rm": "Squat",
-                "bench_e1rm": "Bench",
-                "deadlift_e1rm": "Deadlift",
-                "estimated_total": "Total",
-            }
-        )
+        col_chart, col_table = st.columns([3, 1])
 
-        individual = (
-            alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] != "Total"])
-            .mark_line(strokeDash=[4, 4], strokeWidth=1.5)
-            .encode(
-                x=alt.X("Date:T", title="Date"),
-                y=alt.Y("e1RM (kg):Q", title="e1RM (kg)"),
-                color=alt.Color(
-                    "Lift:N",
-                    scale=alt.Scale(
-                        domain=["Squat", "Bench", "Deadlift"],
-                        range=["#00CC96", "#636EFA", "#EF553B"],
+        # Rolling e1RM chart
+        with col_chart:
+            if big_3_results:
+                today = today_local()
+                pr_rows = []
+                for r in big_3_results:
+                    pr_date = r["date"]
+                    if isinstance(pr_date, str):
+                        pr_date = datetime.strptime(pr_date[:10], "%Y-%m-%d").date()
+                    elif isinstance(pr_date, datetime):
+                        pr_date = pr_date.date()
+                    days_ago = (today - pr_date).days
+                    if days_ago < 30:
+                        since_str = f"{days_ago}d ago"
+                    elif days_ago < 365:
+                        since_str = f"{days_ago // 30}mo ago"
+                    else:
+                        since_str = f"{days_ago // 365}y {(days_ago % 365) // 30}mo ago"
+                    reps = int(r["reps"])
+                    pr_rows.append(
+                        {
+                            "Lift": r["name"],
+                            "e1RM": r["e1rm"],
+                            "Lifted": f"{r['weight']:.1f} x {reps}",
+                            "PR Date": pr_date.strftime("%Y-%m-%d"),
+                            "Since": since_str,
+                        }
+                    )
+                st.dataframe(
+                    pl.DataFrame(pr_rows),
+                    column_config={
+                        "Lift": st.column_config.TextColumn("Lift", width="small"),
+                        "e1RM": st.column_config.NumberColumn(
+                            "e1RM (kg)", format="%.1f", width="small"
+                        ),
+                        "Lifted": st.column_config.TextColumn("Lifted", width="small"),
+                        "PR Date": st.column_config.TextColumn("PR Date", width="small"),
+                        "Since": st.column_config.TextColumn("Since", width="small"),
+                    },
+                    hide_index=True,
+                    use_container_width=True,
+                )
+
+        # Rolling e1RM chart
+        with col_chart:
+            e1rm_chart_data = (
+                df_e1rm.with_columns(pl.col("workout_date").cast(pl.Date).alias("Date"))
+                .select(["Date", "squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"])
+                .to_pandas()
+                .melt(
+                    id_vars=["Date"],
+                    value_vars=["squat_e1rm", "bench_e1rm", "deadlift_e1rm", "estimated_total"],
+                    var_name="Lift",
+                    value_name="e1RM (kg)",
+                )
+            )
+            e1rm_chart_data["Lift"] = e1rm_chart_data["Lift"].map(
+                {
+                    "squat_e1rm": "Squat",
+                    "bench_e1rm": "Bench",
+                    "deadlift_e1rm": "Deadlift",
+                    "estimated_total": "Total",
+                }
+            )
+
+            individual = (
+                alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] != "Total"])
+                .mark_line(strokeDash=[4, 4], strokeWidth=1.5)
+                .encode(
+                    x=alt.X("Date:T", title="Date"),
+                    y=alt.Y("e1RM (kg):Q", title="e1RM (kg)"),
+                    color=alt.Color(
+                        "Lift:N",
+                        scale=alt.Scale(
+                            domain=["Squat", "Bench", "Deadlift"],
+                            range=["#00CC96", "#636EFA", "#EF553B"],
+                        ),
                     ),
-                ),
+                )
             )
-        )
 
-        total = (
-            alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] == "Total"])
-            .mark_line(strokeWidth=3, color="white")
-            .encode(
-                x=alt.X("Date:T"),
-                y=alt.Y("e1RM (kg):Q"),
+            total = (
+                alt.Chart(e1rm_chart_data[e1rm_chart_data["Lift"] == "Total"])
+                .mark_line(strokeWidth=3, color="white")
+                .encode(
+                    x=alt.X("Date:T"),
+                    y=alt.Y("e1RM (kg):Q"),
+                )
             )
-        )
 
-        st.altair_chart(individual + total, width="stretch")
+            st.altair_chart(individual + total, use_container_width=True)
 
     st.divider()
 

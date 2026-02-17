@@ -6,7 +6,7 @@ import streamlit as st
 
 st.set_page_config(page_title="🍽️ Nutrition & Body", page_icon="🍽️", layout="wide")
 
-from dashboard.components import date_filter_sidebar, metric_with_goal  # noqa: E402
+from dashboard.components import date_filter_sidebar, metric_with_goal_color  # noqa: E402
 from dashboard.config import GOALS  # noqa: E402
 from dashboard.data import load_daily_summary  # noqa: E402
 
@@ -45,11 +45,11 @@ if has_macros or has_weight:
 
         c1, c2, c3, c4 = st.columns(4)
         with c1:
-            metric_with_goal("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
+            metric_with_goal_color("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
         with c2:
-            metric_with_goal("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
+            metric_with_goal_color("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
         with c3:
-            metric_with_goal("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
+            metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
         with c4:
             st.metric("Calories", f"{avg_calories:,}")
 

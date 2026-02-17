@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from datetime import date, timedelta
 
 import streamlit as st
@@ -42,6 +43,66 @@ def metric_with_goal(
         st.metric(label, display_value, delta=delta_str, delta_color=delta_color)
     else:
         st.metric(label, display_value)
+
+
+def goal_status_color(value: float, goal: float, tolerance: float = 0.10) -> str:
+    """Return hex color based on proximity to goal.
+
+    Green: at goal. Yellow: within ±tolerance. Red: outside tolerance.
+    Bounds are floored/ceiled for clean integer thresholds.
+    """
+    lower = math.floor(goal * (1 - tolerance))
+    upper = math.ceil(goal * (1 + tolerance))
+
+    if round(value) == round(goal):
+        return "#00CC96"  # green — at goal
+    elif lower <= value <= upper:
+        return "#FFA500"  # amber — within tolerance
+    else:
+        return "#EF553B"  # red — outside tolerance
+
+
+def metric_with_goal_color(
+    label: str,
+    value: float | None,
+    goal: float | None = None,
+    unit: str = "",
+    fmt: str = ".0f",
+    tolerance: float = 0.10,
+) -> None:
+    """Display a metric with tri-color goal status (green/amber/red).
+
+    Args:
+        label: Metric label.
+        value: Current value.
+        goal: Target value.
+        unit: Unit suffix (e.g., "g", "kcal").
+        fmt: Format string for numbers.
+        tolerance: Fraction (0–1) for the yellow band around the goal.
+    """
+    if value is None:
+        st.metric(label, "-")
+        return
+
+    display_value = f"{value:{fmt}}{unit}"
+
+    if goal is None or goal == 0:
+        st.metric(label, display_value)
+        return
+
+    delta = value - goal
+    color = goal_status_color(value, goal, tolerance)
+    delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal"
+
+    st.markdown(
+        f"<div>"
+        f'<p style="font-size:0.82rem;opacity:0.6;margin:0 0 -0.1rem 0;">{label}</p>'
+        f'<p style="font-size:1.75rem;font-weight:700;margin:0;'
+        f'padding:0.2rem 0;">{display_value}</p>'
+        f'<p style="font-size:0.82rem;color:{color};margin:0;">{delta_str}</p>'
+        f"</div>",
+        unsafe_allow_html=True,
+    )
 
 
 def vertical_divider(height: int = 100) -> None:
