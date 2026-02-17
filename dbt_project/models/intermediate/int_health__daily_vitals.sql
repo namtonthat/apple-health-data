@@ -33,6 +33,13 @@ pivoted as (
         -- Respiratory
         max(case when metric_name = 'respiratory_rate' then value end) as respiratory_rate
 
+        -- Heart rate (uncomment to enable):
+        -- max(case when metric_name = 'heart_rate' then value end) as avg_hr_bpm,
+
+        -- Audio exposure (uncomment to enable):
+        -- max(case when metric_name = 'environmental_audio_exposure' then value end) as env_audio_exposure_db,
+        -- max(case when metric_name = 'headphone_audio_exposure' then value end) as headphone_audio_exposure_db
+
     from metrics
     group by metric_date
 )

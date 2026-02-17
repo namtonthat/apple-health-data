@@ -64,6 +64,7 @@ final as (
         a.exercise_minutes,
         a.stand_hours,
         a.daylight_minutes,
+        a.meditation_minutes,
 
         -- Nutrition / Macros
         round(n.protein_g, 0) as protein_g,

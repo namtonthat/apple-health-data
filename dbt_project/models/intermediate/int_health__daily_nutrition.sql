@@ -43,6 +43,20 @@ pivoted as (
         -- Water
         max(case when metric_name = 'dietary_water' then value end) as water_ml
 
+        -- Additional vitamins (uncomment to enable):
+        -- max(case when metric_name = 'vitamin_b6' then value end) as vitamin_b6_mg,
+        -- max(case when metric_name = 'vitamin_e' then value end) as vitamin_e_mg,
+        -- max(case when metric_name = 'vitamin_k' then value end) as vitamin_k_mcg,
+        -- max(case when metric_name = 'thiamin' then value end) as thiamin_mg,          -- B1
+        -- max(case when metric_name = 'riboflavin' then value end) as riboflavin_mg,      -- B2
+        -- max(case when metric_name = 'niacin' then value end) as niacin_mg,              -- B3
+        -- max(case when metric_name = 'pantothenic_acid' then value end) as pantothenic_acid_mg,  -- B5
+
+        -- Additional minerals (uncomment to enable):
+        -- max(case when metric_name = 'copper' then value end) as copper_mg,
+        -- max(case when metric_name = 'manganese' then value end) as manganese_mg,
+        -- max(case when metric_name = 'selenium' then value end) as selenium_mcg
+
     from metrics
     group by metric_date
 )

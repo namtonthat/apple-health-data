@@ -34,7 +34,14 @@ pivoted as (
         max(case when metric_name = 'stair_speed_down' then value end) as stair_speed_down_ms,
 
         -- Environmental
-        max(case when metric_name = 'time_in_daylight' then value end) as daylight_minutes
+        max(case when metric_name = 'time_in_daylight' then value end) as daylight_minutes,
+
+        -- Mindfulness
+        max(case when metric_name = 'mindful_minutes' then value end) as meditation_minutes
+
+        -- Uncomment to enable:
+        -- max(case when metric_name = 'physical_effort' then value end) as physical_effort,
+        -- max(case when metric_name = 'six_minute_walking_test_distance' then value end) as six_min_walk_distance_m
 
     from metrics
     group by metric_date
