@@ -1,13 +1,13 @@
 """
 Pipeline: Hevy API -> S3 Landing Zone (landing/hevy/)
 
-Extracts raw workout data from Hevy API to landing zone.
-dbt staging models read directly from landing and handle dedup/typing.
+Extracts raw workout data from Hevy API to landing zone as Delta tables.
+dbt staging models read directly from landing via delta_scan() and handle dedup/typing.
 
 Structure:
-  s3://{bucket}/landing/hevy/workouts/{date}.parquet
-  s3://{bucket}/landing/hevy/workouts__exercises/{date}.parquet
-  s3://{bucket}/landing/hevy/workouts__exercises__sets/{date}.parquet
+  s3://{bucket}/landing/hevy/workouts/          (Delta table)
+  s3://{bucket}/landing/hevy/workouts__exercises/          (Delta table)
+  s3://{bucket}/landing/hevy/workouts__exercises__sets/     (Delta table)
 """
 
 from pipelines.config import run_s3_pipeline

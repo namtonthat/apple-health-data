@@ -1,7 +1,5 @@
 """Activity page — Steps & movement."""
 
-from datetime import timedelta
-
 import altair as alt
 import polars as pl
 import streamlit as st
@@ -10,14 +8,7 @@ st.set_page_config(page_title="🚶 Activity", page_icon="🚶", layout="wide")
 
 from dashboard.components import date_filter_sidebar, metric_with_goal  # noqa: E402
 from dashboard.config import GOALS  # noqa: E402
-from dashboard.data import load_parquet  # noqa: E402
-
-
-@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
-def load_daily_summary() -> pl.DataFrame:
-    """Load recent daily summary table (last 90 days, cached across reruns)."""
-    return load_parquet("fct_daily_summary_recent")
-
+from dashboard.data import load_daily_summary  # noqa: E402
 
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar(

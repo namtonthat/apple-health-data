@@ -30,17 +30,39 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("""
-    ### 😴 Recovery & Health
+    ### 😴 Recovery
 
-    Track your sleep patterns, nutrition, and daily macros.
+    Track your sleep patterns and mindfulness.
 
     - Sleep duration and stages (Deep, REM, Light)
-    - Macro tracking with goals (Protein, Carbs, Fat)
-    - Calorie balance (Activity vs Eaten)
+    - Meditation minutes with daily goals
     """)
-    st.page_link("pages/1_Recovery_&_Health.py", label="Go to Recovery & Health →", icon="😴")
+    st.page_link("pages/1_Recovery.py", label="Go to Recovery →", icon="😴")
 
 with col2:
+    st.markdown("""
+    ### 🚶 Activity
+
+    Monitor your daily movement.
+
+    - Daily step count with goal tracking
+    """)
+    st.page_link("pages/2_Activity.py", label="Go to Activity →", icon="🚶")
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown("""
+    ### 🍽️ Nutrition & Body
+
+    Track your macros, calories, and weight.
+
+    - Macro tracking with goals (Protein, Carbs, Fat)
+    - Weight trend and body composition
+    """)
+    st.page_link("pages/3_Nutrition_&_Body.py", label="Go to Nutrition & Body →", icon="🍽️")
+
+with col4:
     st.markdown("""
     ### 🏋️ Exercises
 
@@ -50,7 +72,7 @@ with col2:
     - Estimated 1RM for Big 3 lifts
     - Runs, rides, and swims (Strava)
     """)
-    st.page_link("pages/2_Exercises.py", label="Go to Exercises →", icon="🏋️")
+    st.page_link("pages/4_Exercises.py", label="Go to Exercises →", icon="🏋️")
 
 st.divider()
 

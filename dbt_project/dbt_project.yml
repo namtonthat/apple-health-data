@@ -2,7 +2,7 @@ name: 'health_analytics'
 version: '1.0.0'
 config-version: 2
 
-profile: 'hevy_transforms'
+profile: 'health_analytics'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]

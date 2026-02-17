@@ -1,10 +1,10 @@
 """
 Pipeline: Strava API -> S3 Landing Zone (landing/strava/)
 
-Extracts activity data from Strava API to landing zone.
+Extracts activity data from Strava API to landing zone as a Delta table.
 
 Structure:
-  s3://{bucket}/landing/strava/activities/{date}.parquet
+  s3://{bucket}/landing/strava/activities/      (Delta table)
 """
 
 from pipelines.config import run_s3_pipeline

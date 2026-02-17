@@ -1,9 +1,9 @@
-hevy_transforms:
+health_analytics:
   target: dev
   outputs:
     dev:
       type: duckdb
-      path: "{{ env_var('DBT_DUCKDB_PATH', 'hevy.duckdb') }}"
+      path: "{{ env_var('DBT_DUCKDB_PATH', 'health_analytics.duckdb') }}"
       extensions:
         - httpfs
         - parquet

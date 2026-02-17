@@ -10,14 +10,7 @@ st.set_page_config(page_title="🍽️ Nutrition & Body", page_icon="🍽️", l
 
 from dashboard.components import metric_with_goal  # noqa: E402
 from dashboard.config import GOALS, today_local  # noqa: E402
-from dashboard.data import load_parquet  # noqa: E402
-
-
-@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
-def load_daily_summary() -> pl.DataFrame:
-    """Load recent daily summary table (last 90 days, cached across reruns)."""
-    return load_parquet("fct_daily_summary_recent")
-
+from dashboard.data import load_daily_summary  # noqa: E402
 
 df_all = load_daily_summary()
 
@@ -215,7 +208,7 @@ if has_macros or has_weight:
                     .sort("date", descending=True)
                 )
                 st.dataframe(
-                    display_table.to_pandas(),
+                    display_table,
                     column_config={
                         "date": st.column_config.TextColumn("Date", width="small"),
                         "protein_g": st.column_config.NumberColumn(
@@ -250,7 +243,7 @@ if has_macros or has_weight:
             )
             if weight_table.height > 0:
                 st.dataframe(
-                    weight_table.to_pandas(),
+                    weight_table,
                     column_config={
                         "date": st.column_config.TextColumn("Date", width="small"),
                         "weight_kg": st.column_config.NumberColumn(

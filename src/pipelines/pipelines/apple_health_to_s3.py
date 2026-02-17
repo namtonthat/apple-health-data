@@ -2,12 +2,12 @@
 Pipeline: Apple Health JSON (S3 landing) -> S3 Landing Zone (landing/health/)
 
 Reads Apple Health JSON exports from landing zone, parses them,
-and writes structured parquet files back to landing zone.
-dbt staging models read directly from landing and handle dedup/typing.
+and writes structured data to a Delta table in landing zone.
+dbt staging models read directly from landing via delta_scan() and handle dedup/typing.
 
 Structure:
   Input:  s3://{bucket}/landing/health/*.json
-  Output: s3://{bucket}/landing/health/health_metrics/{date}.parquet
+  Output: s3://{bucket}/landing/health/health_metrics/     (Delta table)
 """
 
 from pipelines.config import run_s3_pipeline

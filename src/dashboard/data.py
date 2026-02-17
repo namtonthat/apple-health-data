@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+
 import duckdb
 import polars as pl
+import streamlit as st
 
 from dashboard.config import AWS_REGION, S3_BUCKET, S3_TRANSFORMED_PREFIX, get_secret
 
@@ -53,3 +56,9 @@ def load_parquet(
         if "No files found" in str(e):
             return pl.DataFrame()
         raise
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
+def load_daily_summary() -> pl.DataFrame:
+    """Load recent daily summary table (last 90 days, cached across reruns)."""
+    return load_parquet("fct_daily_summary_recent")

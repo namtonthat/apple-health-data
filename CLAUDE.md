@@ -40,23 +40,32 @@ uv run dbt test --profiles-dir .
 
 ## Architecture
 
-### Data Flow (Medallion Pattern)
+### Data Flow
 
 ```
-Sources (APIs/files) → Landing (S3 parquet) → Transformed (dbt/DuckDB → S3 parquet) → Dashboard/ICS
+Sources (APIs/files) → Landing (S3 Delta tables) → Transformed (dbt/DuckDB → S3 parquet) → Dashboard/ICS
 ```
 
 ### Key Modules
 
 - **`run.py`** — CLI entry point; dispatches to pipeline stages, loads `.env` automatically
-- **`src/pipelines/config.py`** — Shared utilities: S3 client, DuckDB connection, dlt destination
+- **`src/pipelines/config.py`** — Shared utilities: S3 client, DuckDB connection (with `CREATE SECRET` for Delta), dlt destination (`table_format="delta"`)
 - **`src/pipelines/sources/`** — Data source extractors (dlt sources for Hevy/Strava, JSON parser for Apple Health)
-- **`src/pipelines/pipelines/`** — Pipeline runners: `*_to_s3.py` (ingest), `export_to_ics.py`
+- **`src/pipelines/pipelines/`** — Pipeline runners: `*_to_s3.py` (ingest to Delta tables), `export_to_ics.py`
 - **`src/pipelines/openpowerlifting.py`** — Web scraper (BeautifulSoup)
 - **`src/dashboard/`** — Streamlit app with `Home.py` as entry point
 - **`src/dashboard/config.py`** — Loads non-sensitive config from `pyproject.toml [tool.dashboard]` and secrets from `.env` or `st.secrets`
-- **`src/dashboard/data.py`** — Data loading via DuckDB + Polars from S3 parquet
-- **`dbt_project/models/`** — staging → intermediate → marts (fact tables)
+- **`src/dashboard/data.py`** — Shared data loading via DuckDB + Polars from S3 parquet (includes cached `load_daily_summary()`)
+- **`src/dashboard/components.py`** — Reusable UI components (`metric_with_goal`, `date_filter_sidebar`)
+- **`dbt_project/models/`** — staging (`delta_scan()`) → intermediate → marts (external parquet)
+
+### Dashboard Pages
+
+- **Home** — Overview with navigation cards
+- **1_Recovery** — Sleep stages/totals + Meditation (bar charts with goals)
+- **2_Activity** — Steps (bar chart with goal)
+- **3_Nutrition_&_Body** — Macros/Calories + Weight trend + detailed tables
+- **4_Exercises** — Hevy workout data + OpenPowerlifting comparisons
 
 ### Configuration Split
 
@@ -66,6 +75,10 @@ Sources (APIs/files) → Landing (S3 parquet) → Transformed (dbt/DuckDB → S3
 ### Streamlit Quirk
 
 Dashboard pages (`src/dashboard/pages/*.py` and `Home.py`) must call `st.set_page_config()` before other imports, so E402 (module-level import not at top) is suppressed for those files.
+
+### DuckDB + Delta Quirk
+
+`delta_scan()` uses DeltaKernel FFI which does NOT read DuckDB's `SET s3_*` variables. Auth must use `CREATE SECRET` (in dbt: `secrets:` block in `profiles.yml`, not `settings:`).
 
 ## Code Style
 
@@ -77,9 +90,9 @@ Dashboard pages (`src/dashboard/pages/*.py` and `Home.py`) must call `st.set_pag
 ## Tech Stack
 
 - **Package manager**: uv (Python 3.12.0)
-- **Ingestion**: dlt with S3 filesystem destination
-- **Storage**: S3 (parquet), DuckDB (in-memory OLAP)
-- **Transform**: dbt-core + dbt-duckdb
+- **Ingestion**: dlt with S3 filesystem destination (`table_format="delta"`)
+- **Storage**: S3 (Delta tables in landing, parquet in transformed), DuckDB (in-memory OLAP)
+- **Transform**: dbt-core + dbt-duckdb (profile: `health_analytics`)
 - **DataFrames**: Polars
 - **Dashboard**: Streamlit + Altair
 - **CI**: GitHub Actions (daily at 13:00 UTC)

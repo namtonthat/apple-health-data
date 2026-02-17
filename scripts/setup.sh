@@ -30,7 +30,7 @@ AWS_DEFAULT_REGION=ap-southeast-2
 S3_BUCKET_NAME=your_bucket_name
 
 # Hevy API (get from Hevy app settings)
-HEVY_AUTH_TOKEN=your_hevy_token
+HEVY_API_KEY=your_hevy_api_key
 
 # Strava API (create app at https://www.strava.com/settings/api)
 STRAVA_CLIENT_ID=your_client_id
@@ -60,6 +60,6 @@ echo "✅ Setup complete!"
 echo ""
 echo "Next steps:"
 echo "  1. Edit .env with your credentials"
-echo "  2. Run pipelines:  ./scripts/run-pipelines.sh"
+echo "  2. Run pipelines:  uv run python run.py all"
 echo "  3. Run dashboard:  uv run streamlit run src/dashboard/Home.py"
 echo ""
