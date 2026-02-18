@@ -99,35 +99,45 @@ if has_macros or has_weight:
                 }
             )
 
+            macro_order = ["Protein", "Carbs", "Fat"]
+            color_scale = alt.Scale(
+                domain=macro_order,
+                range=["#00CC96", "#FFA15A", "#EF553B"],
+            )
+
             bars = (
                 alt.Chart(macro_melted)
                 .mark_bar()
                 .encode(
                     x=alt.X("Date:N", sort=None, title="Date"),
                     y=alt.Y("Grams:Q", title="Grams"),
-                    color=alt.Color(
-                        "Macro:N",
-                        scale=alt.Scale(
-                            domain=["Protein", "Carbs", "Fat"],
-                            range=["#00CC96", "#FFA15A", "#EF553B"],
-                        ),
-                    ),
+                    color=alt.Color("Macro:N", scale=color_scale),
                     order=alt.Order("Macro:N", sort="descending"),
                 )
             )
 
-            totals = macro_chart_data[["Date", "total_macros"]].drop_duplicates()
-            text = (
-                alt.Chart(totals)
-                .mark_text(dy=-10, fontSize=12, fontWeight="bold", color="white")
+            # Show individual macro values (e.g. 170P, 300C, 60F) inside each segment
+            # Stack order: Fat (bottom), Carbs (middle), Protein (top) — descending
+            stack_order = {"Fat": 0, "Carbs": 1, "Protein": 2}
+            macro_melted["_order"] = macro_melted["Macro"].map(stack_order)
+            macro_melted = macro_melted.sort_values(["Date", "_order"])
+            macro_melted["_cumsum"] = macro_melted.groupby("Date")["Grams"].cumsum()
+            macro_melted["_midpoint"] = macro_melted["_cumsum"] - macro_melted["Grams"] / 2
+            macro_melted["label"] = macro_melted.apply(
+                lambda r: f"{int(r['Grams'])}{r['Macro'][0]}", axis=1
+            )
+
+            segment_text = (
+                alt.Chart(macro_melted)
+                .mark_text(fontSize=11, color="white", fontWeight="bold")
                 .encode(
                     x=alt.X("Date:N", sort=None),
-                    y=alt.Y("total_macros:Q"),
-                    text=alt.Text("total_macros:Q", format=".0f"),
+                    y=alt.Y("_midpoint:Q"),
+                    text=alt.Text("label:N"),
                 )
             )
 
-            st.altair_chart(bars + text, width="stretch")
+            st.altair_chart(bars + segment_text, width="stretch")
         else:
             st.info("No macro data available for selected period")
 
