@@ -116,28 +116,24 @@ if has_macros or has_weight:
                 )
             )
 
-            # Show individual macro values (e.g. 170P, 300C, 60F) inside each segment
-            # Stack order: Fat (bottom), Carbs (middle), Protein (top) — descending
-            stack_order = {"Fat": 0, "Carbs": 1, "Protein": 2}
-            macro_melted["_order"] = macro_melted["Macro"].map(stack_order)
-            macro_melted = macro_melted.sort_values(["Date", "_order"])
-            macro_melted["_cumsum"] = macro_melted.groupby("Date")["Grams"].cumsum()
-            macro_melted["_midpoint"] = macro_melted["_cumsum"] - macro_melted["Grams"] / 2
-            macro_melted["label"] = macro_melted.apply(
-                lambda r: f"{int(r['Grams'])}{r['Macro'][0]}", axis=1
+            # Show macro split label (e.g. "148P 300C 60F") above each bar
+            totals = macro_chart_data.copy()
+            totals["label"] = totals.apply(
+                lambda r: f"{int(r['protein_g'])}P {int(r['carbs_g'])}C {int(r['fat_g'])}F",
+                axis=1,
             )
 
-            segment_text = (
-                alt.Chart(macro_melted)
-                .mark_text(fontSize=11, color="white", fontWeight="bold")
+            text = (
+                alt.Chart(totals)
+                .mark_text(dy=-10, fontSize=11, fontWeight="bold", color="white")
                 .encode(
                     x=alt.X("Date:N", sort=None),
-                    y=alt.Y("_midpoint:Q"),
+                    y=alt.Y("total_macros:Q"),
                     text=alt.Text("label:N"),
                 )
             )
 
-            st.altair_chart(bars + segment_text, width="stretch")
+            st.altair_chart(bars + text, width="stretch")
         else:
             st.info("No macro data available for selected period")
 
