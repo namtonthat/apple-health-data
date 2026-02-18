@@ -16,6 +16,7 @@ dependencies = [
     "altair==6.0.0",
     "beautifulsoup4>=4.14.3",
     "requests>=2.32.5",
+    "duckdb>=1.4.4",
 ]
 
 [build-system]

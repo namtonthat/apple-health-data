@@ -1,44 +1,31 @@
 include .env
 export
 
-DBT_DIR := dbt_project
-DBT := uv run dbt
-DBT_FLAGS := --profiles-dir . --project-dir .
+.PHONY: ingest transform calendar dbt-run dashboard shell all
 
-.PHONY: dbt-run dbt-test dbt-build dbt-clean dbt-debug dbt-docs dbt-deps dbt-run-model dbt-lint
+## Ingest all sources to S3 landing zone
+ingest:
+	uv run python run.py ingest
 
-## Run all dbt models
-dbt-run:
-	cd $(DBT_DIR) && $(DBT) run $(DBT_FLAGS)
+## Run dbt transformations (landing → transformed)
+transform:
+	uv run python run.py transform
 
-## Run dbt tests
-dbt-test:
-	cd $(DBT_DIR) && $(DBT) test $(DBT_FLAGS)
+## Alias for transform
+dbt-run: transform
 
-## Run + test (build)
-dbt-build:
-	cd $(DBT_DIR) && $(DBT) build $(DBT_FLAGS)
+## Export ICS calendar to S3
+calendar:
+	uv run python run.py export
 
-## Run a single model: make dbt-run-model MODEL=fct_daily_summary
-dbt-run-model:
-	cd $(DBT_DIR) && $(DBT) run $(DBT_FLAGS) --select $(MODEL)
+## Start Streamlit dashboard
+dashboard:
+	uv run python run.py dashboard
 
-## Clean dbt artifacts
-dbt-clean:
-	cd $(DBT_DIR) && $(DBT) clean $(DBT_FLAGS)
+## Open DuckDB shell connected to S3 transformed tables
+shell:
+	uv run python scripts/duckdb_shell.py
 
-## Verify dbt connection
-dbt-debug:
-	cd $(DBT_DIR) && $(DBT) debug $(DBT_FLAGS)
-
-## Install dbt packages
-dbt-deps:
-	cd $(DBT_DIR) && $(DBT) deps $(DBT_FLAGS)
-
-## Generate dbt docs
-dbt-docs:
-	cd $(DBT_DIR) && $(DBT) docs generate $(DBT_FLAGS)
-
-## Lint SQL models
-dbt-lint:
-	uv run sqlfluff lint $(DBT_DIR)/models/
+## Run full pipeline (ingest → transform → calendar)
+all:
+	uv run python run.py all

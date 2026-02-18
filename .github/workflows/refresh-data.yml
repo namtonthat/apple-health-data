@@ -2,9 +2,9 @@ name: Refresh Health Data
 
 on:
   schedule:
-    # Run daily at midnight Melbourne time (AEDT UTC+11)
-    # Midnight Melbourne = 13:00 UTC previous day
-    - cron: '0 13 * * *'
+    # Run every 12 hours at midnight and noon Melbourne time (AEDT UTC+11)
+    # Midnight Melbourne = 13:00 UTC, Noon Melbourne = 01:00 UTC
+    - cron: '0 1,13 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
