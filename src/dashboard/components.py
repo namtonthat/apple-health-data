@@ -89,8 +89,9 @@ def metric_with_goal_color(
         return
 
     delta = value - goal
+    pct = round((value - goal) / goal * 100)
     color = goal_status_color(value, goal)
-    delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal"
+    delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal ({pct:+d}%)"
 
     st.markdown(
         f"<div>"
