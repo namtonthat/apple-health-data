@@ -10,7 +10,7 @@ pivoted as (
         metric_date,
 
         -- Body composition
-        max(case when metric_name = 'body_mass' then value end) as weight_kg,
+        max(case when metric_name = 'weight_body_mass' then value end) as weight_kg,
         max(case when metric_name = 'body_mass_index' then value end) as bmi,
 
         -- Cardiovascular
