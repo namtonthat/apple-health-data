@@ -9,7 +9,7 @@ ingest:
 
 ## Run dbt transformations (landing → transformed)
 transform:
-	uv run python run.py transform
+	ulimit -n 10240 && uv run python run.py transform
 
 ## Export ICS calendar to S3
 calendar:
@@ -25,4 +25,4 @@ shell:
 
 ## Run full pipeline (ingest → transform → calendar)
 all:
-	uv run python run.py all
+	ulimit -n 10240 && uv run python run.py all
