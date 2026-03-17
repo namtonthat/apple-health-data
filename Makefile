@@ -11,9 +11,6 @@ ingest:
 transform:
 	uv run python run.py transform
 
-## Alias for transform
-dbt-run: transform
-
 ## Export ICS calendar to S3
 calendar:
 	uv run python run.py export
