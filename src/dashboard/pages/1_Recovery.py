@@ -236,6 +236,13 @@ if df_daily.height > 0:
         graduated_goals["Protein"] = GOALS.get("protein_g")
     if "Cals" in display_df.columns:
         graduated_goals["Cals"] = GOALS.get("calories")
+    if "HRV" in display_df.columns:
+        graduated_goals["HRV"] = GOALS.get("hrv_ms")
+
+    # Inverse graduated goals (lower is better — uses same 10%/20% bands but inverted)
+    inverse_goals = {}
+    if "RHR" in display_df.columns:
+        inverse_goals["RHR"] = GOALS.get("resting_hr_bpm")
 
     # Binary goals (at/above = green, below = red)
     binary_goals = {}
@@ -252,6 +259,21 @@ if df_daily.height > 0:
             return ""
         if col_name in graduated_goals and graduated_goals[col_name] is not None:
             color = goal_status_color(float(val), graduated_goals[col_name])
+            return f"background-color: {color}33; color: {color}"
+        if col_name in inverse_goals and inverse_goals[col_name] is not None:
+            # Lower is better: at/below goal = green, use inverted distance
+            goal = inverse_goals[col_name]
+            v = float(val)
+            if goal == 0:
+                color = "#00CC96"
+            else:
+                pct_over = (v - goal) / goal
+                if pct_over <= 0:
+                    color = "#00CC96"
+                elif pct_over <= 0.10:
+                    color = "#FFA500"
+                else:
+                    color = "#EF553B"
             return f"background-color: {color}33; color: {color}"
         if col_name in binary_goals and binary_goals[col_name] is not None:
             color = "#00CC96" if float(val) >= binary_goals[col_name] else "#EF553B"
@@ -495,137 +517,139 @@ st.header("Cardiovascular Health")
 
 has_rhr = "resting_hr_bpm" in df_daily.columns and df_daily["resting_hr_bpm"].drop_nulls().len() > 0
 has_hrv = "hrv_ms" in df_daily.columns and df_daily["hrv_ms"].drop_nulls().len() > 0
+has_vo2 = "vo2_max" in df_daily.columns and df_daily["vo2_max"].drop_nulls().len() > 0
 
-if has_rhr or has_hrv:
+if has_rhr or has_hrv or has_vo2:
     cardio_data = df_daily.filter(
-        pl.col("resting_hr_bpm").is_not_null() | pl.col("hrv_ms").is_not_null()
+        pl.col("resting_hr_bpm").is_not_null()
+        | pl.col("hrv_ms").is_not_null()
+        | pl.col("vo2_max").is_not_null()
     )
 
-    # Metric cards
-    cv1, cv2, cv3, cv4 = st.columns(4)
+    # Metric cards with goals
+    cv1, cv2, cv3 = st.columns(3)
     if has_rhr:
         rhr_data = cardio_data.filter(pl.col("resting_hr_bpm").is_not_null())
         with cv1:
-            st.metric("Avg RHR", f"{rhr_data['resting_hr_bpm'].mean():.0f} bpm")
-        with cv2:
-            st.metric(
-                "RHR Range",
-                f"{rhr_data['resting_hr_bpm'].min():.0f}–{rhr_data['resting_hr_bpm'].max():.0f}",
+            metric_with_goal(
+                "Avg RHR",
+                rhr_data["resting_hr_bpm"].mean(),
+                GOALS["resting_hr_bpm"],
+                " bpm",
+                ".0f",
+                inverse=True,
             )
     if has_hrv:
         hrv_data = cardio_data.filter(pl.col("hrv_ms").is_not_null())
+        with cv2:
+            metric_with_goal("Avg HRV", hrv_data["hrv_ms"].mean(), GOALS["hrv_ms"], " ms", ".0f")
+    if has_vo2:
+        vo2_data = cardio_data.filter(pl.col("vo2_max").is_not_null())
         with cv3:
-            st.metric("Avg HRV", f"{hrv_data['hrv_ms'].mean():.0f} ms")
-        with cv4:
-            st.metric(
-                "HRV Range",
-                f"{hrv_data['hrv_ms'].min():.0f}–{hrv_data['hrv_ms'].max():.0f}",
-            )
+            latest_vo2 = float(vo2_data.sort("date", descending=True)["vo2_max"].head(1).item())
+            metric_with_goal("VO2 Max", latest_vo2, GOALS["vo2_max"], " ml/kg/min", ".1f")
 
-    # Dual line charts side by side
+    # All 3 charts in one row
     if cardio_data.height > 0:
         chart_data = (
             cardio_data.with_columns(
                 pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
             )
-            .select(["Date", "resting_hr_bpm", "hrv_ms"])
+            .select(["Date", "resting_hr_bpm", "hrv_ms", "vo2_max"])
             .to_pandas()
         )
 
-        col_rhr_chart, col_hrv_chart = st.columns(2)
+        chart_cols = st.columns(3)
 
-        with col_rhr_chart:
+        with chart_cols[0]:
             st.subheader("Resting Heart Rate")
             rhr_chart = chart_data.dropna(subset=["resting_hr_bpm"])
-            rhr_line = (
-                alt.Chart(rhr_chart)
-                .mark_line(point=True, color="#EF553B")
-                .encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("resting_hr_bpm:Q", title="BPM", scale=alt.Scale(zero=False)),
+            if len(rhr_chart) > 0:
+                rhr_line = (
+                    alt.Chart(rhr_chart)
+                    .mark_line(point=True, color="#EF553B")
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("resting_hr_bpm:Q", title="BPM", scale=alt.Scale(zero=False)),
+                    )
                 )
-            )
-            rhr_text = (
-                alt.Chart(rhr_chart)
-                .mark_text(dy=-10, fontSize=11, color="white")
-                .encode(
-                    x=alt.X("Date:N", sort=None),
-                    y=alt.Y("resting_hr_bpm:Q"),
-                    text=alt.Text("resting_hr_bpm:Q", format=".0f"),
+                rhr_text = (
+                    alt.Chart(rhr_chart)
+                    .mark_text(dy=-10, fontSize=11, color="white")
+                    .encode(
+                        x=alt.X("Date:N", sort=None),
+                        y=alt.Y("resting_hr_bpm:Q"),
+                        text=alt.Text("resting_hr_bpm:Q", format=".0f"),
+                    )
                 )
-            )
-            st.altair_chart(rhr_line + rhr_text, width="stretch")
+                rhr_goal = (
+                    alt.Chart(rhr_chart)
+                    .mark_rule(color="#00CC96", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(GOALS["resting_hr_bpm"]))
+                )
+                st.altair_chart(rhr_line + rhr_text + rhr_goal, use_container_width=True)
 
-        with col_hrv_chart:
+        with chart_cols[1]:
             st.subheader("Heart Rate Variability")
             hrv_chart = chart_data.dropna(subset=["hrv_ms"])
-            hrv_line = (
-                alt.Chart(hrv_chart)
-                .mark_line(point=True, color="#636EFA")
-                .encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("hrv_ms:Q", title="ms", scale=alt.Scale(zero=False)),
+            if len(hrv_chart) > 0:
+                hrv_line = (
+                    alt.Chart(hrv_chart)
+                    .mark_line(point=True, color="#636EFA")
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("hrv_ms:Q", title="ms", scale=alt.Scale(zero=False)),
+                    )
                 )
-            )
-            hrv_text = (
-                alt.Chart(hrv_chart)
-                .mark_text(dy=-10, fontSize=11, color="white")
-                .encode(
-                    x=alt.X("Date:N", sort=None),
-                    y=alt.Y("hrv_ms:Q"),
-                    text=alt.Text("hrv_ms:Q", format=".0f"),
+                hrv_text = (
+                    alt.Chart(hrv_chart)
+                    .mark_text(dy=-10, fontSize=11, color="white")
+                    .encode(
+                        x=alt.X("Date:N", sort=None),
+                        y=alt.Y("hrv_ms:Q"),
+                        text=alt.Text("hrv_ms:Q", format=".0f"),
+                    )
                 )
-            )
-            st.altair_chart(hrv_line + hrv_text, width="stretch")
+                hrv_goal = (
+                    alt.Chart(hrv_chart)
+                    .mark_rule(color="#00CC96", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(GOALS["hrv_ms"]))
+                )
+                st.altair_chart(hrv_line + hrv_text + hrv_goal, use_container_width=True)
 
-    # VO2 Max trend (US-005)
-    has_vo2 = "vo2_max" in df_daily.columns and df_daily["vo2_max"].drop_nulls().len() > 0
-    if has_vo2:
-        vo2_data = df_daily.filter(pl.col("vo2_max").is_not_null())
-        if vo2_data.height > 0:
+        with chart_cols[2]:
             st.subheader("VO2 Max")
-            vo2_1, vo2_2, vo2_3 = st.columns(3)
-            latest_vo2 = float(vo2_data.sort("date", descending=True)["vo2_max"].head(1).item())
-            with vo2_1:
-                st.metric("Current", f"{latest_vo2:.1f} ml/kg/min")
-            with vo2_2:
-                st.metric("Average", f"{vo2_data['vo2_max'].mean():.1f} ml/kg/min")
-            with vo2_3:
-                st.metric(
-                    "Range",
-                    f"{vo2_data['vo2_max'].min():.1f}–{vo2_data['vo2_max'].max():.1f}",
+            vo2_chart = chart_data.dropna(subset=["vo2_max"])
+            if len(vo2_chart) > 0:
+                vo2_line = (
+                    alt.Chart(vo2_chart)
+                    .mark_line(point=True, color="#00CC96")
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("vo2_max:Q", title="ml/kg/min", scale=alt.Scale(zero=False)),
+                    )
                 )
-
-            vo2_chart_data = (
-                vo2_data.with_columns(
-                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
+                vo2_text = (
+                    alt.Chart(vo2_chart)
+                    .mark_text(dy=-10, fontSize=11, color="white")
+                    .encode(
+                        x=alt.X("Date:N", sort=None),
+                        y=alt.Y("vo2_max:Q"),
+                        text=alt.Text("vo2_max:Q", format=".1f"),
+                    )
                 )
-                .select(["Date", "vo2_max"])
-                .to_pandas()
-            )
-
-            vo2_line = (
-                alt.Chart(vo2_chart_data)
-                .mark_line(point=True, color="#00CC96")
-                .encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("vo2_max:Q", title="ml/kg/min", scale=alt.Scale(zero=False)),
+                vo2_goal = (
+                    alt.Chart(vo2_chart)
+                    .mark_rule(color="#00CC96", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(GOALS["vo2_max"]))
                 )
-            )
-            vo2_text = (
-                alt.Chart(vo2_chart_data)
-                .mark_text(dy=-10, fontSize=11, color="white")
-                .encode(
-                    x=alt.X("Date:N", sort=None),
-                    y=alt.Y("vo2_max:Q"),
-                    text=alt.Text("vo2_max:Q", format=".1f"),
-                )
-            )
-            st.altair_chart(vo2_line + vo2_text, width="stretch")
+                st.altair_chart(vo2_line + vo2_text + vo2_goal, use_container_width=True)
 
     st.caption(
-        "*Lower RHR and higher HRV indicate better cardiovascular fitness and recovery readiness. "
-        "VO2 Max reflects aerobic capacity — higher is better.*"
+        f"*Goals: RHR ≤{GOALS['resting_hr_bpm']:.0f} bpm (lower is better) · "
+        f"HRV ≥{GOALS['hrv_ms']:.0f} ms (higher is better) · "
+        f"VO2 Max ≥{GOALS['vo2_max']:.0f} ml/kg/min (higher is better). "
+        ":green[--- goal line]*"
     )
 else:
     st.info("No heart rate data available for selected period")

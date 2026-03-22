@@ -61,6 +61,9 @@ protein_g = 165.0
 carbs_g = 250.0
 fat_g = 60.0
 weight_kg = 69.0
+resting_hr_bpm = 55.0
+hrv_ms = 65.0
+vo2_max = 49.0
 steps = 10000
 meditation_minutes = 10
 
