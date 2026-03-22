@@ -176,7 +176,7 @@ if df_daily.height > 0:
         na_rep="—",
     )
 
-    bd_table, bd_legend = st.columns([4, 1])
+    bd_table, bd_legend = st.columns([5, 1])
     with bd_table:
         st.dataframe(styled, hide_index=True, use_container_width=True)
     with bd_legend:
