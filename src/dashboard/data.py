@@ -83,3 +83,9 @@ def load_daily_workouts() -> pl.DataFrame:
             " ORDER BY workout_date DESC"
         ),
     )
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading readiness data...")
+def load_training_readiness() -> pl.DataFrame:
+    """Load training readiness scores."""
+    return load_parquet("fct_training_readiness")

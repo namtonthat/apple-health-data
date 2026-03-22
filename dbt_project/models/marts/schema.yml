@@ -91,6 +91,12 @@ models:
       - name: avg_120d
         description: 120-day rolling average weight
 
+  - name: fct_training_readiness
+    description: >
+      Composite training readiness score (0-100) based on HRV, RHR, sleep, and deep sleep.
+      Each component scores 0-25 using z-score normalization against 30-day rolling baseline.
+      Grain: One row per date with at least one cardiovascular/sleep metric.
+
   - name: fct_exercise_progress
     description: >
       Exercise progression tracking with personal records.

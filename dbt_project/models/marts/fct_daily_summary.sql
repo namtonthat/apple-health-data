@@ -65,6 +65,7 @@ final as (
         a.stand_hours,
         a.daylight_minutes,
         a.meditation_minutes,
+        round(a.walking_asymmetry_pct, 1) as walking_asymmetry_pct,
 
         -- Nutrition / Macros
         round(n.protein_g, 0) as protein_g,

@@ -1,0 +1,3 @@
+# Ralph Progress Log
+# Project: apple-health-data
+# Branch: ralph/athlete-metrics

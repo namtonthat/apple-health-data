@@ -1,0 +1,138 @@
+{
+  "project": "apple-health-data",
+  "branchName": "ralph/athlete-metrics",
+  "description": "Add advanced athlete metrics to the health dashboard: HRV/RHR trends, VO2 Max, Training Readiness score, hydration/fiber tracking, and walking asymmetry for injury prevention.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add walking_asymmetry_pct to fct_daily_summary dbt model",
+      "description": "As a developer, I need walking asymmetry data flowing through the daily summary so it can be displayed on the dashboard.",
+      "acceptanceCriteria": [
+        "In dbt_project/models/marts/fct_daily_summary.sql, add 'round(a.walking_asymmetry_pct, 1) as walking_asymmetry_pct' after the 'a.meditation_minutes' line (line 67)",
+        "Run 'set -a && source .env && set +a && cd dbt_project && uv run dbt run --profiles-dir . --select fct_daily_summary recent_fct_daily_summary' and it succeeds",
+        "Query the parquet to verify walking_asymmetry_pct column exists and has non-null values"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": "walking_asymmetry_pct already exists in int_health__daily_activity but is not included in fct_daily_summary. Just need to add the column pass-through."
+    },
+    {
+      "id": "US-002",
+      "title": "Create fct_training_readiness dbt model",
+      "description": "As a developer, I need a composite training readiness score computed from HRV, RHR, sleep, and deep sleep ratio.",
+      "acceptanceCriteria": [
+        "Create dbt_project/models/marts/fct_training_readiness.sql that reads from fct_daily_summary",
+        "Model computes 4 sub-scores (0-25 each): hrv_score (z-score vs 30d avg, higher=better), rhr_score (z-score inverted, lower RHR=better), sleep_score (ratio vs 7h goal), deep_score (deep_sleep_ratio vs 30d avg)",
+        "Model outputs: date, hrv_ms, resting_hr_bpm, sleep_hours, deep_sleep_ratio, hrv_score, rhr_score, sleep_score, deep_score, readiness_score (sum of 4 sub-scores, 0-100)",
+        "Materialized as external parquet to s3://{{ var('s3_bucket') }}/transformed/fct_training_readiness",
+        "Add schema entry in dbt_project/models/marts/schema.yml",
+        "Run 'set -a && source .env && set +a && cd dbt_project && uv run dbt run --profiles-dir . --select fct_training_readiness' and it succeeds",
+        "Lint passes: uv run sqlfluff lint dbt_project/models/marts/fct_training_readiness.sql"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": "See docs/plans/2026-03-22-training-readiness.md for the full SQL. Use z-score normalization with 30-day rolling window. Clamp z-scores to [-2,2] and map to [0,25]."
+    },
+    {
+      "id": "US-003",
+      "title": "Add load_training_readiness data loader",
+      "description": "As a developer, I need a cached data loader for the training readiness parquet so the dashboard can display it.",
+      "acceptanceCriteria": [
+        "Add load_training_readiness() function to src/dashboard/data.py after load_daily_workouts()",
+        "Function uses @st.cache_data(ttl=timedelta(hours=1)) decorator",
+        "Function calls load_parquet('fct_training_readiness')",
+        "Lint passes: uv run ruff check src/dashboard/data.py"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": "Follow the same pattern as load_weight_rolling_averages() and load_daily_workouts()."
+    },
+    {
+      "id": "US-004",
+      "title": "Add HRV and RHR trend charts to Recovery page",
+      "description": "As an athlete, I want to see my resting heart rate and heart rate variability trends over time so I can monitor cardiovascular fitness and recovery.",
+      "acceptanceCriteria": [
+        "New 'Cardiovascular Health' section added to src/dashboard/pages/1_Recovery.py between the Sleep section divider (line 373) and the Meditation/Steps section (line 375)",
+        "Section has st.header('Cardiovascular Health')",
+        "Shows 4 metric cards in a row: Avg RHR, RHR Range, Avg HRV, HRV Range",
+        "Two side-by-side Altair line charts: RHR (red, #EF553B) and HRV (blue, #636EFA), each with data point labels",
+        "Both charts use scale=alt.Scale(zero=False) for y-axis",
+        "Caption explains: lower RHR + higher HRV = better recovery",
+        "Section gracefully shows st.info message when no heart rate data available",
+        "Lint passes: uv run ruff check src/dashboard/pages/1_Recovery.py",
+        "Format passes: uv run ruff format --check src/dashboard/pages/1_Recovery.py"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": "resting_hr_bpm and hrv_ms are already in df_daily from load_daily_summary(). No new data loading needed. See docs/plans/2026-03-22-hrv-rhr-trend.md for full code."
+    },
+    {
+      "id": "US-005",
+      "title": "Add VO2 Max trend chart to Recovery page",
+      "description": "As an athlete, I want to track my VO2 Max trend to monitor aerobic fitness, which affects recovery between sets and sessions.",
+      "acceptanceCriteria": [
+        "VO2 Max sub-section added inside the Cardiovascular Health section, after the RHR/HRV charts",
+        "Shows 3 metric cards: Current, Average, Range",
+        "Green (#00CC96) line chart with data point labels",
+        "Uses scale=alt.Scale(zero=False) for y-axis",
+        "Only renders when vo2_max data exists (graceful fallback)",
+        "Lint passes: uv run ruff check src/dashboard/pages/1_Recovery.py"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": "vo2_max is already in df_daily. Updates less frequently than RHR/HRV (only after outdoor walks/runs). See docs/plans/2026-03-22-vo2-max-trend.md."
+    },
+    {
+      "id": "US-006",
+      "title": "Add Training Readiness score display to Recovery page",
+      "description": "As an athlete, I want a composite readiness score at the top of my Recovery page so I can decide training intensity at a glance.",
+      "acceptanceCriteria": [
+        "Import load_training_readiness in 1_Recovery.py",
+        "New 'Training Readiness' section appears BEFORE the Daily Breakdown table (very top of page after data loading)",
+        "Shows large score number (3rem font) color-coded: green ≥75 ('Ready'), orange 50-75 ('Moderate'), red <50 ('Fatigued')",
+        "Shows 4 sub-score metric cards in a row: HRV x/25, RHR x/25, Sleep x/25, Deep x/25",
+        "Shows area chart trend of readiness_score over the date range with colored background zones (green 75-100, orange 50-75, red 0-50)",
+        "Caption explains the score bands",
+        "Section only appears when readiness data exists",
+        "Lint passes: uv run ruff check src/dashboard/pages/1_Recovery.py",
+        "Format passes: uv run ruff format --check src/dashboard/pages/1_Recovery.py"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": "Depends on US-003 (data loader). See docs/plans/2026-03-22-training-readiness.md for full code."
+    },
+    {
+      "id": "US-007",
+      "title": "Add fiber and water to Nutrition page",
+      "description": "As an athlete cutting weight, I want to track my fiber and water intake alongside macros to manage gut health and hydration.",
+      "acceptanceCriteria": [
+        "In src/dashboard/pages/2_Nutrition_&_Body.py, add Fiber and Water metric cards below the existing Protein/Carbs/Fat/Calories cards in the left column",
+        "Extend the Daily Nutrition table to include Fiber (g) and Water (ml) columns",
+        "New columns formatted as '{:.0f}' with na_rep='—'",
+        "fiber_g and water_ml are already in fct_daily_summary, just need to be selected and displayed",
+        "Lint passes: uv run ruff check src/dashboard/pages/2_Nutrition_\\&_Body.py",
+        "Format passes: uv run ruff format --check src/dashboard/pages/2_Nutrition_\\&_Body.py"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": "fiber_g and water_ml already exist in fct_daily_summary. This is purely a UI addition. See docs/plans/2026-03-22-hydration-fiber.md."
+    },
+    {
+      "id": "US-008",
+      "title": "Add walking asymmetry to Recovery daily breakdown table",
+      "description": "As an athlete, I want to see my walking asymmetry percentage in the daily breakdown table, color-coded for injury risk.",
+      "acceptanceCriteria": [
+        "Add walking_asymmetry_pct to the breakdown_cols dict in 1_Recovery.py",
+        "Add 'Asym %' column to col_map",
+        "Color-coding: green ≤5%, orange 5-10%, red >10% (custom logic, not goal_status_color)",
+        "Format as '{:.1f}%' with na_rep='—'",
+        "Update the bd_legend caption to include 'Asym %' description",
+        "Lint passes: uv run ruff check src/dashboard/pages/1_Recovery.py",
+        "Format passes: uv run ruff format --check src/dashboard/pages/1_Recovery.py"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": "Depends on US-001 (dbt column). See docs/plans/2026-03-22-walking-asymmetry.md."
+    }
+  ]
+}

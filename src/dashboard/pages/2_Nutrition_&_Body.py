@@ -74,6 +74,26 @@ if has_macros or has_weight:
                 metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
                 metric_with_goal_color("Calories", avg_calories, GOALS["calories"], "", ",.0f")
 
+            m3, m4 = st.columns(2)
+            with m3:
+                avg_fiber = (
+                    float(macro_data["fiber_g"].mean())
+                    if "fiber_g" in macro_data.columns
+                    and macro_data["fiber_g"].drop_nulls().len() > 0
+                    else None
+                )
+                if avg_fiber is not None:
+                    st.metric("Fiber", f"{avg_fiber:.0f}g")
+            with m4:
+                avg_water = (
+                    float(macro_data["water_ml"].mean())
+                    if "water_ml" in macro_data.columns
+                    and macro_data["water_ml"].drop_nulls().len() > 0
+                    else None
+                )
+                if avg_water is not None:
+                    st.metric("Water", f"{avg_water:.0f}ml")
+
             # --- Daily Macros Chart ---
             st.subheader("Daily Macros (g)")
             macro_chart_data = (
@@ -140,7 +160,15 @@ if has_macros or has_weight:
 
             # --- Daily Nutrition Table ---
             st.subheader("Daily Nutrition")
-            nutrition_cols = ["date", "protein_g", "carbs_g", "fat_g", "logged_calories"]
+            nutrition_cols = [
+                "date",
+                "protein_g",
+                "carbs_g",
+                "fat_g",
+                "logged_calories",
+                "fiber_g",
+                "water_ml",
+            ]
             table_data = section_data.filter(pl.col("protein_g").is_not_null())
 
             if table_data.height > 0:
@@ -153,7 +181,18 @@ if has_macros or has_weight:
                 )
 
                 display_df = display_table.to_pandas()
-                display_df.columns = ["Date", "Protein (g)", "Carbs (g)", "Fat (g)", "Calories"]
+                col_rename = {
+                    "date": "Date",
+                    "protein_g": "Protein (g)",
+                    "carbs_g": "Carbs (g)",
+                    "fat_g": "Fat (g)",
+                    "logged_calories": "Calories",
+                    "fiber_g": "Fiber (g)",
+                    "water_ml": "Water (ml)",
+                }
+                display_df = display_df.rename(
+                    columns={c: col_rename[c] for c in display_df.columns if c in col_rename}
+                )
 
                 macro_goals = {
                     "Protein (g)": GOALS["protein_g"],
@@ -180,6 +219,8 @@ if has_macros or has_weight:
                         "Carbs (g)": "{:.0f}",
                         "Fat (g)": "{:.0f}",
                         "Calories": "{:.0f}",
+                        "Fiber (g)": "{:.0f}",
+                        "Water (ml)": "{:.0f}",
                     }
                 )
 
