@@ -267,53 +267,31 @@ if has_macros or has_weight:
                     weight_goal = GOALS["weight_kg"]
                     latest_avg = df_weight_avg.sort("date", descending=True).head(1)
 
-                    labels = ["Now", "7d", "14d", "30d", "60d", "120d"]
-                    src_cols = [
-                        "weight_kg",
-                        "avg_7d",
-                        "avg_14d",
-                        "avg_30d",
-                        "avg_60d",
-                        "avg_120d",
-                    ]
+                    labels = ["7d", "14d", "30d", "60d", "120d"]
+                    src_cols = ["avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
 
-                    values = []
-                    deltas = []
-                    for c in src_cols:
-                        val = latest_avg[c].item()
-                        if val is not None:
-                            val = float(val)
-                            values.append(f"{val:.1f}")
-                            deltas.append(f"{val - weight_goal:+.1f}")
-                        else:
-                            values.append("—")
-                            deltas.append("—")
+                    ra1, ra2, ra3 = st.columns(3)
+                    ra4, ra5, _ = st.columns(3)
+                    card_cols = [ra1, ra2, ra3, ra4, ra5]
 
-                    table_df = pd.DataFrame({"Window": labels, "kg": values, "vs Goal": deltas})
-
-                    def _weight_goal_style(row):
-                        styles = [""] * len(row)
-                        for i, col_name in enumerate(row.index):
-                            if col_name == "vs Goal" and row[col_name] != "—":
-                                diff = float(row[col_name])
-                                if abs(diff) <= weight_goal * 0.02:
-                                    color = "#00CC96"
-                                elif abs(diff) <= weight_goal * 0.05:
-                                    color = "#FFA500"
-                                else:
-                                    color = "#EF553B"
-                                styles[i] = f"background-color: {color}33; color: {color}"
-                        return styles
-
-                    styled_wt = table_df.style.apply(_weight_goal_style, axis=1).hide(axis="index")
-                    st.dataframe(styled_wt, hide_index=True, use_container_width=True)
+                    for card_col, label, src_col in zip(card_cols, labels, src_cols):
+                        val = latest_avg[src_col].item()
+                        with card_col:
+                            if val is not None:
+                                val = float(val)
+                                delta = round(val - weight_goal, 1)
+                                st.metric(
+                                    label,
+                                    f"{val:.1f} kg",
+                                    delta=f"{delta:+.1f} kg vs goal",
+                                    delta_color="inverse",
+                                )
+                            else:
+                                st.metric(label, "—")
 
                     st.caption(
                         f"*Goal: **{weight_goal:.0f} kg** · "
-                        "**Now**: latest weigh-in · "
-                        "**7d–120d**: rolling avg · "
-                        "**vs Goal**: diff from target "
-                        "(green ≤2%, orange ≤5%, red >5%)*"
+                        "Delta shows rolling avg vs goal (lower is better)*"
                     )
 
                 # --- Daily Weight Table ---

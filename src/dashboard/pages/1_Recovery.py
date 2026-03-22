@@ -185,177 +185,165 @@ else:
 st.divider()
 
 # =============================================================================
-# Meditation Section
+# Meditation & Steps — side by side (1/3 + 2/3)
 # =============================================================================
-st.header("Meditation")
-
 has_meditation = (
     "meditation_minutes" in df_daily.columns
     and df_daily["meditation_minutes"].drop_nulls().len() > 0
 )
+has_steps = "steps" in df_daily.columns and df_daily["steps"].drop_nulls().len() > 0
 
-if has_meditation:
-    med_data = df_daily.filter(pl.col("meditation_minutes").is_not_null())
+col_med, col_steps = st.columns([1, 2])
 
-    # Metric cards
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        metric_with_goal(
-            "Daily Avg",
-            med_data["meditation_minutes"].mean(),
-            GOALS.get("meditation_minutes"),
-            "min",
-            ".0f",
-        )
-    with col2:
-        metric_with_goal("Best Day", med_data["meditation_minutes"].max(), unit="min", fmt=".0f")
-    with col3:
-        goal = GOALS.get("meditation_minutes")
-        if goal:
-            days_hit = med_data.filter(pl.col("meditation_minutes") >= goal).height
-            total_days = med_data.height
-            st.metric("Days at Goal", f"{days_hit} / {total_days}")
-        else:
-            st.metric("Total Days", f"{med_data.height}")
+# --- Meditation (1/3) ---
+with col_med:
+    st.header("Meditation")
+    if has_meditation:
+        med_data = df_daily.filter(pl.col("meditation_minutes").is_not_null())
 
-    # Bar chart
-    if med_data.height > 0:
-        med_chart_data = (
-            med_data.with_columns(
-                [
-                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                    pl.col("meditation_minutes").round(0).cast(pl.Int64).alias("Minutes"),
-                ]
+        m1, m2 = st.columns(2)
+        with m1:
+            metric_with_goal(
+                "Daily Avg",
+                med_data["meditation_minutes"].mean(),
+                GOALS.get("meditation_minutes"),
+                "min",
+                ".0f",
             )
-            .select(["Date", "Minutes"])
-            .to_pandas()
-        )
+        with m2:
+            goal = GOALS.get("meditation_minutes")
+            if goal:
+                days_hit = med_data.filter(pl.col("meditation_minutes") >= goal).height
+                st.metric("Days at Goal", f"{days_hit} / {med_data.height}")
+            else:
+                st.metric("Total Days", f"{med_data.height}")
 
-        goal = GOALS.get("meditation_minutes")
-        if goal:
-            st.caption(
-                f":green-background[At goal]  :blue-background[Below goal]  "
-                f":red[--- {goal:.0f} min goal]"
+        if med_data.height > 0:
+            med_chart_data = (
+                med_data.with_columns(
+                    [
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                        pl.col("meditation_minutes").round(0).cast(pl.Int64).alias("Minutes"),
+                    ]
+                )
+                .select(["Date", "Minutes"])
+                .to_pandas()
             )
-            bars = (
+
+            goal = GOALS.get("meditation_minutes")
+            if goal:
+                st.caption(
+                    f":green-background[At goal]  :blue-background[Below goal]  "
+                    f":red[--- {goal:.0f} min goal]"
+                )
+                bars = (
+                    alt.Chart(med_chart_data)
+                    .mark_bar()
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("Minutes:Q", title="Minutes"),
+                        color=alt.condition(
+                            alt.datum.Minutes >= goal,
+                            alt.value("#00CC96"),
+                            alt.value("#636EFA"),
+                        ),
+                    )
+                )
+                med_goal_line = (
+                    alt.Chart(med_chart_data)
+                    .mark_rule(color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(goal))
+                )
+            else:
+                bars = (
+                    alt.Chart(med_chart_data)
+                    .mark_bar()
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("Minutes:Q", title="Minutes"),
+                        color=alt.value("#636EFA"),
+                    )
+                )
+                med_goal_line = alt.Chart(med_chart_data).mark_point(opacity=0)
+
+            text = (
                 alt.Chart(med_chart_data)
+                .mark_text(dy=-10, fontSize=11, fontWeight="bold", color="white")
+                .encode(
+                    x=alt.X("Date:N", sort=None),
+                    y=alt.Y("Minutes:Q"),
+                    text=alt.Text("Minutes:Q", format=".0f"),
+                )
+            )
+
+            st.altair_chart(bars + med_goal_line + text, use_container_width=True)
+    else:
+        st.info("No meditation data available for selected period")
+
+# --- Steps (2/3) ---
+with col_steps:
+    st.header("Steps")
+    if has_steps:
+        steps_data = df_daily.filter(pl.col("steps").is_not_null())
+
+        s1, s2, s3 = st.columns(3)
+        with s1:
+            metric_with_goal("Daily Avg", steps_data["steps"].mean(), GOALS["steps"], "", ",.0f")
+        with s2:
+            metric_with_goal("Best Day", steps_data["steps"].max(), unit="", fmt=",.0f")
+        with s3:
+            days_hit = steps_data.filter(pl.col("steps") >= GOALS["steps"]).height
+            st.metric("Days at Goal", f"{days_hit} / {steps_data.height}")
+
+        st.caption(
+            f":green-background[At goal]  :blue-background[Below goal]  "
+            f":red[--- {GOALS['steps']:,.0f} steps goal]"
+        )
+        if steps_data.height > 0:
+            steps_chart_data = (
+                steps_data.with_columns(
+                    [
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                        pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
+                    ]
+                )
+                .select(["Date", "steps"])
+                .to_pandas()
+            )
+
+            bars = (
+                alt.Chart(steps_chart_data)
                 .mark_bar()
                 .encode(
                     x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("Minutes:Q", title="Minutes"),
+                    y=alt.Y("steps:Q", title="Steps"),
                     color=alt.condition(
-                        alt.datum.Minutes >= goal,
+                        alt.datum.steps >= GOALS["steps"],
                         alt.value("#00CC96"),
                         alt.value("#636EFA"),
                     ),
                 )
             )
+
             goal_line = (
-                alt.Chart(med_chart_data)
+                alt.Chart(steps_chart_data)
                 .mark_rule(color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2)
-                .encode(y=alt.datum(goal))
+                .encode(y=alt.datum(GOALS["steps"]))
             )
-        else:
-            bars = (
-                alt.Chart(med_chart_data)
-                .mark_bar()
+
+            text = (
+                alt.Chart(steps_chart_data)
+                .mark_text(dy=-10, fontSize=11, fontWeight="bold", color="white")
                 .encode(
-                    x=alt.X("Date:N", sort=None, title="Date"),
-                    y=alt.Y("Minutes:Q", title="Minutes"),
-                    color=alt.value("#636EFA"),
+                    x=alt.X("Date:N", sort=None),
+                    y=alt.Y("steps:Q"),
+                    text=alt.Text("steps:Q", format=",.0f"),
                 )
             )
-            goal_line = alt.Chart(med_chart_data).mark_point(opacity=0)
 
-        text = (
-            alt.Chart(med_chart_data)
-            .mark_text(dy=-10, fontSize=11, fontWeight="bold", color="white")
-            .encode(
-                x=alt.X("Date:N", sort=None),
-                y=alt.Y("Minutes:Q"),
-                text=alt.Text("Minutes:Q", format=".0f"),
-            )
-        )
-
-        st.altair_chart(bars + goal_line + text, width="stretch")
-else:
-    st.info("No meditation data available for selected period")
-
-st.divider()
-
-# =============================================================================
-# Steps Section
-# =============================================================================
-st.header("Steps")
-
-has_steps = "steps" in df_daily.columns and df_daily["steps"].drop_nulls().len() > 0
-
-if has_steps:
-    steps_data = df_daily.filter(pl.col("steps").is_not_null())
-
-    # Metric cards
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        metric_with_goal("Daily Avg", steps_data["steps"].mean(), GOALS["steps"], "", ",.0f")
-    with col2:
-        metric_with_goal("Best Day", steps_data["steps"].max(), unit="", fmt=",.0f")
-    with col3:
-        days_hit = steps_data.filter(pl.col("steps") >= GOALS["steps"]).height
-        total_days = steps_data.height
-        st.metric("Days at Goal", f"{days_hit} / {total_days}")
-
-    # Steps bar chart
-    st.caption(
-        f":green-background[At goal]  :blue-background[Below goal]  "
-        f":red[--- {GOALS['steps']:,.0f} steps goal]"
-    )
-    if steps_data.height > 0:
-        steps_chart_data = (
-            steps_data.with_columns(
-                [
-                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                    pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
-                ]
-            )
-            .select(["Date", "steps"])
-            .to_pandas()
-        )
-
-        bars = (
-            alt.Chart(steps_chart_data)
-            .mark_bar()
-            .encode(
-                x=alt.X("Date:N", sort=None, title="Date"),
-                y=alt.Y("steps:Q", title="Steps"),
-                color=alt.condition(
-                    alt.datum.steps >= GOALS["steps"],
-                    alt.value("#00CC96"),
-                    alt.value("#636EFA"),
-                ),
-            )
-        )
-
-        # Goal line
-        goal_line = (
-            alt.Chart(steps_chart_data)
-            .mark_rule(color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2)
-            .encode(y=alt.datum(GOALS["steps"]))
-        )
-
-        # Labels on top of bars
-        text = (
-            alt.Chart(steps_chart_data)
-            .mark_text(dy=-10, fontSize=11, fontWeight="bold", color="white")
-            .encode(
-                x=alt.X("Date:N", sort=None),
-                y=alt.Y("steps:Q"),
-                text=alt.Text("steps:Q", format=",.0f"),
-            )
-        )
-
-        st.altair_chart(bars + goal_line + text, width="stretch")
-else:
-    st.info("No step data available for selected period")
+            st.altair_chart(bars + goal_line + text, use_container_width=True)
+    else:
+        st.info("No step data available for selected period")
 
 st.divider()
 
@@ -387,13 +375,23 @@ if df_daily.height > 0:
         # Aggregate multiple workouts per day into one row
         workout_daily = (
             df_workouts.with_columns(
-                pl.col("started_at").cast(pl.Datetime).dt.strftime("%H:%M").alias("gym_time"),
+                pl.col("started_at")
+                .cast(pl.Datetime)
+                .dt.strftime("%-I:%M%p")
+                .str.to_lowercase()
+                .alias("start"),
+                pl.col("ended_at")
+                .cast(pl.Datetime)
+                .dt.strftime("%-I:%M%p")
+                .str.to_lowercase()
+                .alias("end"),
             )
             .group_by("workout_date")
             .agg(
                 pl.col("workout_name").first().alias("workout"),
-                pl.col("gym_time").first().alias("gym_time"),
-                pl.col("workout_duration_minutes").sum().alias("gym_mins"),
+                pl.col("start").first().alias("start"),
+                pl.col("end").first().alias("end"),
+                pl.col("workout_duration_minutes").sum().alias("duration"),
             )
         )
         base = base.join(
@@ -405,8 +403,9 @@ if df_daily.height > 0:
     else:
         base = base.with_columns(
             pl.lit(None).alias("workout"),
-            pl.lit(None).alias("gym_time"),
-            pl.lit(None).cast(pl.Int64).alias("gym_mins"),
+            pl.lit(None).alias("start"),
+            pl.lit(None).alias("end"),
+            pl.lit(None).cast(pl.Int64).alias("duration"),
         )
 
     # Format date as "Mon 17"
@@ -423,8 +422,9 @@ if df_daily.height > 0:
     if "sleep_rem_hours" in avail_cols:
         col_map["sleep_rem_hours"] = "REM"
     col_map["workout"] = "Workout"
-    col_map["gym_time"] = "Time"
-    col_map["gym_mins"] = "Mins"
+    col_map["start"] = "Start"
+    col_map["end"] = "End"
+    col_map["duration"] = "Duration"
     if "protein_g" in avail_cols:
         col_map["protein_g"] = "Protein"
     if "logged_calories" in avail_cols:
@@ -442,31 +442,37 @@ if df_daily.height > 0:
     display_df = display.select(src_cols).to_pandas()
     display_df.columns = [col_map[c] for c in src_cols]
 
-    # Goals for color coding
-    goal_map = {}
+    # Goals for color coding (graduated: 10%/20% bands)
+    graduated_goals = {}
     if "Sleep" in display_df.columns:
-        goal_map["Sleep"] = GOALS.get("sleep_hours")
+        graduated_goals["Sleep"] = GOALS.get("sleep_hours")
     if "Deep" in display_df.columns:
-        goal_map["Deep"] = GOALS.get("sleep_deep_hours")
+        graduated_goals["Deep"] = GOALS.get("sleep_deep_hours")
     if "REM" in display_df.columns:
-        goal_map["REM"] = GOALS.get("sleep_rem_hours")
+        graduated_goals["REM"] = GOALS.get("sleep_rem_hours")
     if "Protein" in display_df.columns:
-        goal_map["Protein"] = GOALS.get("protein_g")
+        graduated_goals["Protein"] = GOALS.get("protein_g")
     if "Cals" in display_df.columns:
-        goal_map["Cals"] = GOALS.get("calories")
-    if "Steps" in display_df.columns:
-        goal_map["Steps"] = GOALS.get("steps")
+        graduated_goals["Cals"] = GOALS.get("calories")
 
-    def _color_cell(val, goal):
-        if pd.isna(val) or goal is None:
+    # Binary goals (at/above = green, below = red)
+    binary_goals = {}
+    if "Steps" in display_df.columns:
+        binary_goals["Steps"] = GOALS.get("steps")
+
+    def _color_cell(val, col_name):
+        if pd.isna(val):
             return ""
-        color = goal_status_color(float(val), goal)
-        return f"background-color: {color}33; color: {color}"
+        if col_name in graduated_goals and graduated_goals[col_name] is not None:
+            color = goal_status_color(float(val), graduated_goals[col_name])
+            return f"background-color: {color}33; color: {color}"
+        if col_name in binary_goals and binary_goals[col_name] is not None:
+            color = "#00CC96" if float(val) >= binary_goals[col_name] else "#EF553B"
+            return f"background-color: {color}33; color: {color}"
+        return ""
 
     styled = display_df.style.apply(
-        lambda col: [
-            _color_cell(v, goal_map[col.name]) if col.name in goal_map else "" for v in col
-        ],
+        lambda col: [_color_cell(v, col.name) for v in col],
         axis=0,
     ).format(
         {
@@ -481,7 +487,7 @@ if df_daily.height > 0:
                 "RHR": "{:.0f}",
                 "HRV": "{:.0f}",
                 "Weight": "{:.1f}",
-                "Mins": "{:.0f}",
+                "Duration": "{:.0f}min",
             }.items()
             if k in display_df.columns
         },
@@ -494,15 +500,14 @@ if df_daily.height > 0:
         "*Abbreviations — "
         "**Sleep/Deep/REM**: hours · "
         "**Workout**: session name · "
-        "**Time**: gym start time · "
-        "**Mins**: workout duration · "
+        "**Start/End**: workout times · "
+        "**Duration**: training time (min) · "
         "**Protein**: grams · "
         "**Cals**: logged calories · "
-        "**Steps**: daily count · "
+        "**Steps**: daily count (green ≥ goal, red below) · "
         "**RHR**: resting heart rate (bpm) · "
         "**HRV**: heart rate variability (ms) · "
-        "**Weight**: kg. "
-        "Colors: green (within 10% of goal), orange (10–20% off), red (>20% off).*"
+        "**Weight**: kg.*"
     )
 else:
     st.info("No data available for the selected period.")
