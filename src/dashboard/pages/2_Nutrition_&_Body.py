@@ -213,6 +213,37 @@ if has_macros or has_weight:
                 with w3:
                     st.metric("Range", f"{min_weight:.1f} – {max_weight:.1f} kg")
 
+                # --- Rolling Averages (single row of 5 cards) ---
+                st.subheader("Rolling Averages")
+                df_weight_avg = load_weight_rolling_averages()
+                if df_weight_avg.height > 0:
+                    weight_goal = GOALS["weight_kg"]
+                    latest_avg = df_weight_avg.sort("date", descending=True).head(1)
+
+                    labels = ["7d", "14d", "30d", "60d", "120d"]
+                    avg_cols = ["avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
+
+                    ra_cols = st.columns(5)
+                    for ra_col, label, avg_col_name in zip(ra_cols, labels, avg_cols):
+                        val = latest_avg[avg_col_name].item()
+                        with ra_col:
+                            if val is not None:
+                                val = float(val)
+                                delta = round(val - weight_goal, 1)
+                                st.metric(
+                                    label,
+                                    f"{val:.1f} kg",
+                                    delta=f"{delta:+.1f}",
+                                    delta_color="inverse",
+                                )
+                            else:
+                                st.metric(label, "—")
+
+                    st.caption(
+                        f"*Goal: **{weight_goal:.0f} kg** · "
+                        "Delta shows rolling avg vs goal (lower is better)*"
+                    )
+
                 # --- Weight Trend Chart ---
                 st.subheader("Weight Trend")
                 weight_chart_data = (
@@ -259,40 +290,6 @@ if has_macros or has_weight:
                     f":green[--- {GOALS['weight_kg']:.0f} kg goal]  "
                     f":red[--- {avg_weight:.1f} kg avg]"
                 )
-
-                # --- Rolling Averages Table ---
-                st.subheader("Rolling Averages")
-                df_weight_avg = load_weight_rolling_averages()
-                if df_weight_avg.height > 0:
-                    weight_goal = GOALS["weight_kg"]
-                    latest_avg = df_weight_avg.sort("date", descending=True).head(1)
-
-                    labels = ["7d", "14d", "30d", "60d", "120d"]
-                    src_cols = ["avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
-
-                    ra1, ra2, ra3 = st.columns(3)
-                    ra4, ra5, _ = st.columns(3)
-                    card_cols = [ra1, ra2, ra3, ra4, ra5]
-
-                    for card_col, label, src_col in zip(card_cols, labels, src_cols):
-                        val = latest_avg[src_col].item()
-                        with card_col:
-                            if val is not None:
-                                val = float(val)
-                                delta = round(val - weight_goal, 1)
-                                st.metric(
-                                    label,
-                                    f"{val:.1f} kg",
-                                    delta=f"{delta:+.1f} kg vs goal",
-                                    delta_color="inverse",
-                                )
-                            else:
-                                st.metric(label, "—")
-
-                    st.caption(
-                        f"*Goal: **{weight_goal:.0f} kg** · "
-                        "Delta shows rolling avg vs goal (lower is better)*"
-                    )
 
                 # --- Daily Weight Table ---
                 st.subheader("Daily Weight")

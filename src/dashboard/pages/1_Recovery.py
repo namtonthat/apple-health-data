@@ -31,6 +31,171 @@ else:
     df_daily = df_all
 
 # =============================================================================
+# Daily Breakdown Table (top of page)
+# =============================================================================
+st.header("Health & Recovery — Daily Breakdown")
+
+if df_daily.height > 0:
+    # Build the base table from daily summary
+    breakdown_cols = {
+        "date": True,
+        "sleep_hours": "sleep_hours" in df_daily.columns,
+        "sleep_deep_hours": "sleep_deep_hours" in df_daily.columns,
+        "sleep_rem_hours": "sleep_rem_hours" in df_daily.columns,
+        "protein_g": "protein_g" in df_daily.columns,
+        "logged_calories": "logged_calories" in df_daily.columns,
+        "steps": "steps" in df_daily.columns,
+        "resting_hr_bpm": "resting_hr_bpm" in df_daily.columns,
+        "hrv_ms": "hrv_ms" in df_daily.columns,
+        "weight_kg": "weight_kg" in df_daily.columns,
+    }
+    avail_cols = [c for c, present in breakdown_cols.items() if present]
+    base = df_daily.select(avail_cols).sort("date", descending=True)
+
+    # Load workout data and join
+    df_workouts = load_daily_workouts()
+    if df_workouts.height > 0:
+        workout_daily = (
+            df_workouts.with_columns(
+                pl.col("started_at")
+                .cast(pl.Datetime)
+                .dt.strftime("%-I:%M%p")
+                .str.to_lowercase()
+                .alias("start"),
+                pl.col("ended_at")
+                .cast(pl.Datetime)
+                .dt.strftime("%-I:%M%p")
+                .str.to_lowercase()
+                .alias("end"),
+            )
+            .group_by("workout_date")
+            .agg(
+                pl.col("workout_name").first().alias("workout"),
+                pl.col("start").first().alias("start"),
+                pl.col("end").first().alias("end"),
+                pl.col("workout_duration_minutes").sum().alias("duration"),
+            )
+        )
+        base = base.join(
+            workout_daily,
+            left_on="date",
+            right_on="workout_date",
+            how="left",
+        )
+    else:
+        base = base.with_columns(
+            pl.lit(None).alias("workout"),
+            pl.lit(None).alias("start"),
+            pl.lit(None).alias("end"),
+            pl.lit(None).cast(pl.Int64).alias("duration"),
+        )
+
+    # Format date as "Mon 17"
+    display = base.with_columns(
+        pl.col("date").cast(pl.Date).dt.strftime("%a %d").alias("Day"),
+    )
+
+    # Select and rename for display
+    col_map = {"Day": "Day"}
+    if "sleep_hours" in avail_cols:
+        col_map["sleep_hours"] = "Sleep"
+    if "sleep_deep_hours" in avail_cols:
+        col_map["sleep_deep_hours"] = "Deep"
+    if "sleep_rem_hours" in avail_cols:
+        col_map["sleep_rem_hours"] = "REM"
+    col_map["workout"] = "Workout"
+    col_map["start"] = "Start"
+    col_map["end"] = "End"
+    col_map["duration"] = "Duration"
+    if "protein_g" in avail_cols:
+        col_map["protein_g"] = "Protein"
+    if "logged_calories" in avail_cols:
+        col_map["logged_calories"] = "Cals"
+    if "steps" in avail_cols:
+        col_map["steps"] = "Steps"
+    if "resting_hr_bpm" in avail_cols:
+        col_map["resting_hr_bpm"] = "RHR"
+    if "hrv_ms" in avail_cols:
+        col_map["hrv_ms"] = "HRV"
+    if "weight_kg" in avail_cols:
+        col_map["weight_kg"] = "Weight"
+
+    src_cols = [c for c in col_map if c in display.columns]
+    display_df = display.select(src_cols).to_pandas()
+    display_df.columns = [col_map[c] for c in src_cols]
+
+    # Goals for color coding (graduated: 10%/20% bands)
+    graduated_goals = {}
+    if "Sleep" in display_df.columns:
+        graduated_goals["Sleep"] = GOALS.get("sleep_hours")
+    if "Deep" in display_df.columns:
+        graduated_goals["Deep"] = GOALS.get("sleep_deep_hours")
+    if "REM" in display_df.columns:
+        graduated_goals["REM"] = GOALS.get("sleep_rem_hours")
+    if "Protein" in display_df.columns:
+        graduated_goals["Protein"] = GOALS.get("protein_g")
+    if "Cals" in display_df.columns:
+        graduated_goals["Cals"] = GOALS.get("calories")
+
+    # Binary goals (at/above = green, below = red)
+    binary_goals = {}
+    if "Steps" in display_df.columns:
+        binary_goals["Steps"] = GOALS.get("steps")
+
+    def _color_cell(val, col_name):
+        if pd.isna(val):
+            return ""
+        if col_name in graduated_goals and graduated_goals[col_name] is not None:
+            color = goal_status_color(float(val), graduated_goals[col_name])
+            return f"background-color: {color}33; color: {color}"
+        if col_name in binary_goals and binary_goals[col_name] is not None:
+            color = "#00CC96" if float(val) >= binary_goals[col_name] else "#EF553B"
+            return f"background-color: {color}33; color: {color}"
+        return ""
+
+    styled = display_df.style.apply(
+        lambda col: [_color_cell(v, col.name) for v in col],
+        axis=0,
+    ).format(
+        {
+            k: v
+            for k, v in {
+                "Sleep": "{:.1f}h",
+                "Deep": "{:.1f}h",
+                "REM": "{:.1f}h",
+                "Protein": "{:.0f}g",
+                "Cals": "{:,.0f}",
+                "Steps": "{:,.0f}",
+                "RHR": "{:.0f}",
+                "HRV": "{:.0f}",
+                "Weight": "{:.1f}",
+                "Duration": "{:.0f}min",
+            }.items()
+            if k in display_df.columns
+        },
+        na_rep="—",
+    )
+
+    st.dataframe(styled, hide_index=True, use_container_width=True)
+
+    st.caption(
+        "- **Sleep / Deep / REM** — hours\n"
+        "- **Workout** — session name\n"
+        "- **Start / End** — workout times\n"
+        "- **Duration** — training time (min)\n"
+        "- **Protein** — grams\n"
+        "- **Cals** — logged calories\n"
+        "- **Steps** — daily count (green ≥ goal, red below)\n"
+        "- **RHR** — resting heart rate (bpm)\n"
+        "- **HRV** — heart rate variability (ms)\n"
+        "- **Weight** — kg"
+    )
+else:
+    st.info("No data available for the selected period.")
+
+st.divider()
+
+# =============================================================================
 # Sleep Section
 # =============================================================================
 st.header("Sleep")
@@ -74,6 +239,7 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
 
         with chart_left:
             st.subheader("Sleep Stages")
+            st.caption(":blue[--- Deep goal]  :purple[--- REM goal]  :orange[--- Light goal]")
             # Melt for grouped bar chart
             sleep_melted = sleep_chart_data.melt(
                 id_vars=["Date"],
@@ -108,7 +274,27 @@ if "sleep_hours" in df_daily.columns and df_daily["sleep_hours"].drop_nulls().le
                 text=alt.Text("Hours:Q", format=".1f"),
             )
 
-            st.altair_chart(bars + text, width="stretch")
+            # Goal lines for each sleep stage
+            deep_goal_line = (
+                alt.Chart(sleep_chart_data)
+                .mark_rule(color="#1f77b4", strokeDash=[5, 5], strokeWidth=2)
+                .encode(y=alt.datum(GOALS["sleep_deep_hours"]))
+            )
+            rem_goal_line = (
+                alt.Chart(sleep_chart_data)
+                .mark_rule(color="#9467bd", strokeDash=[5, 5], strokeWidth=2)
+                .encode(y=alt.datum(GOALS["sleep_rem_hours"]))
+            )
+            light_goal_line = (
+                alt.Chart(sleep_chart_data)
+                .mark_rule(color="#ff7f0e", strokeDash=[5, 5], strokeWidth=2)
+                .encode(y=alt.datum(GOALS["sleep_light_hours"]))
+            )
+
+            st.altair_chart(
+                bars + text + deep_goal_line + rem_goal_line + light_goal_line,
+                width="stretch",
+            )
 
         with chart_right:
             st.subheader("Total Sleep")
@@ -344,173 +530,6 @@ with col_steps:
             st.altair_chart(bars + goal_line + text, use_container_width=True)
     else:
         st.info("No step data available for selected period")
-
-st.divider()
-
-# =============================================================================
-# Daily Breakdown Table
-# =============================================================================
-st.header("Health & Recovery — Daily Breakdown")
-
-if df_daily.height > 0:
-    # Build the base table from daily summary
-    breakdown_cols = {
-        "date": True,
-        "sleep_hours": "sleep_hours" in df_daily.columns,
-        "sleep_deep_hours": "sleep_deep_hours" in df_daily.columns,
-        "sleep_rem_hours": "sleep_rem_hours" in df_daily.columns,
-        "protein_g": "protein_g" in df_daily.columns,
-        "logged_calories": "logged_calories" in df_daily.columns,
-        "steps": "steps" in df_daily.columns,
-        "resting_hr_bpm": "resting_hr_bpm" in df_daily.columns,
-        "hrv_ms": "hrv_ms" in df_daily.columns,
-        "weight_kg": "weight_kg" in df_daily.columns,
-    }
-    avail_cols = [c for c, present in breakdown_cols.items() if present]
-    base = df_daily.select(avail_cols).sort("date", descending=True)
-
-    # Load workout data and join
-    df_workouts = load_daily_workouts()
-    if df_workouts.height > 0:
-        # Aggregate multiple workouts per day into one row
-        workout_daily = (
-            df_workouts.with_columns(
-                pl.col("started_at")
-                .cast(pl.Datetime)
-                .dt.strftime("%-I:%M%p")
-                .str.to_lowercase()
-                .alias("start"),
-                pl.col("ended_at")
-                .cast(pl.Datetime)
-                .dt.strftime("%-I:%M%p")
-                .str.to_lowercase()
-                .alias("end"),
-            )
-            .group_by("workout_date")
-            .agg(
-                pl.col("workout_name").first().alias("workout"),
-                pl.col("start").first().alias("start"),
-                pl.col("end").first().alias("end"),
-                pl.col("workout_duration_minutes").sum().alias("duration"),
-            )
-        )
-        base = base.join(
-            workout_daily,
-            left_on="date",
-            right_on="workout_date",
-            how="left",
-        )
-    else:
-        base = base.with_columns(
-            pl.lit(None).alias("workout"),
-            pl.lit(None).alias("start"),
-            pl.lit(None).alias("end"),
-            pl.lit(None).cast(pl.Int64).alias("duration"),
-        )
-
-    # Format date as "Mon 17"
-    display = base.with_columns(
-        pl.col("date").cast(pl.Date).dt.strftime("%a %d").alias("Day"),
-    )
-
-    # Select and rename for display
-    col_map = {"Day": "Day"}
-    if "sleep_hours" in avail_cols:
-        col_map["sleep_hours"] = "Sleep"
-    if "sleep_deep_hours" in avail_cols:
-        col_map["sleep_deep_hours"] = "Deep"
-    if "sleep_rem_hours" in avail_cols:
-        col_map["sleep_rem_hours"] = "REM"
-    col_map["workout"] = "Workout"
-    col_map["start"] = "Start"
-    col_map["end"] = "End"
-    col_map["duration"] = "Duration"
-    if "protein_g" in avail_cols:
-        col_map["protein_g"] = "Protein"
-    if "logged_calories" in avail_cols:
-        col_map["logged_calories"] = "Cals"
-    if "steps" in avail_cols:
-        col_map["steps"] = "Steps"
-    if "resting_hr_bpm" in avail_cols:
-        col_map["resting_hr_bpm"] = "RHR"
-    if "hrv_ms" in avail_cols:
-        col_map["hrv_ms"] = "HRV"
-    if "weight_kg" in avail_cols:
-        col_map["weight_kg"] = "Weight"
-
-    src_cols = [c for c in col_map if c in display.columns]
-    display_df = display.select(src_cols).to_pandas()
-    display_df.columns = [col_map[c] for c in src_cols]
-
-    # Goals for color coding (graduated: 10%/20% bands)
-    graduated_goals = {}
-    if "Sleep" in display_df.columns:
-        graduated_goals["Sleep"] = GOALS.get("sleep_hours")
-    if "Deep" in display_df.columns:
-        graduated_goals["Deep"] = GOALS.get("sleep_deep_hours")
-    if "REM" in display_df.columns:
-        graduated_goals["REM"] = GOALS.get("sleep_rem_hours")
-    if "Protein" in display_df.columns:
-        graduated_goals["Protein"] = GOALS.get("protein_g")
-    if "Cals" in display_df.columns:
-        graduated_goals["Cals"] = GOALS.get("calories")
-
-    # Binary goals (at/above = green, below = red)
-    binary_goals = {}
-    if "Steps" in display_df.columns:
-        binary_goals["Steps"] = GOALS.get("steps")
-
-    def _color_cell(val, col_name):
-        if pd.isna(val):
-            return ""
-        if col_name in graduated_goals and graduated_goals[col_name] is not None:
-            color = goal_status_color(float(val), graduated_goals[col_name])
-            return f"background-color: {color}33; color: {color}"
-        if col_name in binary_goals and binary_goals[col_name] is not None:
-            color = "#00CC96" if float(val) >= binary_goals[col_name] else "#EF553B"
-            return f"background-color: {color}33; color: {color}"
-        return ""
-
-    styled = display_df.style.apply(
-        lambda col: [_color_cell(v, col.name) for v in col],
-        axis=0,
-    ).format(
-        {
-            k: v
-            for k, v in {
-                "Sleep": "{:.1f}h",
-                "Deep": "{:.1f}h",
-                "REM": "{:.1f}h",
-                "Protein": "{:.0f}g",
-                "Cals": "{:,.0f}",
-                "Steps": "{:,.0f}",
-                "RHR": "{:.0f}",
-                "HRV": "{:.0f}",
-                "Weight": "{:.1f}",
-                "Duration": "{:.0f}min",
-            }.items()
-            if k in display_df.columns
-        },
-        na_rep="—",
-    )
-
-    st.dataframe(styled, hide_index=True, use_container_width=True)
-
-    st.caption(
-        "*Abbreviations — "
-        "**Sleep/Deep/REM**: hours · "
-        "**Workout**: session name · "
-        "**Start/End**: workout times · "
-        "**Duration**: training time (min) · "
-        "**Protein**: grams · "
-        "**Cals**: logged calories · "
-        "**Steps**: daily count (green ≥ goal, red below) · "
-        "**RHR**: resting heart rate (bpm) · "
-        "**HRV**: heart rate variability (ms) · "
-        "**Weight**: kg.*"
-    )
-else:
-    st.info("No data available for the selected period.")
 
 # Footer
 st.divider()
