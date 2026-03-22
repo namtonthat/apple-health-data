@@ -33,7 +33,7 @@ else:
 # =============================================================================
 # Daily Breakdown Table (top of page)
 # =============================================================================
-st.header("Health & Recovery — Daily Breakdown")
+st.header("Daily Breakdown")
 
 if df_daily.height > 0:
     # Build the base table from daily summary
@@ -176,20 +176,22 @@ if df_daily.height > 0:
         na_rep="—",
     )
 
-    st.dataframe(styled, hide_index=True, use_container_width=True)
-
-    st.caption(
-        "- **Sleep / Deep / REM** — hours\n"
-        "- **Workout** — session name\n"
-        "- **Start / End** — workout times\n"
-        "- **Duration** — training time (min)\n"
-        "- **Protein** — grams\n"
-        "- **Cals** — logged calories\n"
-        "- **Steps** — daily count (green ≥ goal, red below)\n"
-        "- **RHR** — resting heart rate (bpm)\n"
-        "- **HRV** — heart rate variability (ms)\n"
-        "- **Weight** — kg"
-    )
+    bd_table, bd_legend = st.columns([4, 1])
+    with bd_table:
+        st.dataframe(styled, hide_index=True, use_container_width=True)
+    with bd_legend:
+        st.caption(
+            "**Sleep / Deep / REM** — hours  \n"
+            "**Workout** — session name  \n"
+            "**Start / End** — workout times  \n"
+            "**Duration** — training time (min)  \n"
+            "**Protein** — grams  \n"
+            "**Cals** — logged calories  \n"
+            "**Steps** — green ≥ goal, red below  \n"
+            "**RHR** — resting heart rate (bpm)  \n"
+            "**HRV** — heart rate variability (ms)  \n"
+            "**Weight** — kg"
+        )
 else:
     st.info("No data available for the selected period.")
 
