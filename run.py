@@ -15,6 +15,7 @@ Usage:
 """
 
 import argparse
+import resource
 import subprocess
 import sys
 import time
@@ -25,6 +26,13 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).resolve().parent
 ENV_FILE = ROOT / ".env"
+
+
+def _raise_fd_limit(target: int = 10240) -> None:
+    """Raise the open-file-descriptor limit to avoid 'Too many open files' during Delta writes."""
+    soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+    if soft < target:
+        resource.setrlimit(resource.RLIMIT_NOFILE, (min(target, hard), hard))
 
 
 def load_env() -> None:
@@ -140,6 +148,8 @@ def run_all(date: str | None) -> None:
 # CLI
 # ---------------------------------------------------------------------------
 def main() -> None:
+    _raise_fd_limit()
+
     parser = argparse.ArgumentParser(
         description="Health & Fitness Data Pipeline CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
