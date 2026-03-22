@@ -1,12 +1,17 @@
 """Nutrition & Body page — Macros, Calories, and Weight."""
 
 import altair as alt
+import pandas as pd
 import polars as pl
 import streamlit as st
 
 st.set_page_config(page_title="🍽️ Nutrition & Body", page_icon="🍽️", layout="wide")
 
-from dashboard.components import date_filter_sidebar, metric_with_goal_color  # noqa: E402
+from dashboard.components import (  # noqa: E402
+    date_filter_sidebar,
+    goal_status_color,
+    metric_with_goal_color,
+)
 from dashboard.config import GOALS  # noqa: E402
 from dashboard.data import load_daily_summary  # noqa: E402
 
@@ -223,26 +228,40 @@ if has_macros or has_weight:
                     .select([c for c in nutrition_cols if c in table_data.columns])
                     .sort("date", descending=True)
                 )
-                st.dataframe(
-                    display_table,
-                    column_config={
-                        "date": st.column_config.TextColumn("Date", width="small"),
-                        "protein_g": st.column_config.NumberColumn(
-                            "Protein (g)", format="%.0f", width="small"
-                        ),
-                        "carbs_g": st.column_config.NumberColumn(
-                            "Carbs (g)", format="%.0f", width="small"
-                        ),
-                        "fat_g": st.column_config.NumberColumn(
-                            "Fat (g)", format="%.0f", width="small"
-                        ),
-                        "logged_calories": st.column_config.NumberColumn(
-                            "Calories", format="%.0f", width="small"
-                        ),
-                    },
-                    hide_index=True,
-                    width="stretch",
+
+                display_df = display_table.to_pandas()
+                display_df.columns = ["Date", "Protein (g)", "Carbs (g)", "Fat (g)", "Calories"]
+
+                cal_goal = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
+                macro_goals = {
+                    "Protein (g)": GOALS["protein_g"],
+                    "Carbs (g)": GOALS["carbs_g"],
+                    "Fat (g)": GOALS["fat_g"],
+                    "Calories": cal_goal,
+                }
+
+                def _style_cell(val, goal):
+                    if pd.isna(val):
+                        return ""
+                    color = goal_status_color(float(val), goal)
+                    return f"background-color: {color}33; color: {color}"
+
+                styled = display_df.style.apply(
+                    lambda col: [
+                        _style_cell(v, macro_goals[col.name]) if col.name in macro_goals else ""
+                        for v in col
+                    ],
+                    axis=0,
+                ).format(
+                    {
+                        "Protein (g)": "{:.0f}",
+                        "Carbs (g)": "{:.0f}",
+                        "Fat (g)": "{:.0f}",
+                        "Calories": "{:.0f}",
+                    }
                 )
+
+                st.dataframe(styled, hide_index=True, width="stretch")
             else:
                 st.info("No nutrition data for selected period")
         else:
