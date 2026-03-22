@@ -68,3 +68,18 @@ def load_daily_summary() -> pl.DataFrame:
 def load_weight_rolling_averages() -> pl.DataFrame:
     """Load rolling weight averages (full history, cached across reruns)."""
     return load_parquet("fct_weight_rolling_averages")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading workout data...")
+def load_daily_workouts() -> pl.DataFrame:
+    """Load one row per workout with name, start time, and duration."""
+    return load_parquet(
+        "recent/fct_workout_sets",
+        query=(
+            "SELECT workout_date, workout_name, started_at, ended_at,"
+            " workout_duration_minutes"
+            " FROM read_parquet('{path}')"
+            " GROUP BY ALL"
+            " ORDER BY workout_date DESC"
+        ),
+    )

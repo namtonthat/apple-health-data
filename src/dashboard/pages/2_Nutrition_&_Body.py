@@ -23,11 +23,6 @@ start_date, end_date = date_filter_sidebar(
 
 df_all = load_daily_summary()
 
-# =============================================================================
-# Calories & Macros Section
-# =============================================================================
-st.header("Calories & Macros")
-
 has_macros = "protein_g" in df_all.columns and df_all["protein_g"].drop_nulls().len() > 0
 has_weight = "weight_kg" in df_all.columns and df_all["weight_kg"].drop_nulls().len() > 0
 
@@ -54,29 +49,33 @@ if has_macros or has_weight:
     elif has_macros:
         st.info("No nutrition data logged for the selected period.")
 
-    # Metrics row: Protein, Carbs, Fat, Calories (from macros)
-    if has_macros and macro_data.height > 0:
-        avg_protein = float(macro_data["protein_g"].mean())
-        avg_carbs = float(macro_data["carbs_g"].mean())
-        avg_fat = float(macro_data["fat_g"].mean())
-        avg_calories = round(avg_protein * 4 + avg_carbs * 4 + avg_fat * 9)
+    # =============================================================================
+    # Two-column layout: Macros (left) | Weight (right)
+    # =============================================================================
+    col_macros, col_weight = st.columns(2)
 
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            metric_with_goal_color("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
-        with c2:
-            metric_with_goal_color("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
-        with c3:
-            metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
-        with c4:
-            metric_with_goal_color("Calories", avg_calories, GOALS["calories"], "", ",.0f")
+    # -------------------------------------------------------------------------
+    # LEFT COLUMN — Macros & Calories
+    # -------------------------------------------------------------------------
+    with col_macros:
+        st.header("Calories & Macros")
 
-    chart_left, chart_right = st.columns(2)
-
-    # --- Daily Macros (left) ---
-    with chart_left:
-        st.subheader("Daily Macros (g)")
         if has_macros and macro_data.height > 0:
+            avg_protein = float(macro_data["protein_g"].mean())
+            avg_carbs = float(macro_data["carbs_g"].mean())
+            avg_fat = float(macro_data["fat_g"].mean())
+            avg_calories = round(avg_protein * 4 + avg_carbs * 4 + avg_fat * 9)
+
+            m1, m2 = st.columns(2)
+            with m1:
+                metric_with_goal_color("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
+                metric_with_goal_color("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
+            with m2:
+                metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
+                metric_with_goal_color("Calories", avg_calories, GOALS["calories"], "", ",.0f")
+
+            # --- Daily Macros Chart ---
+            st.subheader("Daily Macros (g)")
             macro_chart_data = (
                 macro_data.with_columns(
                     [
@@ -121,7 +120,6 @@ if has_macros or has_weight:
                 )
             )
 
-            # Show macro split label (e.g. "148P 300C 60F") above each bar
             totals = macro_chart_data.copy()
             totals["label"] = totals.apply(
                 lambda r: f"{int(r['protein_g'])}P {int(r['carbs_g'])}C {int(r['fat_g'])}F",
@@ -138,85 +136,10 @@ if has_macros or has_weight:
                 )
             )
 
-            st.altair_chart(bars + text, width="stretch")
-        else:
-            st.info("No macro data available for selected period")
+            st.altair_chart(bars + text, use_container_width=True)
 
-    # --- Weight Trend (right) ---
-    with chart_right:
-        st.subheader("Weight Trend")
-        if has_weight:
-            weight_data = section_data.filter(pl.col("weight_kg").is_not_null())
-            if weight_data.height > 0:
-                latest_weight = float(
-                    weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
-                )
-                avg_weight = float(weight_data["weight_kg"].mean())
-                min_weight = float(weight_data["weight_kg"].min())
-                max_weight = float(weight_data["weight_kg"].max())
-
-                w1, w2, w3 = st.columns(3)
-                with w1:
-                    st.metric("Current", f"{latest_weight:.1f} kg")
-                with w2:
-                    st.metric("Average", f"{avg_weight:.1f} kg")
-                with w3:
-                    st.metric("Range", f"{min_weight:.1f} - {max_weight:.1f} kg")
-
-                weight_chart_data = (
-                    weight_data.with_columns(
-                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
-                    )
-                    .select(["Date", "weight_kg"])
-                    .to_pandas()
-                )
-
-                line = (
-                    alt.Chart(weight_chart_data)
-                    .mark_line(point=True)
-                    .encode(
-                        x=alt.X("Date:N", sort=None, title="Date"),
-                        y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
-                    )
-                )
-
-                text = (
-                    alt.Chart(weight_chart_data)
-                    .mark_text(dy=-10, fontSize=11, color="white")
-                    .encode(
-                        x=alt.X("Date:N", sort=None),
-                        y=alt.Y("weight_kg:Q"),
-                        text=alt.Text("weight_kg:Q", format=".1f"),
-                    )
-                )
-
-                avg_line = (
-                    alt.Chart(weight_chart_data)
-                    .mark_rule(
-                        color="#ff6b6b",
-                        strokeDash=[5, 5],
-                        strokeWidth=2,
-                    )
-                    .encode(y=alt.datum(round(avg_weight, 2)))
-                )
-
-                st.altair_chart(line + text + avg_line, width="stretch")
-            else:
-                st.info("No weight data for selected period")
-        else:
-            st.info("No weight data available")
-
-    st.divider()
-
-    # Detailed Breakdown - two tables side by side
-    st.subheader("Detailed Breakdown")
-
-    table_col1, table_col2 = st.columns(2)
-
-    with table_col1:
-        st.markdown("**Daily Nutrition**")
-        # Only show nutrition data when macros are logged (not Apple Watch calories)
-        if has_macros:
+            # --- Daily Nutrition Table ---
+            st.subheader("Daily Nutrition")
             nutrition_cols = ["date", "protein_g", "carbs_g", "fat_g", "logged_calories"]
             table_data = section_data.filter(pl.col("protein_g").is_not_null())
 
@@ -239,7 +162,7 @@ if has_macros or has_weight:
                     "Calories": GOALS["calories"],
                 }
 
-                def _style_cell(val, goal):
+                def _style_macro(val, goal):
                     if pd.isna(val):
                         return ""
                     color = goal_status_color(float(val), goal)
@@ -247,7 +170,7 @@ if has_macros or has_weight:
 
                 styled = display_df.style.apply(
                     lambda col: [
-                        _style_cell(v, macro_goals[col.name]) if col.name in macro_goals else ""
+                        _style_macro(v, macro_goals[col.name]) if col.name in macro_goals else ""
                         for v in col
                     ],
                     axis=0,
@@ -260,22 +183,148 @@ if has_macros or has_weight:
                     }
                 )
 
-                st.dataframe(styled, hide_index=True, width="stretch")
+                st.dataframe(styled, hide_index=True, use_container_width=True)
             else:
                 st.info("No nutrition data for selected period")
         else:
-            st.info("No nutrition data available")
+            st.info("No macro data available for selected period")
 
-    with table_col2:
-        st.markdown("**Daily Weight**")
+    # -------------------------------------------------------------------------
+    # RIGHT COLUMN — Weight & Body
+    # -------------------------------------------------------------------------
+    with col_weight:
+        st.header("Weight & Body")
+
         if has_weight:
-            weight_table = (
-                section_data.filter(pl.col("weight_kg").is_not_null())
-                .with_columns(pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date"))
-                .select(["date", "weight_kg"])
-                .sort("date", descending=True)
-            )
-            if weight_table.height > 0:
+            weight_data = section_data.filter(pl.col("weight_kg").is_not_null())
+            if weight_data.height > 0:
+                latest_weight = float(
+                    weight_data.sort("date", descending=True)["weight_kg"].head(1).item()
+                )
+                avg_weight = float(weight_data["weight_kg"].mean())
+                min_weight = float(weight_data["weight_kg"].min())
+                max_weight = float(weight_data["weight_kg"].max())
+
+                w1, w2, w3 = st.columns(3)
+                with w1:
+                    st.metric("Current", f"{latest_weight:.1f} kg")
+                with w2:
+                    st.metric("Average", f"{avg_weight:.1f} kg")
+                with w3:
+                    st.metric("Range", f"{min_weight:.1f} – {max_weight:.1f} kg")
+
+                # --- Weight Trend Chart ---
+                st.subheader("Weight Trend")
+                weight_chart_data = (
+                    weight_data.with_columns(
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
+                    )
+                    .select(["Date", "weight_kg"])
+                    .to_pandas()
+                )
+
+                line = (
+                    alt.Chart(weight_chart_data)
+                    .mark_line(point=True)
+                    .encode(
+                        x=alt.X("Date:N", sort=None, title="Date"),
+                        y=alt.Y("weight_kg:Q", title="Weight (kg)", scale=alt.Scale(zero=False)),
+                    )
+                )
+
+                wt_text = (
+                    alt.Chart(weight_chart_data)
+                    .mark_text(dy=-10, fontSize=11, color="white")
+                    .encode(
+                        x=alt.X("Date:N", sort=None),
+                        y=alt.Y("weight_kg:Q"),
+                        text=alt.Text("weight_kg:Q", format=".1f"),
+                    )
+                )
+
+                goal_line = (
+                    alt.Chart(weight_chart_data)
+                    .mark_rule(color="#00CC96", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(GOALS["weight_kg"]))
+                )
+
+                avg_line = (
+                    alt.Chart(weight_chart_data)
+                    .mark_rule(color="#ff6b6b", strokeDash=[5, 5], strokeWidth=2)
+                    .encode(y=alt.datum(round(avg_weight, 2)))
+                )
+
+                st.altair_chart(line + wt_text + goal_line + avg_line, use_container_width=True)
+                st.caption(
+                    f":green[--- {GOALS['weight_kg']:.0f} kg goal]  "
+                    f":red[--- {avg_weight:.1f} kg avg]"
+                )
+
+                # --- Rolling Averages Table ---
+                st.subheader("Rolling Averages")
+                df_weight_avg = load_weight_rolling_averages()
+                if df_weight_avg.height > 0:
+                    weight_goal = GOALS["weight_kg"]
+                    latest_avg = df_weight_avg.sort("date", descending=True).head(1)
+
+                    labels = ["Now", "7d", "14d", "30d", "60d", "120d"]
+                    src_cols = [
+                        "weight_kg",
+                        "avg_7d",
+                        "avg_14d",
+                        "avg_30d",
+                        "avg_60d",
+                        "avg_120d",
+                    ]
+
+                    values = []
+                    deltas = []
+                    for c in src_cols:
+                        val = latest_avg[c].item()
+                        if val is not None:
+                            val = float(val)
+                            values.append(f"{val:.1f}")
+                            deltas.append(f"{val - weight_goal:+.1f}")
+                        else:
+                            values.append("—")
+                            deltas.append("—")
+
+                    table_df = pd.DataFrame({"Window": labels, "kg": values, "vs Goal": deltas})
+
+                    def _weight_goal_style(row):
+                        styles = [""] * len(row)
+                        for i, col_name in enumerate(row.index):
+                            if col_name == "vs Goal" and row[col_name] != "—":
+                                diff = float(row[col_name])
+                                if abs(diff) <= weight_goal * 0.02:
+                                    color = "#00CC96"
+                                elif abs(diff) <= weight_goal * 0.05:
+                                    color = "#FFA500"
+                                else:
+                                    color = "#EF553B"
+                                styles[i] = f"background-color: {color}33; color: {color}"
+                        return styles
+
+                    styled_wt = table_df.style.apply(_weight_goal_style, axis=1).hide(axis="index")
+                    st.dataframe(styled_wt, hide_index=True, use_container_width=True)
+
+                    st.caption(
+                        f"*Goal: **{weight_goal:.0f} kg** · "
+                        "**Now**: latest weigh-in · "
+                        "**7d–120d**: rolling avg · "
+                        "**vs Goal**: diff from target "
+                        "(green ≤2%, orange ≤5%, red >5%)*"
+                    )
+
+                # --- Daily Weight Table ---
+                st.subheader("Daily Weight")
+                weight_table = (
+                    weight_data.with_columns(
+                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("date")
+                    )
+                    .select(["date", "weight_kg"])
+                    .sort("date", descending=True)
+                )
                 st.dataframe(
                     weight_table,
                     column_config={
@@ -285,7 +334,7 @@ if has_macros or has_weight:
                         ),
                     },
                     hide_index=True,
-                    width="stretch",
+                    use_container_width=True,
                 )
             else:
                 st.info("No weight data for selected period")
@@ -293,59 +342,6 @@ if has_macros or has_weight:
             st.info("No weight data available")
 else:
     st.info("No calorie or macro data available - log food in an app that syncs to Apple Health")
-
-# =============================================================================
-# Weight Rolling Averages
-# =============================================================================
-st.header("Weight Rolling Averages")
-
-df_weight_avg = load_weight_rolling_averages()
-if df_weight_avg.height > 0:
-    weight_goal = GOALS["weight_kg"]
-    latest = df_weight_avg.sort("date", descending=True).head(1)
-
-    labels = ["Now", "7d", "14d", "30d", "60d", "120d"]
-    src_cols = ["weight_kg", "avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
-
-    values = []
-    deltas = []
-    for col_name in src_cols:
-        val = latest[col_name].item()
-        if val is not None:
-            val = float(val)
-            values.append(f"{val:.1f}")
-            deltas.append(f"{val - weight_goal:+.1f}")
-        else:
-            values.append("—")
-            deltas.append("—")
-
-    table_df = pd.DataFrame({"Window": labels, "Weight (kg)": values, "vs Goal (kg)": deltas})
-
-    def _weight_goal_style(row):
-        styles = [""] * len(row)
-        for i, col_name in enumerate(row.index):
-            if col_name == "vs Goal (kg)" and row[col_name] != "—":
-                diff = float(row[col_name])
-                if abs(diff) <= weight_goal * 0.02:
-                    color = "#00CC96"
-                elif abs(diff) <= weight_goal * 0.05:
-                    color = "#FFA500"
-                else:
-                    color = "#EF553B"
-                styles[i] = f"background-color: {color}33; color: {color}"
-        return styles
-
-    styled = table_df.style.apply(_weight_goal_style, axis=1).hide(axis="index")
-    st.dataframe(styled, hide_index=True, use_container_width=True)
-
-    st.caption(
-        f"*Goal: **{weight_goal:.0f} kg** · "
-        "**Now**: latest weigh-in · "
-        "**7d/14d/30d/60d/120d**: rolling avg over that window · "
-        "**vs Goal**: difference from target (green ≤2%, orange ≤5%, red >5%)*"
-    )
-else:
-    st.info("No weight data available for rolling averages.")
 
 # Footer
 st.divider()
