@@ -71,6 +71,26 @@ models:
       - name: estimated_total
         description: Sum of squat + bench + deadlift e1RMs
 
+  - name: fct_weight_rolling_averages
+    description: >
+      Rolling weight averages at 7/14/30/60/120-day windows.
+      Grain: One row per date with a weight reading.
+    columns:
+      - name: date
+        description: Calendar date
+      - name: weight_kg
+        description: Body weight in kg
+      - name: avg_7d
+        description: 7-day rolling average weight
+      - name: avg_14d
+        description: 14-day rolling average weight
+      - name: avg_30d
+        description: 30-day rolling average weight
+      - name: avg_60d
+        description: 60-day rolling average weight
+      - name: avg_120d
+        description: 120-day rolling average weight
+
   - name: fct_exercise_progress
     description: >
       Exercise progression tracking with personal records.

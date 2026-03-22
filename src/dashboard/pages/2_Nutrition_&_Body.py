@@ -13,7 +13,7 @@ from dashboard.components import (  # noqa: E402
     metric_with_goal_color,
 )
 from dashboard.config import GOALS  # noqa: E402
-from dashboard.data import load_daily_summary  # noqa: E402
+from dashboard.data import load_daily_summary, load_weight_rolling_averages  # noqa: E402
 
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar(
@@ -69,7 +69,7 @@ if has_macros or has_weight:
         with c3:
             metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
         with c4:
-            st.metric("Calories", f"{avg_calories:,}")
+            metric_with_goal_color("Calories", avg_calories, GOALS["calories"], "", ",.0f")
 
     chart_left, chart_right = st.columns(2)
 
@@ -232,12 +232,11 @@ if has_macros or has_weight:
                 display_df = display_table.to_pandas()
                 display_df.columns = ["Date", "Protein (g)", "Carbs (g)", "Fat (g)", "Calories"]
 
-                cal_goal = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
                 macro_goals = {
                     "Protein (g)": GOALS["protein_g"],
                     "Carbs (g)": GOALS["carbs_g"],
                     "Fat (g)": GOALS["fat_g"],
-                    "Calories": cal_goal,
+                    "Calories": GOALS["calories"],
                 }
 
                 def _style_cell(val, goal):
@@ -294,6 +293,47 @@ if has_macros or has_weight:
             st.info("No weight data available")
 else:
     st.info("No calorie or macro data available - log food in an app that syncs to Apple Health")
+
+# =============================================================================
+# Weight Rolling Averages
+# =============================================================================
+st.header("Weight Rolling Averages")
+
+df_weight_avg = load_weight_rolling_averages()
+if df_weight_avg.height > 0:
+    latest = df_weight_avg.sort("date", descending=True).head(1)
+    current = float(latest["weight_kg"].item())
+
+    cols = st.columns(6)
+    labels = ["Now", "7d", "14d", "30d", "60d", "120d"]
+    avg_cols = [None, "avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
+
+    for col, label, avg_col in zip(cols, labels, avg_cols):
+        with col:
+            if avg_col is None:
+                st.metric("Now", f"{current:.1f} kg")
+            else:
+                avg_val = latest[avg_col].item()
+                if avg_val is not None:
+                    avg_val = float(avg_val)
+                    delta = round(current - avg_val, 2)
+                    st.metric(
+                        label,
+                        f"{avg_val:.1f} kg",
+                        delta=f"{delta:+.1f} kg",
+                        delta_color="normal",
+                    )
+                else:
+                    st.metric(label, "—")
+
+    st.caption(
+        "*Abbreviations — "
+        "**Now**: latest weigh-in · "
+        "**7d/14d/30d/60d/120d**: rolling average over that many days. "
+        "Delta (▲/▼) shows current weight vs the rolling average.*"
+    )
+else:
+    st.info("No weight data available for rolling averages.")
 
 # Footer
 st.divider()

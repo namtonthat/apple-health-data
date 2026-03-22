@@ -62,3 +62,9 @@ def load_parquet(
 def load_daily_summary() -> pl.DataFrame:
     """Load recent daily summary table (last 90 days, cached across reruns)."""
     return load_parquet("recent/fct_daily_summary")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading weight averages...")
+def load_weight_rolling_averages() -> pl.DataFrame:
+    """Load rolling weight averages (full history, cached across reruns)."""
+    return load_parquet("fct_weight_rolling_averages")

@@ -39,6 +39,7 @@ GOALS = {
     "steps": _goals_config.get("steps", 10000),
     "meditation_minutes": _goals_config.get("meditation_minutes", 10),
 }
+GOALS["calories"] = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
 
 
 # Last updated timestamp (written by GitHub Actions workflow)
