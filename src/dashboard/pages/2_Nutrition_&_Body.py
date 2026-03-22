@@ -301,36 +301,48 @@ st.header("Weight Rolling Averages")
 
 df_weight_avg = load_weight_rolling_averages()
 if df_weight_avg.height > 0:
+    weight_goal = GOALS["weight_kg"]
     latest = df_weight_avg.sort("date", descending=True).head(1)
-    current = float(latest["weight_kg"].item())
 
-    cols = st.columns(6)
     labels = ["Now", "7d", "14d", "30d", "60d", "120d"]
-    avg_cols = [None, "avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
+    src_cols = ["weight_kg", "avg_7d", "avg_14d", "avg_30d", "avg_60d", "avg_120d"]
 
-    for col, label, avg_col in zip(cols, labels, avg_cols):
-        with col:
-            if avg_col is None:
-                st.metric("Now", f"{current:.1f} kg")
-            else:
-                avg_val = latest[avg_col].item()
-                if avg_val is not None:
-                    avg_val = float(avg_val)
-                    delta = round(current - avg_val, 2)
-                    st.metric(
-                        label,
-                        f"{avg_val:.1f} kg",
-                        delta=f"{delta:+.1f} kg",
-                        delta_color="normal",
-                    )
+    values = []
+    deltas = []
+    for col_name in src_cols:
+        val = latest[col_name].item()
+        if val is not None:
+            val = float(val)
+            values.append(f"{val:.1f}")
+            deltas.append(f"{val - weight_goal:+.1f}")
+        else:
+            values.append("—")
+            deltas.append("—")
+
+    table_df = pd.DataFrame({"Window": labels, "Weight (kg)": values, "vs Goal (kg)": deltas})
+
+    def _weight_goal_style(row):
+        styles = [""] * len(row)
+        for i, col_name in enumerate(row.index):
+            if col_name == "vs Goal (kg)" and row[col_name] != "—":
+                diff = float(row[col_name])
+                if abs(diff) <= weight_goal * 0.02:
+                    color = "#00CC96"
+                elif abs(diff) <= weight_goal * 0.05:
+                    color = "#FFA500"
                 else:
-                    st.metric(label, "—")
+                    color = "#EF553B"
+                styles[i] = f"background-color: {color}33; color: {color}"
+        return styles
+
+    styled = table_df.style.apply(_weight_goal_style, axis=1).hide(axis="index")
+    st.dataframe(styled, hide_index=True, use_container_width=True)
 
     st.caption(
-        "*Abbreviations — "
+        f"*Goal: **{weight_goal:.0f} kg** · "
         "**Now**: latest weigh-in · "
-        "**7d/14d/30d/60d/120d**: rolling average over that many days. "
-        "Delta (▲/▼) shows current weight vs the rolling average.*"
+        "**7d/14d/30d/60d/120d**: rolling avg over that window · "
+        "**vs Goal**: difference from target (green ≤2%, orange ≤5%, red >5%)*"
     )
 else:
     st.info("No weight data available for rolling averages.")

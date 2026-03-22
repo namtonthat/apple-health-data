@@ -36,6 +36,7 @@ GOALS = {
     "protein_g": _goals_config.get("protein_g", 170.0),
     "carbs_g": _goals_config.get("carbs_g", 300.0),
     "fat_g": _goals_config.get("fat_g", 60.0),
+    "weight_kg": _goals_config.get("weight_kg", 69.0),
     "steps": _goals_config.get("steps", 10000),
     "meditation_minutes": _goals_config.get("meditation_minutes", 10),
 }
