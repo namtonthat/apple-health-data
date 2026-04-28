@@ -15,6 +15,7 @@ Usage:
 """
 
 import argparse
+import os
 import resource
 import subprocess
 import sys
@@ -40,8 +41,6 @@ def load_env() -> None:
 
     No-op when .env is missing (e.g. CI where env vars are set externally).
     """
-    import os
-
     if not ENV_FILE.exists():
         return
 
@@ -60,8 +59,11 @@ def load_env() -> None:
 INGEST_SOURCES = ["hevy", "strava", "apple-health", "openpowerlifting"]
 
 
-def run_ingest(sources: list[str], date: str | None) -> None:
-    """Extract data from APIs to S3 landing zone."""
+def run_ingest(sources: list[str], date: str | None, strict: bool = False) -> list[str]:
+    """Extract data from APIs to S3 landing zone.
+
+    Returns a list of sources that failed.
+    """
     load_env()
 
     from pipelines.openpowerlifting import run_pipeline as run_opl
@@ -76,9 +78,14 @@ def run_ingest(sources: list[str], date: str | None) -> None:
         "openpowerlifting": ("OpenPowerlifting", lambda: run_opl()),
     }
 
+    failures: list[str] = []
+
     for source in sources:
         if source not in runners:
             print(f"Unknown source: {source} (choose from {INGEST_SOURCES})")
+            failures.append(source)
+            if strict:
+                break
             continue
         label, fn = runners[source]
         print(f"\n{'=' * 60}")
@@ -88,6 +95,11 @@ def run_ingest(sources: list[str], date: str | None) -> None:
             fn()
         except Exception as exc:
             print(f"Warning: {label} failed — {exc}")
+            failures.append(source)
+            if strict:
+                break
+
+    return failures
 
 
 def run_transform() -> None:
@@ -124,19 +136,21 @@ def run_dashboard() -> None:
 def run_all(date: str | None) -> None:
     """Run the full pipeline end-to-end."""
     t0 = time.time()
+    load_env()
     print("=" * 60)
     print("Health & Fitness Pipeline — Full Run")
     print("=" * 60)
 
-    stages = [
-        ("1/3 Ingest", lambda: run_ingest(INGEST_SOURCES, date)),
-        ("2/3 Transform", run_transform),
-        ("3/3 Export", run_export),
-    ]
+    print("\n[1/3 Ingest]")
+    ingest_failures = run_ingest(INGEST_SOURCES, date, strict=False)
+    if ingest_failures:
+        raise RuntimeError(f"Ingest failed for: {', '.join(ingest_failures)}")
 
-    for label, fn in stages:
-        print(f"\n[{label}]")
-        fn()
+    print("\n[2/3 Transform]")
+    run_transform()
+
+    print("\n[3/3 Export]")
+    run_export()
 
     elapsed = time.time() - t0
     print(f"\n{'=' * 60}")
@@ -199,7 +213,9 @@ examples:
 
     match args.stage:
         case "ingest":
-            run_ingest(args.sources, args.date)
+            failures = run_ingest(args.sources, args.date)
+            if failures:
+                raise SystemExit(1)
         case "transform":
             run_transform()
         case "export":

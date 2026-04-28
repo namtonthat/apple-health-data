@@ -126,7 +126,7 @@ def date_filter_sidebar(
         (start_date, end_date) tuple.
     """
     if presets is None:
-        presets = ["Last 7 days", "Last 30 days", "This month", "Custom"]
+        presets = ["Last 7 days", "Last 14 days", "Last 30 days", "This month", "Custom"]
 
     st.sidebar.title("Filters")
 

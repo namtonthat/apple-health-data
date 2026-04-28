@@ -8,14 +8,36 @@ models:
     columns:
       - name: set_id
         description: Primary key
+        tests:
+          - not_null
+          - unique
+      - name: exercise_id
+        description: Foreign key to the exercise
+        tests:
+          - not_null
+      - name: workout_id
+        description: Foreign key to the workout
+        tests:
+          - not_null
       - name: workout_date
         description: Date of workout
+        tests:
+          - not_null
       - name: exercise_name
         description: Name of exercise performed
+        tests:
+          - not_null
       - name: set_number
         description: Set number within the exercise
+        tests:
+          - not_null
       - name: set_type
         description: Type (normal, warmup, dropset, failure)
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['normal', 'warmup', 'dropset', 'failure']
       - name: weight_kg
         description: Weight lifted in kilograms
       - name: reps
@@ -32,6 +54,9 @@ models:
     columns:
       - name: date
         description: Calendar date
+        tests:
+          - not_null
+          - unique
       - name: weight_kg
         description: Body weight in kg
       - name: resting_hr_bpm
@@ -52,6 +77,11 @@ models:
         description: Total workout volume in kg
       - name: had_strength_workout
         description: Boolean flag for workout days
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
   - name: fct_e1rm_rolling_total
     description: >
@@ -62,14 +92,25 @@ models:
     columns:
       - name: workout_date
         description: Date of workout
+        tests:
+          - not_null
+          - unique
       - name: squat_e1rm
         description: Running max estimated 1RM for squat
+        tests:
+          - not_null
       - name: bench_e1rm
         description: Running max estimated 1RM for bench press
+        tests:
+          - not_null
       - name: deadlift_e1rm
         description: Running max estimated 1RM for deadlift
+        tests:
+          - not_null
       - name: estimated_total
         description: Sum of squat + bench + deadlift e1RMs
+        tests:
+          - not_null
 
   - name: fct_weight_rolling_averages
     description: >
@@ -78,8 +119,13 @@ models:
     columns:
       - name: date
         description: Calendar date
+        tests:
+          - not_null
+          - unique
       - name: weight_kg
         description: Body weight in kg
+        tests:
+          - not_null
       - name: avg_7d
         description: 7-day rolling average weight
       - name: avg_14d
@@ -96,6 +142,24 @@ models:
       Composite training readiness score (0-100) based on HRV, RHR, sleep, and deep sleep.
       Each component scores 0-25 using z-score normalization against 30-day rolling baseline.
       Grain: One row per date with at least one cardiovascular/sleep metric.
+    columns:
+      - name: date
+        description: Date of the readiness score
+        tests:
+          - not_null
+          - unique
+      - name: readiness_score
+        description: Composite readiness score
+        tests:
+          - not_null
+      - name: hrv_score
+        description: HRV component score
+      - name: rhr_score
+        description: Resting heart rate component score
+      - name: sleep_score
+        description: Sleep duration component score
+      - name: deep_score
+        description: Deep sleep component score
 
   - name: fct_exercise_progress
     description: >
@@ -104,8 +168,12 @@ models:
     columns:
       - name: workout_date
         description: Date of workout
+        tests:
+          - not_null
       - name: exercise_name
         description: Name of exercise
+        tests:
+          - not_null
       - name: best_weight_kg
         description: Heaviest weight used that session
       - name: total_volume_kg
@@ -118,3 +186,45 @@ models:
         description: Which session number for this exercise
       - name: total_sessions
         description: Total times exercise has been performed
+
+  - name: fct_strava_activities
+    description: >
+      Fact table of Strava activities.
+      Grain: One row per activity.
+    columns:
+      - name: activity_id
+        description: Primary key
+        tests:
+          - not_null
+          - unique
+      - name: activity_date
+        description: Calendar date of the activity
+        tests:
+          - not_null
+      - name: activity_name
+        description: Activity title from Strava
+        tests:
+          - not_null
+      - name: activity_type
+        description: Activity type
+        tests:
+          - not_null
+      - name: started_at_local
+        description: Local start timestamp
+        tests:
+          - not_null
+
+  - name: fct_personal_bests
+    description: >
+      Competition personal bests aggregated from OpenPowerlifting.
+      Grain: One row per athlete.
+    columns:
+      - name: athlete_name
+        description: Athlete name
+        tests:
+          - not_null
+          - unique
+      - name: last_competition
+        description: Most recent competition date
+        tests:
+          - not_null

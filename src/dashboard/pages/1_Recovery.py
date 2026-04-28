@@ -21,7 +21,7 @@ from dashboard.data import (  # noqa: E402
 
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar(
-    presets=["Last 7 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
+    presets=["Last 7 days", "Last 14 days", "Last 30 days", "Last 90 days", "This month", "Custom"],
     max_lookback=90,
 )
 
@@ -65,16 +65,16 @@ if df_readiness.height > 0:
                 )
             with r2:
                 hrv_s = latest["hrv_score"].item()
-                st.metric("HRV", f"{hrv_s:.0f}/25" if hrv_s else "—")
+                st.metric("HRV", f"{hrv_s:.0f}/25" if hrv_s is not None else "—")
             with r3:
                 rhr_s = latest["rhr_score"].item()
-                st.metric("RHR", f"{rhr_s:.0f}/25" if rhr_s else "—")
+                st.metric("RHR", f"{rhr_s:.0f}/25" if rhr_s is not None else "—")
             with r4:
                 sleep_s = latest["sleep_score"].item()
-                st.metric("Sleep", f"{sleep_s:.0f}/25" if sleep_s else "—")
+                st.metric("Sleep", f"{sleep_s:.0f}/25" if sleep_s is not None else "—")
             with r5:
                 deep_s = latest["deep_score"].item()
-                st.metric("Deep", f"{deep_s:.0f}/25" if deep_s else "—")
+                st.metric("Deep", f"{deep_s:.0f}/25" if deep_s is not None else "—")
 
             # Trend chart
             trend_rows = recent_readiness.filter(pl.col("readiness_score").is_not_null())

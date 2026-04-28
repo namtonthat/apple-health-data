@@ -56,6 +56,8 @@ def load_parquet(
         if "No files found" in str(e):
             return pl.DataFrame()
         raise
+    finally:
+        conn.close()
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
