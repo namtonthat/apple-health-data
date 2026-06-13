@@ -6,6 +6,11 @@ on:
     # Midnight Melbourne = 13:00 UTC, Noon Melbourne = 01:00 UTC
     - cron: '0 1,13 * * *'
   workflow_dispatch:  # Allow manual trigger
+    inputs:
+      full_refresh:
+        description: 'Full refresh: reprocess ALL Apple Health export files (backfill full history). Leave off for normal incremental run.'
+        type: boolean
+        default: false
 
 jobs:
   refresh-data:
@@ -56,7 +61,12 @@ jobs:
           [ -n "$HEVY_API_KEY" ] && SOURCES="$SOURCES hevy"
           [ -n "$STRAVA_CLIENT_ID" ] && SOURCES="$SOURCES strava"
           [ -n "$OPENPOWERLIFTING_URL" ] && SOURCES="$SOURCES openpowerlifting"
-          uv run python run.py ingest $SOURCES
+          # Scheduled runs are incremental (latest export only). A manual
+          # full_refresh reprocesses every Apple Health export file to backfill
+          # history; --all-files is a no-op for the other sources.
+          FLAGS=""
+          [ "${{ inputs.full_refresh }}" = "true" ] && FLAGS="--all-files"
+          uv run python run.py ingest $SOURCES $FLAGS
         continue-on-error: true
 
       - name: Transform
