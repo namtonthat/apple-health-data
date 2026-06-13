@@ -64,6 +64,19 @@ with col3:
     """)
     st.page_link("pages/3_Exercises.py", label="Go to Exercises →", icon="🏋️")
 
+col4, _, _ = st.columns(3)
+with col4:
+    st.markdown("""
+    ### 📊 Performance Insights
+
+    See how recovery and nutrition relate to training.
+
+    - Sleep, HRV & fuel vs training-day performance
+    - Training load vs next-day recovery
+    - Long-run weight, calorie, and sleep trends
+    """)
+    st.page_link("pages/4_Performance_Insights.py", label="Go to Performance Insights →", icon="📊")
+
 st.divider()
 
 st.markdown("""
