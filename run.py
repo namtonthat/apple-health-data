@@ -59,8 +59,14 @@ def load_env() -> None:
 INGEST_SOURCES = ["hevy", "strava", "apple-health", "openpowerlifting"]
 
 
-def run_ingest(sources: list[str], date: str | None, strict: bool = False) -> list[str]:
+def run_ingest(
+    sources: list[str], date: str | None, strict: bool = False, all_files: bool = False
+) -> list[str]:
     """Extract data from APIs to S3 landing zone.
+
+    Args:
+        all_files: When True, reprocess every Apple Health export file (backfill)
+            instead of only the most recent one. Has no effect on other sources.
 
     Returns a list of sources that failed.
     """
@@ -74,7 +80,10 @@ def run_ingest(sources: list[str], date: str | None, strict: bool = False) -> li
     runners = {
         "hevy": ("Hevy", lambda: run_hevy(extraction_date=date)),
         "strava": ("Strava", lambda: run_strava(extraction_date=date)),
-        "apple-health": ("Apple Health", lambda: run_apple_health(extraction_date=date)),
+        "apple-health": (
+            "Apple Health",
+            lambda: run_apple_health(extraction_date=date, latest_only=not all_files),
+        ),
         "openpowerlifting": ("OpenPowerlifting", lambda: run_opl()),
     }
 
@@ -190,6 +199,12 @@ examples:
         help=f"Sources to ingest (default: all). Choices: {', '.join(INGEST_SOURCES)}",
     )
     p_ingest.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
+    p_ingest.add_argument(
+        "--all-files",
+        action="store_true",
+        help="Apple Health only: reprocess every export file to backfill history "
+        "(default: only the most recent file)",
+    )
 
     # transform
     sub.add_parser("transform", help="Run dbt transformations")
@@ -213,7 +228,7 @@ examples:
 
     match args.stage:
         case "ingest":
-            failures = run_ingest(args.sources, args.date)
+            failures = run_ingest(args.sources, args.date, all_files=args.all_files)
             if failures:
                 raise SystemExit(1)
         case "transform":

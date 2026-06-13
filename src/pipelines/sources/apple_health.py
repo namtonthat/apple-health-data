@@ -103,6 +103,14 @@ def health_metrics_resource(
     else:
         print(f"Processing {len(files)} health files")
 
+    # Apple Health exports are overlapping rolling windows, so the same
+    # (metric_date, metric_name, source) key recurs across many files. The Delta
+    # MERGE rejects a batch containing duplicate source rows for one target row,
+    # so we collapse to one row per key here. Files are sorted oldest-first, so
+    # iterating in order and letting later files overwrite earlier ones means the
+    # most recent export wins — matching the dedup intent of stg_health__metrics.
+    deduped: dict[tuple[str, str, str], dict] = {}
+
     for file_path in files:
         file_timestamp = _extract_file_timestamp(file_path)
 
@@ -137,7 +145,7 @@ def health_metrics_resource(
                     if point.get(key) is not None:
                         extra_data[key.lower()] = point[key]
 
-                yield {
+                deduped[(metric_date, metric_name, source)] = {
                     "metric_date": metric_date,
                     "metric_name": metric_name,
                     "value": value,
@@ -146,6 +154,8 @@ def health_metrics_resource(
                     "file_timestamp": file_timestamp,
                     **extra_data,
                 }
+
+    yield from deduped.values()
 
 
 # Convenience function for direct usage
