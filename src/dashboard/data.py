@@ -62,32 +62,61 @@ def load_parquet(
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading health data...")
 def load_daily_summary() -> pl.DataFrame:
-    """Load recent daily summary table (last 90 days, cached across reruns)."""
-    return load_parquet("recent/fct_daily_summary")
+    """Load the daily summary table (cached across reruns)."""
+    return load_parquet("fct_daily_summary")
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading weight averages...")
 def load_weight_rolling_averages() -> pl.DataFrame:
-    """Load rolling weight averages (full history, cached across reruns)."""
+    """Load rolling weight averages (cached across reruns)."""
     return load_parquet("fct_weight_rolling_averages")
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading workout data...")
-def load_daily_workouts() -> pl.DataFrame:
-    """Load one row per workout with name, start time, and duration."""
-    return load_parquet(
-        "recent/fct_workout_sets",
-        query=(
-            "SELECT workout_date, workout_name, started_at, ended_at,"
-            " workout_duration_minutes"
-            " FROM read_parquet('{path}')"
-            " GROUP BY ALL"
-            " ORDER BY workout_date DESC"
-        ),
-    )
+def load_workouts() -> pl.DataFrame:
+    """Load one row per workout (session grain) with name, times, and duration."""
+    return load_parquet("fct_workouts")
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading readiness data...")
 def load_training_readiness() -> pl.DataFrame:
     """Load training readiness scores."""
     return load_parquet("fct_training_readiness")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading workout sets...")
+def load_workout_sets() -> pl.DataFrame:
+    """Load workout sets with the pre-computed est_1rm column."""
+    return load_parquet(
+        "fct_workout_sets",
+        query=(
+            "SELECT workout_date, workout_name, exercise_name, set_number,"
+            " weight_kg, reps, volume_kg, est_1rm, rpe, set_type, started_at, exercise_order"
+            " FROM read_parquet('{path}')"
+            " ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number"
+        ),
+    )
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading lift PRs...")
+def load_big3_prs() -> pl.DataFrame:
+    """Load all-time best estimated 1RM per Big 3 lift."""
+    return load_parquet("fct_big3_prs")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading personal bests...")
+def load_personal_bests() -> pl.DataFrame:
+    """Load competition personal bests from OpenPowerlifting data."""
+    return load_parquet("fct_personal_bests")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading 1RM totals...")
+def load_e1rm_rolling_total() -> pl.DataFrame:
+    """Load rolling estimated 1RM totals for the Big 3."""
+    return load_parquet("fct_e1rm_rolling_total")
+
+
+@st.cache_data(ttl=timedelta(hours=1), show_spinner="Loading Strava activities...")
+def load_strava_activities() -> pl.DataFrame:
+    """Load Strava activities (cached; filter by date in the page)."""
+    return load_parquet("fct_strava_activities")

@@ -10,15 +10,20 @@ st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="
 
 from dashboard.components import date_filter_sidebar, vertical_divider
 from dashboard.config import OPENPOWERLIFTING_URL, today_local
-from dashboard.data import load_parquet
+from dashboard.data import (
+    load_big3_prs,
+    load_e1rm_rolling_total,
+    load_personal_bests,
+    load_strava_activities,
+    load_workout_sets,
+)
 
-# Big 3 exercises - exact names for 1RM summary display.
+# Big 3 lifts in display order (squat, bench, deadlift).
 BIG_3_EXERCISES = {
     "squat": "Squat (Barbell)",
     "bench": "Bench Press (Barbell)",
     "deadlift": "Sumo Deadlift",
 }
-BIG_3_NAMES = tuple(BIG_3_EXERCISES.values())
 
 
 def pr_delta(estimated: float, comp_pr: float | None) -> str | None:
@@ -28,81 +33,46 @@ def pr_delta(estimated: float, comp_pr: float | None) -> str | None:
     return f"{estimated - comp_pr:+.1f} kg vs {comp_pr:.1f} PR"
 
 
-def load_personal_bests() -> dict:
-    """Load competition personal bests from OpenPowerlifting data."""
-    try:
-        df = load_parquet(
-            "fct_personal_bests",
-            """SELECT squat_pr_kg, bench_pr_kg, deadlift_pr_kg, total_pr_kg, last_competition
-               FROM read_parquet('{path}')
-               LIMIT 1""",
-        )
-        if df.height > 0:
-            row = df.row(0, named=True)
-            return {
-                "squat": row["squat_pr_kg"],
-                "bench": row["bench_pr_kg"],
-                "deadlift": row["deadlift_pr_kg"],
-                "total": row["total_pr_kg"],
-                "last_competition": row["last_competition"],
-            }
-    except Exception as exc:
-        print(f"Warning: failed to load personal bests: {exc}")
-    return {}
-
-
-def with_estimated_1rm(df: pl.DataFrame) -> pl.DataFrame:
-    """Add estimated 1RM using a native Polars expression."""
-    return df.with_columns(
-        pl.when(
-            pl.col("weight_kg").is_not_null()
-            & pl.col("reps").is_not_null()
-            & (pl.col("weight_kg") > 0)
-            & (pl.col("reps") > 0)
-        )
-        .then((pl.col("weight_kg") * (1 + pl.col("reps") / 30)).round(1))
-        .otherwise(None)
-        .alias("est_1rm")
-    )
+def personal_bests_dict() -> dict:
+    """Competition personal bests (from fct_personal_bests) keyed by lift."""
+    df = load_personal_bests()
+    if df.height == 0:
+        return {}
+    row = df.row(0, named=True)
+    return {
+        "squat": row.get("squat_pr_kg"),
+        "bench": row.get("bench_pr_kg"),
+        "deadlift": row.get("deadlift_pr_kg"),
+        "total": row.get("total_pr_kg"),
+        "last_competition": row.get("last_competition"),
+    }
 
 
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar()
 
-# Load recent data for the dashboard tables and filters.
-df_exercises_recent = load_parquet(
-    "recent/fct_workout_sets",
-    """SELECT workout_date, workout_name, exercise_name, set_number,
-              weight_kg, reps, volume_kg, rpe, set_type, started_at, exercise_order
-       FROM read_parquet('{path}')
-       ORDER BY workout_date DESC, started_at DESC, exercise_order, set_number""",
-)
-df_exercises = df_exercises_recent.filter(
-    (pl.col("workout_date").cast(pl.Date) >= pl.lit(start_date))
-    & (pl.col("workout_date").cast(pl.Date) <= pl.lit(end_date))
-)
+# Workout sets (est_1rm precomputed in dbt), filtered to the selected window.
+df_sets = load_workout_sets()
+if df_sets.height > 0:
+    df_exercises = df_sets.filter(
+        (pl.col("workout_date").cast(pl.Date) >= pl.lit(start_date))
+        & (pl.col("workout_date").cast(pl.Date) <= pl.lit(end_date))
+    )
+else:
+    df_exercises = df_sets
 
-# Load full history for accurate lifetime Big 3 PRs without broadening the main table reads.
-big_3_name_list = ", ".join(f"'{name}'" for name in BIG_3_NAMES)
-df_big3_all = load_parquet(
-    "fct_workout_sets",
-    f"""SELECT workout_date, exercise_name, weight_kg, reps
-        FROM read_parquet('{{path}}')
-        WHERE exercise_name IN ({big_3_name_list})
-        ORDER BY workout_date DESC""",
-)
-competition_prs = load_personal_bests()
-df_strava = load_parquet(
-    "recent/fct_strava_activities",
-    """SELECT activity_date, activity_name, activity_type, sport_type,
-              moving_time_minutes, distance_km, elevation_gain_m, avg_speed_kmh,
-              avg_pace_min_per_km, avg_heartrate, max_heartrate, pr_count
-       FROM read_parquet('{path}')
-       WHERE activity_date BETWEEN ? AND ?
-       ORDER BY activity_date DESC""",
-    [start_date, end_date],
-)
-df_e1rm = load_parquet("fct_e1rm_rolling_total")
+# All-time Big 3 PRs and competition PRs (both precomputed in dbt).
+competition_prs = personal_bests_dict()
+df_big3_prs = load_big3_prs()
+
+df_strava = load_strava_activities()
+if df_strava.height > 0:
+    df_strava = df_strava.filter(
+        (pl.col("activity_date").cast(pl.Date) >= pl.lit(start_date))
+        & (pl.col("activity_date").cast(pl.Date) <= pl.lit(end_date))
+    )
+
+df_e1rm = load_e1rm_rolling_total()
 
 # =============================================================================
 # Exercises Section
@@ -110,29 +80,22 @@ df_e1rm = load_parquet("fct_e1rm_rolling_total")
 st.header("Exercises")
 
 if df_exercises.height > 0:
-    # Add 1RM column for date-filtered exercises (used in table)
-    df_with_1rm = with_estimated_1rm(df_exercises)
-
-    # Calculate Big 3 1RMs from ALL data (not date-filtered) for all-time best
-    df_all_with_1rm = with_estimated_1rm(df_big3_all)
+    # Build Big 3 results from the precomputed PR mart, in squat/bench/deadlift order.
+    prs_by_lift = {row["lift"]: row for row in df_big3_prs.iter_rows(named=True)}
     big_3_results = []
-    for lift_key, exercise_name in BIG_3_EXERCISES.items():
-        lift_data = df_all_with_1rm.filter(pl.col("exercise_name") == exercise_name)
-        if lift_data.height > 0:
-            best_row = lift_data.sort("est_1rm", descending=True).row(0, named=True)
-            max_1rm = best_row["est_1rm"]
-            if max_1rm is not None:
-                comp_pr = competition_prs.get(lift_key)
-                big_3_results.append(
-                    {
-                        "name": lift_key.title(),
-                        "e1rm": max_1rm,
-                        "comp_pr": comp_pr,
-                        "weight": best_row["weight_kg"],
-                        "reps": best_row["reps"],
-                        "date": best_row["workout_date"],
-                    }
-                )
+    for lift_key in BIG_3_EXERCISES:
+        row = prs_by_lift.get(lift_key)
+        if row and row["best_e1rm"] is not None:
+            big_3_results.append(
+                {
+                    "name": lift_key.title(),
+                    "e1rm": row["best_e1rm"],
+                    "comp_pr": competition_prs.get(lift_key),
+                    "weight": row["best_weight_kg"],
+                    "reps": row["best_reps"],
+                    "date": row["pr_date"],
+                }
+            )
 
     # Summary metrics + Big 3 on one row with separator
     # 4 summary metrics | 3 Big 3 lifts + total
@@ -314,7 +277,7 @@ if df_exercises.height > 0:
         )
 
     # Apply filters
-    display_df = df_with_1rm
+    display_df = df_exercises
     if selected_workout != "All":
         display_df = display_df.filter(pl.col("workout_name") == selected_workout)
     if selected_exercise != "All":

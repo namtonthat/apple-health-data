@@ -15,8 +15,8 @@ from dashboard.components import (  # noqa: E402
 from dashboard.config import GOALS  # noqa: E402
 from dashboard.data import (  # noqa: E402
     load_daily_summary,
-    load_daily_workouts,
     load_training_readiness,
+    load_workouts,
 )
 
 # Sidebar - Date Filter
@@ -151,7 +151,7 @@ if df_daily.height > 0:
     base = df_daily.select(avail_cols).sort("date", descending=True)
 
     # Load workout data and join
-    df_workouts = load_daily_workouts()
+    df_workouts = load_workouts()
     if df_workouts.height > 0:
         workout_daily = (
             df_workouts.with_columns(

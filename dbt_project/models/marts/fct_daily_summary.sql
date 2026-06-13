@@ -53,7 +53,7 @@ final as (
         round(v.sleep_total_hours, 1) as sleep_hours,
         round(v.sleep_deep_hours, 1) as sleep_deep_hours,
         round(v.sleep_rem_hours, 1) as sleep_rem_hours,
-        round(v.sleep_core_hours, 1) as sleep_light_hours,
+        round(v.sleep_light_hours, 1) as sleep_light_hours,
 
         -- Daily activity
         a.steps,
@@ -74,13 +74,13 @@ final as (
         round(n.fiber_g, 0) as fiber_g,
         round(n.water_ml, 0) as water_ml,
 
-        -- Calories: calculated (Apple Watch) vs logged (nutrition app)
+        -- Calories: three honest sources kept separate (no blended column).
+        --   calculated = Apple Watch energy expenditure (active + basal)
+        --   logged     = dietary energy logged in a nutrition app
+        --   macro       = energy derived from logged macros (4/4/9)
         round(coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0), 0) as calculated_calories,
         round(n.dietary_calories, 0) as logged_calories,
-        round(greatest(
-            coalesce(a.active_calories, 0) + coalesce(a.basal_calories, 0),
-            coalesce(n.dietary_calories, 0)
-        ), 0) as total_calories,
+        round(n.protein_g * 4 + n.carbs_g * 4 + n.fat_g * 9, 0) as macro_calories,
 
         -- Workout summary
         coalesce(w.workouts, 0) as workouts,

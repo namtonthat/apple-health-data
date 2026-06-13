@@ -6,16 +6,14 @@
 }}
 
 -- Rolling estimated 1RM total for Big 3 lifts (Squat, Bench, Deadlift)
--- Uses Epley formula: e1RM = weight × (1 + reps/30)
--- Tracks running max per lift, then sums for estimated total
+-- Reuses the est_1rm column from fct_workout_sets (Epley: weight × (1 + reps/30)),
+-- tracks running max per lift, then sums for estimated total.
 
 with big3_sets as (
     select
         workout_date,
         exercise_name,
-        weight_kg,
-        reps,
-        round(weight_kg * (1 + reps / 30.0), 1) as e1rm
+        est_1rm as e1rm
     from {{ ref('fct_workout_sets') }}
     where
         exercise_name in (
@@ -24,8 +22,7 @@ with big3_sets as (
             '{{ var("deadlift_exercise_name") }}'
         )
         and set_type = 'normal'
-        and weight_kg > 0
-        and reps > 0
+        and est_1rm is not null
 ),
 
 best_per_day as (
@@ -63,6 +60,10 @@ pivoted as (
     group by workout_date
 ),
 
+-- Forward-fill each lift's running max so a row carries the latest known e1RM
+-- for every lift. Combined with the all-three-not-null filter below, the total
+-- only appears once all three lifts have a recorded best, and can lag a fresh
+-- single-lift PR until the next date where all three are populated.
 forward_filled as (
     select
         workout_date,

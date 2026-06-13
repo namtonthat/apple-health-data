@@ -54,6 +54,12 @@ final as (
         s.rpe,
         round(s.weight_kg * s.reps, 1) as volume_kg,
 
+        -- Estimated 1-rep max (Epley formula: weight * (1 + reps/30))
+        case
+            when s.weight_kg > 0 and s.reps > 0
+                then round(s.weight_kg * (1 + s.reps / 30.0), 1)
+        end as est_1rm,
+
         -- Cardio metrics
         s.distance_meters,
         s.duration_seconds

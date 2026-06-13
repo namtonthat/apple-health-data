@@ -37,11 +37,13 @@ models:
       - name: vo2_max
         description: VO2 max estimate
       - name: sleep_total_hours
-        description: Total sleep (REM + deep + core)
+        description: Total sleep (REM + deep + light)
       - name: sleep_rem_hours
         description: REM sleep hours
       - name: sleep_deep_hours
         description: Deep sleep hours
+      - name: sleep_light_hours
+        description: Light sleep hours (Apple Health "Core" stage)
       - name: respiratory_rate
         description: Respiratory rate
 

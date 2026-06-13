@@ -44,8 +44,69 @@ models:
         description: Number of repetitions
       - name: volume_kg
         description: Set volume (weight × reps)
+      - name: est_1rm
+        description: Estimated 1-rep max (Epley formula); null for sets without weight and reps
       - name: rpe
         description: Rate of Perceived Exertion
+
+  - name: fct_workouts
+    description: >
+      Fact table of workouts (session grain), aggregated from fct_workout_sets.
+      Grain: One row per workout.
+    columns:
+      - name: workout_id
+        description: Primary key
+        tests:
+          - not_null
+          - unique
+      - name: workout_date
+        description: Date of the workout
+        tests:
+          - not_null
+      - name: workout_name
+        description: Workout/session name
+      - name: workout_duration_minutes
+        description: Session duration in minutes
+      - name: unique_exercises
+        description: Count of distinct exercises in the session
+      - name: total_sets
+        description: Total sets performed
+      - name: working_sets
+        description: Number of working (non-warmup) sets
+      - name: total_volume_kg
+        description: Total session volume (weight × reps) in kg
+      - name: max_weight_kg
+        description: Heaviest weight lifted in the session
+      - name: avg_rpe
+        description: Average RPE across scored sets
+
+  - name: fct_big3_prs
+    description: >
+      All-time best estimated 1RM per Big 3 lift (Squat, Bench, Deadlift).
+      Grain: One row per lift.
+    columns:
+      - name: lift
+        description: Lift key (squat, bench, deadlift)
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values: ['squat', 'bench', 'deadlift']
+      - name: exercise_name
+        description: Source exercise name
+        tests:
+          - not_null
+      - name: best_e1rm
+        description: Best estimated 1RM achieved
+        tests:
+          - not_null
+      - name: best_weight_kg
+        description: Weight of the set that produced the best e1RM
+      - name: best_reps
+        description: Reps of the set that produced the best e1RM
+      - name: pr_date
+        description: Date the best e1RM was achieved
 
   - name: fct_daily_summary
     description: >
@@ -69,8 +130,12 @@ models:
         description: Total sleep duration
       - name: steps
         description: Daily step count
-      - name: total_calories
-        description: Total calories burned (active + basal)
+      - name: calculated_calories
+        description: Apple Watch energy expenditure (active + basal)
+      - name: logged_calories
+        description: Dietary energy logged in a nutrition app
+      - name: macro_calories
+        description: Energy derived from logged macros (protein×4 + carbs×4 + fat×9)
       - name: workouts
         description: Number of workouts performed
       - name: total_volume_kg

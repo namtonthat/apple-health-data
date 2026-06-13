@@ -20,10 +20,11 @@ pivoted as (
         max(case when metric_name = 'vo2_max' then value end) as vo2_max,
         max(case when metric_name = 'blood_oxygen_saturation' then value end) as blood_oxygen_pct,
 
-        -- Sleep (total = rem + deep + core)
+        -- Sleep (total = rem + deep + light). Apple Health's "Core" sleep stage is
+        -- surfaced as "light" here, the term used everywhere downstream.
         max(case when metric_name = 'sleep_analysis' then sleep_rem_hours end) as sleep_rem_hours,
         max(case when metric_name = 'sleep_analysis' then sleep_deep_hours end) as sleep_deep_hours,
-        max(case when metric_name = 'sleep_analysis' then sleep_core_hours end) as sleep_core_hours,
+        max(case when metric_name = 'sleep_analysis' then sleep_core_hours end) as sleep_light_hours,
         max(case when metric_name = 'sleep_analysis' then sleep_awake_hours end) as sleep_awake_hours,
         max(case
             when metric_name = 'sleep_analysis'
@@ -32,13 +33,6 @@ pivoted as (
 
         -- Respiratory
         max(case when metric_name = 'respiratory_rate' then value end) as respiratory_rate
-
-        -- Heart rate (uncomment to enable):
-        -- max(case when metric_name = 'heart_rate' then value end) as avg_hr_bpm,
-
-        -- Audio exposure (uncomment to enable):
-        -- max(case when metric_name = 'environmental_audio_exposure' then value end) as env_audio_exposure_db,
-        -- max(case when metric_name = 'headphone_audio_exposure' then value end) as headphone_audio_exposure_db
 
     from metrics
     group by metric_date

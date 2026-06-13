@@ -64,7 +64,15 @@ if has_macros or has_weight:
             avg_protein = float(macro_data["protein_g"].mean())
             avg_carbs = float(macro_data["carbs_g"].mean())
             avg_fat = float(macro_data["fat_g"].mean())
-            avg_calories = round(avg_protein * 4 + avg_carbs * 4 + avg_fat * 9)
+            # Use the dbt-computed macro_calories column (single source for the 4/4/9
+            # formula); fall back to recomputing if the column is unavailable.
+            if (
+                "macro_calories" in macro_data.columns
+                and macro_data["macro_calories"].drop_nulls().len() > 0
+            ):
+                avg_calories = round(float(macro_data["macro_calories"].mean()))
+            else:
+                avg_calories = round(avg_protein * 4 + avg_carbs * 4 + avg_fat * 9)
 
             m1, m2 = st.columns(2)
             with m1:
