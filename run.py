@@ -135,6 +135,14 @@ def run_export() -> None:
     run_pipeline()
 
 
+def run_export_web() -> None:
+    """Export the consolidated JSON snapshot for the static web dashboard."""
+    load_env()
+    from dashboard.export_web import run as export_web
+
+    export_web()
+
+
 def run_dashboard() -> None:
     """Start the Streamlit dashboard."""
     load_env()
@@ -216,6 +224,9 @@ examples:
     p_all = sub.add_parser("all", help="Run full pipeline end-to-end")
     p_all.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
 
+    # export-web
+    sub.add_parser("export-web", help="Export JSON snapshot for the static web dashboard")
+
     # dashboard
     sub.add_parser("dashboard", help="Start Streamlit dashboard")
 
@@ -235,6 +246,8 @@ examples:
             run_transform()
         case "export":
             run_export()
+        case "export-web":
+            run_export_web()
         case "all":
             run_all(args.date)
         case "dashboard":
