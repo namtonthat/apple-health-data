@@ -1,63 +1,109 @@
-import { Card, LineChart } from "@tremor/react";
-import { ChartCard } from "@/components/ChartCard";
-import { dashboard, fmt, lastN, shortDate } from "@/lib/data";
+import { Card } from "@tremor/react";
+import { dashboard, fmt, shortDate, type Num } from "@/lib/data";
 
 export function Training() {
   const { e1rm, prs, workouts, strava } = dashboard;
 
-  const e1rmSeries = lastN(
-    e1rm.filter((r) => r.estimated_total != null),
-    60,
-  ).map((r) => ({
-    date: shortDate(r.workout_date),
-    Squat: r.squat_e1rm,
-    Bench: r.bench_e1rm,
-    Deadlift: r.deadlift_e1rm,
-  }));
+  // Current estimated 1RM = most recent row of the rolling-total series.
+  const cur = e1rm.length ? e1rm[e1rm.length - 1] : ({} as (typeof e1rm)[number]);
 
-  const prCards = [
-    { label: "Squat", value: prs.squat_pr_kg },
-    { label: "Bench", value: prs.bench_pr_kg },
-    { label: "Deadlift", value: prs.deadlift_pr_kg },
-    { label: "Total", value: prs.total_pr_kg },
+  const lifts: { lift: string; e: Num; pr: Num }[] = [
+    { lift: "Squat", e: cur.squat_e1rm ?? null, pr: prs.squat_pr_kg as Num },
+    { lift: "Bench", e: cur.bench_e1rm ?? null, pr: prs.bench_pr_kg as Num },
+    { lift: "Deadlift", e: cur.deadlift_e1rm ?? null, pr: prs.deadlift_pr_kg as Num },
+    { lift: "Total", e: cur.estimated_total ?? null, pr: prs.total_pr_kg as Num },
   ];
+
+  const diffOf = (e: Num, pr: Num): number | null =>
+    e !== null && pr !== null ? Math.round((e as number) - (pr as number)) : null;
+
+  const signed = (n: number) => `${n >= 0 ? "+" : ""}${n}`;
 
   return (
     <div className="space-y-3">
-      <ChartCard title="Estimated 1RM" subtitle="Big 3 · recent sessions">
-        <LineChart
-          data={e1rmSeries}
-          index="date"
-          categories={["Squat", "Bench", "Deadlift"]}
-          colors={["emerald", "blue", "amber"]}
-          showLegend
-          startEndOnly
-          connectNulls
-          autoMinValue
-          className="h-44"
-        />
-      </ChartCard>
-
+      {/* ── Lifts: current e1RM vs competition PR (the centerpiece) ── */}
       <Card className="p-4">
-        <p className="text-tremor-default font-medium text-white">Competition PRs</p>
-        <p className="text-tremor-label text-gray-500">
-          Best DOTS {fmt(prs.best_dots as number, 1)} · {prs.total_competitions} meets
-        </p>
-        <div className="mt-3 grid grid-cols-4 gap-2">
-          {prCards.map((p) => (
-            <div key={p.label} className="rounded-tremor-default bg-gray-900 p-2 text-center">
-              <p className="text-lg font-semibold text-white">{fmt(p.value as number, 0)}</p>
-              <p className="text-tremor-label text-gray-500">{p.label}</p>
-            </div>
-          ))}
+        <div className="mb-3 flex items-baseline justify-between">
+          <p className="text-tremor-default font-medium text-white">Lifts</p>
+          <p className="text-tremor-label text-gray-500">
+            e1RM vs comp PR{cur.workout_date ? ` · ${shortDate(cur.workout_date)}` : ""}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          {lifts.map((l) => {
+            const diff = diffOf(l.e, l.pr);
+            const tone =
+              diff === null
+                ? "text-gray-500"
+                : diff >= 0
+                  ? "text-emerald-400"
+                  : "text-rose-400";
+            const total = l.lift === "Total";
+            return (
+              <div
+                key={l.lift}
+                className={`rounded-tremor-default border p-3 ${
+                  total
+                    ? "col-span-2 border-gray-700 bg-gray-900/60"
+                    : "border-gray-800 bg-gray-900/30"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-tremor-label uppercase tracking-wide text-gray-400">
+                    {l.lift}
+                  </p>
+                  <span className={`text-tremor-label font-medium ${tone}`}>
+                    {diff === null ? "-" : signed(diff)}
+                  </span>
+                </div>
+                <p className="mt-1 text-2xl font-semibold text-white">
+                  {fmt(l.e, 0)}
+                  <span className="text-tremor-label font-normal text-gray-500"> kg</span>
+                </p>
+                <p className="text-tremor-label text-gray-500">PR {fmt(l.pr, 0, " kg")}</p>
+              </div>
+            );
+          })}
         </div>
       </Card>
 
+      {/* ── Competition context ── */}
+      <Card className="p-4">
+        <p className="mb-3 text-tremor-default font-medium text-white">Competition</p>
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <p className="text-tremor-label text-gray-500">Best DOTS</p>
+            <p className="mt-0.5 text-xl font-semibold text-white">
+              {fmt(prs.best_dots as Num, 1)}
+            </p>
+          </div>
+          <div>
+            <p className="text-tremor-label text-gray-500">Meets</p>
+            <p className="mt-0.5 text-xl font-semibold text-white">
+              {fmt(prs.total_competitions as Num, 0)}
+            </p>
+          </div>
+          <div>
+            <p className="text-tremor-label text-gray-500">Best place</p>
+            <p className="mt-0.5 text-xl font-semibold text-white">
+              {prs.best_place != null ? String(prs.best_place) : "-"}
+            </p>
+          </div>
+        </div>
+        {prs.last_competition != null && (
+          <p className="mt-3 border-t border-gray-800 pt-2 text-tremor-label text-gray-500">
+            Last meet · {shortDate(String(prs.last_competition))}
+          </p>
+        )}
+      </Card>
+
+      {/* ── Recent workouts ── */}
       <Card className="p-4">
         <p className="mb-2 text-tremor-default font-medium text-white">Recent workouts</p>
         <div className="divide-y divide-gray-800">
           {workouts.slice(0, 8).map((w, i) => (
-            <div key={i} className="flex items-center justify-between py-2">
+            <div key={i} className="flex items-center justify-between gap-3 py-2">
               <div className="min-w-0">
                 <p className="truncate text-sm text-gray-200">{w.workout_name}</p>
                 <p className="text-tremor-label text-gray-500">
@@ -73,12 +119,13 @@ export function Training() {
         </div>
       </Card>
 
+      {/* ── Cardio ── */}
       {strava.length > 0 && (
         <Card className="p-4">
           <p className="mb-2 text-tremor-default font-medium text-white">Cardio (Strava)</p>
           <div className="divide-y divide-gray-800">
             {strava.slice(0, 6).map((a, i) => (
-              <div key={i} className="flex items-center justify-between py-2">
+              <div key={i} className="flex items-center justify-between gap-3 py-2">
                 <div className="min-w-0">
                   <p className="truncate text-sm text-gray-200">{a.activity_name}</p>
                   <p className="text-tremor-label text-gray-500">

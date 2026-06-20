@@ -122,7 +122,7 @@ export function shortDate(iso: string): string {
 }
 
 export function fmt(value: Num | undefined, digits = 0, unit = ""): string {
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined) return "-";
   const n = digits > 0 ? value.toFixed(digits) : Math.round(value).toString();
   return `${n}${unit}`;
 }

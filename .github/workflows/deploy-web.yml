@@ -1,0 +1,57 @@
+name: Deploy web dashboard
+
+# Publishes the static Next.js dashboard (web/) to GitHub Pages — free for this
+# public repo, no extra accounts. Auto-runs when the app or its committed data
+# snapshot changes (the daily data refresh touches web/data/dashboard.json, so
+# the live site stays current), and on manual dispatch.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "infra/deploy-web.sh"
+      - ".github/workflows/deploy-web.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; let an in-progress run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      # Project pages serve from /<repo>; prefix asset + route URLs to match.
+      PAGES_BASE_PATH: /apple-health-data
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build static site
+        run: bash infra/deploy-web.sh
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

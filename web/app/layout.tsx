@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Health Dashboard",
-  description: "Personal health & fitness vitals — Apple Health, Hevy, Strava.",
+  description: "Personal health & fitness vitals · Apple Health, Hevy, Strava.",
 };
 
 export const viewport: Viewport = {

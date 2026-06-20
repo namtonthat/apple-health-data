@@ -40,7 +40,7 @@ export default function Page() {
       </TabGroup>
 
       <p className="mt-6 px-5 text-center text-tremor-label text-gray-600">
-        Apple Health · Hevy · Strava — updated {dashboard.last_data_date}
+        Apple Health · Hevy · Strava · updated {dashboard.last_data_date}
       </p>
     </main>
   );
