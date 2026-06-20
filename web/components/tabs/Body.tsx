@@ -22,12 +22,47 @@ export function Body() {
     .filter((r) => r.protein_g != null)
     .map((r) => ({ date: shortDate(r.date), Protein: r.protein_g }));
 
-  // Today's macros vs goal as a share of calories
-  const macros: { name: string; g: Num; goal: number; color: string }[] = [
+  const { macro_avg } = dashboard;
+  type MacroRow = { name: string; g: Num; goal: number; color: string };
+
+  // Today's macros vs goal
+  const macros: MacroRow[] = [
     { name: "Protein", g: latest.protein_g, goal: goals.protein_g, color: "amber" },
     { name: "Carbs", g: latest.carbs_g, goal: goals.carbs_g, color: "sky" },
     { name: "Fat", g: latest.fat_g, goal: goals.fat_g, color: "rose" },
   ];
+
+  // Average over the last 7 recorded days (excludes untracked days; from dbt).
+  const macrosAvg: MacroRow[] = [
+    { name: "Protein", g: macro_avg.protein_avg_7d, goal: goals.protein_g, color: "amber" },
+    { name: "Carbs", g: macro_avg.carbs_avg_7d, goal: goals.carbs_g, color: "sky" },
+    { name: "Fat", g: macro_avg.fat_avg_7d, goal: goals.fat_g, color: "rose" },
+  ];
+
+  const renderMacros = (rows: MacroRow[]) => (
+    <div className="space-y-3">
+      {rows.map((m) => {
+        const have = m.g ?? 0;
+        const pct = Math.min(100, Math.round((have / m.goal) * 100));
+        return (
+          <div key={m.name}>
+            <div className="mb-1 flex justify-between text-tremor-label">
+              <span className="text-gray-300">{m.name}</span>
+              <span className="text-gray-500">
+                {fmt(m.g, 0, "g")} / {fmt(m.goal, 0, "g")} · {pct}%
+              </span>
+            </div>
+            <CategoryBar
+              values={[pct, Math.max(0, 100 - pct)]}
+              colors={[m.color as "amber", "gray"]}
+              showLabels={false}
+              className="h-1.5"
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
 
   return (
     <div className="space-y-3">
@@ -46,29 +81,15 @@ export function Body() {
         />
       </ChartCard>
 
+      <ChartCard
+        title="Macros · 7-day average"
+        subtitle={`Grams vs goal · over ${fmt(macro_avg.recorded_days_7d, 0)} recorded days`}
+      >
+        {renderMacros(macrosAvg)}
+      </ChartCard>
+
       <ChartCard title="Macros today" subtitle="Grams vs goal">
-        <div className="space-y-3">
-          {macros.map((m) => {
-            const have = m.g ?? 0;
-            const pct = Math.min(100, Math.round((have / m.goal) * 100));
-            return (
-              <div key={m.name}>
-                <div className="mb-1 flex justify-between text-tremor-label">
-                  <span className="text-gray-300">{m.name}</span>
-                  <span className="text-gray-500">
-                    {fmt(m.g, 0, "g")} / {fmt(m.goal, 0, "g")} · {pct}%
-                  </span>
-                </div>
-                <CategoryBar
-                  values={[pct, Math.max(0, 100 - pct)]}
-                  colors={[m.color as "amber", "gray"]}
-                  showLabels={false}
-                  className="h-1.5"
-                />
-              </div>
-            );
-          })}
-        </div>
+        {renderMacros(macros)}
       </ChartCard>
 
       <ChartCard title="Protein" subtitle={`Goal ${goals.protein_g} g · last 21 days`}>

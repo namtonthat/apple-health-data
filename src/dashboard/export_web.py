@@ -153,6 +153,19 @@ def build_snapshot() -> dict[str, Any]:
     )
     prs = prs_rows[0] if prs_rows else {}
 
+    macro_avg_rows = _rows(
+        conn,
+        f"""
+        SELECT recorded_days_7d,
+               protein_avg_7d, carbs_avg_7d, fat_avg_7d, calories_avg_7d,
+               protein_avg_30d, carbs_avg_30d, fat_avg_30d, calories_avg_30d
+        FROM read_parquet('{_path("fct_nutrition_rolling_averages")}')
+        ORDER BY date DESC
+        LIMIT 1
+        """,
+    )
+    macro_avg = macro_avg_rows[0] if macro_avg_rows else {}
+
     strava = _rows(
         conn,
         f"""
@@ -203,6 +216,7 @@ def build_snapshot() -> dict[str, Any]:
         "workouts": workouts,
         "e1rm": e1rm,
         "prs": prs,
+        "macro_avg": macro_avg,
         "strava": strava,
     }
 

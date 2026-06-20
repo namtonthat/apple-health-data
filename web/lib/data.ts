@@ -90,6 +90,7 @@ export interface Dashboard {
   workouts: WorkoutRow[];
   e1rm: E1rmRow[];
   prs: Record<string, number | string | null>;
+  macro_avg: Record<string, Num>;
   strava: StravaRow[];
 }
 
