@@ -19,6 +19,9 @@ export function Training() {
 
   const signed = (n: number) => `${n >= 0 ? "+" : ""}${n}`;
 
+  const daysAgo = (iso: string) =>
+    Math.round((Date.parse(dashboard.today) - Date.parse(iso)) / 86_400_000);
+
   return (
     <div className="space-y-3">
       {/* ── Lifts: current e1RM vs competition PR (the centerpiece) ── */}
@@ -30,7 +33,7 @@ export function Training() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           {lifts.map((l) => {
             const diff = diffOf(l.e, l.pr);
             const tone =
@@ -39,29 +42,17 @@ export function Training() {
                 : diff >= 0
                   ? "text-emerald-400"
                   : "text-rose-400";
-            const total = l.lift === "Total";
             return (
               <div
                 key={l.lift}
-                className={`rounded-tremor-default border p-3 ${
-                  total
-                    ? "col-span-2 border-gray-700 bg-gray-900/60"
-                    : "border-gray-800 bg-gray-900/30"
-                }`}
+                className="rounded-tremor-default border border-gray-800 bg-gray-900/40 p-2 text-center"
               >
-                <div className="flex items-center justify-between">
-                  <p className="text-tremor-label uppercase tracking-wide text-gray-400">
-                    {l.lift}
-                  </p>
-                  <span className={`text-tremor-label font-medium ${tone}`}>
-                    {diff === null ? "-" : signed(diff)}
-                  </span>
-                </div>
-                <p className="mt-1 text-2xl font-semibold text-white">
-                  {fmt(l.e, 0)}
-                  <span className="text-tremor-label font-normal text-gray-500"> kg</span>
+                <p className="text-tremor-label uppercase tracking-wide text-gray-400">{l.lift}</p>
+                <p className="mt-1 text-xl font-semibold text-white">{fmt(l.e, 0)}</p>
+                <p className={`text-tremor-label font-medium ${tone}`}>
+                  {diff === null ? "-" : signed(diff)}
                 </p>
-                <p className="text-tremor-label text-gray-500">PR {fmt(l.pr, 0, " kg")}</p>
+                <p className="text-tremor-label text-gray-500">PR {fmt(l.pr, 0)}</p>
               </div>
             );
           })}
@@ -93,7 +84,7 @@ export function Training() {
         </div>
         {prs.last_competition != null && (
           <p className="mt-3 border-t border-gray-800 pt-2 text-tremor-label text-gray-500">
-            Last meet · {shortDate(String(prs.last_competition))}
+            Last meet · {daysAgo(String(prs.last_competition))} days ago
           </p>
         )}
       </Card>
