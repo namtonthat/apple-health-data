@@ -32,3 +32,6 @@ dbt_project/dbt_packages/
 # OS
 .DS_Store
 
+# Superpowers brainstorming/spec docs (local only)
+docs/superpowers/
+
