@@ -5,8 +5,8 @@ description = "Extract Hevy workout data to S3 and transform with dbt"
 readme = "README.md"
 requires-python = "==3.12.0"
 dependencies = [
-    "dlt[filesystem,parquet,deltalake]==1.27.2",
-    "s3fs==2026.4.0",
+    "dlt[filesystem,parquet,deltalake]==1.28.1",
+    "s3fs==2026.6.0",
     "pyarrow==24.0.0",
     "polars==1.41.2",
     "dbt-core==1.11.11",
@@ -16,7 +16,7 @@ dependencies = [
     "altair==6.2.1",
     "beautifulsoup4==4.15.0",
     "requests==2.34.2",
-    "duckdb==1.5.3",
+    "duckdb==1.5.4",
 ]
 
 [build-system]
@@ -69,8 +69,8 @@ meditation_minutes = 10
 
 [dependency-groups]
 dev = [
-    "pytest==9.0.3",
-    "ruff==0.15.17",
+    "pytest==9.1.1",
+    "ruff==0.15.18",
     "sqlfluff==4.2.2",
     "sqlfluff-templater-dbt==4.2.2",
     "pre-commit==4.6.0",
