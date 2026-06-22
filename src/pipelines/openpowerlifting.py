@@ -133,7 +133,10 @@ def run_pipeline():
             bucket_url=f"s3://{bucket}",
             layout="{table_name}/{load_id}.{file_id}.{ext}",
         ),
-        dataset_name="landing/openpowerlifting",
+        # dlt forbids "/" in dataset names and would normalize "landing/openpowerlifting"
+        # to "landing_openpowerlifting" (warning on every internal call). Use the normalized
+        # form directly to keep the same S3 output path without the warning spam.
+        dataset_name="landing_openpowerlifting",
     )
 
     load_info = pipeline.run([get_personal_bests(), get_competitions()])
