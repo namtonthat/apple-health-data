@@ -1,4 +1,4 @@
-import { ProgressCircle } from "@tremor/react";
+import { ProgressCircle } from "@/components/ProgressCircle";
 import { dashboard, fmt, shortDate } from "@/lib/data";
 
 function readinessColor(score: number): string {
