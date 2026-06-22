@@ -1,4 +1,6 @@
-import { AreaChart, BarChart, LineChart } from "@tremor/react";
+import { AreaChart } from "@/components/charts/AreaChart";
+import { BarChart } from "@/components/charts/BarChart";
+import { LineChart } from "@/components/charts/LineChart";
 import { ChartCard } from "@/components/ChartCard";
 import { dashboard, lastN, shortDate } from "@/lib/data";
 

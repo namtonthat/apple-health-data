@@ -1,4 +1,6 @@
-import { AreaChart, BarChart, CategoryBar } from "@tremor/react";
+import { AreaChart } from "@/components/charts/AreaChart";
+import { BarChart } from "@/components/charts/BarChart";
+import { CategoryBar } from "@/components/CategoryBar";
 import { ChartCard } from "@/components/ChartCard";
 import { dashboard, fmt, lastN, shortDate, type Num } from "@/lib/data";
 
@@ -46,7 +48,7 @@ export function Body() {
         const pct = Math.min(100, Math.round((have / m.goal) * 100));
         return (
           <div key={m.name}>
-            <div className="mb-1 flex justify-between text-tremor-label">
+            <div className="mb-1 flex justify-between text-xs">
               <span className="text-gray-300">{m.name}</span>
               <span className="text-gray-500">
                 {fmt(m.g, 0, "g")} / {fmt(m.goal, 0, "g")} · {pct}%
@@ -54,7 +56,7 @@ export function Body() {
             </div>
             <CategoryBar
               values={[pct, Math.max(0, 100 - pct)]}
-              colors={[m.color as "amber", "gray"]}
+              colors={[m.color, "gray"]}
               showLabels={false}
               className="h-1.5"
             />
