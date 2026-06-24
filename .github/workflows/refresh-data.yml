@@ -15,6 +15,9 @@ on:
 jobs:
   refresh-data:
     runs-on: ubuntu-latest
+    concurrency:
+      group: refresh-data-main
+      cancel-in-progress: false
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -93,6 +96,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git pull --rebase --autostash origin main
+
           git add last_updated.txt web/data/dashboard.json
-          git diff --staged --quiet || git commit -m "chore: refresh dashboard data [skip ci]"
-          git push
+          if git diff --staged --quiet; then
+            echo "No refreshed data changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: refresh dashboard data [skip ci]"
+          git push origin HEAD:main
