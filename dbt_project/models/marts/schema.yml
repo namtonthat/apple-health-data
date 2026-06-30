@@ -241,6 +241,8 @@ models:
           - not_null
       - name: best_weight_kg
         description: Heaviest weight used that session
+      - name: best_reps
+        description: Reps performed at the heaviest set that session (not the day's max reps)
       - name: total_volume_kg
         description: Total volume for exercise that session
       - name: weight_pr_to_date

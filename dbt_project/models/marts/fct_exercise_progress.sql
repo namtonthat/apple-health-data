@@ -13,13 +13,37 @@ with sets as (
     where set_type = 'normal'  -- Only working sets
 ),
 
--- Daily best for each exercise
-daily_best as (
+-- Heaviest working set per day, carrying the reps performed AT that set.
+-- Ranking by weight (then reps) so best_reps reflects the top-weight set rather
+-- than the day's max reps across all sets — a heavy single + lighter back-off
+-- sets must report the single's reps, not the back-offs'.
+top_set as (
     select
         workout_date,
         exercise_name,
-        max(weight_kg) as best_weight_kg,
-        max(reps) as best_reps,
+        weight_kg as best_weight_kg,
+        reps as best_reps
+    from (
+        select
+            workout_date,
+            exercise_name,
+            weight_kg,
+            reps,
+            row_number() over (
+                partition by workout_date, exercise_name
+                order by weight_kg desc, reps desc
+            ) as rn
+        from sets
+        where weight_kg > 0
+    ) ranked_sets
+    where rn = 1
+),
+
+-- Daily aggregates across all working sets for that exercise
+daily_agg as (
+    select
+        workout_date,
+        exercise_name,
         max(volume_kg) as best_set_volume_kg,
         sum(volume_kg) as total_volume_kg,
         count(*) as sets_performed,
@@ -27,6 +51,24 @@ daily_best as (
     from sets
     where weight_kg > 0
     group by workout_date, exercise_name
+),
+
+-- Daily best for each exercise: top set joined to the day's aggregates
+daily_best as (
+    select
+        top_set.workout_date,
+        top_set.exercise_name,
+        top_set.best_weight_kg,
+        top_set.best_reps,
+        daily_agg.best_set_volume_kg,
+        daily_agg.total_volume_kg,
+        daily_agg.sets_performed,
+        daily_agg.avg_rpe
+    from top_set
+    inner join daily_agg
+        on
+            top_set.workout_date = daily_agg.workout_date
+            and top_set.exercise_name = daily_agg.exercise_name
 ),
 
 -- Calculate running PRs
