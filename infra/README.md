@@ -1,7 +1,8 @@
 # infra
 
-Deployment infrastructure for the web dashboard (`../web`). Kept free and
-all-in-repo: no servers, no paid hosting, no extra accounts.
+Deployment infrastructure for the web dashboard (`../web`) and the S3 event
+trigger Lambda. Kept free and all-in-repo: no servers, no paid hosting, no
+extra accounts.
 
 ## How it works
 
@@ -36,6 +37,45 @@ make deploy-web   # trigger the GitHub Pages deploy workflow (gh CLI)
 ```
 
 A normal `git push` that changes `web/**` also deploys automatically.
+
+## S3 event trigger (Lambda)
+
+When a new Apple Health export JSON lands in
+`s3://<bucket>/landing/health/`, the `apple-health-refresh-trigger` Lambda
+(`lambda/trigger_refresh.py`) dispatches the `refresh-data.yml` workflow so
+the dashboard refreshes immediately instead of waiting for the daily cron.
+See `docs/superpowers/specs/2026-07-03-s3-event-trigger-design.md` for the
+full design.
+
+- **`deploy-trigger-lambda.sh`** — idempotent deploy: stores the GitHub PAT
+  in SSM Parameter Store (`/apple-health-data/github-pat`), creates/updates
+  the IAM role and Lambda, and wires the bucket notification
+  (prefix `landing/health/`, suffix `.json`). Bucket and region are read
+  from `pyproject.toml [tool.dashboard]`.
+
+Prerequisites:
+
+- AWS credentials with IAM/Lambda/SSM/S3 access.
+- A fine-grained GitHub PAT scoped to this repo with **Actions: read and
+  write** permission.
+
+Run (from repo root):
+
+```bash
+./infra/deploy-trigger-lambda.sh   # prompts for the PAT (hidden input)
+```
+
+Do **not** put the PAT inline on the command line (`GITHUB_PAT=... ./infra/...`)
+— zsh writes the whole line, token included, to `~/.zsh_history`. For
+non-interactive runs, read it into the environment without echoing it first:
+
+```bash
+read -rs GITHUB_PAT && export GITHUB_PAT
+./infra/deploy-trigger-lambda.sh
+```
+
+Smoke test: upload any `.json` to `landing/health/`, then check
+`gh run list --workflow refresh-data.yml` for a new run.
 
 ## Other free hosts
 

@@ -2,9 +2,10 @@ name: Refresh Health Data
 
 on:
   schedule:
-    # Run every 12 hours at midnight and noon Melbourne time (AEDT UTC+11)
-    # Midnight Melbourne = 13:00 UTC, Noon Melbourne = 01:00 UTC
-    - cron: '0 1,13 * * *'
+    # Daily fallback at midnight Melbourne time (13:00 UTC). The primary
+    # trigger is the S3-event Lambda (infra/lambda/trigger_refresh.py), which
+    # dispatches this workflow when a new Apple Health export lands in S3.
+    - cron: '0 13 * * *'
   workflow_dispatch:  # Allow manual trigger
     inputs:
       full_refresh:
