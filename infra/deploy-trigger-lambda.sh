@@ -58,6 +58,11 @@ fi
 
 [[ -f "$HANDLER_FILE" ]] || { echo "error: handler not found at $HANDLER_FILE" >&2; exit 1; }
 
+# Private scratch space (mktemp -d => 700) for the PAT request JSON and the
+# Lambda zip; removed on any exit.
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
 # --- 2. SSM parameter: GitHub PAT --------------------------------------------
 if [[ -z "${GITHUB_PAT:-}" ]]; then
   if [[ ! -t 0 ]]; then
@@ -69,14 +74,34 @@ if [[ -z "${GITHUB_PAT:-}" ]]; then
 fi
 [[ -n "$GITHUB_PAT" ]] || { echo "error: no PAT provided" >&2; exit 1; }
 echo "==> Storing PAT in SSM parameter $SSM_PARAM_NAME"
-# Feed the value via --cli-input-json on stdin so the PAT never appears in the
-# aws process's argv (readable via ps by other same-user processes / EDR
-# tooling). Fine-grained PATs are [A-Za-z0-9_], so no JSON escaping is needed.
+# The PAT must stay out of the aws process's argv (readable via ps / shell
+# history), but AWS CLI v2 cannot read file:///dev/stdin — its file:// loader
+# returns an empty read for non-regular files. So write the request JSON to a
+# 600-perm file in the private temp dir and delete it right after. Python
+# builds the JSON (json.dumps escapes anything; .strip() drops pasted
+# whitespace/CR) and the token travels via the environment, never argv.
+PARAM_JSON_FILE="$TMP_DIR/ssm-param.json"
+GITHUB_PAT="$GITHUB_PAT" SSM_PARAM_NAME="$SSM_PARAM_NAME" \
+  PARAM_JSON_FILE="$PARAM_JSON_FILE" python3 <<'PY'
+import json
+import os
+
+fd = os.open(os.environ["PARAM_JSON_FILE"], os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+with os.fdopen(fd, "w") as f:
+    json.dump(
+        {
+            "Name": os.environ["SSM_PARAM_NAME"],
+            "Type": "SecureString",
+            "Value": os.environ["GITHUB_PAT"].strip(),
+            "Overwrite": True,
+        },
+        f,
+    )
+PY
 aws ssm put-parameter \
-  --cli-input-json file:///dev/stdin \
-  --region "$AWS_REGION" >/dev/null <<EOF
-{"Name": "${SSM_PARAM_NAME}", "Type": "SecureString", "Value": "${GITHUB_PAT}", "Overwrite": true}
-EOF
+  --cli-input-json "file://$PARAM_JSON_FILE" \
+  --region "$AWS_REGION" >/dev/null
+rm -f "$PARAM_JSON_FILE"
 unset GITHUB_PAT
 
 # --- 3. IAM role --------------------------------------------------------------
@@ -125,8 +150,6 @@ aws iam put-role-policy \
 ROLE_ARN=$(aws iam get-role --role-name "$ROLE_NAME" --query Role.Arn --output text)
 
 # --- 4. Package + create/update the function ---------------------------------
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
 ZIP_FILE="$TMP_DIR/trigger_refresh.zip"
 # Zip from inside the dir so the entry is flat (trigger_refresh.py at the root).
 (cd "$(dirname "$HANDLER_FILE")" && zip -q "$ZIP_FILE" "$(basename "$HANDLER_FILE")")
