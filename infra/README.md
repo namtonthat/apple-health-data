@@ -44,8 +44,6 @@ When a new Apple Health export JSON lands in
 `s3://<bucket>/landing/health/`, the `apple-health-refresh-trigger` Lambda
 (`lambda/trigger_refresh.py`) dispatches the `refresh-data.yml` workflow so
 the dashboard refreshes immediately instead of waiting for the daily cron.
-See `docs/superpowers/specs/2026-07-03-s3-event-trigger-design.md` for the
-full design.
 
 - **`deploy-trigger-lambda.sh`** — idempotent deploy: stores the GitHub PAT
   in SSM Parameter Store (`/apple-health-data/github-pat`), creates/updates
@@ -55,7 +53,9 @@ full design.
 
 Prerequisites:
 
-- AWS credentials with IAM/Lambda/SSM/S3 access.
+- Personal-account AWS credentials in the repo's `.env` (the script sources
+  it and ignores any ambient `AWS_PROFILE`, then refuses to run unless the
+  active account owns the bucket).
 - A fine-grained GitHub PAT scoped to this repo with **Actions: read and
   write** permission.
 

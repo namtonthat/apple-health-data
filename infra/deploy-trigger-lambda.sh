@@ -18,6 +18,17 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 export AWS_PAGER=""
 
+# Use the personal-account credentials from the repo's .env (the same ones the
+# pipeline uses) — never an ambient shell profile, which may point at a work
+# account. The head-bucket ownership guard below backstops this.
+unset AWS_PROFILE AWS_DEFAULT_PROFILE
+if [[ -f "$ROOT/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$ROOT/.env"
+  set +a
+fi
+
 FUNCTION_NAME="apple-health-refresh-trigger"
 ROLE_NAME="apple-health-refresh-trigger-role"
 SSM_PARAM_NAME="/apple-health-data/github-pat"
@@ -33,7 +44,17 @@ HANDLER_FILE="$ROOT/infra/lambda/trigger_refresh.py"
 S3_BUCKET=$(cd "$ROOT" && uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['s3_bucket_name'])")
 AWS_REGION=$(cd "$ROOT" && uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['aws_region'])")
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-echo "==> Deploying $FUNCTION_NAME (bucket: $S3_BUCKET, region: $AWS_REGION, account: $ACCOUNT_ID)"
+CALLER_ARN=$(aws sts get-caller-identity --query Arn --output text)
+echo "==> Deploying $FUNCTION_NAME (bucket: $S3_BUCKET, region: $AWS_REGION)"
+echo "    as $CALLER_ARN (account $ACCOUNT_ID)"
+
+# Guard: the active credentials must belong to the account that owns the
+# bucket, or every resource below would land in the wrong account.
+if ! aws s3api head-bucket --bucket "$S3_BUCKET" \
+  --expected-bucket-owner "$ACCOUNT_ID" --region "$AWS_REGION" >/dev/null 2>&1; then
+  echo "error: account $ACCOUNT_ID does not own s3://$S3_BUCKET — wrong AWS credentials?" >&2
+  exit 1
+fi
 
 [[ -f "$HANDLER_FILE" ]] || { echo "error: handler not found at $HANDLER_FILE" >&2; exit 1; }
 
