@@ -6,12 +6,19 @@ the nested metrics into a normalized structure.
 """
 
 import json
+import re
 from typing import Iterator
 
 import dlt
 import s3fs
 
 from pipelines.config import get_bucket, get_s3_client
+
+# Export files are named with an ISO timestamp (2026-07-02T22:00:16.342882+00:00.json).
+# latest_only ingestion takes the lexicographically-last file, so any stray JSON
+# whose name sorts after the digits (e.g. a smoke-test upload) would shadow the
+# real latest export unless filtered out here.
+_EXPORT_FILENAME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T")
 
 
 def _parse_health_date(date_str: str) -> str:
@@ -24,10 +31,10 @@ def _parse_health_date(date_str: str) -> str:
 def _list_health_files(
     s3: s3fs.S3FileSystem, bucket: str, prefix: str = "landing/health"
 ) -> list[str]:
-    """List all health JSON files in S3."""
+    """List timestamp-named health export JSON files in S3, oldest first."""
     path = f"{bucket}/{prefix}"
     files = s3.glob(f"{path}/*.json")
-    return sorted(files)
+    return sorted(str(f) for f in files if _EXPORT_FILENAME_RE.match(str(f).split("/")[-1]))
 
 
 def _read_health_file(s3: s3fs.S3FileSystem, file_path: str) -> dict:
