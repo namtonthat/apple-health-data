@@ -66,6 +66,7 @@ hrv_ms = 65.0
 vo2_max = 49.0
 steps = 10000
 meditation_minutes = 10
+lifts_per_week = 4.0
 
 [dependency-groups]
 dev = [
