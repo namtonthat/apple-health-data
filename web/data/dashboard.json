@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-03T00:41:53+00:00",
+  "generated_at": "2026-07-03T15:05:06+00:00",
   "last_data_date": "2026-07-03",
-  "today": "2026-07-03",
+  "today": "2026-07-04",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,7 +35,7 @@
     "fat_g": 69,
     "water_ml": 633,
     "logged_calories": 2512,
-    "total_volume_kg": 11293,
+    "total_volume_kg": 8922,
     "readiness_score": 66
   },
   "daily": [
@@ -2698,8 +2698,8 @@
       "water_ml": null,
       "logged_calories": null,
       "calculated_calories": 974,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 8922
     }
   ],
   "readiness": [
@@ -5119,6 +5119,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-07-03",
+      "workout_name": "PL - Accessories",
+      "day_name": "Friday",
+      "workout_duration_minutes": 23,
+      "unique_exercises": 3,
+      "total_sets": 13,
+      "working_sets": 9,
+      "total_reps": 147,
+      "total_volume_kg": 8922,
+      "max_weight_kg": 90,
+      "avg_rpe": 7.8
+    },
+    {
       "workout_date": "2026-07-01",
       "workout_name": "PL - Bench",
       "day_name": "Wednesday",
@@ -5416,19 +5429,6 @@
       "total_volume_kg": 8892,
       "max_weight_kg": 130,
       "avg_rpe": null
-    },
-    {
-      "workout_date": "2026-05-11",
-      "workout_name": "PL - Bench",
-      "day_name": "Monday",
-      "workout_duration_minutes": 0,
-      "unique_exercises": 5,
-      "total_sets": 20,
-      "working_sets": 16,
-      "total_reps": 175,
-      "total_volume_kg": 7548,
-      "max_weight_kg": 100,
-      "avg_rpe": 8.5
     }
   ],
   "e1rm": [
@@ -9921,6 +9921,13 @@
     },
     {
       "workout_date": "2026-07-01",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-07-03",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
