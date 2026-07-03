@@ -38,6 +38,19 @@ make deploy-web   # trigger the GitHub Pages deploy workflow (gh CLI)
 
 A normal `git push` that changes `web/**` also deploys automatically.
 
+## Phone upload receiver (Lambda Function URL)
+
+Health Auto Export POSTs each export to the `apple-health-ingest` Lambda's
+Function URL (`infra/lambda/ingest_health_data.py`), which writes it to
+`s3://<bucket>/landing/health/<utc-timestamp>.json` — the S3 event then fires
+the refresh trigger below, so an upload refreshes the dashboard end to end.
+
+- **`deploy-ingest-lambda.sh`** — idempotent deploy: IAM role (PutObject on
+  `landing/health/*` only), function, and public Function URL. Requests must
+  carry a shared token (`?token=…` or `x-api-key` header); the script prints
+  the full URL to paste into the app and reuses the existing token on
+  re-runs (`ROTATE_TOKEN=1` to mint a new one, then update the app).
+
 ## S3 event trigger (Lambda)
 
 When a new Apple Health export JSON lands in
