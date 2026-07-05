@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-04T14:26:47+00:00",
-  "last_data_date": "2026-07-03",
-  "today": "2026-07-05",
+  "generated_at": "2026-07-05T14:28:24+00:00",
+  "last_data_date": "2026-07-04",
+  "today": "2026-07-06",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,32 +35,10 @@
     "fat_g": 48,
     "water_ml": 652,
     "logged_calories": 2332,
-    "total_volume_kg": 8922,
+    "total_volume_kg": 8970,
     "readiness_score": 64
   },
   "daily": [
-    {
-      "date": "2026-03-06",
-      "sleep_hours": 5.9,
-      "sleep_deep_hours": 1.2,
-      "sleep_rem_hours": 1.7,
-      "sleep_light_hours": 3.1,
-      "hrv_ms": 44.75,
-      "resting_hr_bpm": 51,
-      "vo2_max": null,
-      "weight_kg": 71.59,
-      "bmi": 23.92,
-      "steps": 10771,
-      "protein_g": 119,
-      "carbs_g": 214,
-      "fat_g": 70,
-      "fiber_g": 23,
-      "water_ml": 1146,
-      "logged_calories": 1919,
-      "calculated_calories": 2466,
-      "workouts": 1,
-      "total_volume_kg": 5295
-    },
     {
       "date": "2026-03-07",
       "sleep_hours": 6.8,
@@ -2678,21 +2656,31 @@
       "calculated_calories": 2481,
       "workouts": 1,
       "total_volume_kg": 8922
+    },
+    {
+      "date": "2026-07-04",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 8970
     }
   ],
   "readiness": [
-    {
-      "date": "2026-03-06",
-      "readiness_score": 63,
-      "hrv_score": 6,
-      "rhr_score": 16,
-      "sleep_score": 21,
-      "deep_score": 20,
-      "hrv_ms": 44.75,
-      "resting_hr_bpm": 51,
-      "sleep_hours": 5.9,
-      "deep_sleep_ratio": 0.2
-    },
     {
       "date": "2026-03-07",
       "readiness_score": 74,
@@ -5078,6 +5066,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-07-04",
+      "workout_name": "PL - Deads",
+      "day_name": "Saturday",
+      "workout_duration_minutes": 34,
+      "unique_exercises": 5,
+      "total_sets": 19,
+      "working_sets": 13,
+      "total_reps": 146,
+      "total_volume_kg": 8970,
+      "max_weight_kg": 220,
+      "avg_rpe": 7.8
+    },
+    {
       "workout_date": "2026-07-03",
       "workout_name": "PL - Accessories",
       "day_name": "Friday",
@@ -5374,19 +5375,6 @@
       "total_reps": 139,
       "total_volume_kg": 6533,
       "max_weight_kg": 110,
-      "avg_rpe": null
-    },
-    {
-      "workout_date": "2026-05-13",
-      "workout_name": "PL - Squat",
-      "day_name": "Wednesday",
-      "workout_duration_minutes": 37,
-      "unique_exercises": 5,
-      "total_sets": 18,
-      "working_sets": 14,
-      "total_reps": 199,
-      "total_volume_kg": 8892,
-      "max_weight_kg": 130,
       "avg_rpe": null
     }
   ],
@@ -9887,6 +9875,13 @@
     },
     {
       "workout_date": "2026-07-03",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-07-04",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
