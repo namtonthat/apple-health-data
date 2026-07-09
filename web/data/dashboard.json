@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-09T15:55:18+00:00",
-  "last_data_date": "2026-07-07",
+  "generated_at": "2026-07-09T23:22:41+00:00",
+  "last_data_date": "2026-07-08",
   "today": "2026-07-10",
   "user_name": "Nam Tonthat",
   "goals": {
@@ -20,23 +20,23 @@
     "calories": 2200.0
   },
   "latest": {
-    "sleep_hours": 6.3,
-    "sleep_deep_hours": 0.6,
-    "sleep_rem_hours": 1.4,
+    "sleep_hours": 7.5,
+    "sleep_deep_hours": 0.8,
+    "sleep_rem_hours": 2.4,
     "sleep_light_hours": 4.3,
-    "hrv_ms": 61.53,
-    "resting_hr_bpm": 49,
-    "vo2_max": 43.58,
-    "weight_kg": 70.49,
-    "bmi": 23.55,
-    "steps": 16474,
-    "protein_g": 48,
-    "carbs_g": 44,
-    "fat_g": 37,
-    "water_ml": 2000,
-    "logged_calories": 777,
+    "hrv_ms": 65.78,
+    "resting_hr_bpm": 52,
+    "vo2_max": 43.34,
+    "weight_kg": 70.87,
+    "bmi": 23.68,
+    "steps": 15092,
+    "protein_g": 151,
+    "carbs_g": 302,
+    "fat_g": 41,
+    "water_ml": 392,
+    "logged_calories": 2276,
     "total_volume_kg": 8970,
-    "readiness_score": 76
+    "readiness_score": 74
   },
   "daily": [
     {
@@ -2543,7 +2543,7 @@
       "fiber_g": 40,
       "water_ml": 633,
       "logged_calories": 2512,
-      "calculated_calories": 2316,
+      "calculated_calories": 2307,
       "workouts": 0,
       "total_volume_kg": null
     },
@@ -2625,12 +2625,12 @@
       "weight_kg": 70.49,
       "bmi": 23.55,
       "steps": 13334.13,
-      "protein_g": 48,
-      "carbs_g": 44,
-      "fat_g": 37,
-      "fiber_g": 36,
-      "water_ml": null,
-      "logged_calories": 777,
+      "protein_g": 166,
+      "carbs_g": 143,
+      "fat_g": 79,
+      "fiber_g": 49,
+      "water_ml": 290,
+      "logged_calories": 2039,
       "calculated_calories": 2403,
       "workouts": 0,
       "total_volume_kg": null
@@ -2647,13 +2647,35 @@
       "weight_kg": null,
       "bmi": null,
       "steps": 16474,
-      "protein_g": null,
-      "carbs_g": null,
-      "fat_g": null,
-      "fiber_g": null,
-      "water_ml": null,
-      "logged_calories": null,
+      "protein_g": 163,
+      "carbs_g": 163,
+      "fat_g": 117,
+      "fiber_g": 41,
+      "water_ml": 94,
+      "logged_calories": 2400,
       "calculated_calories": 2609,
+      "workouts": 0,
+      "total_volume_kg": null
+    },
+    {
+      "date": "2026-07-08",
+      "sleep_hours": 7.5,
+      "sleep_deep_hours": 0.8,
+      "sleep_rem_hours": 2.4,
+      "sleep_light_hours": 4.3,
+      "hrv_ms": 65.78,
+      "resting_hr_bpm": 52,
+      "vo2_max": 43.34,
+      "weight_kg": 70.87,
+      "bmi": 23.68,
+      "steps": 15092,
+      "protein_g": 151,
+      "carbs_g": 302,
+      "fat_g": 41,
+      "fiber_g": 66,
+      "water_ml": 392,
+      "logged_calories": 2276,
+      "calculated_calories": 2547,
       "workouts": 0,
       "total_volume_kg": null
     }
@@ -4086,6 +4108,18 @@
       "resting_hr_bpm": 49,
       "sleep_hours": 6.3,
       "deep_sleep_ratio": 0.1
+    },
+    {
+      "date": "2026-07-08",
+      "readiness_score": 74,
+      "hrv_score": 22,
+      "rhr_score": 13,
+      "sleep_score": 25,
+      "deep_score": 14,
+      "hrv_ms": 65.78,
+      "resting_hr_bpm": 52,
+      "sleep_hours": 7.5,
+      "deep_sleep_ratio": 0.11
     }
   ],
   "weight": [
@@ -5054,6 +5088,13 @@
       "avg_7d": 70.58,
       "avg_30d": 70.75,
       "avg_60d": 70.72
+    },
+    {
+      "date": "2026-07-08",
+      "weight_kg": 70.87,
+      "avg_7d": 70.62,
+      "avg_30d": 70.76,
+      "avg_60d": 70.71
     }
   ],
   "workouts": [
@@ -9893,14 +9934,14 @@
   },
   "macro_avg": {
     "recorded_days_7d": 7,
-    "protein_avg_7d": 134,
-    "carbs_avg_7d": 209,
-    "fat_avg_7d": 59,
-    "calories_avg_7d": 2070,
-    "protein_avg_30d": 132,
-    "carbs_avg_30d": 229,
-    "fat_avg_30d": 58,
-    "calories_avg_30d": 2094
+    "protein_avg_7d": 149,
+    "carbs_avg_7d": 230,
+    "fat_avg_7d": 66,
+    "calories_avg_7d": 2274,
+    "protein_avg_30d": 138,
+    "carbs_avg_30d": 230,
+    "fat_avg_30d": 59,
+    "calories_avg_30d": 2138
   },
   "strava": [
     {
