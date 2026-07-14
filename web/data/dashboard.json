@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-14T14:45:54+00:00",
+  "generated_at": "2026-07-14T22:35:11+00:00",
   "last_data_date": "2026-07-13",
   "today": "2026-07-15",
   "user_name": "Nam Tonthat",
@@ -25,7 +25,7 @@
     "sleep_rem_hours": 1.6,
     "sleep_light_hours": 5.2,
     "hrv_ms": 43.83,
-    "resting_hr_bpm": 49,
+    "resting_hr_bpm": 51,
     "vo2_max": 43.54,
     "weight_kg": 71.12,
     "bmi": 23.76,
@@ -36,7 +36,7 @@
     "water_ml": 115,
     "logged_calories": 2262,
     "total_volume_kg": 8767,
-    "readiness_score": 63
+    "readiness_score": 58
   },
   "daily": [
     {
@@ -2664,7 +2664,7 @@
       "sleep_rem_hours": 1.6,
       "sleep_light_hours": 5.2,
       "hrv_ms": 43.83,
-      "resting_hr_bpm": 49,
+      "resting_hr_bpm": 51,
       "vo2_max": 43.54,
       "weight_kg": null,
       "bmi": null,
@@ -4111,13 +4111,13 @@
     },
     {
       "date": "2026-07-13",
-      "readiness_score": 63,
+      "readiness_score": 58,
       "hrv_score": 6,
-      "rhr_score": 19,
+      "rhr_score": 14,
       "sleep_score": 25,
       "deep_score": 13,
       "hrv_ms": 43.83,
-      "resting_hr_bpm": 49,
+      "resting_hr_bpm": 51,
       "sleep_hours": 7.5,
       "deep_sleep_ratio": 0.09
     }
