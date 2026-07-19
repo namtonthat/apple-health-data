@@ -13,6 +13,10 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write  # push refreshed dashboard.json to main
+  actions: write   # dispatch deploy-web.yml after a data commit
+
 jobs:
   refresh-data:
     runs-on: ubuntu-latest
@@ -94,6 +98,7 @@ jobs:
         run: TZ='Australia/Melbourne' date '+%Y-%m-%d' > last_updated.txt
 
       - name: Commit and push refreshed data
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -103,8 +108,19 @@ jobs:
           git add last_updated.txt web/data/dashboard.json
           if git diff --staged --quiet; then
             echo "No refreshed data changes to commit."
+            echo "committed=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           git commit -m "chore: refresh dashboard data [skip ci]"
           git push origin HEAD:main
+          echo "committed=true" >> $GITHUB_OUTPUT
+
+      # GITHUB_TOKEN pushes never trigger push workflows (recursion
+      # prevention), so redeploy Pages explicitly — workflow_dispatch is
+      # exempt from that rule.
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.committed == 'true'
+        run: gh workflow run deploy-web.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}

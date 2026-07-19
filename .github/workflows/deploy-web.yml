@@ -1,9 +1,10 @@
 name: Deploy web dashboard
 
 # Publishes the static Next.js dashboard (web/) to GitHub Pages — free for this
-# public repo, no extra accounts. Auto-runs when the app or its committed data
-# snapshot changes (the daily data refresh touches web/data/dashboard.json, so
-# the live site stays current), and on manual dispatch.
+# public repo, no extra accounts. Auto-runs when the app changes, and via
+# workflow_dispatch — including from refresh-data.yml after each data commit
+# (its GITHUB_TOKEN push can't trigger the push event), so the live site stays
+# current.
 on:
   push:
     branches: [main]
