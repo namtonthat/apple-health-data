@@ -24,6 +24,10 @@ def _to_date(value) -> date:
     return date.fromisoformat(str(value)[:10])
 
 
+def _to_float(value) -> float | None:
+    return float(value) if value is not None else None
+
+
 def load_daily_rows(conn: duckdb.DuckDBPyConnection, source: str | None = None) -> list[DailyRow]:
     source = source or _default_source("fct_daily_summary")
     result = conn.execute(f"""
@@ -35,15 +39,15 @@ def load_daily_rows(conn: duckdb.DuckDBPyConnection, source: str | None = None) 
     return [
         DailyRow(
             date=_to_date(row[0]),
-            weight_kg=float(row[1]) if row[1] is not None else None,
-            sleep_hours=float(row[2]) if row[2] is not None else None,
-            calories=float(row[3]) if row[3] is not None else None,
-            protein_g=float(row[4]) if row[4] is not None else None,
-            carbs_g=float(row[5]) if row[5] is not None else None,
-            fat_g=float(row[6]) if row[6] is not None else None,
-            fiber_g=float(row[7]) if row[7] is not None else None,
-            water_ml=float(row[8]) if row[8] is not None else None,
-            steps=int(row[9]) if row[9] is not None else None,
+            weight_kg=_to_float(row[1]),
+            sleep_hours=_to_float(row[2]),
+            calories=_to_float(row[3]),
+            protein_g=_to_float(row[4]),
+            carbs_g=_to_float(row[5]),
+            fat_g=_to_float(row[6]),
+            fiber_g=_to_float(row[7]),
+            water_ml=_to_float(row[8]),
+            steps=_to_float(row[9]),
         )
         for row in result
     ]
@@ -71,9 +75,9 @@ def load_week_sets(
             workout_date=_to_date(row[1]),
             exercise_name=row[2],
             set_number=int(row[3]),
-            weight_kg=row[4],
+            weight_kg=_to_float(row[4]),
             reps=int(row[5]) if row[5] is not None else None,
-            rpe=row[6],
+            rpe=_to_float(row[6]),
         )
         for row in result
     ]
