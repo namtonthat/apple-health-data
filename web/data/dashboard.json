@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T17:53:12+00:00",
+  "generated_at": "2026-07-20T21:44:03+00:00",
   "last_data_date": "2026-07-20",
   "today": "2026-07-21",
   "user_name": "Nam Tonthat",
@@ -31,10 +31,10 @@
     "bmi": 23.68,
     "steps": 13175,
     "protein_g": 155,
-    "carbs_g": 207,
+    "carbs_g": 315,
     "fat_g": 53,
     "water_ml": 90,
-    "logged_calories": 2357,
+    "logged_calories": 2367,
     "total_volume_kg": 8767,
     "readiness_score": 70
   },
@@ -2675,7 +2675,7 @@
       "fiber_g": null,
       "water_ml": null,
       "logged_calories": null,
-      "calculated_calories": 1816,
+      "calculated_calories": 2349,
       "workouts": 0,
       "total_volume_kg": null
     },
@@ -2692,12 +2692,12 @@
       "bmi": 23.68,
       "steps": 13175,
       "protein_g": 155,
-      "carbs_g": null,
+      "carbs_g": 315,
       "fat_g": 53,
-      "fiber_g": null,
+      "fiber_g": 18,
       "water_ml": 90,
-      "logged_calories": null,
-      "calculated_calories": 1870,
+      "logged_calories": 2367,
+      "calculated_calories": 2543,
       "workouts": 0,
       "total_volume_kg": null
     }
@@ -9983,13 +9983,13 @@
   "macro_avg": {
     "recorded_days_7d": 7,
     "protein_avg_7d": 127,
-    "carbs_avg_7d": 218,
+    "carbs_avg_7d": 231,
     "fat_avg_7d": 65,
-    "calories_avg_7d": 2083,
+    "calories_avg_7d": 2123,
     "protein_avg_30d": 134,
-    "carbs_avg_30d": 222,
+    "carbs_avg_30d": 225,
     "fat_avg_30d": 61,
-    "calories_avg_30d": 2106
+    "calories_avg_30d": 2115
   },
   "strava": [
     {
