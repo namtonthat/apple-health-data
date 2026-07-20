@@ -1,0 +1,58 @@
+name: Export Program Sheet
+
+on:
+  schedule:
+    # Monday 08:00 Melbourne (22:00 UTC Sunday during AEST).
+    - cron: '0 22 * * SUN'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: print intended writes without touching the sheet'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  export-sheet:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GSHEET_SERVICE_ACCOUNT_JSON: ${{ secrets.GSHEET_SERVICE_ACCOUNT_JSON }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Load config from pyproject.toml
+        run: |
+          S3_BUCKET=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['s3_bucket_name'])")
+          AWS_REGION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['aws_region'])")
+          echo "S3_BUCKET_NAME=$S3_BUCKET" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=$AWS_REGION" >> $GITHUB_ENV
+
+      - name: Export program sheet
+        run: |
+          FLAGS=""
+          [ "${{ inputs.dry_run }}" = "true" ] && FLAGS="--dry-run"
+          uv run python run.py export-sheet $FLAGS | tee sheet-export.log
+
+      - name: Summary
+        run: |
+          echo "## Program Sheet Export" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -A 100 "Summary:" sheet-export.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

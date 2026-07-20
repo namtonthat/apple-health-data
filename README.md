@@ -55,6 +55,11 @@ uv run python run.py transform
 # Export — ICS calendar to S3
 uv run python run.py export
 
+# Export — fill the weekly program Google Sheet
+uv run python run.py export-sheet             # Write to the sheet
+uv run python run.py export-sheet --dry-run   # Preview writes only
+uv run python run.py export-sheet --list-tabs # List tab names for config
+
 # Full pipeline — all stages end-to-end
 uv run python run.py all
 uv run python run.py all --date 2026-01-15
@@ -164,6 +169,7 @@ GitHub Actions automatically refreshes data daily via `.github/workflows/refresh
 | `STRAVA_CLIENT_ID` | No | For Strava activities |
 | `STRAVA_CLIENT_SECRET` | No | For Strava activities |
 | `STRAVA_REFRESH_TOKEN` | No | For Strava activities |
+| `GSHEET_SERVICE_ACCOUNT_JSON` | No | Service account JSON for the program sheet export |
 
 Non-sensitive values (bucket name, goals, URLs) are read from `pyproject.toml`.
 
