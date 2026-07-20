@@ -82,10 +82,14 @@ def _workouts_for(sets: list[SetRow], exercise: str) -> list[list[SetRow]]:
     """The week's workouts containing `exercise`, each as its sets, date order."""
     by_workout: dict[str, list[SetRow]] = {}
     for s in sets:
-        if s.exercise_name == exercise and s.weight_kg is not None and s.reps:
+        if s.exercise_name == exercise:
             by_workout.setdefault(s.workout_id, []).append(s)
     workouts = sorted(by_workout.values(), key=lambda ws: (ws[0].workout_date, ws[0].workout_id))
-    return [sorted(ws, key=lambda s: s.set_number) for ws in workouts]
+    # Filter to valid sets (weight_kg and reps) within each workout
+    return [
+        sorted([s for s in ws if s.weight_kg is not None and s.reps], key=lambda s: s.set_number)
+        for ws in workouts
+    ]
 
 
 def _maybe_write(
@@ -135,6 +139,10 @@ def resolve_block_writes(
             result.notes.append(f"{name}: no workout for occurrence {occ + 1} this week")
             continue
         workout = workouts[occ]
+
+        if not workout:
+            result.notes.append(f"{name}: no loggable sets for occurrence {occ + 1} this week")
+            continue
 
         if len(rows) == 1:
             top = max(workout, key=lambda s: (s.weight_kg, s.reps))

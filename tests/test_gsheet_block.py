@@ -127,3 +127,19 @@ def test_no_rpe_leaves_actual_untouched():
 def test_week_index_out_of_range_raises():
     with pytest.raises(ValueError, match="week"):
         resolve_block_writes(make_grid(), EXERCISE_MAP, 2, [])
+
+
+def test_invalid_set_workout_skipped_not_shifted():
+    """First workout has no valid sets; second row should still get second workout."""
+    sets = [
+        s(0, "Squat (Barbell)", 1, None, 1, 6.0),  # First workout: invalid (no weight)
+        s(4, "Squat (Barbell)", 1, 160.0, 1, 8.0),  # Second workout: valid
+    ]
+    result = resolve_block_writes(make_grid(), EXERCISE_MAP, 0, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    # First row (row 3) should have no writes (first workout has no valid sets)
+    assert all(w.row != 3 for w in result.writes)
+    # Second row (row 5) should get the second workout's load
+    assert values[(5, 6)] == "160"
+    # First occurrence should be in notes as having no loggable sets
+    assert any("no loggable sets" in note for note in result.notes)
