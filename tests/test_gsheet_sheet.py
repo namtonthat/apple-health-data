@@ -14,9 +14,8 @@ def test_a1_conversion():
 def test_batch_write_builds_single_batch_update():
     with patch("exports.gsheet.sheet.gspread") as mock_gspread:
         ws = MagicMock()
-        (
-            mock_gspread.service_account_from_dict.return_value.open_by_key.return_value.worksheet.return_value
-        ) = ws
+        root = mock_gspread.service_account_from_dict.return_value
+        root.open_by_key.return_value.worksheet.return_value = ws
 
         client = SheetClient("sheet-id", '{"type": "service_account"}')
         client.batch_write(
@@ -36,9 +35,8 @@ def test_batch_write_builds_single_batch_update():
 def test_batch_write_no_writes_is_noop():
     with patch("exports.gsheet.sheet.gspread") as mock_gspread:
         ws = MagicMock()
-        (
-            mock_gspread.service_account_from_dict.return_value.open_by_key.return_value.worksheet.return_value
-        ) = ws
+        root = mock_gspread.service_account_from_dict.return_value
+        root.open_by_key.return_value.worksheet.return_value = ws
         client = SheetClient("sheet-id", '{"type": "service_account"}')
         client.batch_write("Daily", [])
         ws.batch_update.assert_not_called()
