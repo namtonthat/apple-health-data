@@ -143,6 +143,14 @@ def run_export_web() -> None:
     export_web()
 
 
+def run_export_sheet_stage(dry_run: bool, list_tabs: bool) -> None:
+    """Fill the weekly program Google Sheet from transformed data."""
+    load_env()
+    from exports.gsheet.export import run_export_sheet
+
+    run_export_sheet(dry_run=dry_run, list_tabs=list_tabs)
+
+
 def run_dashboard() -> None:
     """Start the Streamlit dashboard."""
     load_env()
@@ -227,6 +235,11 @@ examples:
     # export-web
     sub.add_parser("export-web", help="Export JSON snapshot for the static web dashboard")
 
+    # export-sheet
+    p_sheet = sub.add_parser("export-sheet", help="Fill the program Google Sheet")
+    p_sheet.add_argument("--dry-run", action="store_true", help="Print writes, change nothing")
+    p_sheet.add_argument("--list-tabs", action="store_true", help="List spreadsheet tab names")
+
     # dashboard
     sub.add_parser("dashboard", help="Start Streamlit dashboard")
 
@@ -248,6 +261,8 @@ examples:
             run_export()
         case "export-web":
             run_export_web()
+        case "export-sheet":
+            run_export_sheet_stage(args.dry_run, args.list_tabs)
         case "all":
             run_all(args.date)
         case "dashboard":
