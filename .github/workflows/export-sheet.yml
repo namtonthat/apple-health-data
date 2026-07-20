@@ -2,8 +2,8 @@ name: Export Program Sheet
 
 on:
   schedule:
-    # Monday 08:00 Melbourne (22:00 UTC Sunday during AEST).
-    - cron: '0 22 * * SUN'
+    # Tuesday 12:00 Melbourne (02:00 UTC during AEST; 13:00 AEDT in summer).
+    - cron: '0 2 * * TUE'
   workflow_dispatch:
     inputs:
       dry_run:
