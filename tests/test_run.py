@@ -26,16 +26,28 @@ def test_run_all_stops_before_transform_when_ingest_fails(monkeypatch):
 
 
 def test_main_ingest_exits_non_zero_when_a_source_fails(monkeypatch):
+    def mock_parse_args(self):
+        return type(
+            "Args",
+            (),
+            {
+                "stage": "ingest",
+                "sources": ["hevy"],
+                "date": None,
+                "all_files": False,
+            },
+        )()
+
     monkeypatch.setattr(run, "_raise_fd_limit", lambda: None)
     monkeypatch.setattr(
         run,
         "run_ingest",
-        lambda sources, date, strict=False: ["hevy"],
+        lambda sources, date, strict=False, all_files=False: ["hevy"],
     )
     monkeypatch.setattr(
         run.argparse.ArgumentParser,
         "parse_args",
-        lambda self: type("Args", (), {"stage": "ingest", "sources": ["hevy"], "date": None})(),
+        mock_parse_args,
     )
 
     try:
