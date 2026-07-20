@@ -31,6 +31,7 @@ def plan_writes(
     daily_rows: list[DailyRow],
     week_sets: list[SetRow],
     today: date,
+    block_monday: date,
 ) -> ExportPlan:
     plan = ExportPlan()
 
@@ -41,7 +42,7 @@ def plan_writes(
     )
     plan.summary_lines.extend(f"daily tab: {note}" for note in daily.notes)
 
-    week_index = current_week_index(cfg.week1_monday, today)
+    week_index = current_week_index(cfg.week1_monday, block_monday)
     try:
         block = resolve_block_writes(block_grid, cfg.exercise_map, week_index, week_sets)
     except ValueError as exc:
@@ -50,8 +51,8 @@ def plan_writes(
 
     plan.block_writes = block.writes
     plan.summary_lines.append(
-        f"block tab (week {week_index + 1}): {len(block.writes)} cells written, "
-        f"{block.skipped} already filled"
+        f"block tab (week {week_index + 1}, w/c {block_monday.isoformat()}): "
+        f"{len(block.writes)} cells written, {block.skipped} already filled"
     )
     if block.unmapped:
         plan.summary_lines.append(
@@ -93,16 +94,19 @@ def run_export_sheet(
     from pipelines.config import get_duckdb_connection
 
     today = datetime.now(MELBOURNE).date()
-    week_monday = today - timedelta(days=today.weekday())
+    # The block tab always targets the previous completed Mon-Sun week, since
+    # the scheduled run fires Monday morning before the current week has
+    # produced any sets.
+    block_monday = today - timedelta(days=today.weekday()) - timedelta(days=7)
 
     conn = get_duckdb_connection()
     daily_rows = load_daily_rows(conn)
-    week_sets = load_week_sets(conn, week_monday)
+    week_sets = load_week_sets(conn, block_monday)
 
     daily_grid = client.get_grid(cfg.daily_tab)
     block_grid = client.get_grid(cfg.block_tab)
 
-    plan = plan_writes(cfg, daily_grid, block_grid, daily_rows, week_sets, today)
+    plan = plan_writes(cfg, daily_grid, block_grid, daily_rows, week_sets, today, block_monday)
 
     print("=" * 60)
     print(f"Google Sheets Program Export{' (DRY RUN)' if dry_run else ''}")

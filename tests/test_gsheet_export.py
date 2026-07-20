@@ -36,6 +36,8 @@ BLOCK_GRID = [
 
 
 def test_plan_writes_produces_both_sections():
+    """today=Mon 2026-07-20 -> block_monday=2026-07-13 (week 1); the week's
+    sets (13-19/7) should fill the week-1 group even though today has moved on."""
     daily_rows = [
         DailyRow(
             date=date(2026, 7, 13),
@@ -61,14 +63,20 @@ def test_plan_writes_produces_both_sections():
             rpe=7.5,
         )
     ]
-    plan = plan_writes(CFG, DAILY_GRID, BLOCK_GRID, daily_rows, sets, today=date(2026, 7, 15))
+    today = date(2026, 7, 20)
+    block_monday = date(2026, 7, 13)
+    plan = plan_writes(CFG, DAILY_GRID, BLOCK_GRID, daily_rows, sets, today, block_monday)
     assert len(plan.daily_writes) == 2  # weight + sleep
     assert len(plan.block_writes) == 3  # reps + load + actual
     assert any("written" in line for line in plan.summary_lines)
+    assert any("week 1, w/c 2026-07-13" in line for line in plan.summary_lines)
 
 
 def test_plan_writes_skips_block_when_before_block_start():
-    plan = plan_writes(CFG, DAILY_GRID, BLOCK_GRID, [], [], today=date(2026, 7, 10))
+    """today=2026-07-15 -> block_monday=2026-07-06, which predates week1_monday."""
+    today = date(2026, 7, 15)
+    block_monday = date(2026, 7, 6)
+    plan = plan_writes(CFG, DAILY_GRID, BLOCK_GRID, [], [], today, block_monday)
     assert plan.block_writes == []
     assert any("skip" in line.lower() for line in plan.summary_lines)
 
@@ -76,5 +84,7 @@ def test_plan_writes_skips_block_when_before_block_start():
 def test_plan_writes_reports_unmapped():
     grid = [row[:] for row in BLOCK_GRID]
     grid[1][0] = "MYSTERY PRESS"
-    plan = plan_writes(CFG, DAILY_GRID, grid, [], [], today=date(2026, 7, 15))
+    today = date(2026, 7, 20)
+    block_monday = date(2026, 7, 13)
+    plan = plan_writes(CFG, DAILY_GRID, grid, [], [], today, block_monday)
     assert any("MYSTERY PRESS" in line for line in plan.summary_lines)
