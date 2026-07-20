@@ -153,3 +153,43 @@ def test_missing_header_raises():
     grid = [["DATE", "DAY"]]  # no BODY WEIGHT anywhere
     with pytest.raises(ValueError, match="BODY WEIGHT"):
         resolve_daily_writes(grid, [], today=date(2026, 7, 20))
+
+
+def test_weekly_averages_written_when_fibre_and_fluid_columns_absent():
+    """FIBRE/FLUID are only written when the tab exposes those columns; a tab
+    without them should still get the other weekly averages, not raise."""
+    no_fluid_fibre_headers = [h for h in HEADERS if h not in ("FIBRE", "FLUID")]
+    n = len(no_fluid_fibre_headers)
+    grid = [["BANNER"] + [""] * (n - 1), no_fluid_fibre_headers[:]]
+    days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    for i, day in enumerate(days):
+        row = [""] * n
+        row[0], row[1] = f"{13 + i}/7/26", day
+        grid.append(row)
+    grid.append([""] * n)  # weekly average row
+
+    rows = [
+        daily(
+            date(2026, 7, 13),
+            calories=2000,
+            protein_g=120,
+            carbs_g=300,
+            fat_g=50,
+            steps=10000,
+        ),
+        daily(
+            date(2026, 7, 14),
+            calories=2200,
+            protein_g=140,
+            carbs_g=320,
+            fat_g=60,
+            steps=12000,
+        ),
+    ]
+    result = resolve_daily_writes(grid, rows, today=date(2026, 7, 20))
+    avg_row = 9  # row after SUN
+    values = {(w.row, w.col): w.value for w in result.writes}
+    calories_col = no_fluid_fibre_headers.index("CALORIES")
+    steps_col = no_fluid_fibre_headers.index("STEPS")
+    assert values[(avg_row, calories_col)] == "2100"
+    assert values[(avg_row, steps_col)] == "11000"

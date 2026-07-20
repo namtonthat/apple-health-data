@@ -21,10 +21,12 @@ REQUIRED_HEADERS = [
     "PROTEIN",
     "CARBS",
     "FAT",
-    "FIBRE",
-    "FLUID",
     "STEPS",
 ]
+
+# Written only if the tab exposes these columns; a tab without them still
+# gets the other weekly averages instead of failing the whole export.
+OPTIONAL_HEADERS = ["FIBRE", "FLUID"]
 
 
 @dataclass
@@ -131,11 +133,14 @@ def _write_week_averages(
         "STEPS": [r.steps for r in week],
     }
     for header, values in int_metrics.items():
+        if header not in cols:
+            continue
         mean = _mean(values)
         if mean is not None:
             rounded = _round_decimal(mean, 0)
             _maybe_write(result, grid, avg_row, cols[header], fmt_num(float(rounded)))
 
-    fluid = _mean([r.water_ml for r in week])
-    if fluid is not None:
-        _maybe_write(result, grid, avg_row, cols["FLUID"], _round_decimal(fluid / 1000, 1))
+    if "FLUID" in cols:
+        fluid = _mean([r.water_ml for r in week])
+        if fluid is not None:
+            _maybe_write(result, grid, avg_row, cols["FLUID"], _round_decimal(fluid / 1000, 1))
