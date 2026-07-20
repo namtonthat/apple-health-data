@@ -132,8 +132,8 @@ def resolve_block_writes(
                 result.unmapped.append(name)
             continue
 
-        occ = occurrence.get(key, 0)
-        occurrence[key] = occ + 1
+        occ = occurrence.get(hevy_name, 0)
+        occurrence[hevy_name] = occ + 1
         workouts = _workouts_for(sets, hevy_name)
         if occ >= len(workouts):
             result.notes.append(f"{name}: no workout for occurrence {occ + 1} this week")

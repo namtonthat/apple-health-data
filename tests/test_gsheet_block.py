@@ -129,6 +129,30 @@ def test_week_index_out_of_range_raises():
         resolve_block_writes(make_grid(), EXERCISE_MAP, 2, [])
 
 
+def test_occurrence_keyed_by_hevy_exercise_not_sheet_movement():
+    """COMP BENCH and COMP PRESS are different sheet movements that both alias
+    to 'Bench Press (Barbell)' in Hevy. With two workouts logged that week,
+    the first sheet row (COMP BENCH) should get workout 1's top set and the
+    second sheet row (COMP PRESS) should get workout 2's top set — not both
+    landing on workout 1 because each sheet movement's own occurrence
+    counter starts fresh at 0."""
+    grid = make_grid()
+    grid[2][2] = "COMP BENCH"
+    grid[3][2] = "COMP PRESS"
+    exercise_map = {
+        "COMP BENCH": "Bench Press (Barbell)",
+        "COMP PRESS": "Bench Press (Barbell)",
+    }
+    sets = [
+        s(0, "Bench Press (Barbell)", 1, 80.0, 8, 7.0),
+        s(4, "Bench Press (Barbell)", 1, 90.0, 8, 8.0),
+    ]
+    result = resolve_block_writes(grid, exercise_map, 0, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(2, 6)] == "80"  # COMP BENCH row -> first workout
+    assert values[(3, 6)] == "90"  # COMP PRESS row -> second workout
+
+
 def test_invalid_set_workout_skipped_not_shifted():
     """First workout has no valid sets; second row should still get second workout."""
     sets = [
