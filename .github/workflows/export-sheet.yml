@@ -46,13 +46,15 @@ jobs:
 
       - name: Export program sheet
         run: |
+          set -o pipefail
           FLAGS=""
           [ "${{ inputs.dry_run }}" = "true" ] && FLAGS="--dry-run"
           uv run python run.py export-sheet $FLAGS | tee sheet-export.log
 
       - name: Summary
+        if: always()
         run: |
           echo "## Program Sheet Export" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          grep -A 100 "Summary:" sheet-export.log >> $GITHUB_STEP_SUMMARY
+          grep -A 100 "Summary:" sheet-export.log >> "$GITHUB_STEP_SUMMARY" || echo "(no summary — export failed)" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> $GITHUB_STEP_SUMMARY
