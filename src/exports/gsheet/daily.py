@@ -133,8 +133,9 @@ def _write_week_averages(
     for header, values in int_metrics.items():
         mean = _mean(values)
         if mean is not None:
-            _maybe_write(result, grid, avg_row, cols[header], fmt_num(round(mean)))
+            rounded = _round_decimal(mean, 0)
+            _maybe_write(result, grid, avg_row, cols[header], fmt_num(float(rounded)))
 
     fluid = _mean([r.water_ml for r in week])
     if fluid is not None:
-        _maybe_write(result, grid, avg_row, cols["FLUID"], f"{fluid / 1000:.1f}")
+        _maybe_write(result, grid, avg_row, cols["FLUID"], _round_decimal(fluid / 1000, 1))

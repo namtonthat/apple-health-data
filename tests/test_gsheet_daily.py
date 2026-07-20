@@ -121,6 +121,34 @@ def test_no_averages_for_incomplete_week():
     assert avg_row_writes == []
 
 
+def test_weekly_averages_half_up_rounding_integers():
+    """Test that .5 ties round up (2000.5 -> 2001, not banker's 2000)."""
+    grid = make_grid()
+    rows = [
+        daily(date(2026, 7, 13), calories=2000),
+        daily(date(2026, 7, 14), calories=2001),
+    ]
+    result = resolve_daily_writes(grid, rows, today=date(2026, 7, 20))
+    avg_row = 9
+    values = {(w.row, w.col): w.value for w in result.writes}
+    # Mean of 2000 and 2001 is 2000.5; should round up to 2001
+    assert values[(avg_row, 7)] == "2001"  # CALORIES
+
+
+def test_weekly_averages_half_up_rounding_fluid():
+    """Test that FLUID .5 ties round up (2.25 -> 2.3, not banker's 2.2)."""
+    grid = make_grid()
+    rows = [
+        daily(date(2026, 7, 13), water_ml=2100),
+        daily(date(2026, 7, 14), water_ml=2400),
+    ]
+    result = resolve_daily_writes(grid, rows, today=date(2026, 7, 20))
+    avg_row = 9
+    values = {(w.row, w.col): w.value for w in result.writes}
+    # Mean of 2100 and 2400 is 2250; 2250/1000 = 2.25; should round up to 2.3
+    assert values[(avg_row, 12)] == "2.3"  # FLUID litres
+
+
 def test_missing_header_raises():
     grid = [["DATE", "DAY"]]  # no BODY WEIGHT anywhere
     with pytest.raises(ValueError, match="BODY WEIGHT"):
