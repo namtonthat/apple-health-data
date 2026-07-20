@@ -3,11 +3,11 @@
 # the sheet with the service account, then fill these in.
 spreadsheet_id: 1s7sjGdylyxJAz8mh781w_xiCiyY7F3V-xywqQBJJrpI
 
-daily_tab: ""
+daily_tab: "Tracking Sheet 📊 "
 
 block:
-  tab: ""
-  week1_monday: 2026-07-13   # Monday of the block's WEEK 1 column group
+  tab: "Block 15 (Post Comp Refresh)"
+  week1_monday: 2026-07-20   # Monday of the block's WEEK 1 column group
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.
