@@ -40,14 +40,29 @@ def _find_header(grid: list[list[str]]) -> tuple[int, dict[str, int]]:
     for i, row in enumerate(grid):
         if any(c.strip().upper() == "BODY WEIGHT" for c in row):
             cols: dict[str, int] = {}
+            # Build map from BODY WEIGHT row (first occurrence wins)
             for j, cell in enumerate(row):
                 key = cell.strip().upper()
                 if key and key not in cols:
                     cols[key] = j
+
+            # Merge with next row if it contains required header names
+            header_row_idx = i
+            if i + 1 < len(grid):
+                next_row = grid[i + 1]
+                # Check if next row is a header row by looking for required headers
+                next_is_header = any(cell.strip().upper() in REQUIRED_HEADERS for cell in next_row)
+                if next_is_header:
+                    for j, cell in enumerate(next_row):
+                        key = cell.strip().upper()
+                        if key and key not in cols:
+                            cols[key] = j
+                    header_row_idx = i + 1
+
             missing = [h for h in REQUIRED_HEADERS if h not in cols]
             if missing:
                 raise ValueError(f"daily tab: missing headers {missing}")
-            return i, cols
+            return header_row_idx, cols
     raise ValueError("daily tab: no header row containing BODY WEIGHT")
 
 

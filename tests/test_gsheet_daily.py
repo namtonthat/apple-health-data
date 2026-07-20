@@ -155,6 +155,89 @@ def test_missing_header_raises():
         resolve_daily_writes(grid, [], today=date(2026, 7, 20))
 
 
+def test_two_row_headers():
+    """Real spreadsheet has headers split across two rows.
+    Row A: DATE(0), DAY(1), COACH NOTES(3), TARGETS(4), SLEEP(8),
+           BODY WEIGHT(10), TRACKED(12), ...
+    Row A+1: TARGET(5), TARGET(6), TOTAL HRS(8), QUAL /10(9), CALORIES(12),
+             PROTEIN(13), CARBS(14), FAT(15), FIBRE(16), FLUID(17), STEPS(18), ...
+    """
+    grid = [
+        ["BANNER"] + [""] * 19,  # placeholder row
+        [
+            "DATE",
+            "DAY",
+            "",
+            "COACH NOTES",
+            "TARGETS",
+            "",
+            "",
+            "",
+            "SLEEP",
+            "",
+            "BODY WEIGHT",
+            "",
+            "TRACKED",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        ],  # First header row with BODY WEIGHT
+        [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "TARGET",
+            "TARGET",
+            "",
+            "TOTAL HRS",
+            "QUAL /10",
+            "",
+            "CALORIES",
+            "PROTEIN",
+            "CARBS",
+            "FAT",
+            "FIBRE",
+            "FLUID",
+            "STEPS",
+            "",
+            "",
+        ],  # Second header row
+        [
+            "13/7/26",
+            "MON",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        ],  # MON data row
+    ]
+    rows = [daily(date(2026, 7, 13), weight_kg=70.34, sleep_hours=7.25)]
+    result = resolve_daily_writes(grid, rows, today=date(2026, 7, 15))
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(3, 10)] == "70.3"  # BODY WEIGHT at col 10
+    assert values[(3, 8)] == "7.3"  # TOTAL HRS at col 8
+
+
 def test_weekly_averages_written_when_fibre_and_fluid_columns_absent():
     """FIBRE/FLUID are only written when the tab exposes those columns; a tab
     without them should still get the other weekly averages, not raise."""
