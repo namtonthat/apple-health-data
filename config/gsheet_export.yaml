@@ -20,10 +20,23 @@ exercise_map:
   SUMO DEADLIFT: Sumo Deadlift
   CLOSE GRIP BENCH: Bench Press - Close Grip (Barbell)
   SPOTO BENCH: 3 Count Spoto Bench Press (Barbell)
-  # Block 15 (Post Comp Refresh)
+  # Block 15 (Post Comp Refresh) — matches the "Block 15" Hevy routine folder
   HIGH BAR SQUAT: Squat (Barbell)
   CONVENTIONAL DEADLIFT: Deadlift (Barbell)
   HIPTHRUST MACHINE: Hip Thrust (Machine)
   LEG CURL MACHINE: Seated Leg Curl (Machine)
   BB BENCH PRESS: Bench Press (Barbell)
+  CHEST SUPPORTED ROW: Chest Supported Row
+  SINGLE ARM DB LATERAL RAISES: Lateral Raise (Dumbbell)
+  OVERHEAD TRICEP ROPE EXTENSIONS: Overhead Tricep Extension
+  CROSSOVER REAR DELT FLY: Rear Delt Reverse Fly (Cable)
+  BULGARIAN SS: Bulgarian Split Squat (Dumbbell)
+  BB RDL: Romanian Deadlift (Barbell)
   LEG EXTENSIONS: Leg Extension (Machine)
+  STRAIGHT BAR PUSHDOWNS: Triceps Pushdown
+  STRAIGHT BAR BICEP CURLS: Bicep Curl (Cable)
+  BB OHP: Overhead Press (Barbell)
+  PRONE DB ROW: Chest Supported Incline Row (Dumbbell)
+  SEATED CABLE ROW: Seated Cable Row - Bar Grip
+  DEFICIT PUSH UPS: Deficit Push-up
+  DB CURLS: Bicep Curl (Dumbbell)
