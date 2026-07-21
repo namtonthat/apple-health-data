@@ -29,9 +29,8 @@ def plan_writes(
     daily_grid: list[list[str]],
     block_grid: list[list[str]],
     daily_rows: list[DailyRow],
-    week_sets: list[SetRow],
+    week_windows: list[tuple[date, list[SetRow]]],
     today: date,
-    block_monday: date,
 ) -> ExportPlan:
     plan = ExportPlan()
 
@@ -42,24 +41,29 @@ def plan_writes(
     )
     plan.summary_lines.extend(f"daily tab: {note}" for note in daily.notes)
 
-    week_index = current_week_index(cfg.week1_monday, block_monday)
-    try:
-        block = resolve_block_writes(block_grid, cfg.exercise_map, week_index, week_sets)
-    except ValueError as exc:
-        plan.summary_lines.append(f"block tab: skipped — {exc}")
-        return plan
+    unmapped: dict[str, None] = {}
+    for monday, sets in week_windows:
+        week_index = current_week_index(cfg.week1_monday, monday)
+        try:
+            block = resolve_block_writes(block_grid, cfg.exercise_map, week_index, sets)
+        except ValueError as exc:
+            plan.summary_lines.append(f"block tab: skipped w/c {monday.isoformat()} — {exc}")
+            continue
 
-    plan.block_writes = block.writes
-    plan.summary_lines.append(
-        f"block tab (week {week_index + 1}, w/c {block_monday.isoformat()}): "
-        f"{len(block.writes)} cells written, {block.skipped} already filled"
-    )
-    if block.unmapped:
+        plan.block_writes.extend(block.writes)
+        plan.summary_lines.append(
+            f"block tab (week {week_index + 1}, w/c {monday.isoformat()}): "
+            f"{len(block.writes)} cells written, {block.skipped} already filled"
+        )
+        for name in block.unmapped:
+            unmapped.setdefault(name)
+        plan.summary_lines.extend(f"block tab: {note}" for note in block.notes)
+
+    if unmapped:
         plan.summary_lines.append(
             "block tab: unmapped movements (add to config/gsheet_export.yaml): "
-            + ", ".join(block.unmapped)
+            + ", ".join(unmapped)
         )
-    plan.summary_lines.extend(f"block tab: {note}" for note in block.notes)
     return plan
 
 
@@ -94,19 +98,24 @@ def run_export_sheet(
     from pipelines.config import get_duckdb_connection
 
     today = datetime.now(MELBOURNE).date()
-    # The block tab always targets the previous completed Mon-Sun week, since
-    # the scheduled run fires Monday morning before the current week has
-    # produced any sets.
-    block_monday = today - timedelta(days=today.weekday()) - timedelta(days=7)
+    # The block tab covers two windows each run: the previous completed
+    # Mon-Sun week (which may have gained late-logged sets) and the current
+    # in-progress week (so sets show up as they're logged mid-week). They
+    # fill disjoint week-group columns, so writing both is safe and
+    # idempotent.
+    current_monday = today - timedelta(days=today.weekday())
+    prev_monday = current_monday - timedelta(days=7)
 
     conn = get_duckdb_connection()
     daily_rows = load_daily_rows(conn)
-    week_sets = load_week_sets(conn, block_monday)
+    prev_sets = load_week_sets(conn, prev_monday)
+    curr_sets = load_week_sets(conn, current_monday)
+    week_windows = [(prev_monday, prev_sets), (current_monday, curr_sets)]
 
     daily_grid = client.get_grid(cfg.daily_tab)
     block_grid = client.get_grid(cfg.block_tab)
 
-    plan = plan_writes(cfg, daily_grid, block_grid, daily_rows, week_sets, today, block_monday)
+    plan = plan_writes(cfg, daily_grid, block_grid, daily_rows, week_windows, today)
 
     print("=" * 60)
     print(f"Google Sheets Program Export{' (DRY RUN)' if dry_run else ''}")
