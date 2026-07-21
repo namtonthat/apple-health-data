@@ -31,9 +31,21 @@ N = len(HEADER)
 
 
 def ex_row(movement: str, sets_reps: str = "3x5") -> list[str]:
+    """An anchor row: MOVEMENT + SETSxREPS both filled."""
     row = [""] * N
     row[2], row[3] = movement, sets_reps
     row[7] = row[11] = "RATE"  # unfilled ACTUAL placeholder
+    return row
+
+
+def cont_row(target_wk1: str = "", note: str = "") -> list[str]:
+    """A continuation row: no SETSxREPS. Optionally a lowercase coach note in
+    the MOVEMENT column, and/or a week-1 TARGET value."""
+    row = [""] * N
+    if note:
+        row[2] = note
+    row[4] = target_wk1
+    row[7] = row[11] = "RATE"
     return row
 
 
@@ -66,6 +78,7 @@ def s(
 EXERCISE_MAP = {
     "COMP BENCH": "Bench Press (Barbell)",
     "LOW BAR SQUAT": "Squat (Barbell)",
+    "HIGH BAR SQUAT": "Squat (Barbell)",
 }
 
 
@@ -167,3 +180,56 @@ def test_invalid_set_workout_skipped_not_shifted():
     assert values[(5, 6)] == "160"
     # First occurrence should be in notes as having no loggable sets
     assert any("no loggable sets" in note for note in result.notes)
+
+
+def test_block15_style_per_set_rows():
+    """Anchor 'HIGH BAR SQUAT' 3x5 followed by 2 continuation rows with
+    real week-1 targets ('RIR 4+') and 2 unused continuation rows ('-'
+    targets). Three logged sets of differing weight/set_number should land
+    set 1 on the anchor row and sets 2-3 on the two active continuation
+    rows; the '-' rows must stay untouched."""
+    grid = [
+        ["", "", "BLOCK", "ESS"] + [""] * (N - 4),
+        HEADER[:],
+        ex_row("HIGH BAR SQUAT", "3x5"),  # anchor, row 2
+        cont_row(target_wk1="RIR 4+"),  # active continuation, row 3
+        cont_row(target_wk1="RIR 4+"),  # active continuation, row 4
+        cont_row(target_wk1="-"),  # unused, row 5
+        cont_row(target_wk1="-"),  # unused, row 6
+        ["", "", "NOTES:", ""] + [""] * (N - 4),
+    ]
+    sets = [
+        s(0, "Squat (Barbell)", 1, 100.0, 5, 7.0),
+        s(0, "Squat (Barbell)", 2, 105.0, 5, 7.5),
+        s(0, "Squat (Barbell)", 3, 110.0, 5, 8.0),
+    ]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 0, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(2, 6)] == "100"  # set 1 -> anchor row LOAD (week-1 group)
+    assert values[(3, 6)] == "105"  # set 2 -> first active continuation row
+    assert values[(4, 6)] == "110"  # set 3 -> second active continuation row
+    assert all(w.row not in (5, 6) for w in result.writes)  # '-' rows untouched
+
+
+def test_lowercase_note_continuation_row_is_active_not_unmapped():
+    """A lowercase coach note ('touch and go') with no SETSxREPS but a real
+    target value is a continuation row of the anchor above: it should be
+    treated as active (and thus eligible to receive a set) and must never
+    show up in `unmapped`."""
+    grid = [
+        ["", "", "BLOCK", "ESS"] + [""] * (N - 4),
+        HEADER[:],
+        ex_row("HIGH BAR SQUAT", "3x5"),  # anchor, row 2
+        cont_row(target_wk1="RIR 4+", note="touch and go"),  # active, row 3
+        ["", "", "NOTES:", ""] + [""] * (N - 4),
+    ]
+    sets = [
+        s(0, "Squat (Barbell)", 1, 100.0, 5, 7.0),
+        s(0, "Squat (Barbell)", 2, 105.0, 5, 7.5),
+    ]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 0, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(2, 6)] == "100"
+    assert values[(3, 6)] == "105"
+    assert "touch and go" not in result.unmapped
+    assert not any("touch and go" in u for u in result.unmapped)
