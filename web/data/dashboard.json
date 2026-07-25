@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-24T14:46:11+00:00",
-  "last_data_date": "2026-07-23",
-  "today": "2026-07-25",
+  "generated_at": "2026-07-25T14:29:12+00:00",
+  "last_data_date": "2026-07-25",
+  "today": "2026-07-26",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,32 +35,10 @@
     "fat_g": 53,
     "water_ml": 90,
     "logged_calories": 2367,
-    "total_volume_kg": 6360,
+    "total_volume_kg": 60,
     "readiness_score": 70
   },
   "daily": [
-    {
-      "date": "2026-03-26",
-      "sleep_hours": 6.6,
-      "sleep_deep_hours": 1,
-      "sleep_rem_hours": 1.5,
-      "sleep_light_hours": 4.1,
-      "hrv_ms": 54.66,
-      "resting_hr_bpm": 54,
-      "vo2_max": 45.36,
-      "weight_kg": 70.88,
-      "bmi": 23.68,
-      "steps": 11359,
-      "protein_g": 106,
-      "carbs_g": 373,
-      "fat_g": 48,
-      "fiber_g": 28,
-      "water_ml": 977,
-      "logged_calories": 2314,
-      "calculated_calories": 2403,
-      "workouts": 0,
-      "total_volume_kg": null
-    },
     {
       "date": "2026-03-27",
       "sleep_hours": 7.3,
@@ -2656,21 +2634,31 @@
       "calculated_calories": 0,
       "workouts": 1,
       "total_volume_kg": 6360
+    },
+    {
+      "date": "2026-07-25",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 60
     }
   ],
   "readiness": [
-    {
-      "date": "2026-03-26",
-      "readiness_score": 62,
-      "hrv_score": 14,
-      "rhr_score": 9,
-      "sleep_score": 24,
-      "deep_score": 15,
-      "hrv_ms": 54.66,
-      "resting_hr_bpm": 54,
-      "sleep_hours": 6.6,
-      "deep_sleep_ratio": 0.15
-    },
     {
       "date": "2026-03-27",
       "readiness_score": 63,
@@ -4066,13 +4054,6 @@
   ],
   "weight": [
     {
-      "date": "2026-01-25",
-      "weight_kg": 71.18,
-      "avg_7d": 70.76,
-      "avg_30d": 70.6,
-      "avg_60d": 70.8
-    },
-    {
       "date": "2026-01-26",
       "weight_kg": 71.21,
       "avg_7d": 70.97,
@@ -5027,6 +5008,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-07-25",
+      "workout_name": "Calisthenics A - Push & Handstand",
+      "day_name": "Saturday",
+      "workout_duration_minutes": 43,
+      "unique_exercises": 5,
+      "total_sets": 12,
+      "working_sets": 8,
+      "total_reps": 101,
+      "total_volume_kg": 60,
+      "max_weight_kg": 10,
+      "avg_rpe": 8
+    },
+    {
       "workout_date": "2026-07-23",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
       "day_name": "Thursday",
@@ -5323,19 +5317,6 @@
       "total_reps": 145,
       "total_volume_kg": 7290,
       "max_weight_kg": 102.5,
-      "avg_rpe": null
-    },
-    {
-      "workout_date": "2026-05-25",
-      "workout_name": "PL - Bench",
-      "day_name": "Monday",
-      "workout_duration_minutes": 47,
-      "unique_exercises": 5,
-      "total_sets": 17,
-      "working_sets": 13,
-      "total_reps": 166,
-      "total_volume_kg": 6923,
-      "max_weight_kg": 87.5,
       "avg_rpe": null
     }
   ],
