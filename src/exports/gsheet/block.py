@@ -9,9 +9,24 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
-from exports.gsheet.model import CellWrite, SetRow, fmt_num, is_blank
+from exports.gsheet.model import CellWrite, SetRow, fmt_num, is_blank, rir_band, rpe_band
 
 GROUP_HEADERS = ("TARGET", "REPS", "LOAD", "ACTUAL")
+
+# Hevy exercise names rated as RPE in the ACTUAL column; everything else is an
+# accessory and rated as RIR. Exact names so e.g. "Bulgarian Split Squat
+# (Dumbbell)" and "Romanian Deadlift (Barbell)" stay accessories.
+MAIN_LIFTS = frozenset(
+    {
+        "Squat (Barbell)",
+        "Bench Press (Barbell)",
+        "Deadlift (Barbell)",
+        "Sumo Deadlift",
+        "Overhead Press (Barbell)",
+        "Bench Press - Close Grip (Barbell)",
+        "3 Count Spoto Bench Press (Barbell)",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -149,7 +164,8 @@ def _write_set(
     _maybe_write(result, grid, row, group.reps_col, str(int(s.reps)))
     _maybe_write(result, grid, row, group.load_col, fmt_num(s.weight_kg))
     if s.rpe is not None:
-        _maybe_write(result, grid, row, group.actual_col, f"RPE {fmt_num(s.rpe)}")
+        band = rpe_band(s.rpe) if s.exercise_name in MAIN_LIFTS else rir_band(s.rpe)
+        _maybe_write(result, grid, row, group.actual_col, band)
 
 
 def resolve_block_writes(

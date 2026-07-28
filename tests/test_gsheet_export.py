@@ -77,11 +77,11 @@ def test_plan_writes_covers_both_previous_and_current_week():
     # Previous week -> week-1 group (cols 3,4,5)
     assert values[(1, 3)] == "8"
     assert values[(1, 4)] == "80"
-    assert values[(1, 5)] == "RPE 7.5"
+    assert values[(1, 5)] == "RPE 7-8"
     # Current week -> week-2 group (cols 7,8,9)
     assert values[(1, 7)] == "8"
     assert values[(1, 8)] == "85"
-    assert values[(1, 9)] == "RPE 8"
+    assert values[(1, 9)] == "RPE 7-8"
 
     assert any("week 1, w/c 2026-07-13" in line for line in plan.summary_lines)
     assert any("week 2, w/c 2026-07-20" in line for line in plan.summary_lines)

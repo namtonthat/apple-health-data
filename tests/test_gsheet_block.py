@@ -79,6 +79,7 @@ EXERCISE_MAP = {
     "COMP BENCH": "Bench Press (Barbell)",
     "LOW BAR SQUAT": "Squat (Barbell)",
     "HIGH BAR SQUAT": "Squat (Barbell)",
+    "LEG CURL MACHINE": "Seated Leg Curl (Machine)",
 }
 
 
@@ -99,7 +100,7 @@ def test_writes_top_set_into_selected_week_group():
     values = {(w.row, w.col): w.value for w in result.writes}
     assert values[(2, 9)] == "8"  # REPS in week-2 group
     assert values[(2, 10)] == "82.5"  # LOAD
-    assert values[(2, 11)] == "RPE 7.5"  # ACTUAL (RATE treated as blank)
+    assert values[(2, 11)] == "RPE 7-8"  # ACTUAL: main lift -> RPE band (RATE treated as blank)
 
 
 def test_second_occurrence_uses_second_workout():
@@ -128,6 +129,15 @@ def test_filled_cells_are_skipped():
     result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
     assert (2, 9) not in {(w.row, w.col) for w in result.writes}
     assert result.skipped >= 1
+
+
+def test_accessory_writes_rir_band():
+    grid = make_grid()
+    grid[2][2] = "LEG CURL MACHINE"
+    sets = [s(0, "Seated Leg Curl (Machine)", 1, 43.0, 8, 7.0)]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(2, 11)] == "RIR 3-4"  # ACTUAL: accessory -> RIR band
 
 
 def test_no_rpe_leaves_actual_untouched():
