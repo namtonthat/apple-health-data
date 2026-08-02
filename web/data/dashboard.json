@@ -1,10 +1,6 @@
 {
-<<<<<<< Updated upstream
-  "generated_at": "2026-08-01T23:57:39+00:00",
-=======
-  "generated_at": "2026-08-02T00:01:14+00:00",
->>>>>>> Stashed changes
-  "last_data_date": "2026-08-01",
+  "generated_at": "2026-08-02T08:09:33+00:00",
+  "last_data_date": "2026-08-02",
   "today": "2026-08-02",
   "user_name": "Nam Tonthat",
   "goals": {
@@ -33,13 +29,13 @@
     "vo2_max": 43.66,
     "weight_kg": 70.61,
     "bmi": 23.59,
-    "steps": 14769,
+    "steps": 14846.22,
     "protein_g": 127,
     "carbs_g": 303,
     "fat_g": 53,
     "water_ml": 131,
     "logged_calories": 2383,
-    "total_volume_kg": 7113,
+    "total_volume_kg": 5437,
     "readiness_score": 66
   },
   "daily": [
@@ -2672,16 +2668,38 @@
       "vo2_max": null,
       "weight_kg": 70.61,
       "bmi": 23.59,
-      "steps": 14769,
+      "steps": 14846.22,
       "protein_g": null,
       "carbs_g": null,
       "fat_g": null,
       "fiber_g": null,
       "water_ml": null,
       "logged_calories": null,
-      "calculated_calories": 2565,
+      "calculated_calories": 2585,
       "workouts": 1,
       "total_volume_kg": 7113
+    },
+    {
+      "date": "2026-08-02",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 5437
     }
   ],
   "readiness": [
@@ -5075,6 +5093,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-08-02",
+      "workout_name": "Block 15 - Day 4 Upper Hypertrophy",
+      "day_name": "Sunday",
+      "workout_duration_minutes": 51,
+      "unique_exercises": 6,
+      "total_sets": 20,
+      "working_sets": 18,
+      "total_reps": 171,
+      "total_volume_kg": 5437,
+      "max_weight_kg": 65.5,
+      "avg_rpe": 7.7
+    },
+    {
       "workout_date": "2026-08-01",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
       "day_name": "Saturday",
@@ -5372,19 +5403,6 @@
       "total_volume_kg": 10204,
       "max_weight_kg": 150,
       "avg_rpe": 8.5
-    },
-    {
-      "workout_date": "2026-06-08",
-      "workout_name": "PL - Bench",
-      "day_name": "Monday",
-      "workout_duration_minutes": 8,
-      "unique_exercises": 5,
-      "total_sets": 18,
-      "working_sets": 14,
-      "total_reps": 169,
-      "total_volume_kg": 7153,
-      "max_weight_kg": 90,
-      "avg_rpe": 8
     }
   ],
   "e1rm": [
