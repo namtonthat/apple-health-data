@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generated_at": "2026-08-01T23:57:39+00:00",
+=======
+  "generated_at": "2026-08-02T00:01:14+00:00",
+>>>>>>> Stashed changes
   "last_data_date": "2026-08-01",
   "today": "2026-08-02",
   "user_name": "Nam Tonthat",
@@ -39,28 +43,6 @@
     "readiness_score": 66
   },
   "daily": [
-    {
-      "date": "2026-04-03",
-      "sleep_hours": 8.5,
-      "sleep_deep_hours": 0.9,
-      "sleep_rem_hours": 1.8,
-      "sleep_light_hours": 5.8,
-      "hrv_ms": 59.72,
-      "resting_hr_bpm": 52,
-      "vo2_max": null,
-      "weight_kg": 71.01,
-      "bmi": 23.73,
-      "steps": 12566.06,
-      "protein_g": 139,
-      "carbs_g": 256,
-      "fat_g": 61,
-      "fiber_g": 23,
-      "water_ml": 398,
-      "logged_calories": 2308,
-      "calculated_calories": 2668,
-      "workouts": 1,
-      "total_volume_kg": 7796
-    },
     {
       "date": "2026-04-04",
       "sleep_hours": 8.4,
@@ -2703,18 +2685,6 @@
     }
   ],
   "readiness": [
-    {
-      "date": "2026-04-03",
-      "readiness_score": 71,
-      "hrv_score": 21,
-      "rhr_score": 14,
-      "sleep_score": 25,
-      "deep_score": 11,
-      "hrv_ms": 59.72,
-      "resting_hr_bpm": 52,
-      "sleep_hours": 8.5,
-      "deep_sleep_ratio": 0.11
-    },
     {
       "date": "2026-04-04",
       "readiness_score": 76,
