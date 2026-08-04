@@ -93,7 +93,7 @@ carbs_g = 300.0
 fat_g = 60.0
 ```
 
-### Secrets (`.env` / Streamlit Cloud)
+### Secrets (`.env`)
 
 For local development, create a `.env` file:
 
@@ -107,13 +107,6 @@ HEVY_API_KEY=your-hevy-key
 STRAVA_CLIENT_ID=your-client-id
 STRAVA_CLIENT_SECRET=your-client-secret
 STRAVA_REFRESH_TOKEN=your-refresh-token
-```
-
-For Streamlit Cloud deployment, generate and copy secrets:
-
-```bash
-python scripts/generate_streamlit_secrets.py
-# Then copy .streamlit/secrets.toml contents to Streamlit Cloud settings
 ```
 
 ## Data Sources
@@ -144,16 +137,16 @@ Daily events show:
 
 ## Deployment
 
-### Streamlit Cloud
+### Self-hosted dashboard (health.tonthat.casa)
 
-Deploy the dashboard to Streamlit Cloud:
+The Streamlit dashboard is self-hosted on the home server. GitHub Actions
+builds `ghcr.io/namtonthat/apple-health-data-dashboard` when dashboard code or
+dependencies change (`.github/workflows/build-dashboard-image.yml`); the
+server auto-pulls new images hourly via watchtower. Data freshness needs no
+redeploys — the app queries S3 parquet at request time.
 
-1. Fork/push this repo to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io) and connect your repo
-3. Set the main file path to `src/dashboard/Home.py`
-4. Add secrets (Settings → Secrets) - generate with `python scripts/generate_streamlit_secrets.py`
-
-See [Streamlit Cloud documentation](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app) for detailed instructions.
+Runtime setup (compose file, tunnel, runbook) lives in the `home-server` repo
+under `macmini/health-dashboard/`.
 
 ### CI/CD
 
