@@ -1,0 +1,16 @@
+.git
+.venv
+.env
+__pycache__
+**/__pycache__
+node_modules
+web/
+docs/
+logs/
+ralph/
+tests/
+infra/
+dbt_project/target/
+dbt_project/dbt_packages/
+.github/
+.streamlit/
