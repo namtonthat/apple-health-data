@@ -1,0 +1,59 @@
+name: Build dashboard image
+
+# Builds the self-hosted Streamlit dashboard image. Triggers are deliberately
+# code/deps-only — daily data commits (last_updated.txt, web/data) must NOT
+# rebuild the image; the app reads fresh data from S3 at query time.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/dashboard/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/build-dashboard-image.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: dashboard-image
+  cancel-in-progress: true
+
+env:
+  IMAGE: ghcr.io/namtonthat/apple-health-data-dashboard
+
+jobs:
+  build:
+    # Native arm64 (free for public repos) — matches the Apple Silicon mac mini.
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: docker build -t "$IMAGE:latest" -t "$IMAGE:${{ github.sha }}" .
+
+      - name: Smoke test
+        run: |
+          docker run -d --name smoke -p 8501:8501 "$IMAGE:latest"
+          ok=0
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8501/_stcore/health > /dev/null; then ok=1; break; fi
+            sleep 2
+          done
+          docker logs smoke
+          [ "$ok" = "1" ]
+
+      - name: Push
+        run: |
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:${{ github.sha }}"
