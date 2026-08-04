@@ -17,19 +17,32 @@ permissions:
   contents: write  # push refreshed dashboard.json to main
   actions: write   # dispatch deploy-web.yml after a data commit
 
+# Workflow-level (not job-level) so runs don't overlap but the ingest and
+# transform jobs within a single run can execute in parallel.
+concurrency:
+  group: refresh-data-main
+  cancel-in-progress: false
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
+  STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+  STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+  STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+
 jobs:
-  refresh-data:
+  # Each source ingests in its own parallel job. The transform job below runs
+  # concurrently and does NOT wait for these — it transforms whatever is
+  # already in the landing tables, so freshly ingested data appears in the
+  # dashboard on the next run.
+  ingest:
     runs-on: ubuntu-latest
-    concurrency:
-      group: refresh-data-main
-      cancel-in-progress: false
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
-      STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-      STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-      STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [apple-health, hevy, strava, openpowerlifting]
 
     steps:
       - name: Checkout repository
@@ -47,7 +60,6 @@ jobs:
         run: uv sync
 
       - name: Load config from pyproject.toml
-        id: config
         run: |
           # Extract non-sensitive config from pyproject.toml
           S3_BUCKET=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['s3_bucket_name'])")
@@ -58,24 +70,50 @@ jobs:
           echo "AWS_DEFAULT_REGION=$AWS_REGION" >> $GITHUB_ENV
           echo "OPENPOWERLIFTING_URL=$OPL_URL" >> $GITHUB_ENV
 
-          echo "Loaded config:"
-          echo "  S3_BUCKET_NAME=$S3_BUCKET"
-          echo "  AWS_DEFAULT_REGION=$AWS_REGION"
-          echo "  OPENPOWERLIFTING_URL=$OPL_URL"
-
-      - name: Ingest sources
+      - name: Ingest ${{ matrix.source }}
         run: |
-          SOURCES="apple-health"
-          [ -n "$HEVY_API_KEY" ] && SOURCES="$SOURCES hevy"
-          [ -n "$STRAVA_CLIENT_ID" ] && SOURCES="$SOURCES strava"
-          [ -n "$OPENPOWERLIFTING_URL" ] && SOURCES="$SOURCES openpowerlifting"
+          # Skip optional sources whose credentials/config aren't set.
+          case "${{ matrix.source }}" in
+            hevy)
+              [ -z "$HEVY_API_KEY" ] && { echo "HEVY_API_KEY not set; skipping."; exit 0; } ;;
+            strava)
+              [ -z "$STRAVA_CLIENT_ID" ] && { echo "Strava credentials not set; skipping."; exit 0; } ;;
+            openpowerlifting)
+              [ -z "$OPENPOWERLIFTING_URL" ] && { echo "OPENPOWERLIFTING_URL not set; skipping."; exit 0; } ;;
+          esac
           # Scheduled runs are incremental (latest export only). A manual
           # full_refresh reprocesses every Apple Health export file to backfill
           # history; --all-files is a no-op for the other sources.
           FLAGS=""
           [ "${{ inputs.full_refresh }}" = "true" ] && FLAGS="--all-files"
-          uv run python run.py ingest $SOURCES $FLAGS
-        continue-on-error: true
+          uv run python run.py ingest ${{ matrix.source }} $FLAGS
+
+  transform-export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Load config from pyproject.toml
+        run: |
+          # Extract non-sensitive config from pyproject.toml
+          S3_BUCKET=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['s3_bucket_name'])")
+          AWS_REGION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['dashboard']['aws_region'])")
+
+          echo "S3_BUCKET_NAME=$S3_BUCKET" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=$AWS_REGION" >> $GITHUB_ENV
 
       - name: Transform
         run: uv run python run.py transform
