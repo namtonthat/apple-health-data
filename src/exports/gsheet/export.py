@@ -53,7 +53,8 @@ def plan_writes(
         plan.block_writes.extend(block.writes)
         plan.summary_lines.append(
             f"block tab (week {week_index + 1}, w/c {monday.isoformat()}): "
-            f"{len(block.writes)} cells written, {block.skipped} already filled"
+            f"{len(block.writes)} cells written ({block.replaced} replaced), "
+            f"{block.skipped} already correct"
         )
         for name in block.unmapped:
             unmapped.setdefault(name)

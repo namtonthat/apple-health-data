@@ -40,7 +40,8 @@ class WeekGroup:
 @dataclass
 class BlockResult:
     writes: list[CellWrite] = field(default_factory=list)
-    skipped: int = 0
+    skipped: int = 0  # cells already holding the Hevy-derived value
+    replaced: int = 0  # filled cells overwritten because Hevy differed
     unmapped: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -152,8 +153,13 @@ def _workouts_for(sets: list[SetRow], exercise: str) -> list[list[SetRow]]:
 def _maybe_write(
     result: BlockResult, grid: list[list[str]], row: int, col: int, value: str
 ) -> None:
-    if is_blank(_cell(grid, row, col)):
+    """Write when blank, replace when Hevy differs, skip when already correct."""
+    current = _cell(grid, row, col)
+    if is_blank(current):
         result.writes.append(CellWrite(row=row, col=col, value=value))
+    elif current.strip() != value:
+        result.writes.append(CellWrite(row=row, col=col, value=value))
+        result.replaced += 1
     else:
         result.skipped += 1
 

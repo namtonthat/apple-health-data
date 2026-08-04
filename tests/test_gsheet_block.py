@@ -122,13 +122,44 @@ def test_unmapped_movement_reported_not_written():
     assert all(w.row != 2 for w in result.writes)
 
 
-def test_filled_cells_are_skipped():
+def test_cells_matching_hevy_are_skipped():
     grid = make_grid()
-    grid[2][9] = "8"  # REPS already filled
+    grid[2][9] = "8"  # REPS already filled with the value Hevy recorded
     sets = [s(0, "Bench Press (Barbell)", 1, 80.0, 8, None)]
     result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
     assert (2, 9) not in {(w.row, w.col) for w in result.writes}
     assert result.skipped >= 1
+    assert result.replaced == 0
+
+
+def test_cells_differing_from_hevy_are_replaced():
+    grid = make_grid()
+    grid[2][9] = "10"  # planned REPS
+    grid[2][10] = "77.5"  # planned LOAD
+    grid[2][11] = "RPE 8-9"  # stale rating
+    sets = [s(0, "Bench Press (Barbell)", 1, 80.0, 8, 7.0)]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(2, 9)] == "8"
+    assert values[(2, 10)] == "80"
+    assert values[(2, 11)] == "RPE 6-7"
+    assert result.replaced == 3
+
+
+def test_rows_without_hevy_sets_stay_untouched():
+    grid = make_grid()
+    grid[3][10] = "150"  # planned LOAD for a squat not yet performed
+    sets = [s(0, "Bench Press (Barbell)", 1, 80.0, 8, None)]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
+    assert all(w.row != 3 for w in result.writes)
+
+
+def test_manual_actual_band_survives_set_without_rpe():
+    grid = make_grid()
+    grid[2][11] = "RIR 2-3"  # manually rated
+    sets = [s(0, "Bench Press (Barbell)", 1, 80.0, 8, None)]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 1, sets)
+    assert (2, 11) not in {(w.row, w.col) for w in result.writes}
 
 
 def test_accessory_writes_rir_band():
