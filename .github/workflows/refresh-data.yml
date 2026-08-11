@@ -32,10 +32,9 @@ env:
   STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
 
 jobs:
-  # Each source ingests in its own parallel job. The transform job below runs
-  # concurrently and does NOT wait for these — it transforms whatever is
-  # already in the landing tables, so freshly ingested data appears in the
-  # dashboard on the next run.
+  # Each source ingests in its own parallel job. The transform job below
+  # waits for all of them: delta_scan reading a landing table mid-overwrite
+  # returns corrupt results (2026-08-10 run wrote a null-row fct_workout_sets).
   ingest:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -89,6 +88,9 @@ jobs:
           uv run python run.py ingest ${{ matrix.source }} $FLAGS
 
   transform-export:
+    # continue-on-error above means a failed source still lets this run —
+    # it transforms whatever landed.
+    needs: ingest
     runs-on: ubuntu-latest
 
     steps:
