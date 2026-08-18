@@ -28,6 +28,10 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/pipelines", "src/dashboard", "src/exports"]
 
+[tool.uv]
+# dbt-core caps sqlparse <0.6 conservatively; 0.6.0 fixes 4 CVEs. Drop once dbt allows >=0.6.
+override-dependencies = ["sqlparse>=0.6.0"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
