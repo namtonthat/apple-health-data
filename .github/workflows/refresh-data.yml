@@ -143,7 +143,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git pull --rebase --autostash origin main
+          # Generated files are full snapshots — ours always wins, so keep
+          # them out of the pull entirely. --autostash re-merges them and can
+          # commit conflict markers: it exits 0 even when the stash conflicts.
+          mv web/data/dashboard.json /tmp/dashboard.json
+          mv last_updated.txt /tmp/last_updated.txt
+          git checkout -- web/data/dashboard.json last_updated.txt
+          git pull --rebase origin main
+          mv /tmp/dashboard.json web/data/dashboard.json
+          mv /tmp/last_updated.txt last_updated.txt
+
+          python -c "import json; json.load(open('web/data/dashboard.json'))"
 
           git add last_updated.txt web/data/dashboard.json
           if git diff --staged --quiet; then
