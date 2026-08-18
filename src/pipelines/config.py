@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from functools import lru_cache
 from zoneinfo import ZoneInfo
 
 import dlt
@@ -20,13 +21,31 @@ def get_region() -> str:
     return os.environ.get("AWS_DEFAULT_REGION", "ap-southeast-2")
 
 
+@lru_cache(maxsize=1)
+def _default_s3_client() -> s3fs.S3FileSystem:
+    """The plain (no extra kwargs) S3 client, memoized — fresh S3FileSystem per
+    call was measurable overhead given how often pipelines reach for one."""
+    return s3fs.S3FileSystem(
+        key=os.environ["AWS_ACCESS_KEY_ID"],
+        secret=os.environ["AWS_SECRET_ACCESS_KEY"],
+        client_kwargs={"region_name": get_region()},
+    )
+
+
 def get_s3_client(**s3_kwargs) -> s3fs.S3FileSystem:
     """Create S3 filesystem client.
+
+    The common no-kwargs call is memoized (see `_default_s3_client`). Calls with
+    extra kwargs (e.g. `s3_additional_kwargs={"ACL": "public-read"}`) bypass the
+    cache and always build a fresh client, since those kwargs can be unhashable.
 
     Args:
         **s3_kwargs: Extra kwargs passed to S3FileSystem
                      (e.g. s3_additional_kwargs={"ACL": "public-read"})
     """
+    if not s3_kwargs:
+        return _default_s3_client()
+
     return s3fs.S3FileSystem(
         key=os.environ["AWS_ACCESS_KEY_ID"],
         secret=os.environ["AWS_SECRET_ACCESS_KEY"],
@@ -35,12 +54,20 @@ def get_s3_client(**s3_kwargs) -> s3fs.S3FileSystem:
     )
 
 
+@lru_cache(maxsize=1)
 def get_duckdb_connection() -> duckdb.DuckDBPyConnection:
-    """Get DuckDB connection configured for S3 and Delta access."""
+    """Get DuckDB connection configured for S3 and Delta access.
+
+    Memoized: repeated calls return the same connection instead of opening a new
+    in-memory DuckDB + re-installing the delta extension each time.
+    """
     conn = duckdb.connect(":memory:")
     conn.execute("INSTALL delta; LOAD delta;")
+    # OR REPLACE keeps this idempotent — a second call (e.g. from a cache miss
+    # after a fork, or before this function was memoized) must not error on an
+    # already-named secret.
     conn.execute(f"""
-        CREATE SECRET (
+        CREATE OR REPLACE SECRET s3_secret (
             TYPE s3,
             KEY_ID '{os.environ["AWS_ACCESS_KEY_ID"]}',
             SECRET '{os.environ["AWS_SECRET_ACCESS_KEY"]}',
@@ -69,7 +96,9 @@ def run_s3_pipeline(name: str, dataset: str, source, extraction_date: str | None
         name: Pipeline name (e.g. "hevy_to_landing")
         dataset: Dataset name / S3 prefix under landing/ (e.g. "hevy")
         source: dlt source to extract from
-        extraction_date: Date string (YYYY-MM-DD), defaults to today
+        extraction_date: Cosmetic label for this load (YYYY-MM-DD), defaults to
+            today. It is only printed in the run summary — it does not filter,
+            window, or otherwise affect which source data gets extracted.
     """
     if extraction_date is None:
         extraction_date = datetime.now(ZoneInfo("Australia/Melbourne")).date().isoformat()

@@ -11,7 +11,7 @@ Usage:
     uv run python run.py export                   # ICS calendar
     uv run python run.py all                      # Full pipeline
     uv run python run.py dashboard                # Start Streamlit
-    uv run python run.py ingest --date 2026-01-15 # With extraction date
+    uv run python run.py ingest --date 2026-01-15 # With load label (cosmetic; doesn't filter data)
 """
 
 import argparse
@@ -111,6 +111,24 @@ def run_ingest(
     return failures
 
 
+def _write_failure_summary(failures: list[str]) -> None:
+    """Append a markdown failure list to GITHUB_STEP_SUMMARY, if set.
+
+    CI's `continue-on-error: true` on the ingest job (see refresh-data.yml) lets
+    transform run even when a source fails, but that also means a persistently
+    failing source (e.g. an expired Strava token) can fail silently every day.
+    This surfaces it in the job summary so it's visible without digging through logs.
+    """
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+
+    lines = ["## Ingest Failures", ""]
+    lines.extend(f"- {source}" for source in failures)
+    with open(summary_path, "a") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 def run_transform() -> None:
     """Run dbt transformations."""
     load_env()
@@ -169,6 +187,7 @@ def run_all(date: str | None) -> None:
     print("\n[1/3 Ingest]")
     ingest_failures = run_ingest(INGEST_SOURCES, date, strict=False)
     if ingest_failures:
+        _write_failure_summary(ingest_failures)
         raise RuntimeError(f"Ingest failed for: {', '.join(ingest_failures)}")
 
     print("\n[2/3 Transform]")
@@ -214,7 +233,11 @@ examples:
         default=INGEST_SOURCES,
         help=f"Sources to ingest (default: all). Choices: {', '.join(INGEST_SOURCES)}",
     )
-    p_ingest.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
+    p_ingest.add_argument(
+        "--date",
+        help="Label for this load (YYYY-MM-DD); cosmetic only, does not filter source data",
+        default=None,
+    )
     p_ingest.add_argument(
         "--all-files",
         action="store_true",
@@ -230,7 +253,11 @@ examples:
 
     # all
     p_all = sub.add_parser("all", help="Run full pipeline end-to-end")
-    p_all.add_argument("--date", help="Extraction date (YYYY-MM-DD)", default=None)
+    p_all.add_argument(
+        "--date",
+        help="Label for this load (YYYY-MM-DD); cosmetic only, does not filter source data",
+        default=None,
+    )
 
     # export-web
     sub.add_parser("export-web", help="Export JSON snapshot for the static web dashboard")
@@ -254,6 +281,7 @@ examples:
         case "ingest":
             failures = run_ingest(args.sources, args.date, all_files=args.all_files)
             if failures:
+                _write_failure_summary(failures)
                 raise SystemExit(1)
         case "transform":
             run_transform()

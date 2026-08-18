@@ -20,6 +20,60 @@ from pipelines.config import get_bucket, get_s3_client
 # real latest export unless filtered out here.
 _EXPORT_FILENAME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T")
 
+# Only metric_name values actually consumed by dbt_project/models/intermediate/int_health__*.sql.
+# Keep in sync with those models — anything not listed here is dropped during parsing so a
+# noisy Apple Health export doesn't balloon the landing table with metrics nothing reads.
+ALLOWED_METRIC_NAMES = frozenset(
+    {
+        "active_energy",
+        "apple_exercise_time",
+        "apple_stand_hour",
+        "apple_stand_time",
+        "basal_energy_burned",
+        "blood_oxygen_saturation",
+        "body_mass_index",
+        "calcium",
+        "carbohydrates",
+        "cholesterol",
+        "dietary_energy",
+        "dietary_sugar",
+        "dietary_water",
+        "fiber",
+        "flights_climbed",
+        "heart_rate_variability",
+        "iron",
+        "magnesium",
+        "mindful_minutes",
+        "monounsaturated_fat",
+        "polyunsaturated_fat",
+        "potassium",
+        "protein",
+        "respiratory_rate",
+        "resting_heart_rate",
+        "saturated_fat",
+        "sleep_analysis",
+        "sodium",
+        "stair_speed_down",
+        "stair_speed_up",
+        "step_count",
+        "time_in_daylight",
+        "total_fat",
+        "vitamin_a",
+        "vitamin_b12",
+        "vitamin_c",
+        "vitamin_d",
+        "vo2_max",
+        "walking_asymmetry_percentage",
+        "walking_double_support_percentage",
+        "walking_heart_rate_average",
+        "walking_running_distance",
+        "walking_speed",
+        "walking_step_length",
+        "weight_body_mass",
+        "zinc",
+    }
+)
+
 
 def _parse_health_date(date_str: str) -> str:
     """Parse Apple Health date format to ISO date."""
@@ -117,13 +171,14 @@ def health_metrics_resource(
     # iterating in order and letting later files overwrite earlier ones means the
     # most recent export wins — matching the dedup intent of stg_health__metrics.
     deduped: dict[tuple[str, str, str], dict] = {}
+    skipped_points = 0
 
     for file_path in files:
         file_timestamp = _extract_file_timestamp(file_path)
 
         try:
             data = _read_health_file(s3, file_path)
-        except Exception as e:
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError) as e:
             print(f"Error reading {file_path}: {e}")
             continue
 
@@ -132,6 +187,9 @@ def health_metrics_resource(
 
         for metric in metrics:
             metric_name = metric.get("name")
+            if metric_name not in ALLOWED_METRIC_NAMES:
+                continue
+
             units = metric.get("units")
             data_points = metric.get("data", [])
 
@@ -143,7 +201,11 @@ def health_metrics_resource(
 
                 metric_date = _parse_health_date(raw_date)
                 raw_value = point.get("qty")
-                value = float(raw_value) if raw_value is not None else None
+                try:
+                    value = float(raw_value) if raw_value is not None else None
+                except (TypeError, ValueError):
+                    skipped_points += 1
+                    continue
                 source = point.get("source", "Unknown")
 
                 # Handle sleep data which has additional fields
@@ -161,6 +223,9 @@ def health_metrics_resource(
                     "file_timestamp": file_timestamp,
                     **extra_data,
                 }
+
+    if skipped_points:
+        print(f"Skipped {skipped_points} datapoint(s) with a non-numeric qty")
 
     yield from deduped.values()
 

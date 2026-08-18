@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from typing import Iterator
 
 import dlt
-import requests
+from dlt.sources.helpers import requests
 
 STRAVA_API_BASE = "https://www.strava.com/api/v3"
 
@@ -37,7 +37,18 @@ def get_access_token() -> str:
         timeout=30,
     )
     response.raise_for_status()
-    return response.json()["access_token"]
+    token_data = response.json()
+
+    # Strava can rotate the refresh token on use; if we keep using the stale
+    # one from env, every future run fails until someone re-runs the auth flow.
+    new_refresh_token = token_data.get("refresh_token")
+    if new_refresh_token and new_refresh_token != refresh_token:
+        print(
+            "WARNING: Strava returned a new refresh_token. "
+            "STRAVA_REFRESH_TOKEN is stale and must be rotated (update the secret)."
+        )
+
+    return token_data["access_token"]
 
 
 def fetch_activities(access_token: str, per_page: int = 100) -> Iterator[dict]:

@@ -92,13 +92,8 @@ def parse_openpowerlifting_page(url: str) -> dict:
 
 
 @dlt.resource(name="personal_bests", write_disposition="replace")
-def get_personal_bests():
-    """Get personal bests from OpenPowerlifting."""
-    if not OPENPOWERLIFTING_URL:
-        return
-
-    data = parse_openpowerlifting_page(OPENPOWERLIFTING_URL)
-
+def get_personal_bests(data: dict):
+    """Get personal bests from a pre-fetched OpenPowerlifting page parse."""
     yield {
         "athlete_name": data["athlete_name"],
         "profile_url": data["profile_url"],
@@ -111,13 +106,8 @@ def get_personal_bests():
 
 
 @dlt.resource(name="competitions", write_disposition="replace")
-def get_competitions():
-    """Get all competition results from OpenPowerlifting."""
-    if not OPENPOWERLIFTING_URL:
-        return
-
-    data = parse_openpowerlifting_page(OPENPOWERLIFTING_URL)
-
+def get_competitions(data: dict):
+    """Get all competition results from a pre-fetched OpenPowerlifting page parse."""
     for comp in data["competitions"]:
         comp["athlete_name"] = data["athlete_name"]
         yield comp
@@ -125,7 +115,15 @@ def get_competitions():
 
 def run_pipeline():
     """Run the OpenPowerlifting pipeline."""
+    if not OPENPOWERLIFTING_URL:
+        print("OPENPOWERLIFTING_URL not set; skipping.")
+        return None
+
     bucket = get_bucket()
+
+    # Fetch and parse the profile page once; both resources consume the same
+    # result instead of each independently re-fetching and re-parsing it.
+    data = parse_openpowerlifting_page(OPENPOWERLIFTING_URL)
 
     pipeline = dlt.pipeline(
         pipeline_name="openpowerlifting",
@@ -139,7 +137,7 @@ def run_pipeline():
         dataset_name="landing_openpowerlifting",
     )
 
-    load_info = pipeline.run([get_personal_bests(), get_competitions()])
+    load_info = pipeline.run([get_personal_bests(data), get_competitions(data)])
     print(f"OpenPowerlifting pipeline completed: {load_info}")
     return load_info
 
