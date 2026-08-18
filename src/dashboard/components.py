@@ -44,16 +44,18 @@ def metric_with_goal(
         st.metric(label, display_value)
 
 
-def goal_status_color(value: float, goal: float) -> str:
+def goal_status_color(value: float, goal: float, two_sided: bool = False) -> str:
     """Return hex color based on proximity to goal.
 
     Green: 0–10% off. Orange: 10–20% off. Red: >20% off.
-    Bounds are floored/ceiled for clean integer thresholds.
+    By default only shortfall counts (floor goals like sleep/HRV — exceeding is green);
+    two_sided=True also penalises overshoot (target goals like calories).
     """
     if goal == 0:
         return "#00CC96"
 
-    pct_off = abs(value - goal) / goal
+    diff = (value - goal) / goal
+    pct_off = abs(diff) if two_sided else max(-diff, 0.0)
     if pct_off <= 0.10:
         return "#00CC96"  # green — within 10%
     elif pct_off <= 0.20:
@@ -68,6 +70,7 @@ def metric_with_goal_color(
     goal: float | None = None,
     unit: str = "",
     fmt: str = ".0f",
+    two_sided: bool = False,
 ) -> None:
     """Display a metric with tri-color goal status (green/orange/red).
 
@@ -90,7 +93,7 @@ def metric_with_goal_color(
 
     delta = value - goal
     pct = round((value - goal) / goal * 100)
-    color = goal_status_color(value, goal)
+    color = goal_status_color(value, goal, two_sided=two_sided)
     delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal ({pct:+d}%)"
 
     st.markdown(

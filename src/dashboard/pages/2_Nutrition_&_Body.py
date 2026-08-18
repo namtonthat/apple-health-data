@@ -77,10 +77,14 @@ if has_macros or has_weight:
             m1, m2 = st.columns(2)
             with m1:
                 metric_with_goal_color("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
-                metric_with_goal_color("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
+                metric_with_goal_color(
+                    "Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f", two_sided=True
+                )
             with m2:
-                metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f")
-                metric_with_goal_color("Calories", avg_calories, GOALS["calories"], "", ",.0f")
+                metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f", two_sided=True)
+                metric_with_goal_color(
+                    "Calories", avg_calories, GOALS["calories"], "", ",.0f", two_sided=True
+                )
 
             m3, m4 = st.columns(2)
             with m3:
@@ -202,22 +206,23 @@ if has_macros or has_weight:
                     columns={c: col_rename[c] for c in display_df.columns if c in col_rename}
                 )
 
+                # Protein is a floor (exceeding is good); the rest are targets
                 macro_goals = {
-                    "Protein (g)": GOALS["protein_g"],
-                    "Carbs (g)": GOALS["carbs_g"],
-                    "Fat (g)": GOALS["fat_g"],
-                    "Calories": GOALS["calories"],
+                    "Protein (g)": (GOALS["protein_g"], False),
+                    "Carbs (g)": (GOALS["carbs_g"], True),
+                    "Fat (g)": (GOALS["fat_g"], True),
+                    "Calories": (GOALS["calories"], True),
                 }
 
-                def _style_macro(val, goal):
+                def _style_macro(val, goal, two_sided):
                     if pd.isna(val):
                         return ""
-                    color = goal_status_color(float(val), goal)
+                    color = goal_status_color(float(val), goal, two_sided=two_sided)
                     return f"background-color: {color}33; color: {color}"
 
                 styled = display_df.style.apply(
                     lambda col: [
-                        _style_macro(v, macro_goals[col.name]) if col.name in macro_goals else ""
+                        _style_macro(v, *macro_goals[col.name]) if col.name in macro_goals else ""
                         for v in col
                     ],
                     axis=0,

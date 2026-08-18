@@ -7,6 +7,16 @@ with source as (
     select * from delta_scan('s3://{{ var("s3_bucket") }}/landing/hevy/workouts')
 ),
 
+-- Hevy timestamps land as UTC instants; timezone() converts explicitly so results
+-- don't depend on the session TimeZone (UTC in CI, local on a laptop)
+localized as (
+    select
+        *,
+        timezone('Australia/Melbourne', start_time::timestamptz) as start_time_local,
+        timezone('Australia/Melbourne', end_time::timestamptz) as end_time_local
+    from source
+),
+
 staged as (
     select
         -- Primary key
@@ -15,17 +25,17 @@ staged as (
         -- Natural key
         id as hevy_workout_id,
 
-        -- Timestamps
-        start_time::timestamp as started_at,
-        end_time::timestamp as ended_at,
+        -- Timestamps (Melbourne local)
+        start_time_local as started_at,
+        end_time_local as ended_at,
         created_at::timestamp as created_at,
         updated_at::timestamp as updated_at,
 
         -- Derived date/time fields
-        start_time::date as workout_date,
-        dayname(start_time::timestamp) as day_name,
-        extract('hour' from start_time::timestamp)::int as start_hour,
-        extract('minute' from end_time::timestamp - start_time::timestamp) as duration_minutes,
+        start_time_local::date as workout_date,
+        dayname(start_time_local) as day_name,
+        extract('hour' from start_time_local)::int as start_hour,
+        date_diff('minute', start_time_local, end_time_local) as duration_minutes,
 
         -- Workout details
         coalesce(title, 'Untitled Workout') as workout_name,
@@ -41,7 +51,7 @@ staged as (
             order by updated_at desc, _dlt_load_id desc
         ) as row_num
 
-    from source
+    from localized
 )
 
 select * from staged

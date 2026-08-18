@@ -238,6 +238,8 @@ if df_daily.height > 0:
         graduated_goals["Cals"] = GOALS.get("calories")
     if "HRV" in display_df.columns:
         graduated_goals["HRV"] = GOALS.get("hrv_ms")
+    # Calories is a target (overshooting penalised); the rest are floors
+    two_sided_cols = {"Cals"}
 
     # Inverse graduated goals (lower is better — uses same 10%/20% bands but inverted)
     inverse_goals = {}
@@ -258,7 +260,9 @@ if df_daily.height > 0:
         if pd.isna(val):
             return ""
         if col_name in graduated_goals and graduated_goals[col_name] is not None:
-            color = goal_status_color(float(val), graduated_goals[col_name])
+            color = goal_status_color(
+                float(val), graduated_goals[col_name], two_sided=col_name in two_sided_cols
+            )
             return f"background-color: {color}33; color: {color}"
         if col_name in inverse_goals and inverse_goals[col_name] is not None:
             # Lower is better: at/below goal = green, use inverted distance

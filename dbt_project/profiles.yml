@@ -8,6 +8,7 @@ health_analytics:
         - httpfs
         - parquet
         - delta
+        - icu
       secrets:
         - type: s3
           region: "{{ env_var('AWS_DEFAULT_REGION', 'ap-southeast-2') }}"
