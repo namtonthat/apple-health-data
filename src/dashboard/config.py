@@ -6,6 +6,7 @@ from datetime import date, datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import streamlit as st
 from dotenv import load_dotenv
 
 # Load .env for local development (AWS creds, etc.)
@@ -26,32 +27,46 @@ AWS_REGION = CONFIG.get("aws_region", "ap-southeast-2")
 USER_NAME = CONFIG.get("user_name", "there")
 OPENPOWERLIFTING_URL = CONFIG.get("openpowerlifting_url", "")
 
-# Goals (with defaults)
+# Goals -- pyproject.toml [tool.dashboard.goals] always defines these keys, so no
+# in-code fallback defaults (they can only drift out of sync with the TOML, as
+# happened here previously).
 _goals_config = CONFIG.get("goals", {})
 GOALS = {
-    "sleep_hours": _goals_config.get("sleep_hours", 7.0),
-    "sleep_deep_hours": _goals_config.get("sleep_deep_hours", 1.5),
-    "sleep_rem_hours": _goals_config.get("sleep_rem_hours", 1.5),
-    "sleep_light_hours": _goals_config.get("sleep_light_hours", 3.5),
-    "protein_g": _goals_config.get("protein_g", 170.0),
-    "carbs_g": _goals_config.get("carbs_g", 300.0),
-    "fat_g": _goals_config.get("fat_g", 60.0),
-    "weight_kg": _goals_config.get("weight_kg", 69.0),
-    "resting_hr_bpm": _goals_config.get("resting_hr_bpm", 55.0),
-    "hrv_ms": _goals_config.get("hrv_ms", 65.0),
-    "vo2_max": _goals_config.get("vo2_max", 49.0),
-    "steps": _goals_config.get("steps", 10000),
-    "meditation_minutes": _goals_config.get("meditation_minutes", 10),
+    "sleep_hours": _goals_config["sleep_hours"],
+    "sleep_deep_hours": _goals_config["sleep_deep_hours"],
+    "sleep_rem_hours": _goals_config["sleep_rem_hours"],
+    "sleep_light_hours": _goals_config["sleep_light_hours"],
+    "protein_g": _goals_config["protein_g"],
+    "carbs_g": _goals_config["carbs_g"],
+    "fat_g": _goals_config["fat_g"],
+    "weight_kg": _goals_config["weight_kg"],
+    "resting_hr_bpm": _goals_config["resting_hr_bpm"],
+    "hrv_ms": _goals_config["hrv_ms"],
+    "vo2_max": _goals_config["vo2_max"],
+    "steps": _goals_config["steps"],
+    "meditation_minutes": _goals_config["meditation_minutes"],
 }
 GOALS["calories"] = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
 
 
-# Last updated timestamp (written by GitHub Actions workflow)
 _last_updated_path = Path(__file__).parent.parent.parent / "last_updated.txt"
-try:
-    LAST_UPDATED = _last_updated_path.read_text().strip()
-except FileNotFoundError:
-    LAST_UPDATED = "Unknown"
+
+
+def get_last_updated() -> str:
+    """Read last_updated.txt fresh (written daily by the CI refresh workflow).
+
+    A cheap few-byte file read -- callers use this as a cache-busting key so
+    ``st.cache_data`` loaders invalidate exactly when new data lands, rather than
+    on a wall-clock TTL that doesn't match the once-daily refresh cadence.
+    """
+    try:
+        return _last_updated_path.read_text().strip()
+    except FileNotFoundError:
+        return "Unknown"
+
+
+# Last updated timestamp for display (Home.py); computed once at import.
+LAST_UPDATED = get_last_updated()
 
 
 TIMEZONE = ZoneInfo(CONFIG.get("timezone", "Australia/Melbourne"))
@@ -63,10 +78,12 @@ def today_local() -> date:
 
 
 def get_secret(key: str, default: str = "") -> str:
-    """Get secret from Streamlit Cloud secrets or env vars (local)."""
-    try:
-        import streamlit as st
+    """Get secret from Streamlit Cloud secrets or env vars (local).
 
+    ``st.secrets`` (~/.streamlit/secrets.toml or Streamlit Cloud secrets) takes
+    precedence over `.env` / process environment variables.
+    """
+    try:
         return st.secrets[key]
     except (KeyError, FileNotFoundError):
         return os.environ.get(key, default)

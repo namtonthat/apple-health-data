@@ -66,29 +66,6 @@ df = df.with_columns(
     ]
 )
 
-train = df.filter(pl.col("had_strength_workout"))
-
-# =============================================================================
-# 1. Correlation tables
-# =============================================================================
-st.header("What moves with what")
-
-same_day = [
-    ("Sleep (h) → training volume", "sleep_hours", "total_volume_kg", train),
-    ("Deep sleep (h) → training volume", "sleep_deep_hours", "total_volume_kg", train),
-    ("HRV (ms) → training volume", "hrv_ms", "total_volume_kg", train),
-    ("HRV (ms) → session RPE", "hrv_ms", "avg_rpe", train),
-    ("Resting HR → training volume", "resting_hr_bpm", "total_volume_kg", train),
-    ("Protein (g) → training volume", "protein_g", "total_volume_kg", train),
-    ("Calories → training volume", "logged_calories", "total_volume_kg", train),
-]
-lagged = [
-    ("Training volume → next-night sleep", "total_volume_kg", "sleep_next", df),
-    ("Training volume → next-day HRV", "total_volume_kg", "hrv_next", df),
-    ("Training volume → next-day resting HR", "total_volume_kg", "rhr_next", df),
-    ("Workout duration → next-day HRV", "workout_duration_minutes", "hrv_next", df),
-]
-
 
 def corr_rows(specs: list) -> pl.DataFrame:
     out = []
@@ -98,11 +75,44 @@ def corr_rows(specs: list) -> pl.DataFrame:
     return pl.DataFrame(out)
 
 
+@st.cache_data(show_spinner=False)
+def compute_correlation_tables(df: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Same-day and lagged correlation tables.
+
+    Cached: independent of the metric-picker selectbox below, so changing that
+    selection doesn't recompute these over the full history on every rerun.
+    """
+    train = df.filter(pl.col("had_strength_workout"))
+    same_day = [
+        ("Sleep (h) → training volume", "sleep_hours", "total_volume_kg", train),
+        ("Deep sleep (h) → training volume", "sleep_deep_hours", "total_volume_kg", train),
+        ("HRV (ms) → training volume", "hrv_ms", "total_volume_kg", train),
+        ("HRV (ms) → session RPE", "hrv_ms", "avg_rpe", train),
+        ("Resting HR → training volume", "resting_hr_bpm", "total_volume_kg", train),
+        ("Protein (g) → training volume", "protein_g", "total_volume_kg", train),
+        ("Calories → training volume", "logged_calories", "total_volume_kg", train),
+    ]
+    lagged = [
+        ("Training volume → next-night sleep", "total_volume_kg", "sleep_next", df),
+        ("Training volume → next-day HRV", "total_volume_kg", "hrv_next", df),
+        ("Training volume → next-day resting HR", "total_volume_kg", "rhr_next", df),
+        ("Workout duration → next-day HRV", "workout_duration_minutes", "hrv_next", df),
+    ]
+    return corr_rows(same_day), corr_rows(lagged)
+
+
+# =============================================================================
+# 1. Correlation tables
+# =============================================================================
+st.header("What moves with what")
+
+same_day_df, lagged_df = compute_correlation_tables(df)
+
 col_a, col_b = st.columns(2)
 with col_a:
     st.subheader("Recovery & fuel → same-day training")
     st.dataframe(
-        corr_rows(same_day).to_pandas(),
+        same_day_df.to_pandas(),
         hide_index=True,
         use_container_width=True,
         column_config={
@@ -113,7 +123,7 @@ with col_a:
 with col_b:
     st.subheader("Training load → next-day recovery")
     st.dataframe(
-        corr_rows(lagged).to_pandas(),
+        lagged_df.to_pandas(),
         hide_index=True,
         use_container_width=True,
         column_config={
@@ -172,23 +182,35 @@ if rec.height > 0:
 # 3. Long-run monthly trends
 # =============================================================================
 st.header("Monthly trends")
-monthly = (
-    df.with_columns(pl.col("date").dt.truncate("1mo").alias("month"))
-    .group_by("month")
-    .agg(
-        pl.col("weight_kg").mean().round(1).alias("Weight (kg)"),
-        pl.col("logged_calories").mean().round(0).alias("Calories"),
-        pl.col("protein_g").mean().round(0).alias("Protein (g)"),
-        pl.col("sleep_hours").mean().round(2).alias("Sleep (h)"),
-        pl.col("hrv_ms").mean().round(0).alias("HRV (ms)"),
+
+
+@st.cache_data(show_spinner=False)
+def compute_monthly_trends(df: pl.DataFrame) -> pl.DataFrame:
+    """Monthly aggregation of the daily summary.
+
+    Cached: independent of the metric-picker selectbox below, so changing that
+    selection doesn't recompute this groupby over the full history on every rerun.
+    """
+    return (
+        df.with_columns(pl.col("date").dt.truncate("1mo").alias("month"))
+        .group_by("month")
+        .agg(
+            pl.col("weight_kg").mean().round(1).alias("Weight (kg)"),
+            pl.col("logged_calories").mean().round(0).alias("Calories"),
+            pl.col("protein_g").mean().round(0).alias("Protein (g)"),
+            pl.col("sleep_hours").mean().round(2).alias("Sleep (h)"),
+            pl.col("hrv_ms").mean().round(0).alias("HRV (ms)"),
+        )
+        .sort("month")
+        .filter(
+            pl.col("Weight (kg)").is_not_null()
+            | pl.col("Calories").is_not_null()
+            | pl.col("Sleep (h)").is_not_null()
+        )
     )
-    .sort("month")
-    .filter(
-        pl.col("Weight (kg)").is_not_null()
-        | pl.col("Calories").is_not_null()
-        | pl.col("Sleep (h)").is_not_null()
-    )
-)
+
+
+monthly = compute_monthly_trends(df)
 
 if monthly.height > 0:
     metric_choice = st.selectbox(
@@ -199,9 +221,8 @@ if monthly.height > 0:
         monthly.with_columns(pl.col("month").dt.strftime("%Y-%m").alias("Month"))
         .select(["Month", metric_choice])
         .drop_nulls()
-        .to_pandas()
     )
-    if not chart_df.empty:
+    if chart_df.height > 0:
         line = (
             alt.Chart(chart_df)
             .mark_line(point=True)

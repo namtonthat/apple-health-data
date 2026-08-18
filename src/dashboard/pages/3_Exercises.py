@@ -11,6 +11,7 @@ st.set_page_config(page_title="🏋️ Exercises", page_icon="🏋️", layout="
 from dashboard.components import date_filter_sidebar, vertical_divider
 from dashboard.config import OPENPOWERLIFTING_URL, today_local
 from dashboard.data import (
+    filter_date_range,
     load_big3_prs,
     load_e1rm_rolling_total,
     load_personal_bests,
@@ -52,25 +53,13 @@ def personal_bests_dict() -> dict:
 start_date, end_date = date_filter_sidebar()
 
 # Workout sets (est_1rm precomputed in dbt), filtered to the selected window.
-df_sets = load_workout_sets()
-if df_sets.height > 0:
-    df_exercises = df_sets.filter(
-        (pl.col("workout_date").cast(pl.Date) >= pl.lit(start_date))
-        & (pl.col("workout_date").cast(pl.Date) <= pl.lit(end_date))
-    )
-else:
-    df_exercises = df_sets
+df_exercises = filter_date_range(load_workout_sets(), "workout_date", start_date, end_date)
 
 # All-time Big 3 PRs and competition PRs (both precomputed in dbt).
 competition_prs = personal_bests_dict()
 df_big3_prs = load_big3_prs()
 
-df_strava = load_strava_activities()
-if df_strava.height > 0:
-    df_strava = df_strava.filter(
-        (pl.col("activity_date").cast(pl.Date) >= pl.lit(start_date))
-        & (pl.col("activity_date").cast(pl.Date) <= pl.lit(end_date))
-    )
+df_strava = filter_date_range(load_strava_activities(), "activity_date", start_date, end_date)
 
 df_e1rm = load_e1rm_rolling_total()
 
@@ -406,20 +395,27 @@ if df_strava.height > 0:
         pl.col("activity_type").replace_strict(ACTIVITY_ICONS, default="🏅").alias("icon")
     )
 
-    # Format pace as MM:SS
-    def format_pace(pace_decimal):
-        if pace_decimal is None or pace_decimal <= 0:
-            return "-"
-        mins = int(pace_decimal)
-        secs = int((pace_decimal - mins) * 60)
-        return f"{mins}:{secs:02d}"
+    # Format pace as MM:SS (vectorized floor/modulo; avoids a per-row Python UDF)
+    _pace = pl.col("avg_pace_min_per_km")
+    _pace_mins = _pace.floor()
+    _pace_secs = ((_pace - _pace_mins) * 60).floor()
+    pace_formatted = (
+        pl.when(_pace.is_null() | (_pace <= 0))
+        .then(pl.lit("-"))
+        .otherwise(
+            pl.format(
+                "{}:{}",
+                _pace_mins.cast(pl.Int64),
+                _pace_secs.cast(pl.Int64).cast(pl.Utf8).str.zfill(2),
+            )
+        )
+        .alias("pace_formatted")
+    )
 
     display_strava = display_strava.with_columns(
         [
             pl.col("activity_date").cast(pl.Date),
-            pl.col("avg_pace_min_per_km")
-            .map_elements(format_pace, return_dtype=pl.Utf8)
-            .alias("pace_formatted"),
+            pace_formatted,
         ]
     )
 

@@ -9,11 +9,12 @@ st.set_page_config(page_title="😴 Recovery", page_icon="😴", layout="wide")
 
 from dashboard.components import (  # noqa: E402
     date_filter_sidebar,
-    goal_status_color,
     metric_with_goal,
+    style_goal_column,
 )
 from dashboard.config import GOALS  # noqa: E402
 from dashboard.data import (  # noqa: E402
+    filter_date_range,
     load_daily_summary,
     load_training_readiness,
     load_workouts,
@@ -27,21 +28,14 @@ start_date, end_date = date_filter_sidebar(
 
 # Load data
 df_all = load_daily_summary()
-if df_all.height > 0 and "date" in df_all.columns:
-    df_daily = df_all.filter(
-        (pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date))
-    )
-else:
-    df_daily = df_all
+df_daily = filter_date_range(df_all, "date", start_date, end_date)
 
 # =============================================================================
 # Training Readiness Score (top of page)
 # =============================================================================
 df_readiness = load_training_readiness()
 if df_readiness.height > 0:
-    recent_readiness = df_readiness.filter(
-        (pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date))
-    )
+    recent_readiness = filter_date_range(df_readiness, "date", start_date, end_date)
     if recent_readiness.height > 0 and recent_readiness["readiness_score"].drop_nulls().len() > 0:
         st.header("Training Readiness")
         latest = recent_readiness.sort("date", descending=True).head(1)
@@ -85,7 +79,6 @@ if df_readiness.height > 0:
                     )
                     .select(["Date", "readiness_score"])
                     .sort("Date")
-                    .to_pandas()
                 )
                 area = (
                     alt.Chart(trend_data)
@@ -150,8 +143,9 @@ if df_daily.height > 0:
     avail_cols = [c for c, present in breakdown_cols.items() if present]
     base = df_daily.select(avail_cols).sort("date", descending=True)
 
-    # Load workout data and join
-    df_workouts = load_workouts()
+    # Load workout data and join (filter to the selected range before aggregating,
+    # not over all-time history)
+    df_workouts = filter_date_range(load_workouts(), "workout_date", start_date, end_date)
     if df_workouts.height > 0:
         workout_daily = (
             df_workouts.with_columns(
@@ -260,25 +254,11 @@ if df_daily.height > 0:
         if pd.isna(val):
             return ""
         if col_name in graduated_goals and graduated_goals[col_name] is not None:
-            color = goal_status_color(
-                float(val), graduated_goals[col_name], two_sided=col_name in two_sided_cols
+            return style_goal_column(
+                val, graduated_goals[col_name], two_sided=col_name in two_sided_cols
             )
-            return f"background-color: {color}33; color: {color}"
         if col_name in inverse_goals and inverse_goals[col_name] is not None:
-            # Lower is better: at/below goal = green, use inverted distance
-            goal = inverse_goals[col_name]
-            v = float(val)
-            if goal == 0:
-                color = "#00CC96"
-            else:
-                pct_over = (v - goal) / goal
-                if pct_over <= 0:
-                    color = "#00CC96"
-                elif pct_over <= 0.10:
-                    color = "#FFA500"
-                else:
-                    color = "#EF553B"
-            return f"background-color: {color}33; color: {color}"
+            return style_goal_column(val, inverse_goals[col_name], inverse=True)
         if col_name in binary_goals and binary_goals[col_name] is not None:
             color = "#00CC96" if float(val) >= binary_goals[col_name] else "#EF553B"
             return f"background-color: {color}33; color: {color}"
@@ -695,16 +675,12 @@ with col_med:
                 st.metric("Total Days", f"{med_data.height}")
 
         if med_data.height > 0:
-            med_chart_data = (
-                med_data.with_columns(
-                    [
-                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                        pl.col("meditation_minutes").round(0).cast(pl.Int64).alias("Minutes"),
-                    ]
-                )
-                .select(["Date", "Minutes"])
-                .to_pandas()
-            )
+            med_chart_data = med_data.with_columns(
+                [
+                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                    pl.col("meditation_minutes").round(0).cast(pl.Int64).alias("Minutes"),
+                ]
+            ).select(["Date", "Minutes"])
 
             goal = GOALS.get("meditation_minutes")
             if goal:
@@ -776,16 +752,12 @@ with col_steps:
             f":red[--- {GOALS['steps']:,.0f} steps goal]"
         )
         if steps_data.height > 0:
-            steps_chart_data = (
-                steps_data.with_columns(
-                    [
-                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
-                        pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
-                    ]
-                )
-                .select(["Date", "steps"])
-                .to_pandas()
-            )
+            steps_chart_data = steps_data.with_columns(
+                [
+                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date"),
+                    pl.col("steps").round(0).cast(pl.Int64).alias("steps"),
+                ]
+            ).select(["Date", "steps"])
 
             bars = (
                 alt.Chart(steps_chart_data)

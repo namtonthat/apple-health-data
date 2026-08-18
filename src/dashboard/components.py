@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
+import pandas as pd
 import streamlit as st
 
 from dashboard.config import today_local
@@ -105,6 +106,43 @@ def metric_with_goal_color(
         f"</div>",
         unsafe_allow_html=True,
     )
+
+
+def style_goal_column(
+    value: float | None,
+    goal: float | None,
+    *,
+    two_sided: bool = False,
+    inverse: bool = False,
+) -> str:
+    """Pandas Styler CSS for a table cell based on a value's proximity to a goal.
+
+    Shared by the daily-breakdown and nutrition tables (previously hand-rolled
+    in both pages). For floor/target goals this delegates to
+    ``goal_status_color`` (``two_sided=True`` also penalises overshoot, e.g.
+    calories). ``inverse=True`` is for ceiling goals (lower is better, e.g.
+    resting heart rate): at/under goal is green, 0-10% over is orange, >10%
+    over is red. ``two_sided`` and ``inverse`` are mutually exclusive.
+    """
+    if value is None or pd.isna(value) or goal is None:
+        return ""
+
+    if inverse:
+        v = float(value)
+        if goal == 0:
+            color = "#00CC96"
+        else:
+            pct_over = (v - goal) / goal
+            if pct_over <= 0:
+                color = "#00CC96"
+            elif pct_over <= 0.10:
+                color = "#FFA500"
+            else:
+                color = "#EF553B"
+    else:
+        color = goal_status_color(float(value), goal, two_sided=two_sided)
+
+    return f"background-color: {color}33; color: {color}"
 
 
 def vertical_divider(height: int = 100) -> None:

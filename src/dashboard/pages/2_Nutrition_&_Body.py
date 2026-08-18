@@ -1,7 +1,6 @@
 """Nutrition & Body page — Macros, Calories, and Weight."""
 
 import altair as alt
-import pandas as pd
 import polars as pl
 import streamlit as st
 
@@ -9,11 +8,15 @@ st.set_page_config(page_title="🍽️ Nutrition & Body", page_icon="🍽️", l
 
 from dashboard.components import (  # noqa: E402
     date_filter_sidebar,
-    goal_status_color,
     metric_with_goal_color,
+    style_goal_column,
 )
 from dashboard.config import GOALS  # noqa: E402
-from dashboard.data import load_daily_summary, load_weight_rolling_averages  # noqa: E402
+from dashboard.data import (  # noqa: E402
+    filter_date_range,
+    load_daily_summary,
+    load_weight_rolling_averages,
+)
 
 # Sidebar - Date Filter
 start_date, end_date = date_filter_sidebar(
@@ -27,11 +30,7 @@ has_macros = "protein_g" in df_all.columns and df_all["protein_g"].drop_nulls().
 has_weight = "weight_kg" in df_all.columns and df_all["weight_kg"].drop_nulls().len() > 0
 
 if has_macros or has_weight:
-    section_data = (
-        df_all.filter((pl.col("date") >= pl.lit(start_date)) & (pl.col("date") <= pl.lit(end_date)))
-        if df_all.height > 0
-        else df_all
-    )
+    section_data = filter_date_range(df_all, "date", start_date, end_date)
     macro_data = (
         section_data.filter(pl.col("protein_g").is_not_null()) if has_macros else pl.DataFrame()
     )
@@ -115,9 +114,15 @@ if has_macros or has_weight:
                         (pl.col("protein_g") + pl.col("carbs_g") + pl.col("fat_g")).alias(
                             "total_macros"
                         ),
+                        pl.format(
+                            "{}P {}C {}F",
+                            pl.col("protein_g").cast(pl.Int64),
+                            pl.col("carbs_g").cast(pl.Int64),
+                            pl.col("fat_g").cast(pl.Int64),
+                        ).alias("label"),
                     ]
                 )
-                .select(["Date", "protein_g", "carbs_g", "fat_g", "total_macros"])
+                .select(["Date", "protein_g", "carbs_g", "fat_g", "total_macros", "label"])
                 .to_pandas()
             )
 
@@ -152,11 +157,7 @@ if has_macros or has_weight:
                 )
             )
 
-            totals = macro_chart_data.copy()
-            totals["label"] = totals.apply(
-                lambda r: f"{int(r['protein_g'])}P {int(r['carbs_g'])}C {int(r['fat_g'])}F",
-                axis=1,
-            )
+            totals = macro_chart_data
 
             text = (
                 alt.Chart(totals)
@@ -214,19 +215,13 @@ if has_macros or has_weight:
                     "Calories": (GOALS["calories"], True),
                 }
 
-                def _style_macro(val, goal, two_sided):
-                    if pd.isna(val):
-                        return ""
-                    color = goal_status_color(float(val), goal, two_sided=two_sided)
-                    return f"background-color: {color}33; color: {color}"
+                def _style_macro_col(col):
+                    if col.name not in macro_goals:
+                        return ["" for _ in col]
+                    goal, two_sided = macro_goals[col.name]
+                    return [style_goal_column(v, goal, two_sided=two_sided) for v in col]
 
-                styled = display_df.style.apply(
-                    lambda col: [
-                        _style_macro(v, *macro_goals[col.name]) if col.name in macro_goals else ""
-                        for v in col
-                    ],
-                    axis=0,
-                ).format(
+                styled = display_df.style.apply(_style_macro_col, axis=0).format(
                     {
                         "Protein (g)": "{:.0f}",
                         "Carbs (g)": "{:.0f}",
@@ -300,13 +295,9 @@ if has_macros or has_weight:
 
                 # --- Weight Trend Chart ---
                 st.subheader("Weight Trend")
-                weight_chart_data = (
-                    weight_data.with_columns(
-                        pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
-                    )
-                    .select(["Date", "weight_kg"])
-                    .to_pandas()
-                )
+                weight_chart_data = weight_data.with_columns(
+                    pl.col("date").cast(pl.Date).dt.strftime("%Y-%m-%d").alias("Date")
+                ).select(["Date", "weight_kg"])
 
                 line = (
                     alt.Chart(weight_chart_data)
