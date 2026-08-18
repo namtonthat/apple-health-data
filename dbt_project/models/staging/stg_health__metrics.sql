@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 -- Source: Apple Health metrics from dlt landing zone (Delta table)
 -- Path: s3://{bucket}/landing/health/health_metrics/

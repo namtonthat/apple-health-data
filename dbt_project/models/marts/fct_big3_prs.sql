@@ -11,21 +11,7 @@
 -- without scanning the full set history in Python.
 
 with big3_sets as (
-    select
-        workout_date,
-        exercise_name,
-        weight_kg,
-        reps,
-        est_1rm
-    from {{ ref('fct_workout_sets') }}
-    where
-        exercise_name in (
-            '{{ var("squat_exercise_name") }}',
-            '{{ var("bench_exercise_name") }}',
-            '{{ var("deadlift_exercise_name") }}'
-        )
-        and set_type = 'normal'
-        and est_1rm is not null
+    select * from {{ ref('int_hevy__big3_sets') }}
 ),
 
 ranked as (

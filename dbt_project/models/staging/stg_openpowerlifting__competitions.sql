@@ -46,4 +46,3 @@ staged as (
 )
 
 select * from staged
-order by competition_date desc

@@ -12,8 +12,10 @@ with source as (
 localized as (
     select
         *,
-        timezone('Australia/Melbourne', start_time::timestamptz) as start_time_local,
-        timezone('Australia/Melbourne', end_time::timestamptz) as end_time_local
+        timezone('{{ var("timezone") }}', start_time::timestamptz) as start_time_local,
+        timezone('{{ var("timezone") }}', end_time::timestamptz) as end_time_local,
+        timezone('{{ var("timezone") }}', created_at::timestamptz) as created_at_local,
+        timezone('{{ var("timezone") }}', updated_at::timestamptz) as updated_at_local
     from source
 ),
 
@@ -28,8 +30,8 @@ staged as (
         -- Timestamps (Melbourne local)
         start_time_local as started_at,
         end_time_local as ended_at,
-        created_at::timestamp as created_at,
-        updated_at::timestamp as updated_at,
+        created_at_local as created_at,
+        updated_at_local as updated_at,
 
         -- Derived date/time fields
         start_time_local::date as workout_date,

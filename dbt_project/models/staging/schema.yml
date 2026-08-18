@@ -6,6 +6,9 @@ models:
     columns:
       - name: workout_id
         description: Primary key (dlt generated)
+        tests:
+          - unique
+          - not_null
       - name: hevy_workout_id
         description: Original Hevy workout ID
       - name: workout_date
@@ -26,6 +29,9 @@ models:
     columns:
       - name: exercise_id
         description: Primary key (dlt generated)
+        tests:
+          - unique
+          - not_null
       - name: workout_id
         description: Foreign key to workouts
       - name: exercise_name
@@ -38,6 +44,9 @@ models:
     columns:
       - name: set_id
         description: Primary key (dlt generated)
+        tests:
+          - unique
+          - not_null
       - name: exercise_id
         description: Foreign key to exercises
       - name: set_number
@@ -56,6 +65,9 @@ models:
     columns:
       - name: metric_id
         description: Primary key (dlt generated)
+        tests:
+          - unique
+          - not_null
       - name: metric_date
         description: Date of the measurement
       - name: metric_name
@@ -66,3 +78,47 @@ models:
         description: Unit of measurement
       - name: data_source
         description: Source device (Apple Watch, iPhone, etc.)
+
+  - name: stg_strava__activities
+    description: Staged activities from Strava (deduplicated)
+    columns:
+      - name: activity_id
+        description: Primary key (Strava activity ID)
+      - name: activity_name
+        description: Activity title from Strava
+      - name: activity_type
+        description: Activity type (Run, Ride, Swim, etc.)
+      - name: sport_type
+        description: Strava's more specific sport classification
+      - name: started_at_local
+        description: Local start timestamp
+      - name: moving_time_minutes
+        description: Moving time in minutes
+      - name: distance_km
+        description: Distance covered in kilometers
+      - name: avg_heartrate
+        description: Average heart rate for the activity
+      - name: is_trainer
+        description: Whether the activity was recorded on a stationary trainer
+
+  - name: stg_openpowerlifting__competitions
+    description: Staged competition results from OpenPowerlifting
+    columns:
+      - name: athlete_name
+        description: Name of the competing athlete
+      - name: competition_name
+        description: Name of the competition/meet
+      - name: competition_date
+        description: Date of the competition
+      - name: federation
+        description: Powerlifting federation the meet was sanctioned under
+      - name: squat_kg
+        description: Best squat attempt in kilograms
+      - name: bench_kg
+        description: Best bench press attempt in kilograms
+      - name: deadlift_kg
+        description: Best deadlift attempt in kilograms
+      - name: total_kg
+        description: Total of best squat, bench, and deadlift attempts
+      - name: place
+        description: Placing within the competition division

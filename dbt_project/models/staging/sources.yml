@@ -13,15 +13,27 @@ sources:
         external:
           location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts"
           file_format: delta
+        # _dlt_load_id is the pipeline run's unix-epoch start time (as a string);
+        # cast + convert gives an actual freshness timestamp for this root table.
+        loaded_at_field: to_timestamp(try_cast(_dlt_load_id as double))
+        freshness:
+          warn_after: {count: 26, period: hour}
+          error_after: {count: 50, period: hour}
 
       - name: exercises
-        description: Exercises within workouts
+        description: >
+          Exercises within workouts. No freshness check: this is a dlt child
+          table and carries no _dlt_load_id (only _dlt_root_id), so there is
+          no usable loaded-at field on the table itself.
         external:
           location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises"
           file_format: delta
 
       - name: sets
-        description: Individual sets within exercises
+        description: >
+          Individual sets within exercises. No freshness check: this is a dlt
+          child table and carries no _dlt_load_id (only _dlt_root_id), so
+          there is no usable loaded-at field on the table itself.
         external:
           location: "s3://{{ var('s3_bucket') }}/landing/hevy/workouts__exercises__sets"
           file_format: delta
@@ -38,6 +50,10 @@ sources:
         external:
           location: "s3://{{ var('s3_bucket') }}/landing/health/health_metrics"
           file_format: delta
+        loaded_at_field: to_timestamp(try_cast(_dlt_load_id as double))
+        freshness:
+          warn_after: {count: 26, period: hour}
+          error_after: {count: 50, period: hour}
 
   - name: strava
     description: Strava activity data from dlt landing zone
@@ -51,3 +67,7 @@ sources:
         external:
           location: "s3://{{ var('s3_bucket') }}/landing/strava/activities"
           file_format: delta
+        loaded_at_field: to_timestamp(try_cast(_dlt_load_id as double))
+        freshness:
+          warn_after: {count: 26, period: hour}
+          error_after: {count: 50, period: hour}

@@ -13,13 +13,22 @@ sets as (
     select * from {{ ref('stg_hevy__sets') }}
 ),
 
+-- Workout-grain duration, summed independently of the set-level join below so
+-- two same-day workouts don't collapse into one value via sum(distinct ...)
+workout_durations as (
+    select
+        workout_date,
+        sum(duration_minutes) as total_duration_minutes
+    from workouts
+    group by workout_date
+),
+
 -- Join sets to exercises to workouts
 set_details as (
     select
         w.workout_date,
         w.workout_id,
         w.workout_name,
-        w.duration_minutes,
         w.day_name,
         e.exercise_name,
         s.set_number,
@@ -38,9 +47,8 @@ daily_summary as (
         workout_date,
         day_name,
 
-        -- Workout count & duration
+        -- Workout count
         count(distinct workout_id) as workouts,
-        sum(distinct duration_minutes) as total_duration_minutes,
 
         -- Exercise stats
         count(distinct exercise_name) as unique_exercises,
@@ -62,4 +70,18 @@ daily_summary as (
     group by workout_date, day_name
 )
 
-select * from daily_summary
+select
+    d.workout_date,
+    d.day_name,
+    d.workouts,
+    wd.total_duration_minutes,
+    d.unique_exercises,
+    d.total_sets,
+    d.working_sets,
+    d.warmup_sets,
+    d.total_reps,
+    d.total_volume_kg,
+    d.max_weight_kg,
+    d.avg_rpe
+from daily_summary d
+left join workout_durations wd on d.workout_date = wd.workout_date

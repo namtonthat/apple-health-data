@@ -1,9 +1,8 @@
 {{
-    config(
-        materialized='external',
-        location="s3://{{ var('s3_bucket') }}/transformed/fct_strava_activities",
-        format='parquet'
-    )
+  config(
+    materialized='external',
+    location='s3://{{ var("s3_bucket") }}/transformed/fct_strava_activities'
+  )
 }}
 
 with activities as (

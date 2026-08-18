@@ -14,15 +14,7 @@ with big3_sets as (
         workout_date,
         exercise_name,
         est_1rm as e1rm
-    from {{ ref('fct_workout_sets') }}
-    where
-        exercise_name in (
-            '{{ var("squat_exercise_name") }}',
-            '{{ var("bench_exercise_name") }}',
-            '{{ var("deadlift_exercise_name") }}'
-        )
-        and set_type = 'normal'
-        and est_1rm is not null
+    from {{ ref('int_hevy__big3_sets') }}
 ),
 
 best_per_day as (
