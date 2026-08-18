@@ -1,10 +1,6 @@
 {
-<<<<<<< Updated upstream
-  "generated_at": "2026-08-18T03:11:23+00:00",
-=======
-  "generated_at": "2026-08-18T03:15:22+00:00",
->>>>>>> Stashed changes
-  "last_data_date": "2026-08-17",
+  "generated_at": "2026-08-18T13:37:18+00:00",
+  "last_data_date": "2026-08-18",
   "today": "2026-08-18",
   "user_name": "Nam Tonthat",
   "goals": {
@@ -17,7 +13,7 @@
     "fat_g": 60.0,
     "weight_kg": 69.0,
     "resting_hr_bpm": 55.0,
-    "hrv_ms": 65.0,
+    "hrv_ms": 50.0,
     "vo2_max": 49.0,
     "steps": 10000,
     "meditation_minutes": 10,
@@ -84,8 +80,8 @@
       "water_ml": 242,
       "logged_calories": 2129,
       "calculated_calories": 2290,
-      "workouts": 2,
-      "total_volume_kg": 19411
+      "workouts": 1,
+      "total_volume_kg": 8899
     },
     {
       "date": "2026-04-22",
@@ -106,8 +102,8 @@
       "water_ml": 559,
       "logged_calories": 2192,
       "calculated_calories": 2477,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 10512
     },
     {
       "date": "2026-04-23",
@@ -238,8 +234,8 @@
       "water_ml": 176,
       "logged_calories": 2213,
       "calculated_calories": 2399,
-      "workouts": 2,
-      "total_volume_kg": 13924
+      "workouts": 1,
+      "total_volume_kg": 6950
     },
     {
       "date": "2026-04-29",
@@ -260,8 +256,8 @@
       "water_ml": 257,
       "logged_calories": 2060,
       "calculated_calories": 2570,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 6974
     },
     {
       "date": "2026-04-30",
@@ -392,8 +388,8 @@
       "water_ml": 181,
       "logged_calories": 2052,
       "calculated_calories": 2439,
-      "workouts": 2,
-      "total_volume_kg": 14645
+      "workouts": 1,
+      "total_volume_kg": 7050
     },
     {
       "date": "2026-05-06",
@@ -414,8 +410,8 @@
       "water_ml": 363,
       "logged_calories": 2402,
       "calculated_calories": 2636,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7595
     },
     {
       "date": "2026-05-07",
@@ -524,8 +520,8 @@
       "water_ml": 206,
       "logged_calories": 2260,
       "calculated_calories": 2823,
-      "workouts": 1,
-      "total_volume_kg": 7548
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-05-12",
@@ -546,8 +542,8 @@
       "water_ml": 0,
       "logged_calories": 2265,
       "calculated_calories": 2459,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7548
     },
     {
       "date": "2026-05-13",
@@ -678,8 +674,8 @@
       "water_ml": 158,
       "logged_calories": 2238,
       "calculated_calories": 2595,
-      "workouts": 2,
-      "total_volume_kg": 15760
+      "workouts": 1,
+      "total_volume_kg": 6418
     },
     {
       "date": "2026-05-19",
@@ -700,8 +696,8 @@
       "water_ml": 167,
       "logged_calories": 2253,
       "calculated_calories": 2463,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 9342
     },
     {
       "date": "2026-05-20",
@@ -832,8 +828,8 @@
       "water_ml": 459,
       "logged_calories": 2297,
       "calculated_calories": 2450,
-      "workouts": 1,
-      "total_volume_kg": 6923
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-05-26",
@@ -854,8 +850,8 @@
       "water_ml": 586,
       "logged_calories": 2458,
       "calculated_calories": 2593,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 6923
     },
     {
       "date": "2026-05-27",
@@ -942,8 +938,8 @@
       "water_ml": 2047,
       "logged_calories": 2242,
       "calculated_calories": 2259,
-      "workouts": 1,
-      "total_volume_kg": 9002
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-05-31",
@@ -964,8 +960,8 @@
       "water_ml": 252,
       "logged_calories": 2140,
       "calculated_calories": 2598,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 9002
     },
     {
       "date": "2026-06-01",
@@ -986,8 +982,8 @@
       "water_ml": 46,
       "logged_calories": 2523,
       "calculated_calories": 2494,
-      "workouts": 1,
-      "total_volume_kg": 7713
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-06-02",
@@ -1008,8 +1004,8 @@
       "water_ml": null,
       "logged_calories": null,
       "calculated_calories": 2316,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7713
     },
     {
       "date": "2026-06-03",
@@ -1030,8 +1026,8 @@
       "water_ml": 180,
       "logged_calories": 2180,
       "calculated_calories": 2393,
-      "workouts": 1,
-      "total_volume_kg": 9337
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-06-04",
@@ -1052,8 +1048,8 @@
       "water_ml": 278,
       "logged_calories": 2231,
       "calculated_calories": 2480,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 9337
     },
     {
       "date": "2026-06-05",
@@ -1140,8 +1136,8 @@
       "water_ml": 209,
       "logged_calories": 2036,
       "calculated_calories": 2460,
-      "workouts": 1,
-      "total_volume_kg": 7153
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-06-09",
@@ -1162,8 +1158,8 @@
       "water_ml": 390,
       "logged_calories": 2173,
       "calculated_calories": 2586,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7153
     },
     {
       "date": "2026-06-10",
@@ -1206,8 +1202,8 @@
       "water_ml": 363,
       "logged_calories": 2519,
       "calculated_calories": 2480,
-      "workouts": 1,
-      "total_volume_kg": 9146
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-06-12",
@@ -1228,8 +1224,8 @@
       "water_ml": 7,
       "logged_calories": 664,
       "calculated_calories": 2354,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 9146
     },
     {
       "date": "2026-06-13",
@@ -1316,8 +1312,8 @@
       "water_ml": null,
       "logged_calories": 2235,
       "calculated_calories": 2590,
-      "workouts": 2,
-      "total_volume_kg": 20614
+      "workouts": 1,
+      "total_volume_kg": 10986
     },
     {
       "date": "2026-06-17",
@@ -1338,8 +1334,8 @@
       "water_ml": 104,
       "logged_calories": 2262,
       "calculated_calories": 2568,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 9628
     },
     {
       "date": "2026-06-18",
@@ -1602,8 +1598,8 @@
       "water_ml": 472,
       "logged_calories": 2213,
       "calculated_calories": 2496,
-      "workouts": 1,
-      "total_volume_kg": 10807
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-06-30",
@@ -1624,8 +1620,8 @@
       "water_ml": null,
       "logged_calories": null,
       "calculated_calories": 2343,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 10807
     },
     {
       "date": "2026-07-01",
@@ -1646,8 +1642,8 @@
       "water_ml": 1275,
       "logged_calories": 2301,
       "calculated_calories": 2572,
-      "workouts": 1,
-      "total_volume_kg": 11293
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-07-02",
@@ -1668,8 +1664,8 @@
       "water_ml": 633,
       "logged_calories": 2512,
       "calculated_calories": 2307,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 11293
     },
     {
       "date": "2026-07-03",
@@ -1712,8 +1708,8 @@
       "water_ml": 2166,
       "logged_calories": 2251,
       "calculated_calories": 2278,
-      "workouts": 1,
-      "total_volume_kg": 8970
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-07-05",
@@ -1734,8 +1730,8 @@
       "water_ml": 2000,
       "logged_calories": 2107,
       "calculated_calories": 2533,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 8970
     },
     {
       "date": "2026-07-06",
@@ -2064,8 +2060,8 @@
       "water_ml": 75,
       "logged_calories": 2413,
       "calculated_calories": 2522,
-      "workouts": 1,
-      "total_volume_kg": 8706
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-07-21",
@@ -2086,8 +2082,8 @@
       "water_ml": 380,
       "logged_calories": 2401,
       "calculated_calories": 2539,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 8706
     },
     {
       "date": "2026-07-22",
@@ -2108,8 +2104,8 @@
       "water_ml": 129,
       "logged_calories": 2439,
       "calculated_calories": 2376,
-      "workouts": 1,
-      "total_volume_kg": 5372
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-07-23",
@@ -2131,7 +2127,7 @@
       "logged_calories": 2410,
       "calculated_calories": 2489,
       "workouts": 1,
-      "total_volume_kg": 6360
+      "total_volume_kg": 5372
     },
     {
       "date": "2026-07-24",
@@ -2152,8 +2148,8 @@
       "water_ml": 153,
       "logged_calories": 2048,
       "calculated_calories": 2685,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 6360
     },
     {
       "date": "2026-07-25",
@@ -2240,8 +2236,8 @@
       "water_ml": 259,
       "logged_calories": 2311,
       "calculated_calories": 2912,
-      "workouts": 2,
-      "total_volume_kg": 15095
+      "workouts": 1,
+      "total_volume_kg": 7985
     },
     {
       "date": "2026-07-29",
@@ -2262,8 +2258,8 @@
       "water_ml": 7,
       "logged_calories": 2248,
       "calculated_calories": 2608,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7110
     },
     {
       "date": "2026-07-30",
@@ -2372,8 +2368,8 @@
       "water_ml": 49,
       "logged_calories": 857,
       "calculated_calories": 2454,
-      "workouts": 1,
-      "total_volume_kg": 8169
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-08-04",
@@ -2394,8 +2390,8 @@
       "water_ml": null,
       "logged_calories": 2032,
       "calculated_calories": 2542,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 8169
     },
     {
       "date": "2026-08-05",
@@ -2416,8 +2412,8 @@
       "water_ml": 116,
       "logged_calories": 2270,
       "calculated_calories": 2532,
-      "workouts": 1,
-      "total_volume_kg": 7242
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-08-06",
@@ -2438,8 +2434,8 @@
       "water_ml": 98,
       "logged_calories": 2259,
       "calculated_calories": 2496,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 7242
     },
     {
       "date": "2026-08-07",
@@ -2482,8 +2478,8 @@
       "water_ml": 72,
       "logged_calories": 2084,
       "calculated_calories": 2540,
-      "workouts": 2,
-      "total_volume_kg": 13510
+      "workouts": 1,
+      "total_volume_kg": 8058
     },
     {
       "date": "2026-08-09",
@@ -2504,8 +2500,8 @@
       "water_ml": null,
       "logged_calories": null,
       "calculated_calories": 2563,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 5452
     },
     {
       "date": "2026-08-10",
@@ -2526,8 +2522,8 @@
       "water_ml": null,
       "logged_calories": null,
       "calculated_calories": 2503,
-      "workouts": 1,
-      "total_volume_kg": 7357
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-08-11",
@@ -2548,8 +2544,8 @@
       "water_ml": 131,
       "logged_calories": 2266,
       "calculated_calories": 2661,
-      "workouts": 1,
-      "total_volume_kg": 7303
+      "workouts": 2,
+      "total_volume_kg": 14660
     },
     {
       "date": "2026-08-12",
@@ -2570,8 +2566,8 @@
       "water_ml": 448,
       "logged_calories": 238,
       "calculated_calories": 2431,
-      "workouts": 1,
-      "total_volume_kg": 180
+      "workouts": 0,
+      "total_volume_kg": null
     },
     {
       "date": "2026-08-13",
@@ -2593,7 +2589,7 @@
       "logged_calories": null,
       "calculated_calories": 2676,
       "workouts": 1,
-      "total_volume_kg": 8015
+      "total_volume_kg": 180
     },
     {
       "date": "2026-08-14",
@@ -2614,8 +2610,8 @@
       "water_ml": 82,
       "logged_calories": 2263,
       "calculated_calories": 2507,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 8015
     },
     {
       "date": "2026-08-15",
@@ -2680,6 +2676,28 @@
       "water_ml": 548,
       "logged_calories": 2258,
       "calculated_calories": 2564,
+      "workouts": 0,
+      "total_volume_kg": null
+    },
+    {
+      "date": "2026-08-18",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
       "workouts": 1,
       "total_volume_kg": 7766
     }
@@ -5054,10 +5072,10 @@
   ],
   "workouts": [
     {
-      "workout_date": "2026-08-17",
+      "workout_date": "2026-08-18",
       "workout_name": "Block 15 - Day 1 Lower Strength",
-      "day_name": "Monday",
-      "workout_duration_minutes": 16,
+      "day_name": "Tuesday",
+      "workout_duration_minutes": 77,
       "unique_exercises": 4,
       "total_sets": 15,
       "working_sets": 11,
@@ -5080,10 +5098,10 @@
       "avg_rpe": 7.6
     },
     {
-      "workout_date": "2026-08-13",
+      "workout_date": "2026-08-14",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
-      "day_name": "Thursday",
-      "workout_duration_minutes": 16,
+      "day_name": "Friday",
+      "workout_duration_minutes": 76,
       "unique_exercises": 6,
       "total_sets": 19,
       "working_sets": 17,
@@ -5093,9 +5111,9 @@
       "avg_rpe": 8
     },
     {
-      "workout_date": "2026-08-12",
+      "workout_date": "2026-08-13",
       "workout_name": "Calisthenics A - Push & Handstand",
-      "day_name": "Wednesday",
+      "day_name": "Thursday",
       "workout_duration_minutes": 51,
       "unique_exercises": 4,
       "total_sets": 11,
@@ -5109,7 +5127,7 @@
       "workout_date": "2026-08-11",
       "workout_name": "Block 15 - Day 1 Lower Strength",
       "day_name": "Tuesday",
-      "workout_duration_minutes": 33,
+      "workout_duration_minutes": 93,
       "unique_exercises": 4,
       "total_sets": 15,
       "working_sets": 11,
@@ -5119,10 +5137,10 @@
       "avg_rpe": 7.1
     },
     {
-      "workout_date": "2026-08-10",
+      "workout_date": "2026-08-11",
       "workout_name": "Block 15 - Day 2 Upper Strength",
-      "day_name": "Monday",
-      "workout_duration_minutes": 29,
+      "day_name": "Tuesday",
+      "workout_duration_minutes": 30,
       "unique_exercises": 5,
       "total_sets": 19,
       "working_sets": 15,
@@ -5132,9 +5150,9 @@
       "avg_rpe": 7.8
     },
     {
-      "workout_date": "2026-08-08",
+      "workout_date": "2026-08-09",
       "workout_name": "Block 15 - Day 4 Upper Hypertrophy",
-      "day_name": "Saturday",
+      "day_name": "Sunday",
       "workout_duration_minutes": 52,
       "unique_exercises": 6,
       "total_sets": 20,
@@ -5148,7 +5166,7 @@
       "workout_date": "2026-08-08",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
       "day_name": "Saturday",
-      "workout_duration_minutes": 12,
+      "workout_duration_minutes": 72,
       "unique_exercises": 6,
       "total_sets": 19,
       "working_sets": 17,
@@ -5158,9 +5176,9 @@
       "avg_rpe": 8.2
     },
     {
-      "workout_date": "2026-08-05",
+      "workout_date": "2026-08-06",
       "workout_name": "Block 15 - Day 2 Upper Strength",
-      "day_name": "Wednesday",
+      "day_name": "Thursday",
       "workout_duration_minutes": 50,
       "unique_exercises": 5,
       "total_sets": 19,
@@ -5171,10 +5189,10 @@
       "avg_rpe": 7.7
     },
     {
-      "workout_date": "2026-08-03",
+      "workout_date": "2026-08-04",
       "workout_name": "Block 15 - Day 1 Lower Strength",
-      "day_name": "Monday",
-      "workout_duration_minutes": 12,
+      "day_name": "Tuesday",
+      "workout_duration_minutes": 72,
       "unique_exercises": 4,
       "total_sets": 15,
       "working_sets": 11,
@@ -5200,7 +5218,7 @@
       "workout_date": "2026-08-01",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
       "day_name": "Saturday",
-      "workout_duration_minutes": 3,
+      "workout_duration_minutes": 64,
       "unique_exercises": 6,
       "total_sets": 19,
       "working_sets": 17,
@@ -5210,10 +5228,10 @@
       "avg_rpe": 7.3
     },
     {
-      "workout_date": "2026-07-28",
+      "workout_date": "2026-07-29",
       "workout_name": "Block 15 - Day 2 Upper Strength",
-      "day_name": "Tuesday",
-      "workout_duration_minutes": 13,
+      "day_name": "Wednesday",
+      "workout_duration_minutes": 73,
       "unique_exercises": 5,
       "total_sets": 19,
       "working_sets": 15,
@@ -5226,7 +5244,7 @@
       "workout_date": "2026-07-28",
       "workout_name": "Block 15 - Day 1 Lower Strength",
       "day_name": "Tuesday",
-      "workout_duration_minutes": 15,
+      "workout_duration_minutes": 76,
       "unique_exercises": 4,
       "total_sets": 15,
       "working_sets": 11,
@@ -5239,7 +5257,7 @@
       "workout_date": "2026-07-26",
       "workout_name": "Block 15 - Day 4 Upper Hypertrophy",
       "day_name": "Sunday",
-      "workout_duration_minutes": 48,
+      "workout_duration_minutes": 49,
       "unique_exercises": 5,
       "total_sets": 15,
       "working_sets": 13,
@@ -5262,9 +5280,9 @@
       "avg_rpe": 8
     },
     {
-      "workout_date": "2026-07-23",
+      "workout_date": "2026-07-24",
       "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
-      "day_name": "Thursday",
+      "day_name": "Friday",
       "workout_duration_minutes": 50,
       "unique_exercises": 5,
       "total_sets": 16,
@@ -5275,9 +5293,9 @@
       "avg_rpe": 7.2
     },
     {
-      "workout_date": "2026-07-22",
+      "workout_date": "2026-07-23",
       "workout_name": "Block 15 - Day 2 Upper Strength",
-      "day_name": "Wednesday",
+      "day_name": "Thursday",
       "workout_duration_minutes": 54,
       "unique_exercises": 5,
       "total_sets": 19,
@@ -5288,9 +5306,9 @@
       "avg_rpe": null
     },
     {
-      "workout_date": "2026-07-20",
+      "workout_date": "2026-07-21",
       "workout_name": "PL - Squat",
-      "day_name": "Monday",
+      "day_name": "Tuesday",
       "workout_duration_minutes": 21,
       "unique_exercises": 5,
       "total_sets": 17,
@@ -5317,7 +5335,7 @@
       "workout_date": "2026-07-09",
       "workout_name": "PL - Bench",
       "day_name": "Thursday",
-      "workout_duration_minutes": 34,
+      "workout_duration_minutes": 94,
       "unique_exercises": 7,
       "total_sets": 26,
       "working_sets": 21,
@@ -5330,7 +5348,7 @@
       "workout_date": "2026-07-07",
       "workout_name": "PL - Squat",
       "day_name": "Tuesday",
-      "workout_duration_minutes": 3,
+      "workout_duration_minutes": 63,
       "unique_exercises": 5,
       "total_sets": 18,
       "working_sets": 13,
@@ -5340,9 +5358,9 @@
       "avg_rpe": 8.5
     },
     {
-      "workout_date": "2026-07-04",
+      "workout_date": "2026-07-05",
       "workout_name": "PL - Deads",
-      "day_name": "Saturday",
+      "day_name": "Sunday",
       "workout_duration_minutes": 34,
       "unique_exercises": 5,
       "total_sets": 19,
@@ -5356,7 +5374,7 @@
       "workout_date": "2026-07-03",
       "workout_name": "PL - Accessories",
       "day_name": "Friday",
-      "workout_duration_minutes": 23,
+      "workout_duration_minutes": 24,
       "unique_exercises": 3,
       "total_sets": 13,
       "working_sets": 9,
@@ -5382,14 +5400,7 @@
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-05-18",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 102,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 411.1
-    },
-    {
-      "workout_date": "2019-05-24",
+      "workout_date": "2019-05-19",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5403,7 +5414,7 @@
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-05-30",
+      "workout_date": "2019-05-26",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5424,7 +5435,7 @@
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-06-06",
+      "workout_date": "2019-06-07",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5438,14 +5449,14 @@
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-06-10",
+      "workout_date": "2019-06-11",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-06-13",
+      "workout_date": "2019-06-14",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5453,13 +5464,6 @@
     },
     {
       "workout_date": "2019-06-18",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 102,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 411.1
-    },
-    {
-      "workout_date": "2019-06-22",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5480,7 +5484,7 @@
       "estimated_total": 411.1
     },
     {
-      "workout_date": "2019-06-28",
+      "workout_date": "2019-06-29",
       "squat_e1rm": 145.8,
       "bench_e1rm": 102,
       "deadlift_e1rm": 163.3,
@@ -5508,7 +5512,7 @@
       "estimated_total": 413.1
     },
     {
-      "workout_date": "2019-07-07",
+      "workout_date": "2019-07-08",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5543,14 +5547,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-08-30",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 415.8
-    },
-    {
-      "workout_date": "2019-09-02",
+      "workout_date": "2019-08-31",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5564,7 +5561,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-09-05",
+      "workout_date": "2019-09-06",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5592,7 +5589,14 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-09-17",
+      "workout_date": "2019-09-13",
+      "squat_e1rm": 145.8,
+      "bench_e1rm": 106.7,
+      "deadlift_e1rm": 163.3,
+      "estimated_total": 415.8
+    },
+    {
+      "workout_date": "2019-09-18",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5606,13 +5610,6 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-09-25",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 415.8
-    },
-    {
       "workout_date": "2019-09-26",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -5620,7 +5617,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-09-29",
+      "workout_date": "2019-09-30",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5655,7 +5652,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-10-09",
+      "workout_date": "2019-10-10",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5669,7 +5666,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-10-13",
+      "workout_date": "2019-10-14",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5697,13 +5694,6 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-10-25",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 415.8
-    },
-    {
       "workout_date": "2019-10-26",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -5711,7 +5701,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-10-30",
+      "workout_date": "2019-10-31",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5732,7 +5722,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-11-05",
+      "workout_date": "2019-11-06",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5830,6 +5820,13 @@
       "estimated_total": 415.8
     },
     {
+      "workout_date": "2019-11-27",
+      "squat_e1rm": 145.8,
+      "bench_e1rm": 106.7,
+      "deadlift_e1rm": 163.3,
+      "estimated_total": 415.8
+    },
+    {
       "workout_date": "2019-11-30",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -5837,14 +5834,14 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-12-11",
+      "workout_date": "2019-12-12",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-12-13",
+      "workout_date": "2019-12-14",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5858,7 +5855,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2019-12-16",
+      "workout_date": "2019-12-17",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5893,14 +5890,14 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-01-02",
+      "workout_date": "2020-01-03",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-01-04",
+      "workout_date": "2020-01-05",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5928,7 +5925,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-01-15",
+      "workout_date": "2020-01-16",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5949,13 +5946,6 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-01-23",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 163.3,
-      "estimated_total": 415.8
-    },
-    {
       "workout_date": "2020-01-24",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -5963,7 +5953,7 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-01-28",
+      "workout_date": "2020-01-25",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -5977,14 +5967,14 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-02-01",
+      "workout_date": "2020-01-30",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-02-05",
+      "workout_date": "2020-02-02",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -6005,14 +5995,14 @@
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-02-12",
+      "workout_date": "2020-02-13",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
       "estimated_total": 415.8
     },
     {
-      "workout_date": "2020-02-13",
+      "workout_date": "2020-02-14",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 163.3,
@@ -6040,13 +6030,6 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-02-20",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 173.1,
-      "estimated_total": 425.6
-    },
-    {
       "workout_date": "2020-02-21",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -6061,7 +6044,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-02-26",
+      "workout_date": "2020-02-27",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6069,13 +6052,6 @@
     },
     {
       "workout_date": "2020-02-29",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 173.1,
-      "estimated_total": 425.6
-    },
-    {
-      "workout_date": "2020-03-03",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6096,7 +6072,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-03-09",
+      "workout_date": "2020-03-10",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6124,14 +6100,14 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-03-17",
+      "workout_date": "2020-03-18",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-03-18",
+      "workout_date": "2020-03-19",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6152,7 +6128,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-03-25",
+      "workout_date": "2020-03-26",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6166,7 +6142,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-04-01",
+      "workout_date": "2020-04-02",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6180,7 +6156,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-04-08",
+      "workout_date": "2020-04-09",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6194,14 +6170,14 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-04-15",
+      "workout_date": "2020-04-16",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-04-29",
+      "workout_date": "2020-04-30",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6215,14 +6191,7 @@
       "estimated_total": 425.6
     },
     {
-      "workout_date": "2020-05-06",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 173.1,
-      "estimated_total": 425.6
-    },
-    {
-      "workout_date": "2020-05-13",
+      "workout_date": "2020-05-07",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 173.1,
@@ -6236,6 +6205,13 @@
       "estimated_total": 425.6
     },
     {
+      "workout_date": "2020-05-15",
+      "squat_e1rm": 145.8,
+      "bench_e1rm": 106.7,
+      "deadlift_e1rm": 173.1,
+      "estimated_total": 425.6
+    },
+    {
       "workout_date": "2020-05-16",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -6243,14 +6219,14 @@
       "estimated_total": 428.5
     },
     {
-      "workout_date": "2020-05-20",
+      "workout_date": "2020-05-21",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 176,
       "estimated_total": 428.5
     },
     {
-      "workout_date": "2020-05-21",
+      "workout_date": "2020-05-22",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
@@ -6264,14 +6240,14 @@
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-05-27",
+      "workout_date": "2020-05-28",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-05-28",
+      "workout_date": "2020-05-29",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
@@ -6285,14 +6261,14 @@
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-03",
+      "workout_date": "2020-06-04",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-04",
+      "workout_date": "2020-06-05",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
@@ -6306,14 +6282,14 @@
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-10",
+      "workout_date": "2020-06-11",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-11",
+      "workout_date": "2020-06-12",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
@@ -6327,21 +6303,14 @@
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-24",
+      "workout_date": "2020-06-25",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
       "estimated_total": 444.5
     },
     {
-      "workout_date": "2020-06-28",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 192,
-      "estimated_total": 444.5
-    },
-    {
-      "workout_date": "2020-07-01",
+      "workout_date": "2020-06-29",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 192,
@@ -6355,6 +6324,13 @@
       "estimated_total": 444.5
     },
     {
+      "workout_date": "2020-07-03",
+      "squat_e1rm": 145.8,
+      "bench_e1rm": 106.7,
+      "deadlift_e1rm": 192,
+      "estimated_total": 444.5
+    },
+    {
       "workout_date": "2020-07-08",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -6362,7 +6338,14 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-11-11",
+      "workout_date": "2020-07-09",
+      "squat_e1rm": 145.8,
+      "bench_e1rm": 106.7,
+      "deadlift_e1rm": 206.7,
+      "estimated_total": 459.2
+    },
+    {
+      "workout_date": "2020-11-12",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6376,7 +6359,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-11-18",
+      "workout_date": "2020-11-19",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6390,7 +6373,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-11-25",
+      "workout_date": "2020-11-26",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6404,7 +6387,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-12-03",
+      "workout_date": "2020-12-04",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6418,14 +6401,14 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-12-09",
+      "workout_date": "2020-12-10",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-12-11",
+      "workout_date": "2020-12-12",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6467,7 +6450,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2020-12-23",
+      "workout_date": "2020-12-24",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6482,13 +6465,6 @@
     },
     {
       "workout_date": "2020-12-31",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 459.2
-    },
-    {
-      "workout_date": "2021-01-04",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6530,13 +6506,6 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-01-20",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 459.2
-    },
-    {
       "workout_date": "2021-01-21",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -6545,13 +6514,6 @@
     },
     {
       "workout_date": "2021-01-26",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 459.2
-    },
-    {
-      "workout_date": "2021-01-27",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6572,7 +6534,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-02-03",
+      "workout_date": "2021-02-04",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6586,7 +6548,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-02-09",
+      "workout_date": "2021-02-10",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6614,13 +6576,6 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-02-23",
-      "squat_e1rm": 145.8,
-      "bench_e1rm": 106.7,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 459.2
-    },
-    {
       "workout_date": "2021-02-24",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
@@ -6642,7 +6597,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-03",
+      "workout_date": "2021-03-04",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6663,7 +6618,7 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-10",
+      "workout_date": "2021-03-11",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6677,14 +6632,14 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-15",
+      "workout_date": "2021-03-16",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-17",
+      "workout_date": "2021-03-18",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6698,14 +6653,14 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-22",
+      "workout_date": "2021-03-23",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-24",
+      "workout_date": "2021-03-25",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6719,14 +6674,14 @@
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-29",
+      "workout_date": "2021-03-30",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
       "estimated_total": 459.2
     },
     {
-      "workout_date": "2021-03-31",
+      "workout_date": "2021-04-01",
       "squat_e1rm": 145.8,
       "bench_e1rm": 106.7,
       "deadlift_e1rm": 206.7,
@@ -6943,14 +6898,21 @@
       "estimated_total": 472.7
     },
     {
-      "workout_date": "2021-07-19",
+      "workout_date": "2021-07-16",
       "squat_e1rm": 158.3,
       "bench_e1rm": 107.7,
       "deadlift_e1rm": 206.7,
       "estimated_total": 472.7
     },
     {
-      "workout_date": "2021-07-21",
+      "workout_date": "2021-07-20",
+      "squat_e1rm": 158.3,
+      "bench_e1rm": 107.7,
+      "deadlift_e1rm": 206.7,
+      "estimated_total": 472.7
+    },
+    {
+      "workout_date": "2021-07-22",
       "squat_e1rm": 158.3,
       "bench_e1rm": 107.7,
       "deadlift_e1rm": 206.7,
@@ -7153,13 +7115,6 @@
       "estimated_total": 483.5
     },
     {
-      "workout_date": "2021-11-08",
-      "squat_e1rm": 162.8,
-      "bench_e1rm": 114,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 483.5
-    },
-    {
       "workout_date": "2021-11-09",
       "squat_e1rm": 162.8,
       "bench_e1rm": 114,
@@ -7167,7 +7122,7 @@
       "estimated_total": 483.5
     },
     {
-      "workout_date": "2021-11-11",
+      "workout_date": "2021-11-12",
       "squat_e1rm": 162.8,
       "bench_e1rm": 114,
       "deadlift_e1rm": 206.7,
@@ -7181,13 +7136,6 @@
       "estimated_total": 483.5
     },
     {
-      "workout_date": "2021-11-15",
-      "squat_e1rm": 163.3,
-      "bench_e1rm": 114,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 484
-    },
-    {
       "workout_date": "2021-11-16",
       "squat_e1rm": 163.3,
       "bench_e1rm": 114,
@@ -7195,7 +7143,7 @@
       "estimated_total": 484
     },
     {
-      "workout_date": "2021-11-18",
+      "workout_date": "2021-11-19",
       "squat_e1rm": 163.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 206.7,
@@ -7207,13 +7155,6 @@
       "bench_e1rm": 114,
       "deadlift_e1rm": 206.7,
       "estimated_total": 484
-    },
-    {
-      "workout_date": "2021-11-22",
-      "squat_e1rm": 166.3,
-      "bench_e1rm": 114,
-      "deadlift_e1rm": 206.7,
-      "estimated_total": 487
     },
     {
       "workout_date": "2021-11-23",
@@ -7237,7 +7178,7 @@
       "estimated_total": 490.3
     },
     {
-      "workout_date": "2021-11-29",
+      "workout_date": "2021-11-30",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 210,
@@ -7251,7 +7192,7 @@
       "estimated_total": 490.3
     },
     {
-      "workout_date": "2021-12-06",
+      "workout_date": "2021-12-07",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 210,
@@ -7265,14 +7206,14 @@
       "estimated_total": 490.3
     },
     {
-      "workout_date": "2021-12-14",
+      "workout_date": "2021-12-15",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 210,
       "estimated_total": 490.3
     },
     {
-      "workout_date": "2021-12-16",
+      "workout_date": "2021-12-17",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 210,
@@ -7293,7 +7234,7 @@
       "estimated_total": 490.3
     },
     {
-      "workout_date": "2021-12-22",
+      "workout_date": "2021-12-23",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 214.5,
@@ -7314,7 +7255,7 @@
       "estimated_total": 494.8
     },
     {
-      "workout_date": "2021-12-29",
+      "workout_date": "2021-12-30",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7328,13 +7269,6 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-01-04",
-      "squat_e1rm": 166.3,
-      "bench_e1rm": 114,
-      "deadlift_e1rm": 220,
-      "estimated_total": 500.3
-    },
-    {
       "workout_date": "2022-01-05",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
@@ -7342,7 +7276,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-01-10",
+      "workout_date": "2022-01-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7356,7 +7290,14 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-01-17",
+      "workout_date": "2022-01-12",
+      "squat_e1rm": 166.3,
+      "bench_e1rm": 114,
+      "deadlift_e1rm": 220,
+      "estimated_total": 500.3
+    },
+    {
+      "workout_date": "2022-01-18",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7370,7 +7311,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-01-24",
+      "workout_date": "2022-01-25",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7384,7 +7325,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-02-01",
+      "workout_date": "2022-02-02",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7398,7 +7339,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-02-07",
+      "workout_date": "2022-02-08",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7412,7 +7353,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-02-15",
+      "workout_date": "2022-02-16",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7426,7 +7367,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-02-21",
+      "workout_date": "2022-02-22",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7440,7 +7381,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-02-28",
+      "workout_date": "2022-03-01",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7454,7 +7395,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-03-07",
+      "workout_date": "2022-03-08",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7552,7 +7493,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-04-16",
+      "workout_date": "2022-04-17",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7594,7 +7535,7 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-04-27",
+      "workout_date": "2022-04-28",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7622,13 +7563,6 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-05-07",
-      "squat_e1rm": 166.3,
-      "bench_e1rm": 114,
-      "deadlift_e1rm": 220,
-      "estimated_total": 500.3
-    },
-    {
       "workout_date": "2022-05-08",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
@@ -7636,14 +7570,21 @@
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-05-12",
+      "workout_date": "2022-05-09",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
       "estimated_total": 500.3
     },
     {
-      "workout_date": "2022-05-16",
+      "workout_date": "2022-05-13",
+      "squat_e1rm": 166.3,
+      "bench_e1rm": 114,
+      "deadlift_e1rm": 220,
+      "estimated_total": 500.3
+    },
+    {
+      "workout_date": "2022-05-17",
       "squat_e1rm": 166.3,
       "bench_e1rm": 114,
       "deadlift_e1rm": 220,
@@ -7713,7 +7654,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2022-08-05",
+      "workout_date": "2022-08-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -7832,7 +7773,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2022-09-14",
+      "workout_date": "2022-09-15",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -7853,7 +7794,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2022-10-05",
+      "workout_date": "2022-10-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -7937,7 +7878,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2022-11-12",
+      "workout_date": "2022-11-13",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -7993,21 +7934,21 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2022-12-28",
+      "workout_date": "2022-12-29",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-01-02",
+      "workout_date": "2023-01-03",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-01-09",
+      "workout_date": "2023-01-10",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8021,7 +7962,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-01-15",
+      "workout_date": "2023-01-16",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8063,7 +8004,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-02-12",
+      "workout_date": "2023-02-13",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8084,7 +8025,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-02-24",
+      "workout_date": "2023-02-25",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8098,14 +8039,14 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-03-03",
+      "workout_date": "2023-03-04",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-03-05",
+      "workout_date": "2023-03-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8161,7 +8102,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-05-05",
+      "workout_date": "2023-05-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8175,7 +8116,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-05-28",
+      "workout_date": "2023-05-29",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 220,
@@ -8259,7 +8200,7 @@
       "estimated_total": 502.7
     },
     {
-      "workout_date": "2023-08-05",
+      "workout_date": "2023-08-06",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
@@ -8329,14 +8270,14 @@
       "estimated_total": 504.9
     },
     {
-      "workout_date": "2023-10-12",
+      "workout_date": "2023-10-13",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
       "estimated_total": 504.9
     },
     {
-      "workout_date": "2023-10-13",
+      "workout_date": "2023-10-14",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
@@ -8371,7 +8312,7 @@
       "estimated_total": 504.9
     },
     {
-      "workout_date": "2023-12-20",
+      "workout_date": "2023-12-21",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
@@ -8427,7 +8368,7 @@
       "estimated_total": 504.9
     },
     {
-      "workout_date": "2024-02-18",
+      "workout_date": "2024-02-19",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
@@ -8455,7 +8396,7 @@
       "estimated_total": 504.9
     },
     {
-      "workout_date": "2024-03-25",
+      "workout_date": "2024-03-26",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 222.2,
@@ -8539,7 +8480,7 @@
       "estimated_total": 506.7
     },
     {
-      "workout_date": "2024-05-13",
+      "workout_date": "2024-05-14",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8547,6 +8488,13 @@
     },
     {
       "workout_date": "2024-05-20",
+      "squat_e1rm": 166.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 224,
+      "estimated_total": 506.7
+    },
+    {
+      "workout_date": "2024-05-21",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8581,7 +8529,7 @@
       "estimated_total": 506.7
     },
     {
-      "workout_date": "2024-08-26",
+      "workout_date": "2024-08-27",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8603,6 +8551,13 @@
     },
     {
       "workout_date": "2024-09-08",
+      "squat_e1rm": 166.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 224,
+      "estimated_total": 506.7
+    },
+    {
+      "workout_date": "2024-09-09",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8637,7 +8592,7 @@
       "estimated_total": 506.7
     },
     {
-      "workout_date": "2024-10-17",
+      "workout_date": "2024-10-18",
       "squat_e1rm": 166.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8672,7 +8627,7 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-01-25",
+      "workout_date": "2025-01-26",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8693,6 +8648,13 @@
       "estimated_total": 511.1
     },
     {
+      "workout_date": "2025-02-06",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 224,
+      "estimated_total": 511.1
+    },
+    {
       "workout_date": "2025-02-08",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
@@ -8700,7 +8662,7 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-02-11",
+      "workout_date": "2025-02-12",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8728,14 +8690,14 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-02-24",
+      "workout_date": "2025-02-21",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-02-26",
+      "workout_date": "2025-02-25",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8749,7 +8711,14 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-03-03",
+      "workout_date": "2025-02-28",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 224,
+      "estimated_total": 511.1
+    },
+    {
+      "workout_date": "2025-03-04",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8784,13 +8753,6 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-03-18",
-      "squat_e1rm": 170.7,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 224,
-      "estimated_total": 511.1
-    },
-    {
       "workout_date": "2025-03-19",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
@@ -8798,7 +8760,14 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-03-22",
+      "workout_date": "2025-03-20",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 224,
+      "estimated_total": 511.1
+    },
+    {
+      "workout_date": "2025-03-23",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8812,7 +8781,7 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-03-26",
+      "workout_date": "2025-03-27",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8833,7 +8802,7 @@
       "estimated_total": 511.1
     },
     {
-      "workout_date": "2025-04-02",
+      "workout_date": "2025-04-03",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 224,
@@ -8861,14 +8830,14 @@
       "estimated_total": 515.1
     },
     {
-      "workout_date": "2025-04-14",
+      "workout_date": "2025-04-15",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 521.1
     },
     {
-      "workout_date": "2025-04-15",
+      "workout_date": "2025-04-16",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -8889,14 +8858,14 @@
       "estimated_total": 521.1
     },
     {
-      "workout_date": "2025-04-24",
+      "workout_date": "2025-04-25",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 521.1
     },
     {
-      "workout_date": "2025-04-28",
+      "workout_date": "2025-04-29",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -8945,6 +8914,13 @@
       "estimated_total": 521.1
     },
     {
+      "workout_date": "2025-05-17",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 521.1
+    },
+    {
       "workout_date": "2025-05-23",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
@@ -8980,7 +8956,14 @@
       "estimated_total": 521.1
     },
     {
-      "workout_date": "2025-06-25",
+      "workout_date": "2025-06-22",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 521.1
+    },
+    {
+      "workout_date": "2025-06-26",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9015,6 +8998,13 @@
       "estimated_total": 521.1
     },
     {
+      "workout_date": "2025-07-11",
+      "squat_e1rm": 170.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 521.1
+    },
+    {
       "workout_date": "2025-07-13",
       "squat_e1rm": 170.7,
       "bench_e1rm": 116.4,
@@ -9029,7 +9019,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-07-21",
+      "workout_date": "2025-07-22",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9043,35 +9033,35 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-08-04",
+      "workout_date": "2025-08-05",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-08-08",
+      "workout_date": "2025-08-09",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-08-15",
+      "workout_date": "2025-08-16",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-08-25",
+      "workout_date": "2025-08-26",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-08-28",
+      "workout_date": "2025-08-29",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9085,7 +9075,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-04",
+      "workout_date": "2025-09-01",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9099,7 +9089,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-07",
+      "workout_date": "2025-09-06",
+      "squat_e1rm": 173.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 523.7
+    },
+    {
+      "workout_date": "2025-09-08",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9113,14 +9110,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-10",
+      "workout_date": "2025-09-11",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-12",
+      "workout_date": "2025-09-13",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9134,14 +9131,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-29",
+      "workout_date": "2025-09-30",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-09-30",
+      "workout_date": "2025-10-01",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9155,14 +9152,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-10-08",
+      "workout_date": "2025-10-09",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-10-21",
+      "workout_date": "2025-10-22",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9176,14 +9173,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-10-28",
-      "squat_e1rm": 173.3,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 234,
-      "estimated_total": 523.7
-    },
-    {
-      "workout_date": "2025-10-31",
+      "workout_date": "2025-10-29",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9197,7 +9187,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-03",
+      "workout_date": "2025-11-02",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9211,7 +9201,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-07",
+      "workout_date": "2025-11-05",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9225,7 +9215,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-10",
+      "workout_date": "2025-11-09",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9239,6 +9229,13 @@
       "estimated_total": 523.7
     },
     {
+      "workout_date": "2025-11-12",
+      "squat_e1rm": 173.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 523.7
+    },
+    {
       "workout_date": "2025-11-13",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
@@ -9246,14 +9243,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-17",
-      "squat_e1rm": 173.3,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 234,
-      "estimated_total": 523.7
-    },
-    {
-      "workout_date": "2025-11-19",
+      "workout_date": "2025-11-18",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9267,14 +9257,21 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-24",
+      "workout_date": "2025-11-21",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-11-27",
+      "workout_date": "2025-11-25",
+      "squat_e1rm": 173.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 523.7
+    },
+    {
+      "workout_date": "2025-11-28",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9309,7 +9306,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-12-17",
+      "workout_date": "2025-12-18",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9330,7 +9327,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-12-22",
+      "workout_date": "2025-12-23",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9351,14 +9348,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-12-27",
+      "workout_date": "2025-12-28",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2025-12-29",
+      "workout_date": "2025-12-30",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9372,14 +9369,14 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-04",
+      "workout_date": "2026-01-02",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-14",
+      "workout_date": "2026-01-04",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9393,7 +9390,7 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-21",
+      "workout_date": "2026-01-16",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9407,21 +9404,28 @@
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-24",
+      "workout_date": "2026-01-23",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-28",
+      "workout_date": "2026-01-25",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 523.7
     },
     {
-      "workout_date": "2026-01-30",
+      "workout_date": "2026-01-29",
+      "squat_e1rm": 173.3,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 523.7
+    },
+    {
+      "workout_date": "2026-01-31",
       "squat_e1rm": 173.3,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9442,14 +9446,14 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-05",
+      "workout_date": "2026-02-06",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-06",
+      "workout_date": "2026-02-07",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9463,21 +9467,21 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-09",
+      "workout_date": "2026-02-10",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-11",
+      "workout_date": "2026-02-12",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-13",
+      "workout_date": "2026-02-14",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9491,14 +9495,7 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-16",
-      "squat_e1rm": 175.7,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 234,
-      "estimated_total": 526.1
-    },
-    {
-      "workout_date": "2026-02-18",
+      "workout_date": "2026-02-17",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9512,6 +9509,13 @@
       "estimated_total": 526.1
     },
     {
+      "workout_date": "2026-02-20",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 526.1
+    },
+    {
       "workout_date": "2026-02-22",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
@@ -9519,14 +9523,7 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-02-23",
-      "squat_e1rm": 175.7,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 234,
-      "estimated_total": 526.1
-    },
-    {
-      "workout_date": "2026-03-01",
+      "workout_date": "2026-02-24",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9540,7 +9537,14 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-03-04",
+      "workout_date": "2026-03-03",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 526.1
+    },
+    {
+      "workout_date": "2026-03-05",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9554,14 +9558,7 @@
       "estimated_total": 526.1
     },
     {
-      "workout_date": "2026-03-07",
-      "squat_e1rm": 175.7,
-      "bench_e1rm": 116.4,
-      "deadlift_e1rm": 234,
-      "estimated_total": 526.1
-    },
-    {
-      "workout_date": "2026-03-10",
+      "workout_date": "2026-03-08",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9569,6 +9566,13 @@
     },
     {
       "workout_date": "2026-03-11",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 234,
+      "estimated_total": 526.1
+    },
+    {
+      "workout_date": "2026-03-12",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 234,
@@ -9589,7 +9593,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-03-16",
+      "workout_date": "2026-03-17",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9603,7 +9607,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-03-23",
+      "workout_date": "2026-03-24",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9617,7 +9621,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-03-30",
+      "workout_date": "2026-03-31",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9631,28 +9635,28 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-04-06",
+      "workout_date": "2026-04-07",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-04-11",
+      "workout_date": "2026-04-12",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-04-13",
+      "workout_date": "2026-04-14",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-04-17",
+      "workout_date": "2026-04-18",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9667,6 +9671,13 @@
     },
     {
       "workout_date": "2026-04-21",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-04-22",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9701,6 +9712,13 @@
       "estimated_total": 529.8
     },
     {
+      "workout_date": "2026-05-06",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
       "workout_date": "2026-05-10",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
@@ -9708,7 +9726,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-05-11",
+      "workout_date": "2026-05-12",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9743,6 +9761,13 @@
       "estimated_total": 529.8
     },
     {
+      "workout_date": "2026-05-19",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
       "workout_date": "2026-05-21",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
@@ -9757,7 +9782,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-05-25",
+      "workout_date": "2026-05-26",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9771,28 +9796,28 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-05-30",
+      "workout_date": "2026-05-31",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-06-01",
+      "workout_date": "2026-06-02",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-06-03",
+      "workout_date": "2026-06-04",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-06-08",
+      "workout_date": "2026-06-09",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9806,7 +9831,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-06-11",
+      "workout_date": "2026-06-12",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9821,6 +9846,13 @@
     },
     {
       "workout_date": "2026-06-16",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-06-17",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9848,14 +9880,14 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-06-29",
+      "workout_date": "2026-06-30",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-07-01",
+      "workout_date": "2026-07-02",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9869,7 +9901,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-07-04",
+      "workout_date": "2026-07-05",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9897,14 +9929,14 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-07-20",
+      "workout_date": "2026-07-21",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-07-22",
+      "workout_date": "2026-07-23",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9918,21 +9950,21 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-08-03",
+      "workout_date": "2026-07-29",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-08-05",
+      "workout_date": "2026-08-04",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-08-10",
+      "workout_date": "2026-08-06",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
@@ -9946,7 +9978,7 @@
       "estimated_total": 529.8
     },
     {
-      "workout_date": "2026-08-17",
+      "workout_date": "2026-08-18",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
