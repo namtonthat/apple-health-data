@@ -8,6 +8,9 @@ daily_tab: "Tracking Sheet 📊 "
 block:
   tab: "Block 15 (Post Comp Refresh)"
   week1_monday: 2026-07-20   # Monday of the block's WEEK 1 column group
+  # Delayed sessions: workout date -> Monday of the week it belongs to.
+  week_overrides:
+    2026-08-24: 2026-08-17   # week-5 BB session done on week-6 Monday
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.

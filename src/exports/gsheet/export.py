@@ -24,6 +24,42 @@ class ExportPlan:
     summary_lines: list[str] = field(default_factory=list)
 
 
+def apply_week_overrides(
+    week_windows: list[tuple[date, list[SetRow]]],
+    overrides: dict[date, date],
+) -> tuple[list[tuple[date, list[SetRow]]], list[str]]:
+    """Reassign each overridden workout date's sets to its target week's window.
+
+    Sets whose target week isn't among the loaded windows are dropped — that
+    window was written in an earlier run, and dropping stops the delayed
+    workout from also claiming an occurrence in its calendar week.
+    """
+    if not overrides:
+        return week_windows, []
+
+    buckets: dict[date, list[SetRow]] = {monday: [] for monday, _ in week_windows}
+    moved: dict[tuple[date, date], int] = {}
+    dropped: dict[tuple[date, date], int] = {}
+    for monday, sets in week_windows:
+        for s in sets:
+            target = overrides.get(s.workout_date, monday)
+            if target == monday:
+                buckets[monday].append(s)
+            elif target in buckets:
+                buckets[target].append(s)
+                moved[(s.workout_date, target)] = moved.get((s.workout_date, target), 0) + 1
+            else:
+                dropped[(s.workout_date, target)] = dropped.get((s.workout_date, target), 0) + 1
+
+    notes = [
+        f"week override: {n} sets from {d} reassigned to w/c {t}" for (d, t), n in moved.items()
+    ] + [
+        f"week override: {n} sets from {d} dropped (w/c {t} not in this run's windows)"
+        for (d, t), n in dropped.items()
+    ]
+    return [(monday, buckets[monday]) for monday, _ in week_windows], notes
+
+
 def plan_writes(
     cfg: ExportConfig,
     daily_grid: list[list[str]],
@@ -33,6 +69,8 @@ def plan_writes(
     today: date,
 ) -> ExportPlan:
     plan = ExportPlan()
+    week_windows, override_notes = apply_week_overrides(week_windows, cfg.week_overrides)
+    plan.summary_lines.extend(f"block tab: {note}" for note in override_notes)
 
     daily = resolve_daily_writes(daily_grid, daily_rows, today)
     plan.daily_writes = daily.writes

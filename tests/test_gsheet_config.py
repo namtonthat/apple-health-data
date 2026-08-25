@@ -47,3 +47,17 @@ def test_load_config_missing_file_raises(tmp_path):
 def test_load_config_missing_key_raises(tmp_path):
     with pytest.raises(ValueError, match="spreadsheet_id"):
         load_config(write_config(tmp_path, "daily_tab: x\n"))
+
+
+def test_load_config_week_overrides_default_empty(tmp_path):
+    cfg = load_config(write_config(tmp_path, SAMPLE))
+    assert cfg.week_overrides == {}
+
+
+def test_load_config_parses_week_overrides(tmp_path):
+    text = SAMPLE.replace(
+        "  week1_monday: 2026-07-13\n",
+        "  week1_monday: 2026-07-13\n  week_overrides:\n    2026-08-24: 2026-08-17\n",
+    )
+    cfg = load_config(write_config(tmp_path, text))
+    assert cfg.week_overrides == {date(2026, 8, 24): date(2026, 8, 17)}

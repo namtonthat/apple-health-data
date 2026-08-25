@@ -1,7 +1,7 @@
 from datetime import date
 
 from exports.gsheet.config import ExportConfig
-from exports.gsheet.export import plan_writes
+from exports.gsheet.export import apply_week_overrides, plan_writes
 from exports.gsheet.model import SetRow
 
 CFG = ExportConfig(
@@ -102,6 +102,67 @@ def test_plan_writes_skips_out_of_range_window_but_writes_the_other():
     values = {(w.row, w.col): w.value for w in plan.block_writes}
     assert values[(1, 3)] == "8"  # week-1 group still written
     assert values[(1, 4)] == "85"
+
+
+def test_apply_week_overrides_moves_sets_to_target_window():
+    """A delayed workout done on Mon of the current week, overridden back to
+    the previous week's window."""
+    delayed = _set(date(2026, 7, 20), "w-delayed", 80.0, 8, 7.5)
+    windows = [
+        (date(2026, 7, 13), []),
+        (date(2026, 7, 20), [delayed]),
+    ]
+    result, notes = apply_week_overrides(windows, {date(2026, 7, 20): date(2026, 7, 13)})
+
+    assert result[0] == (date(2026, 7, 13), [delayed])
+    assert result[1] == (date(2026, 7, 20), [])
+    assert any("2026-07-20" in n and "2026-07-13" in n for n in notes)
+
+
+def test_apply_week_overrides_drops_sets_for_unloaded_target_week():
+    delayed = _set(date(2026, 7, 20), "w-delayed", 80.0, 8, 7.5)
+    windows = [
+        (date(2026, 7, 20), [delayed]),
+        (date(2026, 7, 27), []),
+    ]
+    result, notes = apply_week_overrides(windows, {date(2026, 7, 20): date(2026, 7, 6)})
+
+    assert result == [(date(2026, 7, 20), []), (date(2026, 7, 27), [])]
+    assert any("dropped" in n for n in notes)
+
+
+def test_apply_week_overrides_no_overrides_is_identity():
+    s = _set(date(2026, 7, 20), "w", 80.0, 8, 7.5)
+    windows = [(date(2026, 7, 20), [s])]
+    result, notes = apply_week_overrides(windows, {})
+    assert result == windows
+    assert notes == []
+
+
+def test_plan_writes_applies_week_overrides_from_config():
+    """Delayed week-1 session done Mon of week 2 lands in week-1 columns,
+    not week-2 columns."""
+    cfg = ExportConfig(
+        spreadsheet_id="x",
+        daily_tab="Daily",
+        block_tab="Block",
+        week1_monday=date(2026, 7, 13),
+        exercise_map={"COMP BENCH": "Bench Press (Barbell)"},
+        week_overrides={date(2026, 7, 20): date(2026, 7, 13)},
+    )
+    today = date(2026, 7, 22)
+    delayed = _set(date(2026, 7, 20), "w-delayed", 80.0, 8, 7.5)
+    week_windows = [
+        (date(2026, 7, 13), []),
+        (date(2026, 7, 20), [delayed]),
+    ]
+    plan = plan_writes(cfg, DAILY_GRID, BLOCK_GRID, [], week_windows, today)
+
+    values = {(w.row, w.col): w.value for w in plan.block_writes}
+    assert values[(1, 3)] == "8"  # week-1 group filled from the delayed session
+    assert values[(1, 4)] == "80"
+    assert (1, 7) not in values  # week-2 group untouched
+    assert (1, 8) not in values
 
 
 def test_plan_writes_reports_unmapped_deduplicated_across_windows():
