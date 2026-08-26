@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-25T13:42:48+00:00",
-  "last_data_date": "2026-08-25",
-  "today": "2026-08-25",
+  "generated_at": "2026-08-26T13:47:23+00:00",
+  "last_data_date": "2026-08-26",
+  "today": "2026-08-26",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,32 +35,10 @@
     "fat_g": 76,
     "water_ml": 73,
     "logged_calories": 2343,
-    "total_volume_kg": 7829,
+    "total_volume_kg": 8912,
     "readiness_score": 65
   },
   "daily": [
-    {
-      "date": "2026-04-27",
-      "sleep_hours": 7,
-      "sleep_deep_hours": 1.1,
-      "sleep_rem_hours": 1.8,
-      "sleep_light_hours": 4.2,
-      "hrv_ms": 39.61,
-      "resting_hr_bpm": 53,
-      "vo2_max": null,
-      "weight_kg": 69.64,
-      "bmi": 23.27,
-      "steps": 11403,
-      "protein_g": 151,
-      "carbs_g": 208,
-      "fat_g": 58,
-      "fiber_g": 35,
-      "water_ml": 86,
-      "logged_calories": 2036,
-      "calculated_calories": 2394,
-      "workouts": 0,
-      "total_volume_kg": null
-    },
     {
       "date": "2026-04-28",
       "sleep_hours": 5,
@@ -2700,21 +2678,31 @@
       "calculated_calories": 0,
       "workouts": 1,
       "total_volume_kg": 7829
+    },
+    {
+      "date": "2026-08-26",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 8912
     }
   ],
   "readiness": [
-    {
-      "date": "2026-04-27",
-      "readiness_score": 56,
-      "hrv_score": 0,
-      "rhr_score": 13,
-      "sleep_score": 25,
-      "deep_score": 18,
-      "hrv_ms": 39.61,
-      "resting_hr_bpm": 53,
-      "sleep_hours": 7,
-      "deep_sleep_ratio": 0.16
-    },
     {
       "date": "2026-04-28",
       "readiness_score": 66,
@@ -4146,13 +4134,6 @@
   ],
   "weight": [
     {
-      "date": "2026-02-26",
-      "weight_kg": 71.39,
-      "avg_7d": 71.63,
-      "avg_30d": 71.03,
-      "avg_60d": 70.75
-    },
-    {
       "date": "2026-02-27",
       "weight_kg": 70.86,
       "avg_7d": 71.57,
@@ -5065,6 +5046,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-08-26",
+      "workout_name": "Block 15 - Day 2 Upper Strength",
+      "day_name": "Wednesday",
+      "workout_duration_minutes": 89,
+      "unique_exercises": 5,
+      "total_sets": 19,
+      "working_sets": 15,
+      "total_reps": 218,
+      "total_volume_kg": 8912,
+      "max_weight_kg": 92.5,
+      "avg_rpe": 7.8
+    },
+    {
       "workout_date": "2026-08-25",
       "workout_name": "Block 15 - Day 1 Lower Strength",
       "day_name": "Tuesday",
@@ -5361,19 +5355,6 @@
       "total_reps": 192,
       "total_volume_kg": 5372,
       "max_weight_kg": 85,
-      "avg_rpe": null
-    },
-    {
-      "workout_date": "2026-07-21",
-      "workout_name": "PL - Squat",
-      "day_name": "Tuesday",
-      "workout_duration_minutes": 21,
-      "unique_exercises": 5,
-      "total_sets": 17,
-      "working_sets": 12,
-      "total_reps": 131,
-      "total_volume_kg": 8706,
-      "max_weight_kg": 140,
       "avg_rpe": null
     }
   ],
@@ -9990,18 +9971,25 @@
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-08-26",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
     }
   ],
   "prs": {
-    "squat_pr_kg": 157.5,
-    "bench_pr_kg": 107.5,
-    "deadlift_pr_kg": 207.5,
-    "total_pr_kg": 470,
-    "best_dots": 368.26,
-    "best_wilks": 369.04,
+    "squat_pr_kg": 167.5,
+    "bench_pr_kg": 110,
+    "deadlift_pr_kg": 225,
+    "total_pr_kg": 502.5,
+    "best_dots": 377.83,
+    "best_wilks": 376.98,
     "best_place": 1,
-    "total_competitions": 4,
-    "last_competition": "2023-11-11"
+    "total_competitions": 5,
+    "last_competition": "2026-07-18"
   },
   "macro_avg": {
     "recorded_days_7d": 7,
