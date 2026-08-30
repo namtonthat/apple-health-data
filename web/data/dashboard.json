@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-29T16:57:53+00:00",
-  "last_data_date": "2026-08-28",
-  "today": "2026-08-30",
+  "generated_at": "2026-08-30T17:05:39+00:00",
+  "last_data_date": "2026-08-30",
+  "today": "2026-08-31",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,32 +35,10 @@
     "fat_g": 76,
     "water_ml": 73,
     "logged_calories": 2343,
-    "total_volume_kg": 5845,
+    "total_volume_kg": 6636,
     "readiness_score": 65
   },
   "daily": [
-    {
-      "date": "2026-05-01",
-      "sleep_hours": 6.8,
-      "sleep_deep_hours": 1.2,
-      "sleep_rem_hours": 2.2,
-      "sleep_light_hours": 3.4,
-      "hrv_ms": 50.06,
-      "resting_hr_bpm": 54,
-      "vo2_max": 44.01,
-      "weight_kg": 69.95,
-      "bmi": 23.37,
-      "steps": 15362,
-      "protein_g": 174,
-      "carbs_g": 266,
-      "fat_g": 59,
-      "fiber_g": 25,
-      "water_ml": 397,
-      "logged_calories": 2270,
-      "calculated_calories": 2626,
-      "workouts": 0,
-      "total_volume_kg": null
-    },
     {
       "date": "2026-05-02",
       "sleep_hours": 6.7,
@@ -2656,21 +2634,31 @@
       "calculated_calories": 0,
       "workouts": 1,
       "total_volume_kg": 5845
+    },
+    {
+      "date": "2026-08-30",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 6636
     }
   ],
   "readiness": [
-    {
-      "date": "2026-05-01",
-      "readiness_score": 64,
-      "hrv_score": 10,
-      "rhr_score": 10,
-      "sleep_score": 24,
-      "deep_score": 20,
-      "hrv_ms": 50.06,
-      "resting_hr_bpm": 54,
-      "sleep_hours": 6.8,
-      "deep_sleep_ratio": 0.18
-    },
     {
       "date": "2026-05-02",
       "readiness_score": 66,
@@ -4945,6 +4933,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-08-30",
+      "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
+      "day_name": "Sunday",
+      "workout_duration_minutes": 37,
+      "unique_exercises": 4,
+      "total_sets": 14,
+      "working_sets": 12,
+      "total_reps": 171,
+      "total_volume_kg": 6636,
+      "max_weight_kg": 110,
+      "avg_rpe": 7.7
+    },
+    {
       "workout_date": "2026-08-28",
       "workout_name": "Block 15 - Day 4 Upper Hypertrophy",
       "day_name": "Friday",
@@ -5242,19 +5243,6 @@
       "total_volume_kg": 60,
       "max_weight_kg": 10,
       "avg_rpe": 8
-    },
-    {
-      "workout_date": "2026-07-24",
-      "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
-      "day_name": "Friday",
-      "workout_duration_minutes": 50,
-      "unique_exercises": 5,
-      "total_sets": 16,
-      "working_sets": 14,
-      "total_reps": 198,
-      "total_volume_kg": 6360,
-      "max_weight_kg": 90,
-      "avg_rpe": 7.2
     }
   ],
   "e1rm": [
