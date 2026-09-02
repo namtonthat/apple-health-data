@@ -88,8 +88,8 @@ def load_parquet(
 
 
 # Cache TTL note: data is refreshed once daily by CI (13:00 UTC), not hourly. Each
-# public load_* function below re-reads last_updated.txt (a cheap few-byte file
-# read, see config.get_last_updated) and forwards it as the cache key on the
+# public load_* function below fetches the S3 LastModified of the daily summary
+# (cached 60s, see config.get_last_updated) and forwards it as the cache key on the
 # private _cached implementation -- so the cache invalidates exactly when the
 # daily refresh writes new data, instead of on an arbitrary wall-clock TTL.
 

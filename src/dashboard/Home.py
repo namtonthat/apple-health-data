@@ -13,11 +13,11 @@ st.set_page_config(
     layout="wide",
 )
 
-from dashboard.config import LAST_UPDATED, USER_NAME
+from dashboard.config import USER_NAME, get_last_updated
 
 # Main content - Home page
 st.title(f"👋 Welcome to {USER_NAME}'s Health & Fitness Dashboard")
-st.caption(f"Last updated: {LAST_UPDATED}")
+st.caption(f"Last updated: {get_last_updated()}")
 
 st.markdown("""
 A personal dashboard powered by Apple Health, Hevy, and Strava.

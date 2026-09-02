@@ -49,27 +49,31 @@ GOALS = {
 GOALS["calories"] = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
 
 
-_last_updated_path = Path(__file__).parent.parent.parent / "last_updated.txt"
-
-
-def get_last_updated() -> str:
-    """Read last_updated.txt fresh (written daily by the CI refresh workflow).
-
-    A cheap few-byte file read -- callers use this as a cache-busting key so
-    ``st.cache_data`` loaders invalidate exactly when new data lands, rather than
-    on a wall-clock TTL that doesn't match the once-daily refresh cadence.
-    """
-    try:
-        return _last_updated_path.read_text().strip()
-    except FileNotFoundError:
-        return "Unknown"
-
-
-# Last updated timestamp for display (Home.py); computed once at import.
-LAST_UPDATED = get_last_updated()
-
-
 TIMEZONE = ZoneInfo(CONFIG.get("timezone", "Australia/Melbourne"))
+
+
+@st.cache_data(ttl=60, show_spinner=False)
+def get_last_updated() -> str:
+    """LastModified of the daily-summary parquet in S3, as a Melbourne timestamp.
+
+    Callers use this as the cache-busting key for data loaders. It must come from
+    S3, not a file in the repo: last_updated.txt is baked into the Docker image at
+    build time and never changes in the running container, so a file-based key
+    would never invalidate the cache.
+    """
+    import s3fs
+
+    try:
+        fs = s3fs.S3FileSystem(
+            key=get_secret("AWS_ACCESS_KEY_ID"),
+            secret=get_secret("AWS_SECRET_ACCESS_KEY"),
+            client_kwargs={"region_name": AWS_REGION},
+            skip_instance_cache=True,
+        )
+        modified = fs.info(f"{S3_BUCKET}/{S3_TRANSFORMED_PREFIX}/fct_daily_summary")["LastModified"]
+        return modified.astimezone(TIMEZONE).strftime("%Y-%m-%d %H:%M")
+    except Exception:
+        return "Unknown"
 
 
 def today_local() -> date:
