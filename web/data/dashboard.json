@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-22T17:28:07+00:00",
+  "generated_at": "2026-09-23T17:35:39+00:00",
   "last_data_date": "2026-09-11",
-  "today": "2026-09-23",
+  "today": "2026-09-24",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -39,28 +39,6 @@
     "readiness_score": 82
   },
   "daily": [
-    {
-      "date": "2026-05-25",
-      "sleep_hours": 6.7,
-      "sleep_deep_hours": 1,
-      "sleep_rem_hours": 1.8,
-      "sleep_light_hours": 3.8,
-      "hrv_ms": 64.35,
-      "resting_hr_bpm": 53,
-      "vo2_max": null,
-      "weight_kg": 70.71,
-      "bmi": 23.63,
-      "steps": 11132.72,
-      "protein_g": 179,
-      "carbs_g": 230,
-      "fat_g": 61,
-      "fiber_g": 31,
-      "water_ml": 459,
-      "logged_calories": 2297,
-      "calculated_calories": 2450,
-      "workouts": 0,
-      "total_volume_kg": null
-    },
     {
       "date": "2026-05-26",
       "sleep_hours": 6.2,
@@ -2440,18 +2418,6 @@
   ],
   "readiness": [
     {
-      "date": "2026-05-25",
-      "readiness_score": 69,
-      "hrv_score": 20,
-      "rhr_score": 9,
-      "sleep_score": 24,
-      "deep_score": 16,
-      "hrv_ms": 64.35,
-      "resting_hr_bpm": 53,
-      "sleep_hours": 6.7,
-      "deep_sleep_ratio": 0.15
-    },
-    {
       "date": "2026-05-26",
       "readiness_score": 66,
       "hrv_score": 7,
@@ -3737,13 +3703,6 @@
     }
   ],
   "weight": [
-    {
-      "date": "2026-03-26",
-      "weight_kg": 70.88,
-      "avg_7d": 71.59,
-      "avg_30d": 71.41,
-      "avg_60d": 71.12
-    },
     {
       "date": "2026-03-27",
       "weight_kg": 71.59,
