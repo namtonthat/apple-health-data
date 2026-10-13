@@ -6,11 +6,10 @@ spreadsheet_id: 1s7sjGdylyxJAz8mh781w_xiCiyY7F3V-xywqQBJJrpI
 daily_tab: "Tracking Sheet 📊 "
 
 block:
-  tab: "Block 15 (Post Comp Refresh)"
-  week1_monday: 2026-07-20   # Monday of the block's WEEK 1 column group
+  tab: "Block 16"
+  week1_monday: 2026-10-12   # Monday of the block's WEEK 1 column group
   # Delayed sessions: workout date -> Monday of the week it belongs to.
-  week_overrides:
-    2026-08-24: 2026-08-17   # week-5 BB session done on week-6 Monday
+  week_overrides: {}
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.
@@ -44,3 +43,8 @@ exercise_map:
   SEATED CABLE ROW: Seated Cable Row - Bar Grip
   DEFICIT PUSH UPS: Deficit Push-up
   DB CURLS: Bicep Curl (Dumbbell)
+  # Block 16 — only movements with a confirmed Hevy exercise name
+  BULGARIAN SPLIT SQUAT: Bulgarian Split Squat (Dumbbell)
+  CLOSE GRIP BENCH PRESS: Bench Press - Close Grip (Barbell)
+  WEIGHTED PULL UPS: Pull Up (Weighted)
+  CHEST SUPPORTED ROW OF CHOICE: Chest Supported Row
