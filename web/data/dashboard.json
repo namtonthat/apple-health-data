@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-16T03:30:31+00:00",
-  "last_data_date": "2026-10-15",
-  "today": "2026-10-16",
+  "generated_at": "2026-10-16T17:05:10+00:00",
+  "last_data_date": "2026-10-16",
+  "today": "2026-10-17",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,7 +35,7 @@
     "fat_g": 24,
     "water_ml": 726,
     "logged_calories": 1910,
-    "total_volume_kg": 180,
+    "total_volume_kg": 6940,
     "readiness_score": 68
   },
   "daily": [
@@ -2238,6 +2238,28 @@
       "calculated_calories": 2682,
       "workouts": 1,
       "total_volume_kg": 180
+    },
+    {
+      "date": "2026-10-16",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 6940
     }
   ],
   "readiness": [
@@ -4043,6 +4065,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-10-16",
+      "workout_name": "Block 16 - Day 3 Lower (Sumo)",
+      "day_name": "Friday",
+      "workout_duration_minutes": 71,
+      "unique_exercises": 6,
+      "total_sets": 16,
+      "working_sets": 15,
+      "total_reps": 139,
+      "total_volume_kg": 6940,
+      "max_weight_kg": 170,
+      "avg_rpe": 6
+    },
+    {
       "workout_date": "2026-10-15",
       "workout_name": "Calisthenics A - Push & Handstand",
       "day_name": "Thursday",
@@ -4340,19 +4375,6 @@
       "total_volume_kg": 7303,
       "max_weight_kg": 167.5,
       "avg_rpe": 7.1
-    },
-    {
-      "workout_date": "2026-08-11",
-      "workout_name": "Block 15 - Day 2 Upper Strength",
-      "day_name": "Tuesday",
-      "workout_duration_minutes": 30,
-      "unique_exercises": 5,
-      "total_sets": 19,
-      "working_sets": 15,
-      "total_reps": 207,
-      "total_volume_kg": 7357,
-      "max_weight_kg": 90,
-      "avg_rpe": 7.8
     }
   ],
   "e1rm": [
@@ -9017,6 +9039,13 @@
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
       "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-10-16",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
     }
   ],
   "prs": {
@@ -9040,161 +9069,5 @@
     "carbs_avg_30d": 219,
     "fat_avg_30d": 59,
     "calories_avg_30d": 2051
-  },
-  "strava": [
-    {
-      "activity_date": "2026-02-24",
-      "activity_name": "Rolling 300s",
-      "activity_type": "Run",
-      "distance_km": 4.64,
-      "moving_time_minutes": 27.5,
-      "elevation_gain_m": 40.7,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 5.91,
-      "avg_speed_kmh": 10.14
-    },
-    {
-      "activity_date": "2026-02-20",
-      "activity_name": "8km Long Run",
-      "activity_type": "Run",
-      "distance_km": 4.56,
-      "moving_time_minutes": 30.3,
-      "elevation_gain_m": 60.4,
-      "avg_heartrate": 158.2,
-      "avg_pace_min_per_km": 6.64,
-      "avg_speed_kmh": 9.03
-    },
-    {
-      "activity_date": "2026-02-17",
-      "activity_name": "1km Repeats",
-      "activity_type": "Run",
-      "distance_km": 4.67,
-      "moving_time_minutes": 30.8,
-      "elevation_gain_m": 49.9,
-      "avg_heartrate": 143.7,
-      "avg_pace_min_per_km": 6.59,
-      "avg_speed_kmh": 9.1
-    },
-    {
-      "activity_date": "2026-02-12",
-      "activity_name": "6.5km Progressive Long Run",
-      "activity_type": "Run",
-      "distance_km": 6.54,
-      "moving_time_minutes": 41.4,
-      "elevation_gain_m": 78,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.33,
-      "avg_speed_kmh": 9.49
-    },
-    {
-      "activity_date": "2026-02-09",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 6.04,
-      "moving_time_minutes": 35.6,
-      "elevation_gain_m": 82.5,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 5.9,
-      "avg_speed_kmh": 10.18
-    },
-    {
-      "activity_date": "2026-01-30",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 5.04,
-      "moving_time_minutes": 31.6,
-      "elevation_gain_m": 72.4,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.27,
-      "avg_speed_kmh": 9.57
-    },
-    {
-      "activity_date": "2026-01-23",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 4.04,
-      "moving_time_minutes": 25,
-      "elevation_gain_m": 49.6,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.19,
-      "avg_speed_kmh": 9.69
-    },
-    {
-      "activity_date": "2026-01-16",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 3.54,
-      "moving_time_minutes": 23.9,
-      "elevation_gain_m": 45,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.75,
-      "avg_speed_kmh": 8.89
-    },
-    {
-      "activity_date": "2026-01-09",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 3.04,
-      "moving_time_minutes": 19.5,
-      "elevation_gain_m": 43.1,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.42,
-      "avg_speed_kmh": 9.35
-    },
-    {
-      "activity_date": "2026-01-01",
-      "activity_name": "Afternoon Run",
-      "activity_type": "Run",
-      "distance_km": 3.77,
-      "moving_time_minutes": 25.8,
-      "elevation_gain_m": 39.2,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.84,
-      "avg_speed_kmh": 8.77
-    },
-    {
-      "activity_date": "2025-12-26",
-      "activity_name": "Lunch Run",
-      "activity_type": "Run",
-      "distance_km": 4.19,
-      "moving_time_minutes": 25.4,
-      "elevation_gain_m": 39.5,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 6.05,
-      "avg_speed_kmh": 9.93
-    },
-    {
-      "activity_date": "2025-12-19",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 3.62,
-      "moving_time_minutes": 25.7,
-      "elevation_gain_m": 53.7,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 7.09,
-      "avg_speed_kmh": 8.46
-    },
-    {
-      "activity_date": "2025-12-12",
-      "activity_name": "Morning Run",
-      "activity_type": "Run",
-      "distance_km": 4.04,
-      "moving_time_minutes": 29,
-      "elevation_gain_m": 51.7,
-      "avg_heartrate": null,
-      "avg_pace_min_per_km": 7.17,
-      "avg_speed_kmh": 8.37
-    },
-    {
-      "activity_date": "2020-05-03",
-      "activity_name": "Afternoon Run",
-      "activity_type": "Run",
-      "distance_km": 6.71,
-      "moving_time_minutes": 39,
-      "elevation_gain_m": 18,
-      "avg_heartrate": 145.6,
-      "avg_pace_min_per_km": 5.81,
-      "avg_speed_kmh": 10.32
-    }
-  ]
+  }
 }
