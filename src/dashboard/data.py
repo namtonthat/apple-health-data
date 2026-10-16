@@ -226,21 +226,3 @@ def _load_e1rm_rolling_total(_last_updated: str) -> pl.DataFrame:
 def load_e1rm_rolling_total() -> pl.DataFrame:
     """Load rolling estimated 1RM totals for the Big 3."""
     return _load_e1rm_rolling_total(get_last_updated())
-
-
-@st.cache_data(show_spinner="Loading Strava activities...")
-def _load_strava_activities(_last_updated: str) -> pl.DataFrame:
-    return load_parquet(
-        "fct_strava_activities",
-        query=(
-            "SELECT activity_date, activity_name, activity_type, distance_km,"
-            " moving_time_minutes, elevation_gain_m, avg_heartrate, avg_pace_min_per_km,"
-            " max_heartrate, pr_count"
-            " FROM read_parquet('{path}') ORDER BY activity_date DESC"
-        ),
-    )
-
-
-def load_strava_activities() -> pl.DataFrame:
-    """Load Strava activities (cached; filter by date in the page)."""
-    return _load_strava_activities(get_last_updated())

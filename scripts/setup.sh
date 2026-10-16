@@ -32,11 +32,6 @@ S3_BUCKET_NAME=your_bucket_name
 # Hevy API (get from Hevy app settings)
 HEVY_API_KEY=your_hevy_api_key
 
-# Strava API (create app at https://www.strava.com/settings/api)
-STRAVA_CLIENT_ID=your_client_id
-STRAVA_CLIENT_SECRET=your_client_secret
-STRAVA_REFRESH_TOKEN=your_refresh_token
-
 # OpenPowerlifting Profile URL
 OPENPOWERLIFTING_URL=https://www.openpowerlifting.org/u/yourname
 

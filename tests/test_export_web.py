@@ -255,30 +255,6 @@ class TestBuildSnapshot:
                     "calories_avg_30d": 2141.0,
                 },
             ],
-            "fct_strava_activities": [
-                {
-                    "activity_date": d0,
-                    "activity_name": "Morning Run",
-                    "activity_type": "Run",
-                    "distance_km": 8.2,
-                    "moving_time_minutes": 42.0,
-                    "elevation_gain_m": 60.0,
-                    "avg_heartrate": 145.0,
-                    "avg_pace_min_per_km": 5.1,
-                    "avg_speed_kmh": 11.7,
-                },
-                {
-                    "activity_date": d1,
-                    "activity_name": "Evening Ride",
-                    "activity_type": "Ride",
-                    "distance_km": 25.0,
-                    "moving_time_minutes": 55.0,
-                    "elevation_gain_m": 120.0,
-                    "avg_heartrate": 130.0,
-                    "avg_pace_min_per_km": None,
-                    "avg_speed_kmh": 27.3,
-                },
-            ],
         }
         _patch_tables(monkeypatch, tmp_path, tables)
 
@@ -298,7 +274,6 @@ class TestBuildSnapshot:
             "e1rm",
             "prs",
             "macro_avg",
-            "strava",
         }
 
         # `daily` is ordered ascending by date and dates are ISO strings.
@@ -324,13 +299,6 @@ class TestBuildSnapshot:
         assert [w["workout_name"] for w in snapshot["workouts"]] == ["Pull Day", "Push Day"]
         assert snapshot["workouts"][0]["total_volume_kg"] == 4800.0
         assert "started_at" not in snapshot["workouts"][0]
-
-        # `strava` orders newest-first and nulls survive as None.
-        assert [s["activity_name"] for s in snapshot["strava"]] == [
-            "Evening Ride",
-            "Morning Run",
-        ]
-        assert snapshot["strava"][0]["avg_pace_min_per_km"] is None
 
         # `prs` and `macro_avg` collapse to a single flat dict (LIMIT 1 row).
         assert snapshot["prs"]["total_pr_kg"] == 455.0
@@ -382,7 +350,6 @@ class TestBuildSnapshot:
             "fct_e1rm_rolling_total": [],
             "fct_personal_bests": [],
             "fct_nutrition_rolling_averages": [],
-            "fct_strava_activities": [],
         }
         # Empty polars DataFrames need an explicit schema to still produce a
         # readable (zero-row) parquet file with the right columns.
@@ -450,17 +417,6 @@ class TestBuildSnapshot:
                 "fat_avg_30d": pl.Float64,
                 "calories_avg_30d": pl.Float64,
             },
-            "fct_strava_activities": {
-                "activity_date": pl.Date,
-                "activity_name": pl.Utf8,
-                "activity_type": pl.Utf8,
-                "distance_km": pl.Float64,
-                "moving_time_minutes": pl.Float64,
-                "elevation_gain_m": pl.Float64,
-                "avg_heartrate": pl.Float64,
-                "avg_pace_min_per_km": pl.Float64,
-                "avg_speed_kmh": pl.Float64,
-            },
         }
 
         paths = {}
@@ -481,7 +437,6 @@ class TestBuildSnapshot:
         assert snapshot["weight"] == []
         assert snapshot["workouts"] == []
         assert snapshot["e1rm"] == []
-        assert snapshot["strava"] == []
         assert snapshot["latest"]["readiness_score"] is None
         assert snapshot["last_data_date"] == today.isoformat()
 

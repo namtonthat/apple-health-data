@@ -54,20 +54,3 @@ sources:
         freshness:
           warn_after: {count: 26, period: hour}
           error_after: {count: 50, period: hour}
-
-  - name: strava
-    description: Strava activity data from dlt landing zone
-    meta:
-      owner: data-team
-      source_type: api
-      zone: landing
-    tables:
-      - name: activities
-        description: Activities from Strava API (runs, rides, swims, etc.)
-        external:
-          location: "s3://{{ var('s3_bucket') }}/landing/strava/activities"
-          file_format: delta
-        loaded_at_field: to_timestamp(try_cast(_dlt_load_id as double))
-        freshness:
-          warn_after: {count: 26, period: hour}
-          error_after: {count: 50, period: hour}

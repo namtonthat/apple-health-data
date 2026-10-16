@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { dashboard, fmt, shortDate, type Num } from "@/lib/data";
 
 export function Training() {
-  const { e1rm, prs, workouts, strava } = dashboard;
+  const { e1rm, prs, workouts } = dashboard;
 
   // Current estimated 1RM = most recent row of the rolling-total series.
   const cur = e1rm.length ? e1rm[e1rm.length - 1] : ({} as (typeof e1rm)[number]);
@@ -109,28 +109,6 @@ export function Training() {
           ))}
         </div>
       </Card>
-
-      {/* ── Cardio ── */}
-      {strava.length > 0 && (
-        <Card className="p-4">
-          <p className="mb-2 text-sm font-medium text-white">Cardio (Strava)</p>
-          <div className="divide-y divide-gray-800">
-            {strava.slice(0, 6).map((a, i) => (
-              <div key={i} className="flex items-center justify-between gap-3 py-2">
-                <div className="min-w-0">
-                  <p className="truncate text-sm text-gray-200">{a.activity_name}</p>
-                  <p className="text-xs text-gray-500">
-                    {shortDate(a.activity_date)} · {a.activity_type}
-                  </p>
-                </div>
-                <p className="shrink-0 text-sm font-medium text-gray-300">
-                  {fmt(a.distance_km, 1, "km")}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
     </div>
   );
 }

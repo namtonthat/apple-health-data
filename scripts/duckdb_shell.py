@@ -21,11 +21,9 @@ tables = [
     "fct_daily_summary",
     "recent/fct_daily_summary",
     "recent/fct_workout_sets",
-    "recent/fct_strava_activities",
     "fct_workout_sets",
     "fct_exercise_progress",
     "fct_personal_bests",
-    "fct_strava_activities",
 ]
 
 print("Creating views for transformed tables...")

@@ -10,7 +10,7 @@ def test_run_all_stops_before_transform_when_ingest_fails(monkeypatch):
     monkeypatch.setattr(
         run,
         "run_ingest",
-        lambda sources, date, strict=False: ["strava"],
+        lambda sources, date, strict=False: ["hevy"],
     )
     monkeypatch.setattr(run, "run_transform", lambda: calls.append("transform"))
     monkeypatch.setattr(run, "run_export", lambda: calls.append("export"))
@@ -18,7 +18,7 @@ def test_run_all_stops_before_transform_when_ingest_fails(monkeypatch):
     try:
         run.run_all("2026-01-15")
     except RuntimeError as exc:
-        assert "strava" in str(exc)
+        assert "hevy" in str(exc)
     else:
         raise AssertionError("run_all() should raise when ingest fails")
 

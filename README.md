@@ -9,7 +9,7 @@
 [![Polars](https://img.shields.io/badge/Polars-1.38-CD792C)](https://pola.rs)
 [![Altair](https://img.shields.io/badge/Altair-6.0-1F77B4)](https://altair-viz.github.io)
 
-A personal health and fitness dashboard powered by Apple Health, Hevy, Strava, and OpenPowerlifting.
+A personal health and fitness dashboard powered by Apple Health, Hevy, and OpenPowerlifting.
 
 ## Screenshots
 
@@ -23,7 +23,6 @@ A personal health and fitness dashboard powered by Apple Health, Hevy, Strava, a
 - 🍽️ **Nutrition** - Macros and calories from any app that syncs to Apple Health
 - ⚖️ **Weight** - Daily trends with averages
 - 🏋️ **Workouts** - Exercise logs, volume, and estimated 1RM from Hevy
-- 🏃 **Cardio** - Runs, rides, and swims from Strava
 - 🏆 **Powerlifting PRs** - Competition history from OpenPowerlifting
 - 📅 **Calendar Export** - Subscribe to daily health summaries via ICS
 
@@ -34,7 +33,6 @@ git clone https://github.com/namtonthat/apple-health-data.git
 cd apple-health-data
 ./scripts/setup.sh                # Install dependencies & create .env
 # Edit .env with your credentials
-./scripts/strava-auth.sh          # Authorize Strava (optional)
 uv run python run.py all          # Run full pipeline
 uv run python run.py dashboard    # Start dashboard
 ```
@@ -46,7 +44,7 @@ All pipeline stages can be run via `run.py`, which loads `.env` automatically:
 ```bash
 # Ingest — extract data from APIs to S3 landing zone
 uv run python run.py ingest                          # All sources
-uv run python run.py ingest hevy strava              # Specific sources only
+uv run python run.py ingest hevy apple-health        # Specific sources only
 uv run python run.py ingest --date 2026-01-15        # Custom extraction date
 
 # Transform — run dbt models
@@ -68,7 +66,7 @@ uv run python run.py all --date 2026-01-15
 uv run python run.py dashboard
 ```
 
-Available ingest sources: `hevy`, `strava`, `apple-health`, `openpowerlifting`
+Available ingest sources: `hevy`, `apple-health`, `openpowerlifting`
 
 ## Configuration
 
@@ -104,9 +102,6 @@ AWS_SECRET_ACCESS_KEY=your-secret-key
 
 # Optional (for additional features)
 HEVY_API_KEY=your-hevy-key
-STRAVA_CLIENT_ID=your-client-id
-STRAVA_CLIENT_SECRET=your-client-secret
-STRAVA_REFRESH_TOKEN=your-refresh-token
 ```
 
 ## Data Sources
@@ -116,7 +111,6 @@ STRAVA_REFRESH_TOKEN=your-refresh-token
 | Apple Health | Sleep, Activity, Vitals | [Health Auto Export](https://www.healthyapps.dev/) to S3 |
 | Nutrition App | Macros & Calories | Syncs to Apple Health |
 | Hevy | Workout logs | API |
-| Strava | Runs, Rides, Swims | API ([create app](https://www.strava.com/settings/api)) |
 | OpenPowerlifting | Competition PRs | Web scrape |
 
 ## Calendar Subscription
@@ -159,9 +153,6 @@ GitHub Actions automatically refreshes data daily via `.github/workflows/refresh
 | `AWS_ACCESS_KEY_ID` | Yes | AWS credentials for S3 access |
 | `AWS_SECRET_ACCESS_KEY` | Yes | AWS credentials for S3 access |
 | `HEVY_API_KEY` | No | For workout data from Hevy |
-| `STRAVA_CLIENT_ID` | No | For Strava activities |
-| `STRAVA_CLIENT_SECRET` | No | For Strava activities |
-| `STRAVA_REFRESH_TOKEN` | No | For Strava activities |
 | `GSHEET_SERVICE_ACCOUNT_JSON` | No | Service account JSON for the program sheet export |
 
 Non-sensitive values (bucket name, goals, URLs) are read from `pyproject.toml`.

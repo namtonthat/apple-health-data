@@ -35,7 +35,6 @@ DAILY_DAYS = 120
 READINESS_DAYS = 120
 WEIGHT_DAYS = 180
 WORKOUTS_LIMIT = 24
-STRAVA_LIMIT = 16
 
 
 def _connect() -> duckdb.DuckDBPyConnection:
@@ -166,18 +165,6 @@ def build_snapshot() -> dict[str, Any]:
     )
     macro_avg = macro_avg_rows[0] if macro_avg_rows else {}
 
-    strava = _rows(
-        conn,
-        f"""
-        SELECT activity_date, activity_name, activity_type, distance_km,
-               moving_time_minutes, elevation_gain_m, avg_heartrate,
-               avg_pace_min_per_km, avg_speed_kmh
-        FROM read_parquet('{_path("fct_strava_activities")}')
-        ORDER BY activity_date DESC
-        LIMIT {STRAVA_LIMIT}
-        """,
-    )
-
     conn.close()
 
     latest_keys = [
@@ -217,7 +204,6 @@ def build_snapshot() -> dict[str, Any]:
         "e1rm": e1rm,
         "prs": prs,
         "macro_avg": macro_avg,
-        "strava": strava,
     }
 
 

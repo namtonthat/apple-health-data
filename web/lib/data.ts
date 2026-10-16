@@ -65,18 +65,6 @@ export interface E1rmRow {
   estimated_total?: Num;
 }
 
-export interface StravaRow {
-  activity_date: string;
-  activity_name: string;
-  activity_type?: string;
-  distance_km?: Num;
-  moving_time_minutes?: Num;
-  elevation_gain_m?: Num;
-  avg_heartrate?: Num;
-  avg_pace_min_per_km?: Num;
-  avg_speed_kmh?: Num;
-}
-
 export interface Dashboard {
   generated_at: string;
   last_data_date: string;
@@ -91,7 +79,6 @@ export interface Dashboard {
   e1rm: E1rmRow[];
   prs: Record<string, number | string | null>;
   macro_avg: Record<string, Num>;
-  strava: StravaRow[];
 }
 
 export const dashboard = dashboardJson as unknown as Dashboard;

@@ -6,7 +6,7 @@ Loads .env and runs individual stages or the full pipeline.
 
 Usage:
     uv run python run.py ingest                  # All sources
-    uv run python run.py ingest hevy strava      # Specific sources
+    uv run python run.py ingest hevy apple-health # Specific sources
     uv run python run.py transform               # dbt run
     uv run python run.py export                   # ICS calendar
     uv run python run.py all                      # Full pipeline
@@ -56,7 +56,7 @@ def load_env() -> None:
 # ---------------------------------------------------------------------------
 # Stages
 # ---------------------------------------------------------------------------
-INGEST_SOURCES = ["hevy", "strava", "apple-health", "openpowerlifting"]
+INGEST_SOURCES = ["hevy", "apple-health", "openpowerlifting"]
 
 
 def run_ingest(
@@ -75,11 +75,9 @@ def run_ingest(
     from pipelines.openpowerlifting import run_pipeline as run_opl
     from pipelines.pipelines.apple_health_to_s3 import run_pipeline as run_apple_health
     from pipelines.pipelines.hevy_to_s3 import run_pipeline as run_hevy
-    from pipelines.pipelines.strava_to_s3 import run_pipeline as run_strava
 
     runners = {
         "hevy": ("Hevy", lambda: run_hevy(extraction_date=date)),
-        "strava": ("Strava", lambda: run_strava(extraction_date=date)),
         "apple-health": (
             "Apple Health",
             lambda: run_apple_health(extraction_date=date, latest_only=not all_files),
@@ -116,7 +114,7 @@ def _write_failure_summary(failures: list[str]) -> None:
 
     CI's `continue-on-error: true` on the ingest job (see refresh-data.yml) lets
     transform run even when a source fails, but that also means a persistently
-    failing source (e.g. an expired Strava token) can fail silently every day.
+    failing source (e.g. an expired API key) can fail silently every day.
     This surfaces it in the job summary so it's visible without digging through logs.
     """
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -214,7 +212,7 @@ def main() -> None:
         epilog="""\
 examples:
   %(prog)s ingest                     Run all ingestion sources
-  %(prog)s ingest hevy strava         Ingest only Hevy and Strava
+  %(prog)s ingest hevy apple-health   Ingest only Hevy and Apple Health
   %(prog)s transform                  Run dbt models
   %(prog)s export                     Export ICS calendar
   %(prog)s all                        Full pipeline end-to-end

@@ -31,7 +31,7 @@ export default function Page() {
       </Tabs>
 
       <p className="mt-6 px-5 text-center text-xs text-gray-600">
-        Apple Health · Hevy · Strava · updated {dashboard.last_data_date}
+        Apple Health · Hevy · updated {dashboard.last_data_date}
       </p>
     </main>
   );

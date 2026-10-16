@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal health and fitness analytics platform that extracts data from Apple Health, Hevy, Strava, and OpenPowerlifting, transforms it through a two-layer architecture (landing → transformed), and serves it via a Streamlit dashboard.
+Personal health and fitness analytics platform that extracts data from Apple Health, Hevy, and OpenPowerlifting, transforms it through a two-layer architecture (landing → transformed), and serves it via a Streamlit dashboard.
 
 ## Common Commands
 
@@ -17,7 +17,7 @@ uv run python run.py all
 
 # Individual pipeline stages
 uv run python run.py ingest                    # All sources to S3 landing
-uv run python run.py ingest hevy strava        # Specific sources
+uv run python run.py ingest hevy apple-health  # Specific sources
 uv run python run.py ingest --date 2026-01-15  # Custom date
 uv run python run.py transform                 # dbt models
 uv run python run.py export                    # ICS calendar export
@@ -53,7 +53,7 @@ Sources (APIs/files) → Landing (S3 Delta tables) → Transformed (dbt/DuckDB �
 
 - **`run.py`** — CLI entry point; dispatches to pipeline stages, loads `.env` automatically. Adds `src/` to `sys.path` for pipeline imports.
 - **`src/pipelines/config.py`** — Shared utilities: `get_s3_client()`, `get_duckdb_connection()` (with `CREATE SECRET` for Delta), `get_s3_destination()`, and `run_s3_pipeline()` which all pipeline runners call.
-- **`src/pipelines/sources/`** — dlt source decorators: `apple_health_source()` (JSON parser), `hevy_source()` (REST API), `strava_source()` (OAuth2 REST API)
+- **`src/pipelines/sources/`** — dlt source decorators: `apple_health_source()` (JSON parser), `hevy_source()` (REST API)
 - **`src/pipelines/pipelines/`** — Thin wrappers: each calls `source() → run_s3_pipeline(name, dataset, source, date)`
 - **`src/pipelines/openpowerlifting.py`** — Web scraper (BeautifulSoup)
 - **`src/dashboard/data.py`** — Data loading: S3 parquet → DuckDB query → Arrow → Polars DataFrame. Central function is `load_daily_summary()` (1-hour TTL cache), used by all dashboard pages.
@@ -66,7 +66,7 @@ Three-layer architecture in `dbt_project/models/`:
 
 - **Staging** (views) — `stg_*` models read from S3 Delta tables via `delta_scan()`, deduplicate, and rename columns
 - **Intermediate** (views) — `int_*` models pivot metrics into one-row-per-day format (daily_vitals, daily_activity, daily_nutrition, daily_workouts)
-- **Marts** (external parquet) — `fct_*` models materialize to S3 `transformed/` prefix. Key table: `fct_daily_summary` joins all intermediate models via full-outer date spine. Also: `fct_workout_sets`, `fct_exercise_progress`, `fct_personal_bests`, `fct_strava_activities`.
+- **Marts** (external parquet) — `fct_*` models materialize to S3 `transformed/` prefix. Key table: `fct_daily_summary` joins all intermediate models via full-outer date spine. Also: `fct_workout_sets`, `fct_exercise_progress`, `fct_personal_bests`.
 
 ### DuckDB Auth: Two Patterns
 
@@ -76,7 +76,7 @@ Three-layer architecture in `dbt_project/models/`:
 ### Configuration Split
 
 - **Non-sensitive** (`pyproject.toml` under `[tool.dashboard]`): S3 bucket, region, user name, goals
-- **Secrets** (`.env`, not committed): AWS credentials, API keys (Hevy, Strava)
+- **Secrets** (`.env`, not committed): AWS credentials, API keys (Hevy)
 
 ### Streamlit Quirk
 

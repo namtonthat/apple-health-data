@@ -254,33 +254,6 @@ models:
       - name: total_sessions
         description: Total times exercise has been performed
 
-  - name: fct_strava_activities
-    description: >
-      Fact table of Strava activities.
-      Grain: One row per activity.
-    columns:
-      - name: activity_id
-        description: Primary key
-        tests:
-          - not_null
-          - unique
-      - name: activity_date
-        description: Calendar date of the activity
-        tests:
-          - not_null
-      - name: activity_name
-        description: Activity title from Strava
-        tests:
-          - not_null
-      - name: activity_type
-        description: Activity type
-        tests:
-          - not_null
-      - name: started_at_local
-        description: Local start timestamp
-        tests:
-          - not_null
-
   - name: fct_personal_bests
     description: >
       Competition personal bests aggregated from OpenPowerlifting.

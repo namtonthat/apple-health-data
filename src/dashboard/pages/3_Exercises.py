@@ -15,7 +15,6 @@ from dashboard.data import (
     load_big3_prs,
     load_e1rm_rolling_total,
     load_personal_bests,
-    load_strava_activities,
     load_workout_sets,
 )
 
@@ -58,8 +57,6 @@ df_exercises = filter_date_range(load_workout_sets(), "workout_date", start_date
 # All-time Big 3 PRs and competition PRs (both precomputed in dbt).
 competition_prs = personal_bests_dict()
 df_big3_prs = load_big3_prs()
-
-df_strava = filter_date_range(load_strava_activities(), "activity_date", start_date, end_date)
 
 df_e1rm = load_e1rm_rolling_total()
 
@@ -344,118 +341,3 @@ if df_exercises.height > 0:
     )
 else:
     st.info("No workout data available for selected period")
-
-# =============================================================================
-# Strava Activities Section
-# =============================================================================
-st.divider()
-st.header("🏃 Strava Activities")
-
-if df_strava.height > 0:
-    # Activity type icons
-    ACTIVITY_ICONS = {
-        "Run": "🏃",
-        "Ride": "🚴",
-        "Swim": "🏊",
-        "Walk": "🚶",
-        "Hike": "🥾",
-        "Workout": "💪",
-        "WeightTraining": "🏋️",
-        "Yoga": "🧘",
-    }
-
-    # Summary metrics
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        n_activities = df_strava.height
-        st.metric("Activities", n_activities)
-    with col2:
-        total_distance = df_strava["distance_km"].sum()
-        st.metric("Distance", f"{total_distance:.1f} km" if total_distance else "0 km")
-    with col3:
-        total_time = df_strava["moving_time_minutes"].sum()
-        hours = int(total_time // 60) if total_time else 0
-        mins = int(total_time % 60) if total_time else 0
-        st.metric("Time", f"{hours}h {mins}m")
-    with col4:
-        total_elevation = df_strava["elevation_gain_m"].sum()
-        st.metric("Elevation", f"{total_elevation:,.0f} m" if total_elevation else "0 m")
-
-    # Filter by activity type
-    activity_types = ["All"] + sorted(df_strava["activity_type"].drop_nulls().unique().to_list())
-    selected_type = st.selectbox("Filter by activity type", activity_types)
-
-    display_strava = df_strava
-    if selected_type != "All":
-        display_strava = display_strava.filter(pl.col("activity_type") == selected_type)
-
-    # Add icon column
-    display_strava = display_strava.with_columns(
-        pl.col("activity_type").replace_strict(ACTIVITY_ICONS, default="🏅").alias("icon")
-    )
-
-    # Format pace as MM:SS (vectorized floor/modulo; avoids a per-row Python UDF)
-    _pace = pl.col("avg_pace_min_per_km")
-    _pace_mins = _pace.floor()
-    _pace_secs = ((_pace - _pace_mins) * 60).floor()
-    pace_formatted = (
-        pl.when(_pace.is_null() | (_pace <= 0))
-        .then(pl.lit("-"))
-        .otherwise(
-            pl.format(
-                "{}:{}",
-                _pace_mins.cast(pl.Int64),
-                _pace_secs.cast(pl.Int64).cast(pl.Utf8).str.zfill(2),
-            )
-        )
-        .alias("pace_formatted")
-    )
-
-    display_strava = display_strava.with_columns(
-        [
-            pl.col("activity_date").cast(pl.Date),
-            pace_formatted,
-        ]
-    )
-
-    # Display table
-    st.dataframe(
-        display_strava.to_pandas(),
-        column_config={
-            "icon": st.column_config.TextColumn("", width="small"),
-            "activity_date": st.column_config.DateColumn("Date", width="small"),
-            "activity_name": st.column_config.TextColumn("Activity", width="medium"),
-            "activity_type": st.column_config.TextColumn("Type", width="small"),
-            "moving_time_minutes": st.column_config.NumberColumn(
-                "Time (min)", format="%.0f", width="small"
-            ),
-            "distance_km": st.column_config.NumberColumn(
-                "Distance (km)", format="%.2f", width="small"
-            ),
-            "pace_formatted": st.column_config.TextColumn("Pace (/km)", width="small"),
-            "elevation_gain_m": st.column_config.NumberColumn(
-                "Elevation (m)", format="%.0f", width="small"
-            ),
-            "avg_heartrate": st.column_config.NumberColumn("Avg HR", format="%.0f", width="small"),
-            "max_heartrate": st.column_config.NumberColumn("Max HR", format="%.0f", width="small"),
-            "pr_count": st.column_config.NumberColumn("PRs", width="small"),
-        },
-        column_order=[
-            "icon",
-            "activity_date",
-            "activity_name",
-            "activity_type",
-            "moving_time_minutes",
-            "distance_km",
-            "pace_formatted",
-            "elevation_gain_m",
-            "avg_heartrate",
-            "max_heartrate",
-            "pr_count",
-        ],
-        hide_index=True,
-        width="stretch",
-    )
-else:
-    st.info("No Strava activities found for the selected period.")

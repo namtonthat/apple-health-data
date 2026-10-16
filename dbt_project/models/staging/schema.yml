@@ -79,28 +79,6 @@ models:
       - name: data_source
         description: Source device (Apple Watch, iPhone, etc.)
 
-  - name: stg_strava__activities
-    description: Staged activities from Strava (deduplicated)
-    columns:
-      - name: activity_id
-        description: Primary key (Strava activity ID)
-      - name: activity_name
-        description: Activity title from Strava
-      - name: activity_type
-        description: Activity type (Run, Ride, Swim, etc.)
-      - name: sport_type
-        description: Strava's more specific sport classification
-      - name: started_at_local
-        description: Local start timestamp
-      - name: moving_time_minutes
-        description: Moving time in minutes
-      - name: distance_km
-        description: Distance covered in kilometers
-      - name: avg_heartrate
-        description: Average heart rate for the activity
-      - name: is_trainer
-        description: Whether the activity was recorded on a stationary trainer
-
   - name: stg_openpowerlifting__competitions
     description: Staged competition results from OpenPowerlifting
     columns:

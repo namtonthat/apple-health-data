@@ -187,24 +187,6 @@ def _e1rm_rolling_total_frame(dates: list[date]) -> pl.DataFrame:
     )
 
 
-def _strava_activities_frame(dates: list[date]) -> pl.DataFrame:
-    recent = dates[-2:]
-    return pl.DataFrame(
-        {
-            "activity_date": recent,
-            "activity_name": ["Morning Run", "Evening Ride"],
-            "activity_type": ["Run", "Ride"],
-            "distance_km": [8.2, 25.0],
-            "moving_time_minutes": [45.0, 60.0],
-            "elevation_gain_m": [50.0, 200.0],
-            "avg_heartrate": [145.0, 130.0],
-            "avg_pace_min_per_km": [5.5, 0.0],
-            "max_heartrate": [165.0, 150.0],
-            "pr_count": [1, 0],
-        }
-    )
-
-
 @pytest.fixture
 def patched_loaders(monkeypatch):
     """Patch every public ``load_*`` wrapper in ``dashboard.data`` to return
@@ -225,7 +207,6 @@ def patched_loaders(monkeypatch):
         "load_big3_prs": _big3_prs_frame(dates),
         "load_personal_bests": _personal_bests_frame(dates),
         "load_e1rm_rolling_total": _e1rm_rolling_total_frame(dates),
-        "load_strava_activities": _strava_activities_frame(dates),
     }
     for name, frame in frames.items():
         monkeypatch.setattr(data, name, lambda frame=frame: frame)

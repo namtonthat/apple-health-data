@@ -27,9 +27,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   HEVY_API_KEY: ${{ secrets.HEVY_API_KEY }}
-  STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-  STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-  STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
 
 jobs:
   # Each source ingests in its own parallel job. The transform job below
@@ -41,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        source: [apple-health, hevy, strava, openpowerlifting]
+        source: [apple-health, hevy, openpowerlifting]
 
     steps:
       - name: Checkout repository
@@ -75,8 +72,6 @@ jobs:
           case "${{ matrix.source }}" in
             hevy)
               [ -z "$HEVY_API_KEY" ] && { echo "HEVY_API_KEY not set; skipping."; exit 0; } ;;
-            strava)
-              [ -z "$STRAVA_CLIENT_ID" ] && { echo "Strava credentials not set; skipping."; exit 0; } ;;
             openpowerlifting)
               [ -z "$OPENPOWERLIFTING_URL" ] && { echo "OPENPOWERLIFTING_URL not set; skipping."; exit 0; } ;;
           esac

@@ -20,7 +20,7 @@ st.title(f"👋 Welcome to {USER_NAME}'s Health & Fitness Dashboard")
 st.caption(f"Last updated: {get_last_updated()}")
 
 st.markdown("""
-A personal dashboard powered by Apple Health, Hevy, and Strava.
+A personal dashboard powered by Apple Health and Hevy.
 """)
 
 st.divider()
@@ -55,12 +55,11 @@ with col3:
     st.markdown("""
     ### 🏋️ Exercises
 
-    Monitor your workouts and cardio activities.
+    Monitor your workouts.
 
     - Workout logs with sets, reps, and volume (Hevy)
     - Estimated 1RM for Big 3 lifts
     - Rolling e1RM total trend
-    - Runs, rides, and swims (Strava)
     """)
     st.page_link("pages/3_Exercises.py", label="Go to Exercises →", icon="🏋️")
 
@@ -87,5 +86,4 @@ st.markdown("""
 | 🍎 Apple Health | Sleep, activity, vitals |
 | 📱 Nutrition App | Nutrition & macros (via Apple Health) |
 | 💪 Hevy | Workout logs |
-| 🏃 Strava | Runs, rides, swims |
 """)
