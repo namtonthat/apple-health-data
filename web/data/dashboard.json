@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T17:40:04+00:00",
+  "generated_at": "2026-10-20T20:14:14+00:00",
   "last_data_date": "2026-10-20",
   "today": "2026-10-21",
   "user_name": "Nam Tonthat",
@@ -20,23 +20,23 @@
     "calories": 2200.0
   },
   "latest": {
-    "sleep_hours": 4.9,
+    "sleep_hours": 7.1,
     "sleep_deep_hours": 1.2,
-    "sleep_rem_hours": 1.1,
-    "sleep_light_hours": 2.6,
-    "hrv_ms": 39.91,
-    "resting_hr_bpm": 52,
+    "sleep_rem_hours": 1.7,
+    "sleep_light_hours": 4.2,
+    "hrv_ms": 41.06,
+    "resting_hr_bpm": 51,
     "vo2_max": 42.58,
     "weight_kg": 71.16,
     "bmi": 23.78,
-    "steps": 17015.72,
+    "steps": 12011.71,
     "protein_g": 15,
     "carbs_g": 40,
     "fat_g": 5,
     "water_ml": 235,
     "logged_calories": 261,
     "total_volume_kg": 6500,
-    "readiness_score": 57
+    "readiness_score": 61
   },
   "daily": [
     {
@@ -2125,7 +2125,7 @@
       "fiber_g": 31,
       "water_ml": 567,
       "logged_calories": 2376,
-      "calculated_calories": 2535,
+      "calculated_calories": 2533,
       "workouts": 1,
       "total_volume_kg": 9862
     },
@@ -2241,23 +2241,23 @@
     },
     {
       "date": "2026-10-20",
-      "sleep_hours": null,
-      "sleep_deep_hours": null,
-      "sleep_rem_hours": null,
-      "sleep_light_hours": null,
-      "hrv_ms": null,
-      "resting_hr_bpm": null,
+      "sleep_hours": 7.1,
+      "sleep_deep_hours": 1.2,
+      "sleep_rem_hours": 1.7,
+      "sleep_light_hours": 4.2,
+      "hrv_ms": 41.06,
+      "resting_hr_bpm": 51,
       "vo2_max": null,
       "weight_kg": null,
       "bmi": null,
-      "steps": null,
+      "steps": 12011.71,
       "protein_g": null,
       "carbs_g": null,
       "fat_g": null,
       "fiber_g": null,
       "water_ml": null,
       "logged_calories": null,
-      "calculated_calories": 0,
+      "calculated_calories": 2404,
       "workouts": 1,
       "total_volume_kg": 6500
     }
@@ -3450,6 +3450,18 @@
       "resting_hr_bpm": 52,
       "sleep_hours": 4.9,
       "deep_sleep_ratio": 0.24
+    },
+    {
+      "date": "2026-10-20",
+      "readiness_score": 61,
+      "hrv_score": 5,
+      "rhr_score": 14,
+      "sleep_score": 25,
+      "deep_score": 17,
+      "hrv_ms": 41.06,
+      "resting_hr_bpm": 51,
+      "sleep_hours": 7.1,
+      "deep_sleep_ratio": 0.17
     }
   ],
   "weight": [
