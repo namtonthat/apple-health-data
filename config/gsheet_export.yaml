@@ -9,7 +9,8 @@ block:
   tab: "Block 16"
   week1_monday: 2026-10-12   # Monday of the block's WEEK 1 column group
   # Delayed sessions: workout date -> Monday of the week it belongs to.
-  week_overrides: {}
+  week_overrides:
+    2026-10-19: 2026-10-12  # week 1 Day 4 done late
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.
