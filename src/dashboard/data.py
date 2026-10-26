@@ -95,7 +95,7 @@ def load_parquet(
 
 
 @st.cache_data(show_spinner="Loading health data...")
-def _load_daily_summary(_last_updated: str) -> pl.DataFrame:
+def _load_daily_summary(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_daily_summary",
         query=(
@@ -115,7 +115,7 @@ def load_daily_summary() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading weight averages...")
-def _load_weight_rolling_averages(_last_updated: str) -> pl.DataFrame:
+def _load_weight_rolling_averages(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_weight_rolling_averages",
         query=(
@@ -131,7 +131,7 @@ def load_weight_rolling_averages() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading workout data...")
-def _load_workouts(_last_updated: str) -> pl.DataFrame:
+def _load_workouts(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_workouts",
         query=(
@@ -147,7 +147,7 @@ def load_workouts() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading readiness data...")
-def _load_training_readiness(_last_updated: str) -> pl.DataFrame:
+def _load_training_readiness(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_training_readiness",
         query=(
@@ -163,7 +163,7 @@ def load_training_readiness() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading workout sets...")
-def _load_workout_sets(_last_updated: str) -> pl.DataFrame:
+def _load_workout_sets(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_workout_sets",
         query=(
@@ -181,7 +181,7 @@ def load_workout_sets() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading lift PRs...")
-def _load_big3_prs(_last_updated: str) -> pl.DataFrame:
+def _load_big3_prs(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_big3_prs",
         query=(
@@ -197,7 +197,7 @@ def load_big3_prs() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading personal bests...")
-def _load_personal_bests(_last_updated: str) -> pl.DataFrame:
+def _load_personal_bests(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_personal_bests",
         query=(
@@ -213,7 +213,7 @@ def load_personal_bests() -> pl.DataFrame:
 
 
 @st.cache_data(show_spinner="Loading 1RM totals...")
-def _load_e1rm_rolling_total(_last_updated: str) -> pl.DataFrame:
+def _load_e1rm_rolling_total(last_updated: str) -> pl.DataFrame:
     return load_parquet(
         "fct_e1rm_rolling_total",
         query=(

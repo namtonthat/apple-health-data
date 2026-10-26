@@ -113,3 +113,15 @@ def test_load_parquet_reraises_other_duckdb_errors(monkeypatch):
         data.load_parquet("recent/fct_daily_summary")
 
     assert conn.cursors[0].closed is True
+
+
+def test_daily_summary_cache_reloads_when_s3_data_changes(monkeypatch):
+    calls = []
+    monkeypatch.setattr(data, "load_parquet", lambda *a, **k: calls.append(1) or pl.DataFrame())
+    data._load_daily_summary.clear()
+
+    for stamp in ["2026-10-19 00:00", "2026-10-26 00:00"]:
+        monkeypatch.setattr(data, "get_last_updated", lambda stamp=stamp: stamp)
+        data.load_daily_summary()
+
+    assert len(calls) == 2
