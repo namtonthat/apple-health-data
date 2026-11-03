@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T10:14:33+00:00",
+  "generated_at": "2026-11-03T10:35:33+00:00",
   "last_data_date": "2026-11-03",
   "today": "2026-11-03",
   "user_name": "Nam Tonthat",
@@ -2185,12 +2185,12 @@
       "weight_kg": 70.82,
       "bmi": 23.66,
       "steps": 12519,
-      "protein_g": null,
-      "carbs_g": null,
-      "fat_g": null,
-      "fiber_g": null,
-      "water_ml": null,
-      "logged_calories": null,
+      "protein_g": 167,
+      "carbs_g": 256,
+      "fat_g": 61,
+      "fiber_g": 22,
+      "water_ml": 271,
+      "logged_calories": 2297,
       "calculated_calories": 2425,
       "workouts": 0,
       "total_volume_kg": null
@@ -9073,13 +9073,13 @@
   },
   "macro_avg": {
     "recorded_days_7d": 7,
-    "protein_avg_7d": 142,
-    "carbs_avg_7d": 326,
-    "fat_avg_7d": 70,
-    "calories_avg_7d": 2517,
-    "protein_avg_30d": 134,
-    "carbs_avg_30d": 258,
+    "protein_avg_7d": 151,
+    "carbs_avg_7d": 302,
+    "fat_avg_7d": 71,
+    "calories_avg_7d": 2468,
+    "protein_avg_30d": 136,
+    "carbs_avg_30d": 257,
     "fat_avg_30d": 63,
-    "calories_avg_30d": 2175
+    "calories_avg_30d": 2165
   }
 }
