@@ -12,7 +12,7 @@ dependencies = [
     "dbt-core==1.11.11",
     "dbt-duckdb==1.10.1",
     "python-dotenv==1.2.2",
-    "streamlit==1.58.0",
+    "streamlit==1.67.0",
     "altair==6.2.1",
     "beautifulsoup4==4.15.0",
     "requests==2.34.2",
