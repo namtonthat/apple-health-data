@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-10T09:24:13+00:00",
+  "generated_at": "2026-11-10T20:07:45+00:00",
   "last_data_date": "2026-11-09",
-  "today": "2026-11-10",
+  "today": "2026-11-11",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -9,7 +9,7 @@
     "sleep_rem_hours": 1.5,
     "sleep_light_hours": 3.5,
     "protein_g": 165.0,
-    "carbs_g": 250.0,
+    "carbs_g": 275.0,
     "fat_g": 60.0,
     "weight_kg": 69.0,
     "resting_hr_bpm": 55.0,
@@ -17,7 +17,7 @@
     "vo2_max": 49.0,
     "steps": 10000,
     "meditation_minutes": 10,
-    "calories": 2200.0
+    "calories": 2300.0
   },
   "latest": {
     "sleep_hours": 6.1,
