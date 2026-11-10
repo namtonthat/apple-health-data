@@ -53,6 +53,13 @@ class TestGoalStatusColorTwoSided:
     def test_zero_goal_is_green(self):
         assert goal_status_color(5.0, 0.0, two_sided=True) == GREEN
 
+    def test_narrow_band_tightens_thresholds(self):
+        """Calories use a 5% band: 2300 goal is green to 2415, orange to 2530, then red."""
+        assert goal_status_color(2400, 2300, two_sided=True, band=0.05) == GREEN
+        assert goal_status_color(2450, 2300, two_sided=True, band=0.05) == ORANGE
+        assert goal_status_color(2550, 2300, two_sided=True, band=0.05) == RED
+        assert goal_status_color(2150, 2300, two_sided=True, band=0.05) == ORANGE
+
 
 class TestStyleGoalColumn:
     """Cell CSS shared by the Recovery daily-breakdown and Nutrition tables."""

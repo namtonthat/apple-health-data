@@ -11,7 +11,7 @@ from dashboard.components import (  # noqa: E402
     metric_with_goal_color,
     style_goal_column,
 )
-from dashboard.config import GOALS  # noqa: E402
+from dashboard.config import CALORIES_BAND, GOALS  # noqa: E402
 from dashboard.data import (  # noqa: E402
     filter_date_range,
     load_daily_summary,
@@ -76,13 +76,17 @@ if has_macros or has_weight:
             m1, m2 = st.columns(2)
             with m1:
                 metric_with_goal_color("Protein", avg_protein, GOALS["protein_g"], "g", ".0f")
-                metric_with_goal_color(
-                    "Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f", two_sided=True
-                )
+                metric_with_goal_color("Carbs", avg_carbs, GOALS["carbs_g"], "g", ".0f")
             with m2:
                 metric_with_goal_color("Fat", avg_fat, GOALS["fat_g"], "g", ".0f", two_sided=True)
                 metric_with_goal_color(
-                    "Calories", avg_calories, GOALS["calories"], "", ",.0f", two_sided=True
+                    "Calories",
+                    avg_calories,
+                    GOALS["calories"],
+                    "",
+                    ",.0f",
+                    two_sided=True,
+                    band=CALORIES_BAND,
                 )
 
             m3, m4 = st.columns(2)
@@ -207,19 +211,19 @@ if has_macros or has_weight:
                     columns={c: col_rename[c] for c in display_df.columns if c in col_rename}
                 )
 
-                # Protein is a floor (exceeding is good); the rest are targets
+                # Bulking: protein and carbs are floors (over is fine); fat and calories are targets
                 macro_goals = {
-                    "Protein (g)": (GOALS["protein_g"], False),
-                    "Carbs (g)": (GOALS["carbs_g"], True),
-                    "Fat (g)": (GOALS["fat_g"], True),
-                    "Calories": (GOALS["calories"], True),
+                    "Protein (g)": (GOALS["protein_g"], False, 0.10),
+                    "Carbs (g)": (GOALS["carbs_g"], False, 0.10),
+                    "Fat (g)": (GOALS["fat_g"], True, 0.10),
+                    "Calories": (GOALS["calories"], True, CALORIES_BAND),
                 }
 
                 def _style_macro_col(col):
                     if col.name not in macro_goals:
                         return ["" for _ in col]
-                    goal, two_sided = macro_goals[col.name]
-                    return [style_goal_column(v, goal, two_sided=two_sided) for v in col]
+                    goal, two_sided, band = macro_goals[col.name]
+                    return [style_goal_column(v, goal, two_sided=two_sided, band=band) for v in col]
 
                 styled = display_df.style.apply(_style_macro_col, axis=0).format(
                     {

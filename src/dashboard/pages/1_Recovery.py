@@ -12,7 +12,7 @@ from dashboard.components import (  # noqa: E402
     metric_with_goal,
     style_goal_column,
 )
-from dashboard.config import GOALS  # noqa: E402
+from dashboard.config import CALORIES_BAND, GOALS  # noqa: E402
 from dashboard.data import (  # noqa: E402
     filter_date_range,
     load_daily_summary,
@@ -255,7 +255,10 @@ if df_daily.height > 0:
             return ""
         if col_name in graduated_goals and graduated_goals[col_name] is not None:
             return style_goal_column(
-                val, graduated_goals[col_name], two_sided=col_name in two_sided_cols
+                val,
+                graduated_goals[col_name],
+                two_sided=col_name in two_sided_cols,
+                band=CALORIES_BAND if col_name == "Cals" else 0.10,
             )
         if col_name in inverse_goals and inverse_goals[col_name] is not None:
             return style_goal_column(val, inverse_goals[col_name], inverse=True)

@@ -45,10 +45,12 @@ def metric_with_goal(
         st.metric(label, display_value)
 
 
-def goal_status_color(value: float, goal: float, two_sided: bool = False) -> str:
+def goal_status_color(
+    value: float, goal: float, two_sided: bool = False, band: float = 0.10
+) -> str:
     """Return hex color based on proximity to goal.
 
-    Green: 0–10% off. Orange: 10–20% off. Red: >20% off.
+    Green: within ``band`` (default 10%). Orange: up to 2x band. Red: beyond.
     By default only shortfall counts (floor goals like sleep/HRV — exceeding is green);
     two_sided=True also penalises overshoot (target goals like calories).
     """
@@ -57,12 +59,12 @@ def goal_status_color(value: float, goal: float, two_sided: bool = False) -> str
 
     diff = (value - goal) / goal
     pct_off = abs(diff) if two_sided else max(-diff, 0.0)
-    if pct_off <= 0.10:
-        return "#00CC96"  # green — within 10%
-    elif pct_off <= 0.20:
-        return "#FFA500"  # orange — 10–20% off
+    if pct_off <= band:
+        return "#00CC96"
+    elif pct_off <= 2 * band:
+        return "#FFA500"
     else:
-        return "#EF553B"  # red — more than 20% off
+        return "#EF553B"
 
 
 def metric_with_goal_color(
@@ -72,6 +74,7 @@ def metric_with_goal_color(
     unit: str = "",
     fmt: str = ".0f",
     two_sided: bool = False,
+    band: float = 0.10,
 ) -> None:
     """Display a metric with tri-color goal status (green/orange/red).
 
@@ -94,7 +97,7 @@ def metric_with_goal_color(
 
     delta = value - goal
     pct = round((value - goal) / goal * 100)
-    color = goal_status_color(value, goal, two_sided=two_sided)
+    color = goal_status_color(value, goal, two_sided=two_sided, band=band)
     delta_str = f"{delta:+{fmt}}{unit} vs {goal:{fmt}}{unit} goal ({pct:+d}%)"
 
     st.markdown(
@@ -114,6 +117,7 @@ def style_goal_column(
     *,
     two_sided: bool = False,
     inverse: bool = False,
+    band: float = 0.10,
 ) -> str:
     """Pandas Styler CSS for a table cell based on a value's proximity to a goal.
 
@@ -140,7 +144,7 @@ def style_goal_column(
             else:
                 color = "#EF553B"
     else:
-        color = goal_status_color(float(value), goal, two_sided=two_sided)
+        color = goal_status_color(float(value), goal, two_sided=two_sided, band=band)
 
     return f"background-color: {color}33; color: {color}"
 

@@ -47,6 +47,8 @@ GOALS = {
     "meditation_minutes": _goals_config["meditation_minutes"],
 }
 GOALS["calories"] = GOALS["protein_g"] * 4 + GOALS["carbs_g"] * 4 + GOALS["fat_g"] * 9
+# Green band for calories: +/-5% (orange to 10%), tighter than the default 10%/20%.
+CALORIES_BAND = 0.05
 
 
 TIMEZONE = ZoneInfo(CONFIG.get("timezone", "Australia/Melbourne"))
