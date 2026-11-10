@@ -122,16 +122,19 @@ def _movement_runs(
     return runs
 
 
-def _active_rows(grid: list[list[str]], run: _Run, group: WeekGroup) -> list[int]:
+def _active_rows(
+    grid: list[list[str]], run: _Run, group: WeekGroup, setsxreps_col: int
+) -> list[int]:
     """Rows in the run that should receive a set for the selected week group.
 
     The anchor row is always active. A continuation row is active iff its
-    TARGET cell in the selected group is non-empty (after strip) and not "-".
+    TARGET cell in the selected group is non-empty (after strip) and not "-",
+    or it has its own SETSxREPS (a top-set row whose TARGET is "-").
     """
     active = [run.anchor_row]
     for row in run.rows[1:]:
         target = _cell(grid, row, group.target_col).strip()
-        if target and target != "-":
+        if (target and target != "-") or _cell(grid, row, setsxreps_col).strip():
             active.append(row)
     return active
 
@@ -209,13 +212,21 @@ def resolve_block_writes(
             result.notes.append(f"{name}: no loggable sets for occurrence {occ + 1} this week")
             continue
 
-        active_rows = _active_rows(grid, run, group)
+        active_rows = _active_rows(grid, run, group, setsxreps_col)
         if len(active_rows) == 1:
             top = max(workout, key=lambda s: (s.weight_kg, s.reps))
             _write_set(result, grid, active_rows[0], group, top)
         else:
-            for j, row in enumerate(active_rows):
-                if j < len(workout):
-                    _write_set(result, grid, row, group, workout[j])
+            # Top-set rows (own SETSxREPS) take the heaviest set, so a session
+            # logged top-set-first still lands its back-offs on the other rows.
+            remaining = list(workout)
+            top_rows = [r for r in active_rows[1:] if _cell(grid, r, setsxreps_col).strip()]
+            for row in top_rows:
+                if remaining:
+                    top = max(remaining, key=lambda s: (s.weight_kg, s.reps))
+                    remaining.remove(top)
+                    _write_set(result, grid, row, group, top)
+            for row, s in zip([r for r in active_rows if r not in top_rows], remaining):
+                _write_set(result, grid, row, group, s)
 
     return result

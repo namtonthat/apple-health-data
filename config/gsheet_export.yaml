@@ -11,6 +11,7 @@ block:
   # Delayed sessions: workout date -> Monday of the week it belongs to.
   week_overrides:
     2026-10-19: 2026-10-12  # week 1 Day 4 done late
+    2026-11-08: 2026-11-09  # week 5 Day 1 done early (Sunday)
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.

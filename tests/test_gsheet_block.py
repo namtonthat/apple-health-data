@@ -274,3 +274,53 @@ def test_lowercase_note_continuation_row_is_active_not_unmapped():
     assert values[(3, 6)] == "105"
     assert "touch and go" not in result.unmapped
     assert not any("touch and go" in u for u in result.unmapped)
+
+
+def test_top_set_row_with_own_setsxreps_is_active_despite_dash_target():
+    """Block 16 layout: 2x6 back-offs then a '1x3' top-set row whose TARGET is
+    '-' and LOAD holds the prescription ('192-195'). The top set must land there."""
+    top = cont_row(target_wk1="-")
+    top[3], top[6] = "1x3", "192-195"
+    grid = [
+        ["", "", "BLOCK", "ESS"] + [""] * (N - 4),
+        HEADER[:],
+        ex_row("LOW BAR SQUAT", "2x6"),  # anchor, row 2
+        cont_row(target_wk1="RPE 7-8"),  # row 3
+        top,  # row 4
+        cont_row(target_wk1="-"),  # unused, row 5
+        ["", "", "NOTES:", ""] + [""] * (N - 4),
+    ]
+    sets = [
+        s(0, "Squat (Barbell)", 1, 175.0, 6, 7.0),
+        s(0, "Squat (Barbell)", 2, 185.0, 6, 7.5),
+        s(0, "Squat (Barbell)", 3, 195.0, 3, None),
+    ]
+    result = resolve_block_writes(grid, EXERCISE_MAP, 0, sets)
+    values = {(w.row, w.col): w.value for w in result.writes}
+    assert values[(4, 5)] == "3"
+    assert values[(4, 6)] == "195"
+    assert all(w.row != 5 for w in result.writes)
+
+
+def test_top_set_row_takes_heaviest_set_when_logged_out_of_order():
+    top = cont_row(target_wk1="-")
+    top[3] = "1x3"
+    grid = [
+        ["", "", "BLOCK", "ESS"] + [""] * (N - 4),
+        HEADER[:],
+        ex_row("LOW BAR SQUAT", "2x6"),  # row 2
+        cont_row(target_wk1="RPE 7-8"),  # row 3
+        top,  # row 4
+        ["", "", "NOTES:", ""] + [""] * (N - 4),
+    ]
+    sets = [
+        s(0, "Squat (Barbell)", 1, 132.5, 3, 6.0),
+        s(0, "Squat (Barbell)", 2, 140.0, 3, 7.5),
+        s(0, "Squat (Barbell)", 3, 115.0, 4, 7.0),
+    ]
+    values = {
+        (w.row, w.col): w.value for w in resolve_block_writes(grid, EXERCISE_MAP, 0, sets).writes
+    }
+    assert values[(4, 6)] == "140"
+    assert values[(2, 6)] == "132.5"
+    assert values[(3, 6)] == "115"
