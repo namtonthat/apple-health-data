@@ -11,7 +11,7 @@ class _FakeArrowResult:
     def __init__(self, table):
         self._table = table
 
-    def fetch_arrow_table(self):
+    def to_arrow_table(self):
         return self._table
 
 

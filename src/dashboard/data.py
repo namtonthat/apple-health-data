@@ -77,8 +77,8 @@ def load_parquet(
 
     try:
         if params:
-            return pl.from_arrow(cursor.execute(query, params).fetch_arrow_table())
-        return pl.from_arrow(cursor.execute(query).fetch_arrow_table())
+            return pl.from_arrow(cursor.execute(query, params).to_arrow_table())
+        return pl.from_arrow(cursor.execute(query).to_arrow_table())
     except duckdb.Error as e:
         if "No files found" in str(e):
             return pl.DataFrame()
