@@ -3,7 +3,7 @@
 # the sheet with the service account, then fill these in.
 spreadsheet_id: 1s7sjGdylyxJAz8mh781w_xiCiyY7F3V-xywqQBJJrpI
 
-daily_tab: "Copy of Tracking Sheet 📊"
+daily_tab: "Tracking Sheet 📊"
 
 block:
   tab: "Block 17"
