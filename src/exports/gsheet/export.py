@@ -138,11 +138,12 @@ def run_export_sheet(
 
     today = datetime.now(MELBOURNE).date()
     # The block tab covers two windows each run: the previous completed
-    # Mon-Sun week (which may have gained late-logged sets) and the current
-    # in-progress week (so sets show up as they're logged mid-week). They
-    # fill disjoint week-group columns, so writing both is safe and
-    # idempotent.
-    current_monday = today - timedelta(days=today.weekday())
+    # Sun-Sat training week (which may have gained late-logged sets) and the
+    # current in-progress week (so sets show up as they're logged mid-week).
+    # They fill disjoint week-group columns, so writing both is safe and
+    # idempotent. A Sunday belongs to the week whose Monday is tomorrow.
+    tomorrow = today + timedelta(days=1)
+    current_monday = tomorrow - timedelta(days=tomorrow.weekday())
     prev_monday = current_monday - timedelta(days=7)
 
     conn = get_duckdb_connection()

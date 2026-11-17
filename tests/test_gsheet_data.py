@@ -39,14 +39,19 @@ def test_load_week_sets_filters_week_and_warmups(conn, tmp_path):
                 ('s2', 'w1', DATE '2026-07-13', 'Bench Press (Barbell)', 2,
                  'warmup', 60.0, 5, NULL),
                 ('s3', 'w2', DATE '2026-07-25', 'Bench Press (Barbell)', 1,
-                 'normal', 85.0, 5, 8.0)
+                 'normal', 85.0, 5, 8.0),
+                ('s4', 'w0', DATE '2026-07-12', 'Squat (Barbell)', 1,
+                 'normal', 100.0, 5, 7.0),
+                ('s5', 'w3', DATE '2026-07-19', 'Squat (Barbell)', 1,
+                 'normal', 105.0, 5, 7.0)
             ) AS t(set_id, workout_id, workout_date, exercise_name, set_number,
                    set_type, weight_kg, reps, rpe)
         ) TO '{path}' (FORMAT PARQUET)
     """)
     sets = load_week_sets(conn, week_monday=date(2026, 7, 13), source=path)
-    assert len(sets) == 1  # warmup excluded, other week excluded
-    s = sets[0]
+    # Sun-Sat window: the Sunday before is in, the Sunday after starts next week.
+    assert [s.workout_id for s in sets] == ["w0", "w1"]
+    s = sets[1]
     assert s.workout_id == "w1"
     assert s.set_number == 1
     assert s.rpe == 7.5

@@ -57,7 +57,9 @@ def load_week_sets(
     conn: duckdb.DuckDBPyConnection, week_monday: date, source: str | None = None
 ) -> list[SetRow]:
     source = source or _default_source("fct_workout_sets")
-    week_sunday = week_monday + timedelta(days=6)
+    # Training weeks run Sun-Sat (Day 1 is usually a Sunday), labelled by their Monday.
+    week_start = week_monday - timedelta(days=1)
+    week_end = week_monday + timedelta(days=5)
     result = conn.execute(
         f"""
         SELECT workout_id, workout_date, exercise_name, set_number,
@@ -67,7 +69,7 @@ def load_week_sets(
           AND workout_date BETWEEN ? AND ?
         ORDER BY workout_date, workout_id, exercise_name, set_number
         """,
-        [week_monday, week_sunday],
+        [week_start, week_end],
     ).fetchall()
     return [
         SetRow(
