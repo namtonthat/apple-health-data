@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-16T22:39:17+00:00",
-  "last_data_date": "2026-11-16",
+  "generated_at": "2026-11-17T04:59:53+00:00",
+  "last_data_date": "2026-11-17",
   "today": "2026-11-17",
   "user_name": "Nam Tonthat",
   "goals": {
@@ -20,47 +20,25 @@
     "calories": 2300.0
   },
   "latest": {
-    "sleep_hours": 6.6,
-    "sleep_deep_hours": 0.8,
-    "sleep_rem_hours": 2,
-    "sleep_light_hours": 3.8,
-    "hrv_ms": 49.92,
-    "resting_hr_bpm": 52,
+    "sleep_hours": 6.3,
+    "sleep_deep_hours": 1.1,
+    "sleep_rem_hours": 1.9,
+    "sleep_light_hours": 3.4,
+    "hrv_ms": 66.82,
+    "resting_hr_bpm": 51,
     "vo2_max": 42.51,
-    "weight_kg": 71.92,
-    "bmi": 24.03,
-    "steps": 14365.03,
-    "protein_g": 171,
-    "carbs_g": 368,
-    "fat_g": 72,
-    "water_ml": 316,
-    "logged_calories": 2803,
+    "weight_kg": 71.53,
+    "bmi": 23.9,
+    "steps": 4295,
+    "protein_g": 32,
+    "carbs_g": 30,
+    "fat_g": 12,
+    "water_ml": 47,
+    "logged_calories": 355,
     "total_volume_kg": 8377,
-    "readiness_score": 62
+    "readiness_score": 82
   },
   "daily": [
-    {
-      "date": "2026-07-19",
-      "sleep_hours": 5.6,
-      "sleep_deep_hours": 1.2,
-      "sleep_rem_hours": 1.1,
-      "sleep_light_hours": 3.3,
-      "hrv_ms": 54.48,
-      "resting_hr_bpm": 50,
-      "vo2_max": 44.15,
-      "weight_kg": null,
-      "bmi": null,
-      "steps": 11806,
-      "protein_g": null,
-      "carbs_g": null,
-      "fat_g": null,
-      "fiber_g": null,
-      "water_ml": null,
-      "logged_calories": null,
-      "calculated_calories": 2349,
-      "workouts": 0,
-      "total_volume_kg": null
-    },
     {
       "date": "2026-07-20",
       "sleep_hours": 7.9,
@@ -2147,7 +2125,7 @@
       "fiber_g": 37,
       "water_ml": 316,
       "logged_calories": 2622,
-      "calculated_calories": 2676,
+      "calculated_calories": 2669,
       "workouts": 0,
       "total_volume_kg": null
     },
@@ -2236,8 +2214,8 @@
       "water_ml": 407,
       "logged_calories": 2290,
       "calculated_calories": 2452,
-      "workouts": 0,
-      "total_volume_kg": null
+      "workouts": 1,
+      "total_volume_kg": 6060
     },
     {
       "date": "2026-11-16",
@@ -2251,30 +2229,40 @@
       "weight_kg": 71.92,
       "bmi": 24.03,
       "steps": 14365.03,
-      "protein_g": 171,
-      "carbs_g": 368,
-      "fat_g": 72,
-      "fiber_g": 30,
+      "protein_g": 161,
+      "carbs_g": 338,
+      "fat_g": 64,
+      "fiber_g": 28,
       "water_ml": 316,
-      "logged_calories": 2803,
+      "logged_calories": 2578,
       "calculated_calories": 2580,
       "workouts": 1,
       "total_volume_kg": 8377
+    },
+    {
+      "date": "2026-11-17",
+      "sleep_hours": 6.3,
+      "sleep_deep_hours": 1.1,
+      "sleep_rem_hours": 1.9,
+      "sleep_light_hours": 3.4,
+      "hrv_ms": 66.82,
+      "resting_hr_bpm": 51,
+      "vo2_max": null,
+      "weight_kg": 71.53,
+      "bmi": 23.9,
+      "steps": 4295,
+      "protein_g": 32,
+      "carbs_g": 30,
+      "fat_g": 12,
+      "fiber_g": 1,
+      "water_ml": 47,
+      "logged_calories": 355,
+      "calculated_calories": 1421,
+      "workouts": 0,
+      "total_volume_kg": null
     }
   ],
   "readiness": [
-    {
-      "date": "2026-07-19",
-      "readiness_score": 76,
-      "hrv_score": 14,
-      "rhr_score": 17,
-      "sleep_score": 20,
-      "deep_score": 25,
-      "hrv_ms": 54.48,
-      "resting_hr_bpm": 50,
-      "sleep_hours": 5.6,
-      "deep_sleep_ratio": 0.21
-    },
     {
       "date": "2026-07-20",
       "readiness_score": 54,
@@ -3462,16 +3450,21 @@
       "resting_hr_bpm": 52,
       "sleep_hours": 6.6,
       "deep_sleep_ratio": 0.12
+    },
+    {
+      "date": "2026-11-17",
+      "readiness_score": 82,
+      "hrv_score": 24,
+      "rhr_score": 17,
+      "sleep_score": 23,
+      "deep_score": 18,
+      "hrv_ms": 66.82,
+      "resting_hr_bpm": 51,
+      "sleep_hours": 6.3,
+      "deep_sleep_ratio": 0.17
     }
   ],
   "weight": [
-    {
-      "date": "2026-05-20",
-      "weight_kg": 70.82,
-      "avg_7d": 71.22,
-      "avg_30d": 70.73,
-      "avg_60d": 70.96
-    },
     {
       "date": "2026-05-22",
       "weight_kg": 71.22,
@@ -4024,6 +4017,13 @@
       "avg_7d": 71.85,
       "avg_30d": 71.38,
       "avg_60d": 71.17
+    },
+    {
+      "date": "2026-11-17",
+      "weight_kg": 71.53,
+      "avg_7d": 71.74,
+      "avg_30d": 71.38,
+      "avg_60d": 71.17
     }
   ],
   "workouts": [
@@ -4039,6 +4039,19 @@
       "total_volume_kg": 8377,
       "max_weight_kg": 82.5,
       "avg_rpe": 7.6
+    },
+    {
+      "workout_date": "2026-11-15",
+      "workout_name": "Block 17 - Day 1 Lower (Squat)",
+      "day_name": "Sunday",
+      "workout_duration_minutes": 46,
+      "unique_exercises": 5,
+      "total_sets": 14,
+      "working_sets": 11,
+      "total_reps": 137,
+      "total_volume_kg": 6060,
+      "max_weight_kg": 112.5,
+      "avg_rpe": null
     },
     {
       "workout_date": "2026-11-13",
@@ -4325,19 +4338,6 @@
       "total_volume_kg": 4883,
       "max_weight_kg": 117.5,
       "avg_rpe": 6.6
-    },
-    {
-      "workout_date": "2026-10-11",
-      "workout_name": "Block 15 - Day 3 Lower Hypertrophy/Arms",
-      "day_name": "Sunday",
-      "workout_duration_minutes": 57,
-      "unique_exercises": 6,
-      "total_sets": 19,
-      "working_sets": 17,
-      "total_reps": 243,
-      "total_volume_kg": 6860,
-      "max_weight_kg": 100,
-      "avg_rpe": 6
     }
   ],
   "e1rm": [
@@ -9095,6 +9095,13 @@
       "estimated_total": 529.8
     },
     {
+      "workout_date": "2026-11-15",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
       "workout_date": "2026-11-16",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
@@ -9115,13 +9122,13 @@
   },
   "macro_avg": {
     "recorded_days_7d": 7,
-    "protein_avg_7d": 152,
-    "carbs_avg_7d": 286,
-    "fat_avg_7d": 71,
-    "calories_avg_7d": 2400,
-    "protein_avg_30d": 141,
-    "carbs_avg_30d": 280,
-    "fat_avg_30d": 64,
-    "calories_avg_30d": 2282
+    "protein_avg_7d": 131,
+    "carbs_avg_7d": 247,
+    "fat_avg_7d": 62,
+    "calories_avg_7d": 2084,
+    "protein_avg_30d": 136,
+    "carbs_avg_30d": 271,
+    "fat_avg_30d": 63,
+    "calories_avg_30d": 2208
   }
 }
