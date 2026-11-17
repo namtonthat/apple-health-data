@@ -201,7 +201,7 @@ if df_readiness.height > 0:
             with r1:
                 st.markdown(
                     f'<p style="font-size:3rem;font-weight:700;color:{color};margin:0;">'
-                    f'{score:.0f}</p>'
+                    f"{score:.0f}</p>"
                     f'<p style="font-size:1rem;color:{color};margin:0;">{label}</p>',
                     unsafe_allow_html=True,
                 )
@@ -238,7 +238,9 @@ if df_readiness.height > 0:
                     )
                     .encode(
                         x=alt.X("Date:N", sort=None, title="Date"),
-                        y=alt.Y("readiness_score:Q", title="Score", scale=alt.Scale(domain=[0, 100])),
+                        y=alt.Y(
+                            "readiness_score:Q", title="Score", scale=alt.Scale(domain=[0, 100])
+                        ),
                     )
                 )
                 text = (
@@ -250,16 +252,22 @@ if df_readiness.height > 0:
                         text=alt.Text("readiness_score:Q", format=".0f"),
                     )
                 )
-                zones = alt.Chart(trend_data).mark_rect(opacity=0.05).encode(
-                    y=alt.datum(75), y2=alt.datum(100), color=alt.value("#00CC96")
-                ) + alt.Chart(trend_data).mark_rect(opacity=0.05).encode(
-                    y=alt.datum(50), y2=alt.datum(75), color=alt.value("#FFA500")
-                ) + alt.Chart(trend_data).mark_rect(opacity=0.05).encode(
-                    y=alt.datum(0), y2=alt.datum(50), color=alt.value("#EF553B")
+                zones = (
+                    alt.Chart(trend_data)
+                    .mark_rect(opacity=0.05)
+                    .encode(y=alt.datum(75), y2=alt.datum(100), color=alt.value("#00CC96"))
+                    + alt.Chart(trend_data)
+                    .mark_rect(opacity=0.05)
+                    .encode(y=alt.datum(50), y2=alt.datum(75), color=alt.value("#FFA500"))
+                    + alt.Chart(trend_data)
+                    .mark_rect(opacity=0.05)
+                    .encode(y=alt.datum(0), y2=alt.datum(50), color=alt.value("#EF553B"))
                 )
                 st.altair_chart(zones + line + text, width="stretch")
 
-        st.caption("*Score: 75–100 Ready, 50–75 Moderate, <50 Fatigued. Based on HRV, RHR, sleep, and deep sleep ratio vs 30-day baseline.*")
+        st.caption(
+            "*Score: 75–100 Ready, 50–75 Moderate, <50 Fatigued. Based on HRV, RHR, sleep, and deep sleep ratio vs 30-day baseline.*"
+        )
         st.divider()
 ```
 

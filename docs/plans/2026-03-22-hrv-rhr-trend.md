@@ -40,7 +40,10 @@ if has_rhr or has_hrv:
         with cv1:
             st.metric("Avg RHR", f"{rhr_data['resting_hr_bpm'].mean():.0f} bpm")
         with cv2:
-            st.metric("RHR Range", f"{rhr_data['resting_hr_bpm'].min():.0f}–{rhr_data['resting_hr_bpm'].max():.0f}")
+            st.metric(
+                "RHR Range",
+                f"{rhr_data['resting_hr_bpm'].min():.0f}–{rhr_data['resting_hr_bpm'].max():.0f}",
+            )
     if has_hrv:
         hrv_data = cardio_data.filter(pl.col("hrv_ms").is_not_null())
         with cv3:
