@@ -6,12 +6,10 @@ spreadsheet_id: 1s7sjGdylyxJAz8mh781w_xiCiyY7F3V-xywqQBJJrpI
 daily_tab: "Tracking Sheet 📊 "
 
 block:
-  tab: "Block 16"
-  week1_monday: 2026-10-12   # Monday of the block's WEEK 1 column group
+  tab: "Block 17"
+  week1_monday: 2026-11-16   # Monday of the block's WEEK 1 column group
   # Delayed sessions: workout date -> Monday of the week it belongs to.
   week_overrides:
-    2026-10-19: 2026-10-12  # week 1 Day 4 done late
-    2026-11-08: 2026-11-09  # week 5 Day 1 done early (Sunday)
 
 # Sheet MOVEMENT name -> Hevy exercise_name. Unmapped movements are skipped
 # and reported, never guessed.
@@ -57,3 +55,5 @@ exercise_map:
   SMITH MACHINE OR MACHINE CALF RAISES: Standing Calf Raise (Machine)
   REAR DELT FLY MACHINE: Rear Delt Reverse Fly (Machine)
   BICEPS OF CHOICE: Seated Incline Curl (Dumbbell)
+  # Block 17
+  SEATED DIP MACHINE OR KNEELING ROPE PUSHDOWNS: Triceps Rope Pushdown
