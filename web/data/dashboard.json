@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-24T07:09:35+00:00",
-  "last_data_date": "2026-11-24",
-  "today": "2026-11-24",
+  "generated_at": "2026-11-24T22:52:02+00:00",
+  "last_data_date": "2026-11-25",
+  "today": "2026-11-25",
   "user_name": "Nam Tonthat",
   "goals": {
     "sleep_hours": 7.0,
@@ -35,7 +35,7 @@
     "fat_g": 78,
     "water_ml": 451,
     "logged_calories": 2298,
-    "total_volume_kg": 7901,
+    "total_volume_kg": 7295,
     "readiness_score": 45
   },
   "daily": [
@@ -2260,6 +2260,28 @@
       "calculated_calories": 1924,
       "workouts": 1,
       "total_volume_kg": 7901
+    },
+    {
+      "date": "2026-11-25",
+      "sleep_hours": null,
+      "sleep_deep_hours": null,
+      "sleep_rem_hours": null,
+      "sleep_light_hours": null,
+      "hrv_ms": null,
+      "resting_hr_bpm": null,
+      "vo2_max": null,
+      "weight_kg": null,
+      "bmi": null,
+      "steps": null,
+      "protein_g": null,
+      "carbs_g": null,
+      "fat_g": null,
+      "fiber_g": null,
+      "water_ml": null,
+      "logged_calories": null,
+      "calculated_calories": 0,
+      "workouts": 1,
+      "total_volume_kg": 7295
     }
   ],
   "readiness": [
@@ -4035,6 +4057,19 @@
   ],
   "workouts": [
     {
+      "workout_date": "2026-11-25",
+      "workout_name": "Block 17 - Day 3 Lower (Sumo)",
+      "day_name": "Wednesday",
+      "workout_duration_minutes": 91,
+      "unique_exercises": 6,
+      "total_sets": 20,
+      "working_sets": 15,
+      "total_reps": 157,
+      "total_volume_kg": 7295,
+      "max_weight_kg": 190,
+      "avg_rpe": 7.2
+    },
+    {
       "workout_date": "2026-11-24",
       "workout_name": "Block 17 - Day 2 Upper (Bench)",
       "day_name": "Tuesday",
@@ -4332,19 +4367,6 @@
       "total_volume_kg": 6500,
       "max_weight_kg": 127.5,
       "avg_rpe": 6.9
-    },
-    {
-      "workout_date": "2026-10-19",
-      "workout_name": "Block 16 - Day 4 Upper (Close Grip)",
-      "day_name": "Monday",
-      "workout_duration_minutes": 41,
-      "unique_exercises": 6,
-      "total_sets": 17,
-      "working_sets": 17,
-      "total_reps": 129,
-      "total_volume_kg": 5480,
-      "max_weight_kg": 65,
-      "avg_rpe": 8.2
     }
   ],
   "e1rm": [
@@ -9131,6 +9153,13 @@
     },
     {
       "workout_date": "2026-11-24",
+      "squat_e1rm": 175.7,
+      "bench_e1rm": 116.4,
+      "deadlift_e1rm": 237.7,
+      "estimated_total": 529.8
+    },
+    {
+      "workout_date": "2026-11-25",
       "squat_e1rm": 175.7,
       "bench_e1rm": 116.4,
       "deadlift_e1rm": 237.7,
