@@ -25,11 +25,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     env:
       # Project pages serve from /<repo>; prefix asset + route URLs to match.
       PAGES_BASE_PATH: /apple-health-data
@@ -55,6 +52,14 @@ jobs:
         with:
           path: web/out
 
+  # Separate job: deploy-pages queried right after upload intermittently sees 0 artifacts.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
